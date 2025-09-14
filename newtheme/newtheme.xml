@@ -37,6 +37,23 @@
         background-color: #eaf6ff;
         padding: 1em;
         border-right: 2px solid #4682b4;
+        transition: all 0.3s ease;
+        display: block;
+      }
+
+      #sidebar.hidden {
+        display: none;
+      }
+
+      #sidebar-toggle {
+        background-color: #2874a6;
+        color: white;
+        border: none;
+        padding: 0.5em 1em;
+        cursor: pointer;
+        font-weight: bold;
+        margin: 1em;
+        border-radius: 4px;
       }
 
       .post {
@@ -136,6 +153,34 @@
         color: #2874a6;
         text-decoration: underline;
       }
+
+      @media screen and (max-width: 768px) {
+        .content-wrapper {
+          flex-direction: column;
+        }
+
+        #sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          overflow-y: auto;
+          z-index: 1000;
+          transform: translateX(-100%);
+        }
+
+        #sidebar.visible {
+          transform: translateX(0);
+        }
+
+        #sidebar-toggle {
+          position: fixed;
+          top: 1em;
+          left: 1em;
+          z-index: 1100;
+        }
+      }
     ]]></b:skin>
   </head>
 
@@ -143,6 +188,7 @@
     <header>
       <h1><data:blog.title/></h1>
       <p><data:blog.description/></p>
+      <button id="sidebar-toggle">☰ Menu</button>
     </header>
 
     <div id="latest-post-notification">
@@ -196,31 +242,47 @@
       </p>
     </footer>
 
-    <script>
-      // Latest post notification
-      fetch('https://mycustomtemplate1.blogspot.com/feeds/posts/default?alt=json')
-        .then(response => response.json())
-        .then(data => {
-          const latest = data.feed.entry[0];
-          const title = latest.title.$t;
-          const link = latest.link.find(l => l.rel === 'alternate').href;
-          document.getElementById('latest-post-notification').innerHTML =
-            `🆕 New post: <a href="${link}" target="_blank">${title}</a>`;
-        })
-        .catch(() => {
-          document.getElementById('latest-post-notification').innerText =
-            'Could not load latest post.';
-        });
+   <script>
+  // Latest post notification
+  fetch('https://mycustomtemplate1.blogspot.com/feeds/posts/default?alt=json')
+    .then(response => response.json())
+    .then(data => {
+      const latest = data.feed.entry[0];
+      const title = latest.title.$t;
+      const link = latest.link.find(l => l.rel === 'alternate').href;
+      document.getElementById('latest-post-notification').innerHTML =
+        `🆕 New post: <a href="${link}" target="_blank">${title}</a>`;
+    })
+    .catch(() => {
+      document.getElementById('latest-post-notification').innerText =
+        'Could not load latest post.';
+    });
 
-      // Collapsible sidebar menu
-      document.querySelectorAll('.nav-toggle').forEach(function(toggle) {
-        toggle.addEventListener('click', function() {
-          const submenu = this.nextElementSibling;
-          const isOpen = submenu.style.display === 'block';
-          submenu.style.display = isOpen ? 'none' : 'block';
-          this.classList.toggle('active', !isOpen);
-        });
-      });
-    </script>
-  </body>
-</html>
+  // Collapsible sidebar menu
+  document.querySelectorAll('.nav-toggle').forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+      const submenu = this.nextElementSibling;
+      const isOpen = submenu.style.display === 'block';
+      submenu.style.display = isOpen ? 'none' : 'block';
+      this.classList.toggle('active', !isOpen);
+    });
+  });
+
+  // Sidebar open/close toggle
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('sidebar-toggle');
+
+  toggleBtn.addEventListener('click', function() {
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+      sidebar.classList.toggle('visible');
+      this.textContent = sidebar.classList.contains('visible') ? '✖ Close Menu' : '☰ Open Menu';
+    } else {
+      sidebar.classList.toggle('hidden');
+      this.textContent = sidebar.classList.contains('hidden') ? '☰ Open Menu' : '✖ Close Menu';
+    }
+  });
+</script>
+     </body>
+     </html>
