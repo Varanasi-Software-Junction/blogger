@@ -3,7 +3,9 @@
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' b:templateVersion='1.0.0' expr:class='data:blog.languageDirection' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
   <head>
     <style>
-    *{color:black;}
+    *{color:teal;
+      background-color: wheat; 
+      }
 
     </style>
 
@@ -41,8 +43,8 @@ document.addEventListener(&#39;DOMContentLoaded&#39;, function() {
 Blogger Template Style
 Name:        Smag
 Version:     Free Version
-Author:      SoraTemplates
-Author Url:  https://www.soratemplates.com/
+Author:      Champak 
+Author Url:  https://varanasisoftwarejunction.blogspot.com
 ----------------------------------------------- */
 
 /*
