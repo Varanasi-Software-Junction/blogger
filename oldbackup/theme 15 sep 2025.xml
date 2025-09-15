@@ -4,9 +4,9 @@
   <head>
     <style>
     *{color:black;}
-     
+
     </style>
-     
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async='async' src='https://www.googletagmanager.com/gtag/js?id=G-F4DXWP1MZK'/>
 <script>
@@ -16,7 +16,7 @@
 
   gtag(&#39;config&#39;, &#39;G-F4DXWP1MZK&#39;);
 </script>
-    
+
     <script src='https://unpkg.com/kotlin-playground@1'/>
 
 <script>
@@ -24,22 +24,19 @@ document.addEventListener(&#39;DOMContentLoaded&#39;, function() {
   KotlinPlayground(&#39;.code-blocks-selector&#39;);
 });
 </script>
-    
-    
-    
-    
+
     <meta content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1' name='viewport'/>
     <title><data:view.title.escaped/>: Champak</title>
     <b:include data='blog' name='all-head-content'/>
-<b:if cond='data:view.isHomepage'> 
+<b:if cond='data:view.isHomepage'>
  <script type='application/ld+json'>{&quot;@context&quot;:&quot;http://schema.org&quot;,&quot;@type&quot;:&quot;WebSite&quot;,&quot;name&quot;:&quot;<data:view.title.escaped/>&quot;,&quot;url&quot;:&quot;<data:view.url.canonical/>&quot;,&quot;potentialAction&quot;:{&quot;@type&quot;:&quot;SearchAction&quot;,&quot;target&quot;:&quot;<data:view.url.canonical/>search?q={search_term_string}&quot;,&quot;query-input&quot;:&quot;required name=search_term_string&quot;}}</script>
     </b:if>
     <!-- Google Fonts -->
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i' media='all' rel='stylesheet' type='text/css'/>
     <link href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'/>
-  
+
 <!-- Template Style CSS -->
-<b:skin version='1.0.0'><![CDATA[/* 
+<b:skin version='1.0.0'><![CDATA[/*
 -----------------------------------------------
 Blogger Template Style
 Name:        Smag
@@ -69,7 +66,7 @@ Author Url:  https://www.soratemplates.com/
 <Variable name="main.menu.one" description="Menu background 1" hideEditor="true" type="color" default="#ffb23f"  value="#6e39ff"/>
 <Variable name="main.menu.two" description="Menu background 2" hideEditor="true" type="color" default="#fe303e"  value="#2a7ffe"/>
 </Group>
- 
+
 <!-- Extra Variables -->
 <Variable name="body.text.font" description="Font" hideEditor="true" type="font" default="14px Open Sans, sans-serif"  value="14px Open Sans, sans-serif"/>
 <Variable name="posts.background.color" description="Post background color" hideEditor="true" type="color" default="#ffffff"  value="#ffffff"/>
@@ -107,7 +104,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
     fixedSidebar = true,
     fixedMenu = true,
     commentsSystem = "blogger",
-     
+
 //]]>
 </script>
 
@@ -121,7 +118,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
           </h3>
         </div>
       </b:if>
-    </b:includable>    
+    </b:includable>
   </b:defaultmarkup>
   <b:defaultmarkup type='PopularPosts'>
     <b:includable id='main' var='this'>
@@ -251,7 +248,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       </div>
     </b:includable>
   </b:defaultmarkup>
-  
+
   <b:defaultmarkup type='BlogArchive'>
     <b:includable id='main' var='this'>
       <b:include name='widget-title'/>
@@ -283,6 +280,21 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
     <!-- Google Analytics -->
     <b:include data='blog' name='google-analytics'/>
 
+    <!--   -->
+    <script defer='defer' src='https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js'/>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: &quot;350e4fd1-994f-4a74-967a-0d3431a9aca5&quot;,
+      safari_web_id: &quot;web.onesignal.auto.0818a4e7-118f-4fc1-b0e2-07892e811a2a&quot;,
+      notifyButton: {
+        enable: true,
+      },
+    });
+  });
+</script>
+
 </head>
 <body expr:class='data:blog.pageType'>
   <b:class cond='data:view.isHomepage' name='home'/>
@@ -309,12 +321,12 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
           <b:loop values='data:links' var='link'>
             <b:if cond='data:link.name == &quot;fullWidth&quot;'>
               <b:if cond='data:link.target == &quot;true&quot;'>
-                #outer-wrapper{max-width:none} 
+                #outer-wrapper{max-width:none}
               </b:if>
             </b:if>
             <b:if cond='data:link.name == &quot;recentPostsHeadline&quot;'>
               <b:if cond='data:link.target == &quot;false&quot;'>
-                .home-posts-headline{display:none} 
+                .home-posts-headline{display:none}
               </b:if>
             </b:if>
           </b:loop>
@@ -404,12 +416,12 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                   <b:loop values='data:links' var='link'>
                     <li><a expr:href='data:link.target'><data:link.name/></a></li>
                   </b:loop>
-                </ul> 
+                </ul>
               </div>
             </b:includable>
           </b:widget>
         </b:section>
-      <!-- Top Social --> 
+      <!-- Top Social -->
         <b:section class='top-bar-social social' id='top-bar-social' maxwidgets='1' name='Social Top' showaddelement='yes'>
            <b:widget id='LinkList73' locked='true' title='Header Menu Widget' type='LinkList' version='2' visible='false'>
              <b:widget-settings>
@@ -440,7 +452,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   <!-- Header Wrapper -->
   <div id='header-wrap'>
 
-    <div class='header-header'>    
+    <div class='header-header'>
       <div class='container row'>
           <b:section class='header-logo' id='header-logo' maxwidgets='1' name='Header Logo' showaddelement='yes'>
             <b:widget id='Header1' locked='true' title='Champak Roy&apos;s Blog on Programming (Header)' type='Header' version='2' visible='true'>
@@ -547,9 +559,9 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                 <b:if cond='data:link'>
                   <h3><a expr:href='data:blog.homepageUrl'><data:link/></a></h3>
                 </b:if>
-                <b:else/>   
-                <h3><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></h3>       
-              </b:if> 
+                <b:else/>
+                <h3><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></h3>
+              </b:if>
             </div>
           </b:includable>
         </b:widget>
@@ -563,7 +575,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
     </div>
 
     <div class='header-menu'>
-      <div class='container row'> 
+      <div class='container row'>
         <b:section class='main-menu' id='main-menu' maxwidgets='1' name='Main Menu' showaddelement='yes'>
            <b:widget id='LinkList74' locked='true' title='Main Menu' type='LinkList' version='2' visible='false'>
              <b:widget-settings>
@@ -679,9 +691,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 <div class='clearfix'/>
   </div>
 
-  
-
-  <b:if cond='data:view.isHomepage'> 
+  <b:if cond='data:view.isHomepage'>
     <!-- Featured Wrapper -->
     <div class='row' id='hot-wrapper'>
       <b:section id='hot-section' maxwidgets='1' name='Hot Posts' showaddelement='yes'>
@@ -1129,7 +1139,6 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 }
 </style>
 
-
 <a class="champaklink" href="https://varanasisoftwarejunction.blogspot.com/p/run-python-here.html" target="python"><h2>Python IDE</h2></a>]]></b:widget-setting>
               </b:widget-settings>
               <b:includable id='main'>
@@ -1192,7 +1201,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
           </b:section>
  <div class='clearfix'/>
     </div>
-   
+
   </b:if>
 
   <!-- Content Wrapper -->
@@ -1202,7 +1211,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       <!-- Main Wrapper -->
       <div id='main-wrapper'>
 
-        <b:if cond='data:view.isHomepage'> 
+        <b:if cond='data:view.isHomepage'>
           <b:section class='featured-posts' id='featured-posts-2' name='Featured Posts 02' showaddelement='yes'/>
           <div class='clearfix'/>
         </b:if>
@@ -1253,7 +1262,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
               <div class='about-author'>
                 <div class='avatar-container'>
                   <b:if cond='data:post.author.authorPhoto.image'>
-                    <img class='author-avatar' expr:alt='data:post.author.name' expr:src='data:post.author.authorPhoto.image resizeImage 100'/>                
+                    <img class='author-avatar' expr:alt='data:post.author.name' expr:src='data:post.author.authorPhoto.image resizeImage 100'/>
                     <b:else/>
                     <img class='author-avatar' expr:alt='data:post.author.name' src='https://4.bp.blogspot.com/-uCjYgVFIh70/VuOLn-mL7PI/AAAAAAAADUs/Kcu9wJbv790hIo83rI_s7lLW3zkLY01EA/s100/avatar.png'/>
                   </b:if>
@@ -1270,7 +1279,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
               </a>
             </b:includable>
             <b:includable id='backLinks' var='post'>
-              <b:comment>Disabled</b:comment>         
+              <b:comment>Disabled</b:comment>
             </b:includable>
             <b:includable id='blogThisShare'>
   <b:with value='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=270,width=475\&quot;); return false;&quot;' var='onclick'>
@@ -1489,10 +1498,10 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   </b:with>
 </b:includable>
             <b:includable id='feedLinks'>
-              <b:comment>Disabled</b:comment> 
+              <b:comment>Disabled</b:comment>
             </b:includable>
             <b:includable id='feedLinksBody' var='links'>
-              <b:comment>Disabled</b:comment> 
+              <b:comment>Disabled</b:comment>
             </b:includable>
             <b:includable id='footerBylines' var='post'>
               <!-- Post Footer Extras -->
@@ -1512,13 +1521,13 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                 </div>
             </b:includable>
             <b:includable id='homePageLink'>
-              <b:comment>Disabled</b:comment> 
+              <b:comment>Disabled</b:comment>
             </b:includable>
             <b:includable id='homePostsHeadline'>
               <b:if cond='data:view.isHomepage'>
-                <div class='home-posts-headline title-wrap Label'>           
-                  <h3 class='title'><data:messages.recentPosts/></h3>  
-                  <a class='view-all' href='/search'><data:messages.viewAll/></a>   
+                <div class='home-posts-headline title-wrap Label'>
+                  <h3 class='title'><data:messages.recentPosts/></h3>
+                  <a class='view-all' href='/search'><data:messages.viewAll/></a>
                 </div>
                 <div class='clearfix'/>
               </b:if>
@@ -1586,7 +1595,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 </b:includable>
             <b:includable id='messagesJs'>
               <script type='text/javascript'>
-                var messages = { 
+                var messages = {
                   viewAll: &quot;<data:messages.viewAll/>&quot;
                 }
               </script>
@@ -1627,7 +1636,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                 <span class='post-author'><a expr:href='data:post.author.profileUrl' expr:title='data:post.author.name' target='_blank'><data:post.author.name/></a></span>
               </b:if>
             </b:includable>
-            <b:includable id='postBody' var='post'> 
+            <b:includable id='postBody' var='post'>
               <!-- Post Body Entry Content-->
               <div class='post-body post-content'>
                 <data:post.body/>
@@ -1707,7 +1716,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
               <!-- Post Featured Image on Index -->
               <div class='post-image-wrap'>
                 <a class='post-image-link' expr:href='data:post.url'>
-                  <b:if cond='data:post.featuredImage'> 
+                  <b:if cond='data:post.featuredImage'>
                     <img class='post-thumb' expr:alt='data:post.title' expr:src='data:post.featuredImage resizeImage 640'/>
                     <b:else/>
                     <img class='post-thumb' expr:alt='data:post.title' src='https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/w640/nth.png'/>
@@ -1727,7 +1736,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
               </div>
             </b:includable>
             <b:includable id='postFooterAuthorProfile' var='post'>
-              <b:comment>Disabled</b:comment>   
+              <b:comment>Disabled</b:comment>
             </b:includable>
             <b:includable id='postHeader' var='post'>
               <b:include cond='data:view.isPost' data='post' name='postBreadcrumbs'/>
@@ -1790,23 +1799,23 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
             <b:includable id='postNavigation' var='post'>
               <!-- Post Navigation Item -->
               <ul class='post-nav'>
-                <li class='post-next'> 
-                  <b:if cond='data:newerPageUrl'> 
+                <li class='post-next'>
+                  <b:if cond='data:newerPageUrl'>
                     <a class='next-post-link' expr:href='data:newerPageUrl' expr:id='data:widget.instanceId + &quot;_blog-pager-newer-link&quot;' rel='next'>
                       <div class='post-nav-inner'><span><data:messages.newer/></span><p/></div>
-                    </a> 
-                    <b:else/> 
-                    <a rel='next'><div class='post-nav-inner post-nav-active'><span><data:messages.newer/></span><p><data:post.title/></p></div></a> 
-                  </b:if> 
+                    </a>
+                    <b:else/>
+                    <a rel='next'><div class='post-nav-inner post-nav-active'><span><data:messages.newer/></span><p><data:post.title/></p></div></a>
+                  </b:if>
                 </li>
-                <li class='post-prev'> 
-                  <b:if cond='data:olderPageUrl'> 
+                <li class='post-prev'>
+                  <b:if cond='data:olderPageUrl'>
                     <a class='prev-post-link' expr:href='data:olderPageUrl' expr:id='data:widget.instanceId + &quot;_blog-pager-older-link&quot;' rel='previous'>
                       <div class='post-nav-inner'><span><data:messages.older/></span><p/></div>
-                    </a> 
+                    </a>
                     <b:else/>
-                    <a rel='previous'><div class='post-nav-inner post-nav-active'><span><data:messages.older/></span><p><data:post.title/></p></div></a> 
-                  </b:if> 
+                    <a rel='previous'><div class='post-nav-inner post-nav-active'><span><data:messages.older/></span><p><data:post.title/></p></div></a>
+                  </b:if>
                 </li>
               </ul>
             </b:includable>
@@ -1837,18 +1846,18 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                       <b:else/>
                       <div class='related-tag' data-label='random'/>
                     </b:if>
-                  </div> 
-                </div>  
+                  </div>
+                </div>
             </b:includable>
             <b:includable id='postShareButtons' var='post'>
               <!-- Post ShareButtons -->
               <b:if cond='data:allBylineItems.share'>
                 <div class='post-share'>
-                  <ul class='share-links social social-color'> 
+                  <ul class='share-links social social-color'>
                     <b:class cond='data:blog.isMobileRequest' name='is-mobile'/>
                     <li class='facebook'><a class='facebook' expr:href='&quot;https://www.facebook.com/sharer.php?u=&quot; + data:post.url' onclick='window.open(this.href, &apos;windowName&apos;, &apos;width=550, height=650, left=24, top=24, scrollbars, resizable&apos;); return false;' rel='nofollow'><span>Facebook</span></a></li>
                     <li class='twitter'><a class='twitter' expr:href='&quot;https://twitter.com/share?url=&quot; + data:post.url + &quot;&amp;text=&quot; + data:post.title' onclick='window.open(this.href, &apos;windowName&apos;, &apos;width=550, height=450, left=24, top=24, scrollbars, resizable&apos;); return false;' rel='nofollow'><span>Twitter</span></a></li>
-                    <li class='pinterest'><a class='pinterest' expr:href='&quot;https://www.pinterest.com/pin/create/button/?url=&quot; + data:post.url + &quot;&amp;media=&quot; + data:post.featuredImage + &quot;&amp;description=&quot; + data:post.title' onclick='window.open(this.href, &apos;windowName&apos;, &apos;width=735, height=750, left=24, top=24, scrollbars, resizable&apos;); return false;' rel='nofollow'/></li> 
+                    <li class='pinterest'><a class='pinterest' expr:href='&quot;https://www.pinterest.com/pin/create/button/?url=&quot; + data:post.url + &quot;&amp;media=&quot; + data:post.featuredImage + &quot;&amp;description=&quot; + data:post.title' onclick='window.open(this.href, &apos;windowName&apos;, &apos;width=735, height=750, left=24, top=24, scrollbars, resizable&apos;); return false;' rel='nofollow'/></li>
                     <li class='linkedin'><a class='linkedin' expr:href='&quot;https://www.linkedin.com/shareArticle?url=&quot; + data:post.url' onclick='window.open(this.href, &apos;windowName&apos;, &apos;width=950, height=650, left=24, top=24, scrollbars, resizable&apos;); return false;' rel='nofollow'/></li>
                     <li class='whatsapp whatsapp-desktop'><a class='whatsapp' expr:href='&quot;https://web.whatsapp.com/send?text=&quot; + data:post.title + &quot; | &quot; + data:post.url' onclick='window.open(this.href, &apos;windowName&apos;, &apos;width=900, height=550, left=24, top=24, scrollbars, resizable&apos;); return false;' rel='nofollow'/></li>
                     <li class='whatsapp whatsapp-mobile'><a class='whatsapp' expr:href='&quot;https://api.whatsapp.com/send?text=&quot; + data:post.title + &quot; | &quot; + data:post.url' rel='nofollow' target='_blank'/></li>
@@ -1858,7 +1867,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
               </b:if>
             </b:includable>
             <b:includable id='postShortMeta'>
-              <b:comment>Disabled</b:comment> 
+              <b:comment>Disabled</b:comment>
             </b:includable>
             <b:includable id='postSummary' var='post'>
               <!-- Post Summary -->
@@ -2067,9 +2076,9 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   <!-- LINT.ThenChange(//depot/google3/java/com/google/blogger/b2/layouts/widgets/v2-style.css) -->
 </b:includable>
           </b:widget>
-        </b:section> 
+        </b:section>
 
-        <b:if cond='data:view.isHomepage'> 
+        <b:if cond='data:view.isHomepage'>
           <div class='clearfix'/>
           <b:section class='featured-posts' id='featured-posts-3' name='Featured Posts 03' showaddelement='yes'>
             <b:widget id='AdSense6' locked='false' title='' type='AdSense' version='2' visible='true'>
@@ -2107,6 +2116,652 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       <!-- Sidebar Wrapper -->
       <div id='sidebar-wrapper'>
         <b:section class='sidebar common-widget' id='sidebar1' name='Sidebar Right (A)' showaddelement='yes'>
+          <b:widget id='HTML27' locked='false' title='' type='HTML' visible='false'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Groww Referral Widget for Blogger -->
+<div class="groww-widget" id="groww-widget">
+  <style>
+    /* --- Widget styling (self-contained) --- */
+    .groww-card{
+      --bg: #fff8ef;            /* light saffron-ish background */
+      --accent: #f6a623;        /* saffron accent */
+      --muted: #6b6b6b;
+      --card-radius: 12px;
+      max-width: 520px;
+      margin: 12px auto;
+      box-shadow: 0 8px 22px rgba(30,30,30,0.08);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      font-family: Inter, Roboto, Arial, sans-serif;
+      color: #111;
+      background: linear-gradient(180deg, var(--bg), #fff);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .groww-top{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:16px;
+    }
+
+    .groww-logo{
+      width:78px;
+      height:78px;
+      flex: 0 0 78px;
+      border-radius: 10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(180deg,#ffffff, #fff7e8);
+      border: 1px solid rgba(0,0,0,0.03);
+      box-shadow: 0 6px 14px rgba(240,150,50,0.08) inset;
+    }
+
+    /* Simple plant-ish SVG mark styling */
+    .groww-logo svg{ width:52px; height:52px; }
+
+    .groww-head{
+      flex:1;
+    }
+
+    .groww-title{
+      font-size:16px;
+      font-weight:700;
+      margin:0 0 6px 0;
+      color:#0b2540;
+    }
+
+    .groww-sub{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    .groww-body{
+      padding:0 16px 16px 16px;
+      font-size:14px;
+      color:#111;
+      line-height:1.5;
+    }
+
+    .groww-body p{
+      margin:8px 0;
+    }
+
+    .groww-features{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin:8px 0 12px 0;
+    }
+
+    .groww-chip{
+      background: rgba(246,166,35,0.12);
+      color: #8a4f00;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .groww-cta{
+      display:flex;
+      gap:10px;
+      padding:0 16px 18px 16px;
+      align-items:center;
+    }
+
+    .groww-btn{
+      flex:1;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:12px 14px;
+      border-radius:10px;
+      border: none;
+      cursor:pointer;
+      font-weight:700;
+      font-size:15px;
+      background: linear-gradient(90deg, var(--accent), #ff8a00);
+      color: white;
+      text-decoration:none;
+      box-shadow: 0 8px 18px rgba(246,166,35,0.18);
+    }
+
+    .groww-small{
+      font-size:12px;
+      color:var(--muted);
+      text-align:right;
+      min-width:120px;
+    }
+
+    .groww-disclaimer{
+      padding: 12px 16px 18px 16px;
+      border-top: 1px dashed rgba(0,0,0,0.04);
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      justify-content:space-between;
+    }
+
+    .groww-disclaimer a{
+      color:var(--muted);
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width:440px){
+      .groww-card{ margin:10px; }
+      .groww-top{ padding:12px; }
+      .groww-logo{ width:64px; height:64px; flex:0 0 64px; }
+      .groww-btn{ font-size:14px; padding:10px; }
+    }
+  </style>
+
+  <div class="groww-card" role="region" aria-label="Groww referral card">
+    <div class="groww-top">
+      <div class="groww-logo" aria-hidden="true">
+        <!-- decorative plant/growth SVG -->
+        <svg viewbox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g transform="translate(6,6)" fill="none" stroke="none">
+            <circle cx="26" cy="26" r="26" fill="#fff7ec"></circle>
+            <path d="M20 34c4-4 10-12 6-20-4 6-9 8-12 8 2-8 0-14-6-14 0 8 0 18 10 26z" fill="#f6a623" opacity="0.12"></path>
+            <path d="M18 36c6-6 12-18 8-28" stroke="#ff8a00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M10 32c3-6 8-10 14-12" stroke="#0b2540" stroke-width="1.6" stroke-linecap="round"></path>
+          </g>
+        </svg>
+      </div>
+
+      <div class="groww-head">
+        <h3 class="groww-title">Groww — My investing app</h3>
+        <p class="groww-sub">Stocks • Mutual Funds • IPOs • Bonds — demat account with 0 annual charges</p>
+      </div>
+    </div>
+
+    <div class="groww-body">
+      <p>Hey! I’ve been using <strong>Groww</strong> for all my investing needs — from Stocks and Mutual Funds to IPOs, F&O, Bonds, and more. It’s trusted by over <strong>1 crore</strong> investors and traders, and I’ve genuinely had a great experience so far.</p>
+
+      <div class="groww-features" aria-hidden="true">
+        <span class="groww-chip">0 annual charges</span>
+        <span class="groww-chip">Easy interface</span>
+        <span class="groww-chip">Invest in IPOs</span>
+      </div>
+
+      <div class="groww-cta">
+        <a id="groww-ref-btn" class="groww-btn"
+           href="https://app.groww.in/v3cO/27j1qato"
+           target="_blank"
+           rel="noopener noreferrer nofollow">
+          Open free demat account
+          <!-- small arrow -->
+          <svg width="14" height="14" viewbox="0 0 24 24" aria-hidden="true">
+            <path fill="white" d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z"/>
+          </path></svg>
+        </a>
+
+        <div class="groww-small">Trusted by 1 crore+ users</div>
+      </div>
+    </div>
+
+    <div class="groww-disclaimer">
+      <div>
+        <strong style="display:block;color:#333;margin-bottom:6px;">Affiliate disclosure</strong>
+        <div>I may earn a small commission if you open an account using my link — at <em>no extra cost</em> to you. Thank you for supporting my work!</div>
+      </div>
+      <div style="text-align:right;">
+        <a href="javascript:void(0)" id="groww-more" aria-expanded="false">More info</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // Keep JS minimal and safe for Blogger HTML gadget
+      var more = document.getElementById('groww-more');
+      var btn = document.getElementById('groww-ref-btn');
+
+      more && more.addEventListener('click', function(){
+        var expanded = this.getAttribute('aria-expanded') === 'true';
+        if(!expanded){
+          alert('This is an affiliate link. If you sign up using the link, I may receive a small commission at no extra cost to you. Your support helps me keep creating content. Thanks!');
+          this.setAttribute('aria-expanded','true');
+          this.textContent = 'Thanks!';
+        } else {
+          this.setAttribute('aria-expanded','false');
+          this.textContent = 'More info';
+        }
+      });
+
+      // Optional: simple click tracker for your own analytics (stores count in localStorage)
+      try {
+        btn && btn.addEventListener('click', function(){
+          try{
+            var key = 'groww_clicks';
+            var n = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+            localStorage.setItem(key, n);
+          }catch(e){}
+        });
+      } catch(e){}
+    })();
+  </script>
+</div>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
+          <b:widget id='HTML26' locked='false' title='' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Bookmark Widget -->
+<div id="bookmark-widget" style="margin: 10px 0; font-family: Arial, sans-serif;">
+  <button onclick="saveBookmark()"
+          style="padding: 8px 12px; font-size: 14px; background:#0b63d4; color:white; border:none; border-radius:5px; cursor:pointer;">
+    📌 Bookmark this page
+  </button>
+  <div id="bookmark-status" style="margin-top: 6px; font-size: 13px; color: green;"></div>
+
+  <h4 style="margin-top:15px;">📑 Saved Bookmarks</h4>
+  <div id="bookmark-container"
+       style="border: 1px solid #ccc; border-radius: 6px; padding: 10px; margin-top: 8px; background:#f9f9f9;">
+    <ul id="bookmark-list" style="list-style:none; padding-left:0; font-size:14px; margin:0;"></ul>
+  </div>
+</div>
+
+<script>
+  function saveBookmark() {
+    const pageTitle = document.title;
+    const pageURL = window.location.href;
+    const bookmark = { title: pageTitle, url: pageURL };
+
+    // Retrieve existing bookmarks
+    let bookmarks = JSON.parse(localStorage.getItem("blogBookmarks")) || [];
+
+    // Check if already bookmarked
+    const exists = bookmarks.some(b => b.url === pageURL);
+    if (exists) {
+      document.getElementById("bookmark-status").textContent = "✅ Already bookmarked!";
+      renderBookmarks();
+      return;
+    }
+
+    // Save new bookmark
+    bookmarks.push(bookmark);
+    localStorage.setItem("blogBookmarks", JSON.stringify(bookmarks));
+    document.getElementById("bookmark-status").textContent = "✅ Page bookmarked!";
+    renderBookmarks();
+  }
+
+  function renderBookmarks() {
+    let bookmarks = JSON.parse(localStorage.getItem("blogBookmarks")) || [];
+    const list = document.getElementById("bookmark-list");
+    list.innerHTML = "";
+    const currentURL = window.location.href;
+
+    bookmarks.forEach((b, index) => {
+      const li = document.createElement("li");
+      li.style.marginBottom = "8px";
+      li.style.display = "flex";
+      li.style.alignItems = "center";
+      li.style.padding = "6px 8px";
+      li.style.borderRadius = "4px";
+
+      // Highlight current page bookmark
+      if (b.url === currentURL) {
+        li.style.background = "#d4f8d4";  // light green background
+      }
+
+      li.innerHTML = `<span style="margin-right:8px; font-weight:bold; color:#0b63d4;">${index + 1}.</span>
+        <a href="${b.url}" target="_blank" style="text-decoration:none; color:#333; flex-grow:1;">${b.title}</a>
+        <button onclick="deleteBookmark(${index})"
+          style="margin-left:8px; font-size:12px; padding:2px 6px; border:none; border-radius:3px; cursor:pointer; background:#ff4d4d; color:white;">
+          ❌
+        </button>`;
+      list.appendChild(li);
+    });
+  }
+
+  function deleteBookmark(index) {
+    let bookmarks = JSON.parse(localStorage.getItem("blogBookmarks")) || [];
+    bookmarks.splice(index, 1);
+    localStorage.setItem("blogBookmarks", JSON.stringify(bookmarks));
+    renderBookmarks();
+  }
+
+  // Render on load
+  renderBookmarks();
+</script>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
+          <b:widget id='HTML25' locked='false' title='' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Bookmark Widget -->
+<div id="bookmark-widget" style="margin: 10px 0; font-family: Arial, sans-serif;">
+  <button onclick="saveBookmark()"
+          style="padding: 8px 12px; font-size: 14px; background:#0b63d4; color:white; border:none; border-radius:5px; cursor:pointer;">
+    📌 Bookmark this page
+  </button>
+  <div id="bookmark-status" style="margin-top: 6px; font-size: 13px; color: green;"></div>
+
+  <h4 style="margin-top:15px;">📑 Saved Bookmarks</h4>
+  <ul id="bookmark-list" style="list-style:none; padding-left:0; font-size:14px;"></ul>
+</div>
+
+<script>
+  function saveBookmark() {
+    const pageTitle = document.title;
+    const pageURL = window.location.href;
+    const bookmark = { title: pageTitle, url: pageURL };
+
+    // Retrieve existing bookmarks
+    let bookmarks = JSON.parse(localStorage.getItem("blogBookmarks")) || [];
+
+    // Check if already bookmarked
+    const exists = bookmarks.some(b => b.url === pageURL);
+    if (exists) {
+      document.getElementById("bookmark-status").textContent = "✅ Already bookmarked!";
+      return;
+    }
+
+    // Save new bookmark
+    bookmarks.push(bookmark);
+    localStorage.setItem("blogBookmarks", JSON.stringify(bookmarks));
+    document.getElementById("bookmark-status").textContent = "✅ Page bookmarked!";
+    renderBookmarks();
+  }
+
+  function renderBookmarks() {
+    let bookmarks = JSON.parse(localStorage.getItem("blogBookmarks")) || [];
+    const list = document.getElementById("bookmark-list");
+    list.innerHTML = "";
+    bookmarks.forEach((b, index) => {
+      const li = document.createElement("li");
+      li.style.marginBottom = "6px";
+      li.innerHTML = `<a href="${b.url}" target="_blank">${b.title}</a>
+        <button onclick="deleteBookmark(${index})" style="margin-left:8px; font-size:12px; padding:2px 6px; cursor:pointer;">❌</button>`;
+      list.appendChild(li);
+    });
+  }
+
+  function deleteBookmark(index) {
+    let bookmarks = JSON.parse(localStorage.getItem("blogBookmarks")) || [];
+    bookmarks.splice(index, 1);
+    localStorage.setItem("blogBookmarks", JSON.stringify(bookmarks));
+    renderBookmarks();
+  }
+
+  // Render on load
+  renderBookmarks();
+</script>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
+          <b:widget id='HTML24' locked='false' title='' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Paste this into a Blogger "HTML/JavaScript" gadget -->
+<div id="blogger-clock-wrapper">
+  <div id="blogger-clock" aria-live="polite"></div>
+  <div id="blogger-clock-note">(Local time)</div>
+  <button id="toggle-format">Switch to 24h</button>
+</div>
+
+<style>
+  #blogger-clock-wrapper {
+    font-family: Inter, system-ui, Arial;
+    text-align: center;
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background: #f9f9ff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  }
+
+  #blogger-clock {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0b63d4;
+  }
+
+  #blogger-clock .ampm {
+    font-size: 0.7em;
+    vertical-align: super;
+    color: #777;
+    margin-left: 4px;
+  }
+
+  #blogger-clock-note {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  #toggle-format {
+    margin-top: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    border: none;
+    border-radius: 6px;
+    background: #0b63d4;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  #toggle-format:hover {
+    background: #084c9e;
+  }
+</style>
+
+<script>
+(function(){
+  const el = document.getElementById('blogger-clock');
+  const toggleBtn = document.getElementById('toggle-format');
+  const pad = (n) => String(n).padStart(2, '0');
+
+  // Load saved format from localStorage (default = 12h)
+  let use24h = localStorage.getItem("bloggerClock24h") === "true";
+
+  // Set initial button text
+  toggleBtn.textContent = use24h ? "Switch to 12h" : "Switch to 24h";
+
+  function updateClock(){
+    const now = new Date();
+
+    const weekday = new Intl.DateTimeFormat(undefined, { weekday: 'long' }).format(now);
+    const day = pad(now.getDate());
+    const month = new Intl.DateTimeFormat(undefined, { month: 'short' }).format(now);
+    const year = now.getFullYear();
+
+    let hours = now.getHours();
+    let ampm = "";
+
+    if(!use24h){
+      ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // Handle midnight
+    }
+
+    hours = pad(hours);
+    const minutes = pad(now.getMinutes());
+    const seconds = pad(now.getSeconds());
+
+    el.innerHTML = `${weekday}, ${day}-${month}-${year}. ${hours}:${minutes}:${seconds}`
+      + (use24h ? "" : ` <span class="ampm">${ampm}</span>`);
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    use24h = !use24h;
+    localStorage.setItem("bloggerClock24h", use24h); // Save preference
+    toggleBtn.textContent = use24h ? "Switch to 12h" : "Switch to 24h";
+    updateClock();
+  });
+
+  updateClock();
+  setInterval(updateClock, 1000);
+})();
+</script>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
+          <b:widget id='HTML22' locked='false' title='' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Styled original Blogger Search widget with left avatar + icon button -->
+<img src="https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_umQwJV8MuDDto5fvP9ow5V1Ckvs_erUHxwyRi9lltBs1578-SCs8UWuy8ukohtMpHurJ40i8MaZvF8Tq2EnnJSUyAzgxm4WrJHPK3wPWA-bMqD_YumMhK21vbaqq1AlwXctmG3kMQadxlRNmQsrwwDwT8=w640"
+     style="display:none;" alt="widget-avatar" />
+
+<b:widget id='Search1' locked='false' title='Search This Blog' type='BlogSearch' class="cppp">
+  <b:widget-settings>
+    <!-- fixed typo in title -->
+    <b:widget-setting name='title'>What do you need to find?</b:widget-setting>
+  </b:widget-settings>
+
+  <b:includable id='main'>
+    <style>
+      /* Container (scoped to this widget) */
+      .cppp .champakroy1970-searchbox {
+        max-width: 520px;
+
+        margin: 0 auto;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      }
+
+      /* layout: avatar | input + button */
+      .cppp .champakroy1970-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: linear-gradient(180deg, rgba(11,37,69,0.03), rgba(11,37,69,0.01));
+        padding: 8px;
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(11,37,69,0.06);
+        border: 1px solid rgba(11,37,69,0.06);
+      }
+
+      .cppp .champakroy1970-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        flex: 0 0 50px;
+        object-fit: cover;
+        box-shadow: 0 4px 12px rgba(10,40,80,0.08);
+      }
+
+      .cppp .champakroy1970-form {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .cppp .champakroy1970-input {
+        flex: 1;
+
+        outline: none;
+        padding: 10px 12px;
+        font-size: 15px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.85);
+        color: #06203a;
+        min-width: 80px;
+border-style: ridge;
+border-width:5px;
+      }
+
+      .cppp .champakroy1970-input::placeholder { color: #7d9ab5; }
+
+      .cppp .champakroy1970-btn {
+        display: inline-grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        border: 0;
+        cursor: pointer;
+        background: linear-gradient(180deg,#1877d2,#0c5fb0);
+        color: #fff;
+        box-shadow: 0 6px 18px rgba(13,67,132,0.18);
+        transition: transform .12s ease, box-shadow .12s ease;
+      }
+
+      .cppp .champakroy1970-btn:active { transform: translateY(1px) scale(.995); }
+      .cppp .champakroy1970-btn:focus { outline: 3px solid rgba(24,119,210,0.15); }
+
+      .cppp .champakroy1970-label {
+        display:block;
+        margin-bottom:6px;
+        font-weight:600;
+        color:#073050;
+        font-size:14px;
+      }
+
+      /* small screens: avatar shrinks and layout stays tidy */
+      @media (max-width:480px) {
+        .cppp .champakroy1970-row { gap:8px; padding:6px; }
+        .cppp .champakroy1970-avatar { width:40px; height:40px; flex:0 0 40px; }
+        .cppp .champakroy1970-btn { width:40px; height:40px; }
+      }
+    </style>
+
+    <div class='champakroy1970-searchbox'>
+      <label class='champakroy1970-label' for='champakroy1970-q'> </label>
+
+      <!-- outer row contains avatar + form -->
+      <div class='champakroy1970-row'>
+        <!-- avatar image (keeps the URL you provided). Use alt for accessibility. -->
+        <img class='champakroy1970-avatar'
+             src='https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_umQwJV8MuDDto5fvP9ow5V1Ckvs_erUHxwyRi9lltBs1578-SCs8UWuy8ukohtMpHurJ40i8MaZvF8Tq2EnnJSUyAzgxm4WrJHPK3wPWA-bMqD_YumMhK21vbaqq1AlwXctmG3kMQadxlRNmQsrwwDwT8=w640'
+             alt='Champak Roy avatar' />
+
+        <!-- original Blogger search form (keeps /search handling) -->
+        <form class='champakroy1970-form' action='/search' method='get' target='_top' role='search' aria-label='Search this blog'>
+          <!-- visible text input -->
+          <input id='champakroy1970-q' class='champakroy1970-input' type='text' name='q' placeholder='Look up' aria-label='Search query' />
+
+          <!-- accessible button with SVG icon (acts as submit) -->
+          <button class='champakroy1970-btn' type='submit' aria-label='Search'>
+            <!-- magnifying glass icon -->
+            <svg width='20' height='20' viewbox='0 0 24 24' fill='none' aria-hidden='true' focusable='false'>
+              <path d='M21 21l-4.35-4.35' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'></path>
+              <circle cx='11' cy='11' r='6' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'></circle>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </b:includable>
+</b:widget>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
           <b:widget id='HTML15' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='content'><![CDATA[<!--
@@ -3528,7 +4183,7 @@ Features:
 
       .cppp .champakroy1970-input {
         flex: 1;
-        
+
         outline: none;
         padding: 10px 12px;
         font-size: 15px;
@@ -3663,16 +4318,16 @@ border-width:5px;
   <form id="whatsappForm">
     <label>Name:</label><br />
     <input type="text" id="name" required style="width:100%; padding:8px; margin:5px 0;" /><br />
-    
+
     <label>Email:</label><br />
     <input type="email" id="email" required style="width:100%; padding:8px; margin:5px 0;" /><br />
-    
+
     <label>Phone:</label><br />
     <input type="tel" id="phone" required style="width:100%; padding:8px; margin:5px 0;" /><br />
-    
+
     <label>Your Query:</label><br />
     <textarea id="query" rows="4" required style="width:100%; padding:8px; margin:5px 0;"></textarea><br />
-    
+
     <button type="submit" style="background:#25D366; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; width:100%;">Send on WhatsApp</button>
   </form>
 </div>
@@ -3712,12 +4367,12 @@ document.getElementById("whatsappForm").addEventListener("submit", function(e){
 {
 background-color:yellow;
 display:none;
- 
+
 }
 .logo-content
 {
 background-color:yellow;
- 
+
 }
 #main-menu{
 background-color:pink;
@@ -3876,10 +4531,10 @@ background-color:pink;
               <b:widget-setting name='content'><![CDATA[<!-- WhatsApp Group Invite Button -->
 <div style="text-align:center; margin:20px 0;">
   <a href="https://chat.whatsapp.com/KBrIC14c2SELJNBVjbzqsK" target="_blank"
-     style="display:inline-block; padding:12px 25px; background:#25D366; 
-            color:white; font-size:16px; font-weight:bold; 
-            border-radius:8px; text-decoration:none; 
-            box-shadow:0 4px 6px rgba(0,0,0,0.2); 
+     style="display:inline-block; padding:12px 25px; background:#25D366;
+            color:white; font-size:16px; font-weight:bold;
+            border-radius:8px; text-decoration:none;
+            box-shadow:0 4px 6px rgba(0,0,0,0.2);
             transition: all 0.3s ease;">
     💬 Join Our WhatsApp Group
   </a>
@@ -4088,12 +4743,11 @@ background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvX
             </b:widget-settings>
             <b:includable id='main'>
 
- 
 <b:if cond='data:blog.pageType == &quot;item&quot;'>
 <style type='text/css'>
 #comments {display:none;}
 </style>
- 
+
 </b:if>
 <style type='text/css'>
 .post-comment-link { visibility: hidden; }
@@ -4148,18 +4802,15 @@ background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvX
           </b:widget>
           <b:widget id='HTML5' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!doctype html>
+              <b:widget-setting name='content'><![CDATA[
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-
 
 <div class="w3-container">
 
- 
-
   <div id="id01" class="w3-modal">
     <div class="w3-modal-content w3-animate-zoom w3-card-4">
-      <header class="w3-container w3-teal"> 
-        <span onclick="document.getElementById('id01').style.display='none'" 
+      <header class="w3-container w3-teal">
+        <span onclick="document.getElementById('id01').style.display='none'"
         class="w3-button w3-display-topright">&times;</span>
         <h2>Modal Header</h2>
       </header>
@@ -4192,7 +4843,7 @@ background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvX
               <b:widget-setting name='content'><![CDATA[<style>
 .champakwhatsappimage
 {
-width:100px; 
+width:100px;
 height:100px;
 }
 .champakwhatsapplink
@@ -4200,7 +4851,7 @@ height:100px;
 
   background-color: white;
   color: black;
- 
+
   padding: 10px 10px;
   text-align: center;
   text-decoration: none;
@@ -4930,7 +5581,7 @@ border-color:green;
  <div class='clearfix'/>
 
 <!-- Footer Wrapper -->
-<div id='footer-wrapper'> 
+<div id='footer-wrapper'>
   <div class='container row'>
     <div class='footer-widgets-wrap'>
       <b:section class='footer common-widget' id='footer-sec1' maxwidgets='3' name='Section (Left)' showaddelement='yes'>
@@ -5257,7 +5908,7 @@ border-color:green;
         <b:widget id='HTML1' locked='false' title='' type='HTML' visible='false'>
           <b:widget-settings>
             <b:widget-setting name='content'><![CDATA[<script async="async" src="https://cse.google.com/cse.js?cx=fdb7fcb4c37bc3640">
-</script> 
+</script>
 <img src="https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_umQwJV8MuDDto5fvP9ow5V1Ckvs_erUHxwyRi9lltBs1578-SCs8UWuy8ukohtMpHurJ40i8MaZvF8Tq2EnnJSUyAzgxm4WrJHPK3wPWA-bMqD_YumMhK21vbaqq1AlwXctmG3kMQadxlRNmQsrwwDwT8=w640" style="width:50px;border-radius:50%;"/>
 <div class="gcse-search"></div>
 <h2>Search Champak's Blog</h2>]]></b:widget-setting>
@@ -5340,24 +5991,15 @@ border-color:green;
       </b:widget>
     </b:section>
     <div style='text-indent:-99999px;'>
-    
+
     <div class='copyright-area'>Created By <a href='http://soratemplates.com/' id='mycontent' rel='dofollow' title='Blogspot Templates'>Varanasi Software Junction</a> | Distributed By <a href='https://gooyaabitemplates.com/' rel='dofollow' style='color:#ff00ba;' target='_blank'>GooyaabiTemplates</a>
     </div>
-      
-    </div>  
-    
-    
-    
-    <div class='copyright-area'> <a href='https://varanasisoftwarejunction.blogspot.com/' title='Varanasi Software Junction'><h3>Varanasi Software Junction</h3></a> 
+
     </div>
-    
-    
-    
-    
-    
-    
-    
-      
+
+    <div class='copyright-area'> <a href='https://varanasisoftwarejunction.blogspot.com/' title='Varanasi Software Junction'><h3>Varanasi Software Junction</h3></a>
+    </div>
+
   </div>
 </div>
 </div>
@@ -5367,7 +6009,7 @@ border-color:green;
 <!-- Main Scripts -->
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js' type='text/javascript'/>
 <script type='text/javascript'>
-//<![CDATA[   
+//<![CDATA[
 /*! Theia Sticky Sidebar | v1.7.0 - https://github.com/WeCodePixels/theia-sticky-sidebar */
 (function($){$.fn.theiaStickySidebar=function(options){var defaults={'containerSelector':'','additionalMarginTop':0,'additionalMarginBottom':0,'updateSidebarHeight':true,'minWidth':0,'disableOnResponsiveLayouts':true,'sidebarBehavior':'modern','defaultPosition':'relative','namespace':'TSS'};options=$.extend(defaults,options);options.additionalMarginTop=parseInt(options.additionalMarginTop)||0;options.additionalMarginBottom=parseInt(options.additionalMarginBottom)||0;tryInitOrHookIntoEvents(options,this);function tryInitOrHookIntoEvents(options,$that){var success=tryInit(options,$that);if(!success){console.log('TSS: Body width smaller than options.minWidth. Init is delayed.');$(document).on('scroll.'+options.namespace,function(options,$that){return function(evt){var success=tryInit(options,$that);if(success){$(this).unbind(evt)}}}(options,$that));$(window).on('resize.'+options.namespace,function(options,$that){return function(evt){var success=tryInit(options,$that);if(success){$(this).unbind(evt)}}}(options,$that))}}function tryInit(options,$that){if(options.initialized===true){return true}if($('body').width()<options.minWidth){return false}init(options,$that);return true}function init(options,$that){options.initialized=true;var existingStylesheet=$('#theia-sticky-sidebar-stylesheet-'+options.namespace);if(existingStylesheet.length===0){$('head').append($('<style id="theia-sticky-sidebar-stylesheet-'+options.namespace+'">.theiaStickySidebar:after {content: ""; display: table; clear: both;}</style>'))}$that.each(function(){var o={};o.sidebar=$(this);o.options=options||{};o.container=$(o.options.containerSelector);if(o.container.length==0){o.container=o.sidebar.parent()}o.sidebar.parents().css('-webkit-transform','none');o.sidebar.css({'position':o.options.defaultPosition,'overflow':'visible','-webkit-box-sizing':'border-box','-moz-box-sizing':'border-box','box-sizing':'border-box'});o.stickySidebar=o.sidebar.find('.theiaStickySidebar');if(o.stickySidebar.length==0){var javaScriptMIMETypes=/(?:text|application)\/(?:x-)?(?:javascript|ecmascript)/i;o.sidebar.find('script').filter(function(index,script){return script.type.length===0||script.type.match(javaScriptMIMETypes)}).remove();o.stickySidebar=$('<div>').addClass('theiaStickySidebar').append(o.sidebar.children());o.sidebar.append(o.stickySidebar)}o.marginBottom=parseInt(o.sidebar.css('margin-bottom'));o.paddingTop=parseInt(o.sidebar.css('padding-top'));o.paddingBottom=parseInt(o.sidebar.css('padding-bottom'));var collapsedTopHeight=o.stickySidebar.offset().top;var collapsedBottomHeight=o.stickySidebar.outerHeight();o.stickySidebar.css('padding-top',1);o.stickySidebar.css('padding-bottom',1);collapsedTopHeight-=o.stickySidebar.offset().top;collapsedBottomHeight=o.stickySidebar.outerHeight()-collapsedBottomHeight-collapsedTopHeight;if(collapsedTopHeight==0){o.stickySidebar.css('padding-top',0);o.stickySidebarPaddingTop=0}else{o.stickySidebarPaddingTop=1}if(collapsedBottomHeight==0){o.stickySidebar.css('padding-bottom',0);o.stickySidebarPaddingBottom=0}else{o.stickySidebarPaddingBottom=1}o.previousScrollTop=null;o.fixedScrollTop=0;resetSidebar();o.onScroll=function(o){if(!o.stickySidebar.is(":visible")){return}if($('body').width()<o.options.minWidth){resetSidebar();return}if(o.options.disableOnResponsiveLayouts){var sidebarWidth=o.sidebar.outerWidth(o.sidebar.css('float')=='none');if(sidebarWidth+50>o.container.width()){resetSidebar();return}}var scrollTop=$(document).scrollTop();var position='static';if(scrollTop>=o.sidebar.offset().top+(o.paddingTop-o.options.additionalMarginTop)){var offsetTop=o.paddingTop+options.additionalMarginTop;var offsetBottom=o.paddingBottom+o.marginBottom+options.additionalMarginBottom;var containerTop=o.sidebar.offset().top;var containerBottom=o.sidebar.offset().top+getClearedHeight(o.container);var windowOffsetTop=0+options.additionalMarginTop;var windowOffsetBottom;var sidebarSmallerThanWindow=(o.stickySidebar.outerHeight()+offsetTop+offsetBottom)<$(window).height();if(sidebarSmallerThanWindow){windowOffsetBottom=windowOffsetTop+o.stickySidebar.outerHeight()}else{windowOffsetBottom=$(window).height()-o.marginBottom-o.paddingBottom-options.additionalMarginBottom}var staticLimitTop=containerTop-scrollTop+o.paddingTop;var staticLimitBottom=containerBottom-scrollTop-o.paddingBottom-o.marginBottom;var top=o.stickySidebar.offset().top-scrollTop;var scrollTopDiff=o.previousScrollTop-scrollTop;if(o.stickySidebar.css('position')=='fixed'){if(o.options.sidebarBehavior=='modern'){top+=scrollTopDiff}}if(o.options.sidebarBehavior=='stick-to-top'){top=options.additionalMarginTop}if(o.options.sidebarBehavior=='stick-to-bottom'){top=windowOffsetBottom-o.stickySidebar.outerHeight()}if(scrollTopDiff>0){top=Math.min(top,windowOffsetTop)}else{top=Math.max(top,windowOffsetBottom-o.stickySidebar.outerHeight())}top=Math.max(top,staticLimitTop);top=Math.min(top,staticLimitBottom-o.stickySidebar.outerHeight());var sidebarSameHeightAsContainer=o.container.height()==o.stickySidebar.outerHeight();if(!sidebarSameHeightAsContainer&&top==windowOffsetTop){position='fixed'}else if(!sidebarSameHeightAsContainer&&top==windowOffsetBottom-o.stickySidebar.outerHeight()){position='fixed'}else if(scrollTop+top-o.sidebar.offset().top-o.paddingTop<=options.additionalMarginTop){position='static'}else{position='absolute'}}if(position=='fixed'){var scrollLeft=$(document).scrollLeft();o.stickySidebar.css({'position':'fixed','width':getWidthForObject(o.stickySidebar)+'px','transform':'translateY('+top+'px)','left':(o.sidebar.offset().left+parseInt(o.sidebar.css('padding-left'))-scrollLeft)+'px','top':'0px'})}else if(position=='absolute'){var css={};if(o.stickySidebar.css('position')!='absolute'){css.position='absolute';css.transform='translateY('+(scrollTop+top-o.sidebar.offset().top-o.stickySidebarPaddingTop-o.stickySidebarPaddingBottom)+'px)';css.top='0px'}css.width=getWidthForObject(o.stickySidebar)+'px';css.left='';o.stickySidebar.css(css)}else if(position=='static'){resetSidebar()}if(position!='static'){if(o.options.updateSidebarHeight==true){o.sidebar.css({'min-height':o.stickySidebar.outerHeight()+o.stickySidebar.offset().top-o.sidebar.offset().top+o.paddingBottom})}}o.previousScrollTop=scrollTop};o.onScroll(o);$(document).on('scroll.'+o.options.namespace,function(o){return function(){o.onScroll(o)}}(o));$(window).on('resize.'+o.options.namespace,function(o){return function(){o.stickySidebar.css({'position':'static'});o.onScroll(o)}}(o));if(typeof ResizeSensor!=='undefined'){new ResizeSensor(o.stickySidebar[0],function(o){return function(){o.onScroll(o)}}(o))}function resetSidebar(){o.fixedScrollTop=0;o.sidebar.css({'min-height':'1px'});o.stickySidebar.css({'position':'static','width':'','transform':'none'})}function getClearedHeight(e){var height=e.height();e.children().each(function(){height=Math.max(height,$(this).height())});return height}})}function getWidthForObject(object){var width;try{width=object[0].getBoundingClientRect().width}catch(err){}if(typeof width==="undefined"){width=object.width()}return width}return this}})(jQuery);
 //]]>
@@ -5422,14 +6064,11 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
 //]]>
-</script>  
-<!-- Overlay and Back To Top --> 
+</script>
+<!-- Overlay and Back To Top -->
   <div class='overlay'/>
   <div class='back-top' title='Back to Top'/>
-  
-  
-  
-  
+
    <div class='flip-container'>
         <div class='flipper'>
             <img alt='Me' class='flip-image' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEglwaii2_xBr47JtUxESk3iekPLl1TSI5B6RuwqNOs_8zk9iGlLqw3d_WprAhKKp3m9F1eO4XBh_JfU_jj6Ad759bHWsqU0evz1SdsG_XBJPc7nXmkbGHO2glvshLTd0fOaKlIGfEVHlEeltJcg2Azc70rVoswRtvH-QiohpHrAuuPEE1uwA9CToBM9foE/s16000/me.jpg'/>
@@ -5477,25 +6116,17 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     100% { top: 20px; left: 20px; }
 }
 </style>
-  
+
   <style>
     code{
 color: darkblue;
-    
+
 background-color: gray;
     }
 
 </style>
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
   <script src='https://varanasi-software-junction.github.io/search/branding/branding.js'/>
-  
+
 </body>
 </html>

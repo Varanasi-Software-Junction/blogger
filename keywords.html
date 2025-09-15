@@ -1,0 +1,324 @@
+# 🕵️‍♂️ Inspector Chor and the Case of the Forbidden Names  
+### Why C Keywords Cannot Be Used as Identifiers
+
+There was once an inspector named **Chor**.
+
+Yes, that was his actual name. He was honest, sharp, and known for catching real thieves. But one day, while chasing a suspect through Nai Basti, someone shouted:
+
+> **“Chor ko pakdo!”**
+
+The crowd turned on him. He was tackled, cuffed, and dragged to the station—by his own constables.
+
+It took hours to clear the misunderstanding. But the lesson was clear: **some names are too loaded to be used casually**. In certain contexts, they carry fixed meanings. You can't just name your child "Fire" and expect calm when someone yells it in a crowded theatre.
+
+And that, dear reader, is exactly why **C keywords cannot be used as identifiers**.
+
+---
+
+## 🔤 What Are Keywords in C?
+
+In C, **keywords** are reserved words with predefined meanings. They form the grammar of the language and tell the compiler exactly what to do. You cannot use them to name variables, functions, or any other identifiers.
+
+Trying to name a variable `return` or `if` is like naming your dog “Break” and yelling it during a cricket match. Confusion is guaranteed.
+
+```c
+int return = 5; // ❌ Error: 'return' is a keyword
+```
+
+---
+
+## 📘 C Keywords with Serial Numbers, Explanations, and Code Samples
+
+Below are all **32 reserved keywords** in C, grouped by category. Each keyword includes a brief explanation and **two code samples** to illustrate its usage.
+
+---
+
+### 📦 Data Type Keywords
+
+**1. `int`** — Declares an integer variable.
+```c
+int age = 25;
+int sum = a + b;
+```
+
+**2. `char`** — Stores a single character.
+```c
+char grade = 'A';
+char initial = name[0];
+```
+
+**3. `float`** — Stores a decimal number (single precision).
+```c
+float pi = 3.14;
+float temperature = 36.6;
+```
+
+**4. `double`** — Stores a decimal number (double precision).
+```c
+double distance = 123.456;
+double result = sqrt(2.0);
+```
+
+**5. `short`** — Declares a smaller integer type.
+```c
+short x = 100;
+short y = -50;
+```
+
+**6. `long`** — Declares a larger integer type.
+```c
+long population = 1000000;
+long timestamp = time(NULL);
+```
+
+**7. `signed`** — Allows both positive and negative values.
+```c
+signed int balance = -500;
+signed char signal = -1;
+```
+
+**8. `unsigned`** — Allows only positive values.
+```c
+unsigned int points = 250;
+unsigned char byte = 255;
+```
+
+**9. `void`** — Indicates no return value or no data type.
+```c
+void greet() { printf("Hello!"); }
+void *ptr = malloc(10);
+```
+
+---
+
+### 🔁 Control Flow Keywords
+
+**10. `if`** — Executes code if a condition is true.
+```c
+if (x > 0) { printf("Positive"); }
+if (flag == 1) start();
+```
+
+**11. `else`** — Executes code if the `if` condition is false.
+```c
+if (x > 0) { ... } else { printf("Not positive"); }
+if (valid) process(); else reject();
+```
+
+**12. `switch`** — Selects among multiple cases.
+```c
+switch (choice) { case 1: printf("One"); break; }
+switch (key) { case 'a': actionA(); break; }
+```
+
+**13. `case`** — Defines a branch in a `switch` block.
+```c
+case 2: printf("Two");
+case 'x': execute();
+```
+
+**14. `default`** — Specifies fallback behavior in a `switch`.
+```c
+default: printf("Unknown");
+default: handleFallback();
+```
+
+**15. `for`** — Loop with a counter.
+```c
+for (int i = 0; i < 10; i++) { ... }
+for (i = 0; i < n; i++) sum += arr[i];
+```
+
+**16. `while`** — Loop that runs while a condition is true.
+```c
+while (x < 5) { x++; }
+while (!done) wait();
+```
+
+**17. `do`** — Loop that runs at least once.
+```c
+do { x--; } while (x > 0);
+do { retry(); } while (error);
+```
+
+**18. `break`** — Exits a loop or `switch` block immediately.
+```c
+for (int i = 0; i < 10; i++) {
+  if (i == 5) break;
+}
+```
+
+```c
+switch (option) {
+  case 1: printf("Start"); break;
+  case 2: printf("Stop"); break;
+  default: printf("Invalid"); break;
+}
+```
+
+**19. `continue`** — Skips the current iteration and moves to the next.
+```c
+for (i = 0; i < 10; i++) {
+  if (i % 2 == 0) continue;
+  printf("%d ", i);
+}
+```
+
+```c
+while (x < 100) {
+  x++;
+  if (x == 50) continue;
+  process(x);
+}
+```
+
+**20. `goto`** — Jumps to a labeled statement.
+```c
+goto end;
+...
+end: printf("Done");
+```
+
+```c
+if (error) goto cleanup;
+...
+cleanup: free(ptr);
+```
+
+**21. `return`** — Exits a function and optionally returns a value.
+```c
+return 0;
+return sum;
+```
+
+---
+
+### 🧠 Storage Class Keywords
+
+**22. `auto`** — Declares a local variable with automatic storage (default behavior).
+```c
+auto int x = 10;
+auto float rate = 2.5;
+```
+
+**23. `static`** — Preserves a variable’s value between function calls.
+```c
+static int count = 0;
+static char buffer[100];
+```
+
+**24. `extern`** — Refers to a variable or function defined in another file or scope.
+```c
+extern int total;
+extern void log();
+```
+
+**25. `register`** — Suggests storing a variable in a CPU register for faster access.
+```c
+register int speed = 100;
+register char ch = 'A';
+```
+
+---
+
+### 🧩 User-Defined Type Keywords
+
+**26. `struct`** — Defines a group of variables under one name.
+```c
+struct Point { int x, y; };
+struct Point p1 = {10, 20};
+```
+
+**27. `union`** — Allows different data types to share the same memory location.
+```c
+union Data { int i; float f; };
+union Data d; d.i = 5;
+```
+
+**28. `enum`** — Declares a set of named integer constants.
+```c
+enum Color { RED, GREEN, BLUE };
+enum Color c = GREEN;
+```
+
+**29. `typedef`** — Creates a new name (alias) for an existing type.
+```c
+typedef int Length;
+Length l = 100;
+```
+
+---
+
+### 🧪 Miscellaneous Keywords
+
+**30. `const`** — Declares a variable whose value cannot be changed.
+```c
+const float pi = 3.14;
+const int max = 100;
+```
+
+**31. `volatile`** — Tells the compiler that a variable may change unexpectedly.
+```c
+volatile int flag;
+volatile char *port = 0xFF00;
+```
+
+**32. `sizeof`** — Returns the size (in bytes) of a data type or variable.
+```c
+int size = sizeof(int);
+printf("%lu", sizeof(arr));
+```
+
+---
+ ## ✅ Summary Table of All 32 C Keywords
+
+| No. | Keyword     | Category             |
+|-----|-------------|----------------------|
+| 1   | `int`       | Data Type            |
+| 2   | `char`      | Data Type            |
+| 3   | `float`     | Data Type            |
+| 4   | `double`    | Data Type            |
+| 5   | `short`     | Data Type            |
+| 6   | `long`      | Data Type            |
+| 7   | `signed`    | Data Type            |
+| 8   | `unsigned`  | Data Type            |
+| 9   | `void`      | Data Type            |
+| 10  | `if`        | Control Flow         |
+| 11  | `else`      | Control Flow         |
+| 12  | `switch`    | Control Flow         |
+| 13  | `case`      | Control Flow         |
+| 14  | `default`   | Control Flow         |
+| 15  | `for`       | Control Flow         |
+| 16  | `while`     | Control Flow         |
+| 17  | `do`        | Control Flow         |
+| 18  | `break`     | Control Flow         |
+| 19  | `continue`  | Control Flow         |
+| 20  | `goto`      | Control Flow         |
+| 21  | `return`    | Control Flow         |
+| 22  | `auto`      | Storage Class        |
+| 23  | `static`    | Storage Class        |
+| 24  | `extern`    | Storage Class        |
+| 25  | `register`  | Storage Class        |
+| 26  | `struct`    | User-Defined Type    |
+| 27  | `union`     | User-Defined Type    |
+| 28  | `enum`      | User-Defined Type    |
+| 29  | `typedef`   | User-Defined Type    |
+| 30  | `const`     | Miscellaneous        |
+| 31  | `volatile`  | Miscellaneous        |
+| 32  | `sizeof`    | Miscellaneous        |
+
+
+---
+
+## 🔚 Final Summary
+
+C is a language of precision, and its **32 keywords** are the pillars of that precision. Each keyword carries a specific meaning and function—whether it's declaring a variable, controlling program flow, managing memory, or defining custom types. Just like Inspector Chor’s name caused confusion in the real world, using these reserved words as identifiers in code leads to errors and ambiguity.
+
+By understanding these keywords deeply—with examples, context, and care—you build not just programs, but clarity of thought. Whether you're a beginner or revisiting the basics, mastering these keywords is the first step toward writing clean, efficient, and expressive C code.
+
+Let your variables speak clearly. Let your logic flow smoothly. And let your code reflect the discipline and elegance that C was built upon.
+
+---
+
+
+
