@@ -7,6 +7,9 @@
       background-color: wheat; 
       }
 
+      .hidetext{
+      width:0px;
+      }
     </style>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -309,8 +312,10 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
 </head>
 <body expr:class='data:blog.pageType'>
-  <a alt='Go down' href='#txtdown'>Go Down</a>
-  <input id='txtup' type='text'/>
+  <div style='position:relative;'>
+   
+  <a href='#txtdown' id='txtup' style='right:20%;position:absolute;z-index:1000;' title='Go down'>Go Down</a>
+  </div>
   <b:class cond='data:view.isHomepage' name='home'/>
   <b:class cond='data:view.isPage' name='item'/>
   <b:class cond='data:view.isArchive' name='index'/>
@@ -444,6 +449,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   </b:includable>
             </b:widget>
           </b:section>
+        <br/><br/><br/><br/><br/><br/>
           <b:section class='header-ads' id='header-ads' maxwidgets='1' name='Header Ads 728x90' showaddelement='yes'>
             <b:widget id='AdSense2' locked='false' title='' type='AdSense' version='2' visible='true'>
               <b:widget-settings>
@@ -4656,7 +4662,7 @@ border-color:green;
     </span>
   </span>
 </b:includable>
-            <b:includable id='facebookShare'>
+            <b:includable id='facebookShare'>+
   <b:with value='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=430,width=640\&quot;); return false;&quot;' var='onclick'>
     <b:include name='platformShare'/>
   </b:with>
@@ -5442,7 +5448,9 @@ background-color: gray;
 </style>
 
   <script src='https://varanasi-software-junction.github.io/search/branding/branding.js'/>
-  <input id='txtdown' type='text'/>
-  <a alt='Go up' href='#txtup'>Go Up</a>
+  <div style='position:relative;'>
+   
+  <a href='#txtup' id='txtdown' style='right:20%;position:absolute;' title='Go up'>Go Up</a>
+  </div>
 </body>
 </html>
