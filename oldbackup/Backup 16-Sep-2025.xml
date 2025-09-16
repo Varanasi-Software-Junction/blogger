@@ -313,7 +313,73 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
     <!-- Google Analytics -->
     <b:include data='blog' name='google-analytics'/>
 
-    <!--   -->
+   <style>
+     /* Sidebar toggle styles (visible + fallback fixed) */
+.toggle-sidebar-btn {
+  position: absolute; /* will be changed to fixed if fallback used */
+  right: 12px;
+  top: 10px;
+  z-index: 2147483000; /* extremely high so it sits above almost anything */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 0;
+  background: linear-gradient(90deg,#3877fe,#2a7ffe);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.25);
+  transition: transform .18s ease, opacity .18s ease;
+  opacity: 1;
+}
+
+/* If the script chooses fallback fixed mode it will switch this class */
+.toggle-sidebar-btn.fixed-fallback {
+  position: fixed !important;
+  top: 12px !important;
+  right: 12px !important;
+}
+
+/* Make the button visually larger on small screens */
+@media (max-width: 600px) {
+  .toggle-sidebar-btn { padding: 6px 9px; font-size: 12px; right: 8px; top: 8px; }
+  .toggle-sidebar-btn.fixed-fallback { top: 8px; right: 8px; }
+}
+
+/* Smooth width transition for layout (existing rules kept) */
+#main-wrapper, #sidebar-wrapper {
+  -webkit-transition: width .35s ease, margin .35s ease, opacity .25s ease;
+  transition: width .35s ease, margin .35s ease, opacity .25s ease;
+}
+
+/* When sidebar is hidden: expand main content */
+.sidebar-hidden #sidebar-wrapper {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  display: none !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-hidden #main-wrapper {
+  width: 100% !important; /* main takes full row */
+  float: none !important;
+  margin-right: 0 !important;
+  box-sizing: border-box;
+}
+
+/* Ensure main-wrapper has a smooth look when expanding */
+#main-wrapper {
+  width: 66.66666667%;
+  box-sizing: border-box;
+}
+
+    </style>
  
 
 </head>
@@ -2090,7 +2156,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   .share-show-tab {
     position: fixed;
     right: 6px;
-    bottom: 30px;
+    bottom: 50px;
     z-index: 99999;
     background: var(--accent);
     color: #fff;
@@ -2108,7 +2174,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   @media (max-width:520px){
     .share-btn { padding:9px; font-size:14px; }
     .share-icon { width:18px; height:18px; }
-    .share-widget { right:12px; bottom:12px; padding:8px; border-radius:10px; }
+    .share-widget { right:12px; bottom:22px; padding:8px; border-radius:10px; }
     .share-widget::before { width:5px; transform: translateX(-5px); }
     .share-show-tab { right:8px; bottom:18px; padding:7px 10px; font-size:13px; }
   }
@@ -5443,5 +5509,129 @@ background-color: gray;
 
   </div>
   <span id='txtdown'/>
+
+  
+  <script>
+(function() {
+  const mainSel = &#39;#main-wrapper&#39;;
+  const sidebarSel = &#39;#sidebar-wrapper&#39;;
+  const STORAGE_KEY = &#39;blog_sidebar_hidden&#39;;
+  // Common header-like insertion points (tries in order)
+  const headerCandidates = [
+    &#39;#header-wrap .container&#39;,
+    &#39;#top-bar .container&#39;,
+    &#39;#top-bar&#39;,
+    &#39;#header-wrap&#39;,
+    &#39;#main-menu&#39;,
+    &#39;.header-header .container&#39;,
+    &#39;.header-header&#39;,
+    &#39;body&#39; // fallback to body last
+  ];
+
+  function createButton() {
+    const btn = document.createElement(&#39;button&#39;);
+    btn.className = &#39;toggle-sidebar-btn&#39;;
+    btn.setAttribute(&#39;aria-pressed&#39;, &#39;false&#39;);
+    btn.title = &#39;Hide sidebar / Show sidebar&#39;;
+    btn.innerHTML = &#39;&lt;span class=&quot;ts-icon&quot; aria-hidden=&quot;true&quot;&gt;&#9776;&lt;/span&gt;&lt;span class=&quot;ts-text&quot; style=&quot;margin-left:6px;&quot;&gt;Hide Sidebar&lt;/span&gt;&#39;;
+    return btn;
+  }
+
+  function updateButtonText(btn, hidden) {
+    if(!btn) return;
+    const text = btn.querySelector(&#39;.ts-text&#39;);
+    const icon = btn.querySelector(&#39;.ts-icon&#39;);
+    if (hidden) {
+      if (text) text.innerHTML = &#39;Show Sidebar&#39;;
+      if (icon) icon.innerHTML = &#39;&#9636;&#39;;
+      btn.setAttribute(&#39;aria-pressed&#39;, &#39;true&#39;);
+    } else {
+      if (text) text.innerHTML = &#39;Hide Sidebar&#39;;
+      if (icon) icon.innerhtML = &#39;&#9776;&#39;;
+      btn.setAttribute(&#39;aria-pressed&#39;, &#39;false&#39;);
+    }
+  }
+
+  function applyState(hidden) {
+    const el = document.documentElement || document.body;
+    if (hidden) el.classList.add(&#39;sidebar-hidden&#39;);
+    else el.classList.remove(&#39;sidebar-hidden&#39;);
+  }
+
+  function tryInsertButton(btn) {
+    for (let sel of headerCandidates) {
+      const parent = document.querySelector(sel);
+      if (!parent) continue;
+      try {
+        if (parent === document.body) {
+          btn.classList.add(&#39;fixed-fallback&#39;);
+          document.body.appendChild(btn);
+          return { inserted:true, mode:&#39;fixed-fallback&#39;, parentSel: sel };
+        } else {
+          const computed = window.getComputedStyle(parent);
+          if (computed.position === &#39;static&#39;) {
+            parent.style.position = &#39;relative&#39;;
+          }
+          parent.appendChild(btn);
+          return { inserted:true, mode:&#39;in-header&#39;, parentSel: sel };
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+    return { inserted:false };
+  }
+
+  function init() {
+    const main = document.querySelector(mainSel);
+    const sidebar = document.querySelector(sidebarSel);
+
+    const btn = createButton();
+    const result = tryInsertButton(btn);
+
+    if (!result.inserted) {
+      try {
+        btn.classList.add(&#39;fixed-fallback&#39;);
+        document.documentElement.appendChild(btn);
+      } catch(e) {
+        return;
+      }
+    }
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const initialHidden = saved === &#39;1&#39;;
+    applyState(initialHidden);
+    updateButtonText(btn, initialHidden);
+
+    btn.addEventListener(&#39;click&#39;, function () {
+      const nowHidden = document.documentElement.classList.contains(&#39;sidebar-hidden&#39;);
+      const nextHidden = !nowHidden;
+      applyState(nextHidden);
+      updateButtonText(btn, nextHidden);
+      try { localStorage.setItem(STORAGE_KEY, nextHidden ? &#39;1&#39; : &#39;0&#39;); } catch(e) {}
+      window.dispatchEvent(new Event(&#39;resize&#39;));
+    });
+
+    // Accessibility: toggle on &quot;S&quot; key (Shift+S) if not typing in input
+    document.addEventListener(&#39;keydown&#39;, function(e){
+      const active = document.activeElement;
+      if ( (e.key === &#39;s&#39; || e.key === &#39;S&#39;) &amp;&amp; !(active &amp;&amp; (active.tagName===&#39;INPUT&#39; || active.tagName===&#39;TEXTAREA&#39; || active.isContentEditable)) ) {
+        btn.click();
+      }
+    });
+  }
+
+  if (document.readyState === &#39;loading&#39;) {
+    document.addEventListener(&#39;DOMContentLoaded&#39;, init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+  
+  
+  
+
 </body>
 </html>
