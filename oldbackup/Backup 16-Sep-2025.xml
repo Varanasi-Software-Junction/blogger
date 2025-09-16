@@ -10,6 +10,12 @@
       .hidetext{
       width:0px;
       }
+      
+      html {
+  scroll-behavior: smooth;
+}
+      
+      
     </style>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
