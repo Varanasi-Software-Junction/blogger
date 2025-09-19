@@ -313,80 +313,17 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
     <!-- Google Analytics -->
     <b:include data='blog' name='google-analytics'/>
 
-   <style>
-     /* Sidebar toggle styles (visible + fallback fixed) */
-.toggle-sidebar-btn {
-  position: absolute; /* will be changed to fixed if fallback used */
-  right: 12px;
-  top: 10px;
-  z-index: 2147483000; /* extremely high so it sits above almost anything */
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 0;
-  background: linear-gradient(90deg,#3877fe,#2a7ffe);
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(0,0,0,.25);
-  transition: transform .18s ease, opacity .18s ease;
-  opacity: 1;
-}
-
-/* If the script chooses fallback fixed mode it will switch this class */
-.toggle-sidebar-btn.fixed-fallback {
-  position: fixed !important;
-  top: 12px !important;
-  right: 12px !important;
-}
-
-/* Make the button visually larger on small screens */
-@media (max-width: 600px) {
-  .toggle-sidebar-btn { padding: 6px 9px; font-size: 12px; right: 8px; top: 8px; }
-  .toggle-sidebar-btn.fixed-fallback { top: 8px; right: 8px; }
-}
-
-/* Smooth width transition for layout (existing rules kept) */
-#main-wrapper, #sidebar-wrapper {
-  -webkit-transition: width .35s ease, margin .35s ease, opacity .25s ease;
-  transition: width .35s ease, margin .35s ease, opacity .25s ease;
-}
-
-/* When sidebar is hidden: expand main content */
-.sidebar-hidden #sidebar-wrapper {
-  width: 0 !important;
-  min-width: 0 !important;
-  max-width: 0 !important;
-  display: none !important;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.sidebar-hidden #main-wrapper {
-  width: 100% !important; /* main takes full row */
-  float: none !important;
-  margin-right: 0 !important;
-  box-sizing: border-box;
-}
-
-/* Ensure main-wrapper has a smooth look when expanding */
-#main-wrapper {
-  width: 66.66666667%;
-  box-sizing: border-box;
-}
-
-    </style>
- 
+   
 
 </head>
 <body expr:class='data:blog.pageType'>
+  <div style='position:relative'>
+ 
+
+ </div>
   <div style='position:relative;'>
    <span id='txtup'/>
-  <a href='#txtdown' style='right:20px; top:20px; position:fixed; z-index:1000; padding:8px 12px; background:#0b63d4; color:#fff; border-radius:6px; text-decoration:none; font-family:sans-serif; font-size:14px;' title='Go down'>
+  <a href='#txtdown' style='right:20px; top:20px; position:fixed; z-index:1000; padding:8px 12px; background:#0b63d4; color:#fff; border-radius:6px; text-decoration:none; font-family:sans-serif; font-size:50px;' title='Go down'>
      &#8595;
 </a>
   </div>
@@ -567,128 +504,11 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   <b:if cond='data:view.isHomepage'>
     <!-- Featured Wrapper -->
     <div class='row' id='hot-wrapper'>
-      <b:section id='hot-section' maxwidgets='1' name='Hot Posts' showaddelement='yes'>
-        <b:widget id='HTML16' locked='false' title='' type='HTML' visible='true'>
-          <b:widget-settings>
-            <b:widget-setting name='content'><![CDATA[<!--
-  Single GPay Donation Gadget for Blogspot
-  - Casual style version
-  - Replace the QR code URL if needed
--->
-<div id="donation-gadget" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; max-width:420px; margin:12px auto;">
-  <style>
-    #donation-gadget { --accent:#ff914d; --muted:#6b7280; }
-    .dg-card{border-radius:12px; box-shadow:0 6px 18px rgba(11,12,16,0.08); padding:16px; background:linear-gradient(180deg,#fff8f0,#fff); border:1px solid #ffe2cc}
-    .dg-row{display:flex; gap:12px; align-items:center}
-    .dg-qr{width:120px; height:120px; border-radius:8px; background:#fdf2e9; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0}
-    .dg-qr img{width:100%; height:100%; object-fit:cover; display:block}
-    .dg-title{font-size:16px; font-weight:700; margin-bottom:6px; color:#b53b00}
-    .dg-desc{font-size:14px; color:var(--muted); line-height:1.35}
-    .dg-cta{display:inline-block; margin-top:12px; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:600; background:#ffe9d0; color:#8a3b00; border:1px solid rgba(0,0,0,0.05)}
-    @media (max-width:420px){ .dg-row{flex-direction:row} .dg-qr{width:96px;height:96px} }
-  </style>
-
-  <div class="dg-card" role="region" aria-label="Support this blog">
-    <div class="dg-row">
-      <div class="dg-qr" aria-hidden="true">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" alt="GPay QR Code" />
-      </div>
-      <div style="flex:1">
-        <div class="dg-title">Like My Content?</div>
-        <div class="dg-desc">Hey friend 😊 If you enjoy my posts and feel like buying me a cup of chai ☕, just scan the QR and send whatever you like. It’s totally optional, but it really keeps me motivated to share more. Thank you so much!</div>
-        <a class="dg-cta" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" target="_blank" rel="noopener" role="button" title="Open QR image in new tab">Open QR — Scan or save</a>
-      </div>
-    </div>
-  </div>
-</div>]]></b:widget-setting>
-          </b:widget-settings>
-          <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-        </b:widget>
-      </b:section>
+      <b:section id='hot-section' maxwidgets='1' name='Hot Posts' showaddelement='yes'/>
     </div>
  <div class='clearfix'/>
   <div class='row' id='featured-wrapper'>
           <b:section class='featured-posts' id='featured-posts-1' name='Featured Posts 01' showaddelement='yes'>
-            <b:widget id='HTML17' locked='false' title='VSJ Calendar' type='HTML' visible='true'>
-              <b:widget-settings>
-                <b:widget-setting name='content'><![CDATA[<!--
-  Single GPay Donation Gadget for Blogspot
-  - Casual style version
-  - Replace the QR code URL if needed
--->
-<div id="donation-gadget" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; max-width:420px; margin:12px auto;">
-  <style>
-    #donation-gadget { --accent:#ff914d; --muted:#6b7280; }
-    .dg-card{border-radius:12px; box-shadow:0 6px 18px rgba(11,12,16,0.08); padding:16px; background:linear-gradient(180deg,#fff8f0,#fff); border:1px solid #ffe2cc}
-    .dg-row{display:flex; gap:12px; align-items:center}
-    .dg-qr{width:120px; height:120px; border-radius:8px; background:#fdf2e9; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0}
-    .dg-qr img{width:100%; height:100%; object-fit:cover; display:block}
-    .dg-title{font-size:16px; font-weight:700; margin-bottom:6px; color:#b53b00}
-    .dg-desc{font-size:14px; color:var(--muted); line-height:1.35}
-    .dg-cta{display:inline-block; margin-top:12px; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:600; background:#ffe9d0; color:#8a3b00; border:1px solid rgba(0,0,0,0.05)}
-    @media (max-width:420px){ .dg-row{flex-direction:row} .dg-qr{width:96px;height:96px} }
-  </style>
-
-  <div class="dg-card" role="region" aria-label="Support this blog">
-    <div class="dg-row">
-      <div class="dg-qr" aria-hidden="true">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" alt="GPay QR Code" />
-      </div>
-      <div style="flex:1">
-        <div class="dg-title">Like My Content?</div>
-        <div class="dg-desc">Hey friend 😊 If you enjoy my posts and feel like buying me a cup of chai ☕, just scan the QR and send whatever you like. It’s totally optional, but it really keeps me motivated to share more. Thank you so much!</div>
-        <a class="dg-cta" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" target="_blank" rel="noopener" role="button" title="Open QR image in new tab">Open QR — Scan or save</a>
-      </div>
-    </div>
-  </div>
-</div>]]></b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-            </b:widget>
-            <b:widget id='Attribution1' locked='false' title='' type='Attribution' visible='true'>
-              <b:widget-settings>
-                <b:widget-setting name='copyright'>Champak Roy </b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main' var='this'>
-  <div class='widget-content'>
-    <div class='blogger'>
-      <a expr:href='data:bloggerUrl' rel='nofollow'>
-        <b:include name='flatBloggerIcon'/>
-        <b:message name='messages.poweredByBlogger'/>
-      </a>
-    </div>
-
-    <b:if cond='data:imageAuthor'>
-      <div class='image-attribution'>
-        <b:if cond='data:imageAuthor.url'>
-          <b:message name='messages.templateImagesByLink'>
-            <b:param expr:value='data:imageAuthor.url'/>
-            <b:param expr:value='data:imageAuthor.name'/>
-          </b:message>
-        <b:else/>
-          <b:message name='messages.templateImagesBy'>
-            <b:param expr:value='data:imageAuthor.name'/>
-          </b:message>
-        </b:if>
-      </div>
-    </b:if>
-
-    <b:if cond='data:copyright != &quot;&quot;'>
-      <div class='copyright'><data:copyright/></div>
-    </b:if>
-  </div>
-</b:includable>
-            </b:widget>
             <b:widget id='LinkList2' locked='false' title='Default Variables' type='LinkList' visible='false'>
               <b:widget-settings>
                 <b:widget-setting name='sorting'>NONE</b:widget-setting>
@@ -712,426 +532,6 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
    </ul>
  </div>
 </b:includable>
-            </b:widget>
-            <b:widget id='LinkList3' locked='false' title='' type='LinkList' visible='false'>
-              <b:widget-settings>
-                <b:widget-setting name='text-10'>My Newsletter</b:widget-setting>
-                <b:widget-setting name='sorting'>NONE</b:widget-setting>
-                <b:widget-setting name='link-1'>https://www.linkedin.com/company/champaksworld</b:widget-setting>
-                <b:widget-setting name='link-2'>https://www.youtube.com/channel/UCkwKVR1zN4y4Fzgca2Jycvw?view_as=subscriber</b:widget-setting>
-                <b:widget-setting name='link-0'>https://www.amazon.in/Champak-Roy/e/B07M6L4W28/ref=dp_byline_cont_pop_ebooks_1</b:widget-setting>
-                <b:widget-setting name='link-11'>https://varanasisoftwarejunction.herokuapp.com/</b:widget-setting>
-                <b:widget-setting name='link-10'>https://theprogrammingsutras.substack.com/</b:widget-setting>
-                <b:widget-setting name='text-9'>Git Pages</b:widget-setting>
-                <b:widget-setting name='link-9'>https://varanasi-software-junction.github.io/varanasi-software-junction/selectors/positioning/grid/javascript%20array.html</b:widget-setting>
-                <b:widget-setting name='text-8'>Online Classes On Zoom</b:widget-setting>
-                <b:widget-setting name='link-7'>https://us04web.zoom.us/j/75405889096?pwd=Qkt1a1J3c1JhVnJKeitUNlFtS2p4dz09</b:widget-setting>
-                <b:widget-setting name='link-8'>https://us04web.zoom.us/j/75405889096?pwd=Qkt1a1J3c1JhVnJKeitUNlFtS2p4dz09</b:widget-setting>
-                <b:widget-setting name='link-5'>https://github.com/Varanasi-Software-Junction</b:widget-setting>
-                <b:widget-setting name='link-6'><![CDATA[https://varanasi-software-junction.business.site/?utm_source=gmb&utm_medium=referral]]></b:widget-setting>
-                <b:widget-setting name='link-3'>https://twitter.com/VaranasiSoft</b:widget-setting>
-                <b:widget-setting name='link-4'>https://www.facebook.com/Varanasi-Software-Tutor-102930981316879</b:widget-setting>
-                <b:widget-setting name='text-1'>LinkedIn</b:widget-setting>
-                <b:widget-setting name='text-0'>Amazon Author Page</b:widget-setting>
-                <b:widget-setting name='text-3'>Twitter</b:widget-setting>
-                <b:widget-setting name='text-2'>Youtube</b:widget-setting>
-                <b:widget-setting name='text-5'>Varanasi Software Junction Git</b:widget-setting>
-                <b:widget-setting name='text-4'>Facebook</b:widget-setting>
-                <b:widget-setting name='text-7'>Online Classes On Zoom</b:widget-setting>
-                <b:widget-setting name='text-6'>Business Site</b:widget-setting>
-                <b:widget-setting name='text-11'>VSJ on Heroku</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <b:include name='content'/>
-</b:includable>
-              <b:includable id='content'>
- <div class='widget-content'>
-   <ul>
-     <b:loop values='data:links' var='link'>
-       <li><a expr:href='data:link.target'><data:link.name/></a></li>
-     </b:loop>
-   </ul>
- </div>
-</b:includable>
-            </b:widget>
-            <b:widget id='LinkList4' locked='false' title='Header Menu Widget' type='LinkList' visible='false'>
-              <b:widget-settings>
-                <b:widget-setting name='sorting'>NONE</b:widget-setting>
-                <b:widget-setting name='text-1'>twitter</b:widget-setting>
-                <b:widget-setting name='link-1'>https://twitter.com/VaranasiSoft</b:widget-setting>
-                <b:widget-setting name='text-0'>facebook</b:widget-setting>
-                <b:widget-setting name='link-0'>https://www.facebook.com/VaranasiSoftwareJunction</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <b:include name='content'/>
-</b:includable>
-              <b:includable id='content'>
- <div class='widget-content'>
-   <ul>
-     <b:loop values='data:links' var='link'>
-       <li><a expr:href='data:link.target'><data:link.name/></a></li>
-     </b:loop>
-   </ul>
- </div>
-</b:includable>
-            </b:widget>
-            <b:widget id='LinkList6' locked='false' title='Social Plugin' type='LinkList' visible='false'>
-              <b:widget-settings>
-                <b:widget-setting name='sorting'>NONE</b:widget-setting>
-                <b:widget-setting name='text-1'>twitter</b:widget-setting>
-                <b:widget-setting name='link-1'>https://twitter.com/VaranasiSoft</b:widget-setting>
-                <b:widget-setting name='text-0'>facebook</b:widget-setting>
-                <b:widget-setting name='link-2'>5</b:widget-setting>
-                <b:widget-setting name='link-0'>https://www.facebook.com/VaranasiSoftwareJunction/</b:widget-setting>
-                <b:widget-setting name='text-2'>postPerPage</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <b:include name='content'/>
-</b:includable>
-              <b:includable id='content'>
- <div class='widget-content'>
-   <ul>
-     <b:loop values='data:links' var='link'>
-       <li><a expr:href='data:link.target'><data:link.name/></a></li>
-     </b:loop>
-   </ul>
- </div>
-</b:includable>
-            </b:widget>
-            <b:widget id='LinkList7' locked='false' title='Menu Footer Widget' type='LinkList' visible='false'>
-              <b:widget-settings>
-                <b:widget-setting name='text-10'>My Newsletter</b:widget-setting>
-                <b:widget-setting name='sorting'>NONE</b:widget-setting>
-                <b:widget-setting name='link-1'>https://www.linkedin.com/company/champaksworld</b:widget-setting>
-                <b:widget-setting name='link-2'>https://www.youtube.com/channel/UCkwKVR1zN4y4Fzgca2Jycvw?view_as=subscriber</b:widget-setting>
-                <b:widget-setting name='link-0'>https://www.amazon.in/Champak-Roy/e/B07M6L4W28/ref=dp_byline_cont_pop_ebooks_1</b:widget-setting>
-                <b:widget-setting name='link-11'>https://varanasisoftwarejunction.herokuapp.com/</b:widget-setting>
-                <b:widget-setting name='link-10'>https://theprogrammingsutras.substack.com/</b:widget-setting>
-                <b:widget-setting name='text-9'>Git Pages</b:widget-setting>
-                <b:widget-setting name='link-9'>https://varanasi-software-junction.github.io/varanasi-software-junction/selectors/positioning/grid/javascript%20array.html</b:widget-setting>
-                <b:widget-setting name='text-8'>Online Classes On Zoom</b:widget-setting>
-                <b:widget-setting name='link-7'>https://us04web.zoom.us/j/75405889096?pwd=Qkt1a1J3c1JhVnJKeitUNlFtS2p4dz09</b:widget-setting>
-                <b:widget-setting name='link-8'>https://us04web.zoom.us/j/75405889096?pwd=Qkt1a1J3c1JhVnJKeitUNlFtS2p4dz09</b:widget-setting>
-                <b:widget-setting name='link-5'>https://github.com/Varanasi-Software-Junction</b:widget-setting>
-                <b:widget-setting name='link-6'><![CDATA[https://varanasi-software-junction.business.site/?utm_source=gmb&utm_medium=referral]]></b:widget-setting>
-                <b:widget-setting name='link-3'>https://twitter.com/VaranasiSoft</b:widget-setting>
-                <b:widget-setting name='link-4'>https://www.facebook.com/Varanasi-Software-Tutor-102930981316879</b:widget-setting>
-                <b:widget-setting name='text-1'>LinkedIn</b:widget-setting>
-                <b:widget-setting name='text-0'>Amazon Author Page</b:widget-setting>
-                <b:widget-setting name='text-3'>Twitter</b:widget-setting>
-                <b:widget-setting name='text-2'>Youtube</b:widget-setting>
-                <b:widget-setting name='text-5'>Varanasi Software Junction Git</b:widget-setting>
-                <b:widget-setting name='text-4'>Facebook</b:widget-setting>
-                <b:widget-setting name='text-7'>Online Classes On Zoom</b:widget-setting>
-                <b:widget-setting name='text-6'>Business Site</b:widget-setting>
-                <b:widget-setting name='text-11'>VSJ on Heroku</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <b:include name='content'/>
-</b:includable>
-              <b:includable id='content'>
- <div class='widget-content'>
-   <ul>
-     <b:loop values='data:links' var='link'>
-       <li><a expr:href='data:link.target'><data:link.name/></a></li>
-     </b:loop>
-   </ul>
- </div>
-</b:includable>
-            </b:widget>
-            <b:widget id='ReportAbuse1' locked='false' title='' type='ReportAbuse' visible='false'>
-              <b:includable id='main'>
-  <b:include name='reportAbuse'/>
-</b:includable>
-            </b:widget>
-            <b:widget id='BlogArchive1' locked='false' title='Archive' type='BlogArchive' version='2' visible='true'>
-              <b:widget-settings>
-                <b:widget-setting name='showStyle'>FLAT</b:widget-setting>
-                <b:widget-setting name='yearPattern'>yyyy</b:widget-setting>
-                <b:widget-setting name='showWeekEnd'>true</b:widget-setting>
-                <b:widget-setting name='monthPattern'>MMMM yyyy</b:widget-setting>
-                <b:widget-setting name='dayPattern'>MMM dd</b:widget-setting>
-                <b:widget-setting name='weekPattern'>MM/dd</b:widget-setting>
-                <b:widget-setting name='chronological'>false</b:widget-setting>
-                <b:widget-setting name='showPosts'>true</b:widget-setting>
-                <b:widget-setting name='frequency'>MONTHLY</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main' var='this'>
-      <b:include name='widget-title'/>
-      <b:include name='content'/>
-    </b:includable>
-              <b:includable id='content'>
-      <div class='widget-content'>
-        <div id='ArchiveList'>
-          <div expr:id='data:widget.instanceId + &quot;_ArchiveList&quot;'>
-            <b:include cond='data:this.style in {&quot;FLAT&quot;, &quot;MENU&quot;, &quot;HIERARCHY&quot;}' name='flat'/>
-          </div>
-        </div>
-      </div>
-    </b:includable>
-              <b:includable id='flat'>
-      <ul class='flat'>
-        <b:loop values='data:data' var='i'>
-          <li class='archivedate'>
-            <a expr:href='data:i.url'>
-              <data:i.name/><span class='post-count'><data:i.post-count/></span>
-            </a>
-          </li>
-        </b:loop>
-      </ul>
-    </b:includable>
-              <b:includable id='hierarchy'> 
-  <b:include data='data' name='interval'/>
-</b:includable>
-              <b:includable id='interval' var='intervals'>
-  <ul class='hierarchy'>
-    <b:loop values='data:intervals' var='interval'>
-      <li class='archivedate'>
-        <div class='hierarchy-title'>
-          <a class='post-count-link' expr:href='data:interval.url'>
-            <data:interval.name/>
-            <span class='post-count'><data:interval.post-count/></span>
-          </a>
-        </div>
-        <div class='hierarchy-content'>
-          <b:include cond='data:interval.data' data='interval.data' name='interval'/>
-          <b:include cond='data:interval.posts' data='interval.posts' name='posts'/>
-        </div>
-      </li>
-    </b:loop>
-  </ul>
-</b:includable>
-              <b:includable id='posts' var='posts'>
-  <ul class='posts hierarchy'>
-    <b:loop values='data:posts' var='post'>
-      <li>
-        <a expr:href='data:post.url'><data:post.title/></a>
-      </li>
-    </b:loop>
-  </ul>
-</b:includable>
-            </b:widget>
-            <b:widget id='Label1' locked='false' title='Labels' type='Label' visible='true'>
-              <b:widget-settings>
-                <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
-                <b:widget-setting name='display'>LIST</b:widget-setting>
-                <b:widget-setting name='selectedLabelsList'/>
-                <b:widget-setting name='showType'>ALL</b:widget-setting>
-                <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main' var='this'>
-      <b:include name='widget-title'/>
-      <b:include name='content'/>
-    </b:includable>
-              <b:includable id='cloud'>
-  <b:loop values='data:labels' var='label'>
-    <span class='label-size'>
-      <b:class expr:name='&quot;label-size-&quot; + data:label.cssSize'/>
-      <a class='label-name' expr:href='data:label.url'>
-        <data:label.name/>
-        <b:if cond='data:this.showFreqNumbers'>
-          <span class='label-count'><data:label.count/></span>
-        </b:if>
-      </a>
-    </span>
-  </b:loop>
-</b:includable>
-              <b:includable id='content'>
-      <div class='widget-content'>
-        <b:class expr:name='data:this.display + &quot;-label&quot;'/>
-        <b:include cond='data:this.display == &quot;list&quot;' name='list'/>
-        <b:include cond='data:this.display == &quot;cloud&quot;' name='list'/>
-      </div>
-    </b:includable>
-              <b:includable id='list'>
-      <ul>
-        <b:loop values='data:labels' var='label'>
-          <li>
-            <a class='label-name' expr:href='data:label.url'>
-              <data:label.name/>
-              <b:if cond='data:this.showFreqNumbers'>
-                <span class='label-count'><data:label.count/></span>
-              </b:if>
-            </a>
-          </li>
-        </b:loop>
-      </ul>
-    </b:includable>
-            </b:widget>
-            <b:widget id='Image1' locked='false' title='Mobile Logo Settings' type='Image' visible='false'>
-              <b:widget-settings>
-                <b:widget-setting name='displayUrl'>https://blogger.googleusercontent.com/img/a/AVvXsEgSF0qWIOXrrc_CWBV6Mf26gI2DK_xkDPN6D_i7dgIOrjm7OE7y5Wp7gHJL7bSP9oTdhTSk2NJsjfFxXwYVx5FP5d5Tw3vp9v01wHF3nikbULawjD47YVzGjlDbBoyorwun0RPVIdsOVXrn4KkIzJoyPkCojcVrj7rE_sGnR5dM9zsI0GO0SapO_P-NPPg=s790</b:widget-setting>
-                <b:widget-setting name='displayHeight'>790</b:widget-setting>
-                <b:widget-setting name='sectionWidth'>790</b:widget-setting>
-                <b:widget-setting name='shrinkToFit'>true</b:widget-setting>
-                <b:widget-setting name='displayWidth'>790</b:widget-setting>
-                <b:widget-setting name='link'>My Title</b:widget-setting>
-                <b:widget-setting name='caption'>image</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <b:include name='content'/>
-</b:includable>
-              <b:includable id='content'>
-  <div class='widget-content'>
-    <b:tag cond='data:link' expr:href='data:link' name='a'>
-      <img expr:alt='data:title' expr:height='data:height' expr:id='data:widget.instanceId + &quot;_img&quot;' expr:src='data:sourceUrl' expr:width='data:width'>
-        <b:attr cond='data:sourceSet' expr:value='data:sourceSet' name='srcset'/>
-      </img>
-    </b:tag>
-    <br/>
-    <b:if cond='data:caption'>
-      <span class='caption'><data:caption/></span>
-    </b:if>
-  </div>
-</b:includable>
-            </b:widget>
-            <b:widget id='HTML8' locked='false' title='Click to open a Python IDE' type='HTML' visible='false'>
-              <b:widget-settings>
-                <b:widget-setting name='content'><![CDATA[<style>
-.champaklink
-{
-
-  background-color: white;
-  color: black;
-  border: 2px solid green;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.champaklink:hover, .champaklink:active {
-  background-color: green;
-  color: white;
-
-}
-</style>
-
-<a class="champaklink" href="https://varanasisoftwarejunction.blogspot.com/p/run-python-here.html" target="python"><h2>Python IDE</h2></a>]]></b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-            </b:widget>
-            <b:widget id='PageList1' locked='false' title='Pages' type='PageList' visible='true'>
-              <b:widget-settings>
-                <b:widget-setting name='pageListJson'><![CDATA[{"link0":{"href":"http://varanasisoftwarejunction.blogspot.com/","position":0,"title":"Home"}}]]></b:widget-setting>
-                <b:widget-setting name='homeTitle'>Home</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <b:include name='content'/>
-</b:includable>
-              <b:includable id='content'>
-  <div class='widget-content'>
-    <b:include name='pageList'/>
-  </div>
-</b:includable>
-              <b:includable id='overflowButton'>
-  <b:include name='verticalMoreIcon'/>
-</b:includable>
-              <b:includable id='overflowablePageList'>
-  <div class='overflowable-container'>
-    <div class='overflowable-contents'>
-      <div class='container'>
-        <b:with value='true' var='overflow'>
-        <b:with value='&quot;tabs&quot;' var='pageListClass'>
-          <b:include name='pageList'/>
-        </b:with>
-        </b:with>
-      </div>
-    </div>
-    <div class='overflow-button hidden'>
-      <b:include name='overflowButton'/>
-    </div>
-  </div>
-</b:includable>
-              <b:includable id='pageLink'>
-  <li>
-    <b:class cond='data:overflow' name='overflowable-item'/>
-    <b:class cond='data:link.isCurrentPage' name='selected'/>
-
-    <a expr:href='data:link.href'><data:link.title/></a>
-  </li>
-</b:includable>
-              <b:includable id='pageList'>
-  <ul>
-    <b:class cond='data:pageListClass' expr:name='data:pageListClass'/>
-    <b:loop values='data:links' var='link'>
-      <b:include name='pageLink'/>
-    </b:loop>
-  </ul>
-</b:includable>
-            </b:widget>
-            <b:widget id='LinkList72' locked='false' title='' type='LinkList' version='2' visible='false'>
-              <b:widget-settings>
-                <b:widget-setting name='text-10'>My Newsletter</b:widget-setting>
-                <b:widget-setting name='sorting'>NONE</b:widget-setting>
-                <b:widget-setting name='link-1'><![CDATA[https://varanasi-software-junction.business.site/?utm_source=gmb&utm_medium=referral]]></b:widget-setting>
-                <b:widget-setting name='link-2'>https://www.facebook.com/Varanasi-Software-Tutor-102930981316879</b:widget-setting>
-                <b:widget-setting name='link-0'>https://www.amazon.in/Champak-Roy/e/B07M6L4W28/ref=dp_byline_cont_pop_ebooks_1</b:widget-setting>
-                <b:widget-setting name='link-11'>https://varanasisoftwarejunction.herokuapp.com/</b:widget-setting>
-                <b:widget-setting name='link-10'>https://theprogrammingsutras.substack.com/</b:widget-setting>
-                <b:widget-setting name='text-9'>Git Pages</b:widget-setting>
-                <b:widget-setting name='link-9'>https://varanasi-software-junction.github.io/varanasi-software-junction/selectors/positioning/grid/javascript%20array.html</b:widget-setting>
-                <b:widget-setting name='text-8'>Youtube</b:widget-setting>
-                <b:widget-setting name='link-7'>https://www.google.co.in/maps/place/Varanasi+Software+Junction/@25.3493178,82.9991128,17z/data=!4m12!1m6!3m5!1s0x398e2f4ee33d2891:0x61c67124f1ca69b4!2sVaranasi+Software+Junction!8m2!3d25.349313!4d83.0013015!3m4!1s0x398e2f4ee33d2891:0x61c67124f1ca69b4!8m2!3d25.349313!4d83.0013015?hl=en</b:widget-setting>
-                <b:widget-setting name='link-8'>https://www.youtube.com/channel/UCkwKVR1zN4y4Fzgca2Jycvw?view_as=subscriber</b:widget-setting>
-                <b:widget-setting name='link-5'>https://twitter.com/VaranasiSoft</b:widget-setting>
-                <b:widget-setting name='link-6'>https://github.com/Varanasi-Software-Junction</b:widget-setting>
-                <b:widget-setting name='link-3'>https://www.linkedin.com/company/champaksworld</b:widget-setting>
-                <b:widget-setting name='link-4'>https://us04web.zoom.us/j/75405889096?pwd=Qkt1a1J3c1JhVnJKeitUNlFtS2p4dz09</b:widget-setting>
-                <b:widget-setting name='text-1'>Business Site</b:widget-setting>
-                <b:widget-setting name='text-0'>Amazon Author</b:widget-setting>
-                <b:widget-setting name='text-3'>LinkedIn</b:widget-setting>
-                <b:widget-setting name='text-2'>Facebook</b:widget-setting>
-                <b:widget-setting name='text-5'>Twitter</b:widget-setting>
-                <b:widget-setting name='text-4'>Zoom</b:widget-setting>
-                <b:widget-setting name='text-7'>Varanasi Software Junction on Map</b:widget-setting>
-                <b:widget-setting name='text-6'>Varanasi Software Junction Git</b:widget-setting>
-                <b:widget-setting name='text-11'>VSJ on Heroku</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-              <b:include name='content'/>
-            </b:includable>
-              <b:includable id='content'>
-              <div class='widget-content'>
-                <ul>
-                  <b:loop values='data:links' var='link'>
-                    <li><a expr:href='data:link.target'><data:link.name/></a></li>
-                  </b:loop>
-                </ul>
-              </div>
-            </b:includable>
-            </b:widget>
-            <b:widget id='LinkList73' locked='false' title='Header Menu Widget' type='LinkList' version='2' visible='false'>
-              <b:widget-settings>
-                <b:widget-setting name='sorting'>NONE</b:widget-setting>
-                <b:widget-setting name='text-1'>twitter</b:widget-setting>
-                <b:widget-setting name='link-1'>https://twitter.com/VaranasiSoft</b:widget-setting>
-                <b:widget-setting name='text-0'>facebook</b:widget-setting>
-                <b:widget-setting name='link-0'>https://www.facebook.com/VaranasiSoftwareJunction</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-              <b:include name='content'/>
-            </b:includable>
-              <b:includable id='content'>
-              <div class='widget-content'>
-                <ul>
-                  <b:loop values='data:links' var='link'>
-                    <li expr:class='data:link.name'><a expr:href='data:link.target' expr:title='data:link.name' target='_blank'/></li>
-                  </b:loop>
-                </ul>
-              </div>
-            </b:includable>
             </b:widget>
           </b:section>
  <div class='clearfix'/>
@@ -2058,354 +1458,520 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       <!-- Sidebar Wrapper -->
       <div id='sidebar-wrapper'>
         <b:section class='sidebar common-widget' id='sidebar1' name='Sidebar Right (A)' showaddelement='yes'>
-          <b:widget id='HTML27' locked='false' title='' type='HTML' visible='true'>
+          <b:widget id='HTML1' locked='false' title='' type='HTML' visible='false'>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
+          <b:widget id='HTML12' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- START: Share Widget for Blogger — high-visibility + animated reveal + hide/show (localStorage) -->
+              <b:widget-setting name='content'><![CDATA[<!-- Champak's Search Widget — with borders + URLs -->
 <style>
-  /* Basic styling - change colors below */
-  .share-widget {
-    --bg: #ffffff;
-    --accent: #0b63d4; /* main color */
-    --accent-hover: #094ea0;
-    --text: #0b1b2b;
-    --shadow: 0 10px 30px rgba(11,99,212,0.12);
-    --muted-border: rgba(11,99,212,0.10);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    display:flex;
-    gap:10px;
-    align-items:center;
-    flex-wrap:wrap;
-    padding: 10px;
-    border-radius: 12px;
-    border: 1.5px solid var(--muted-border);
-    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.98));
-    box-shadow: 0 12px 36px rgba(7,24,48,0.12), 0 2px 6px rgba(11,99,212,0.06);
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
+  /* Container */
+  #champak-search {
+    display: block !important;
+    visibility: visible !important;
+    position: relative;
     z-index: 9999;
-    transform: translateX(30px);
-    opacity: 0;
-    will-change: transform, opacity;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    max-width:1000px;
+    width: calc(100% - 24px);
+    margin: 12px auto;
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(11,99,212,0.06);
+    border: 1px solid rgba(11,99,212,0.06);
+    color: #222;
   }
 
-  /* revealed animation */
-  .share-widget.revealed {
-    animation: sw-slide-in 420ms cubic-bezier(.2,.9,.2,1) forwards;
-  }
-  @keyframes sw-slide-in {
-    from { transform: translateX(30px); opacity: 0; }
-    60%  { transform: translateX(-6px); opacity: 1; }
-    to   { transform: translateX(0); opacity: 1; }
+  .cs-controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+
+  input[type="search"], select {
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #e6e9ef;
+    font-size:0.95rem;
+    outline:none;
+    min-width:160px;
+    color:#0b63d4;
+    background-color:#fdfcf9;
+    font-weight:500;
   }
 
-  /* left-side option */
-  .share-widget.from-left { right: auto; left:18px; transform: translateX(-30px); }
-  .share-widget.from-left.revealed { animation-name: sw-slide-in-left; }
-  @keyframes sw-slide-in-left {
-    from { transform: translateX(-30px); opacity: 0; }
-    60%  { transform: translateX(6px); opacity: 1; }
-    to   { transform: translateX(0); opacity: 1; }
+  input::placeholder { color:#888; opacity:0.85; }
+  input[type="search"]:focus, select:focus { box-shadow:0 0 0 3px rgba(11,99,212,0.15); border-color:#0b63d4; }
+
+  button.cs-btn {
+    background: linear-gradient(180deg,#0b63d4,#084fb2);
+    color:#fff;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    box-shadow:0 6px 12px rgba(11,99,212,0.12);
   }
 
-  .sw-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-  .share-btn {
-    display:inline-flex; align-items:center; gap:10px;
-    padding:10px 12px; border-radius:12px;
-    background:var(--bg); border:1px solid rgba(11,99,212,0.14);
-    cursor:pointer; font-size:15px; color:var(--text); font-weight:600; text-decoration:none;
-    box-shadow: 0 4px 14px rgba(11,99,212,0.04);
-    transition: transform .14s cubic-bezier(.2,.9,.2,1), box-shadow .14s ease, border-color .14s ease, background .14s ease;
-  }
-  .share-btn:active { transform: translateY(1px); }
-  .share-btn:hover {
-    background: linear-gradient(180deg, rgba(11,99,212,0.03), rgba(11,99,212,0.01));
-    box-shadow: 0 18px 40px rgba(11,99,212,0.12);
-    color: var(--accent-hover);
-    transform: translateY(-3px) scale(1.02);
-    border-color: rgba(11,99,212,0.22);
+  .cs-stats { margin-bottom:10px; color:#444; font-size:0.95rem; }
+
+  /* Results area */
+  #cs-results {
+    max-height:600px;
+    overflow-y:auto;
+    padding-right:6px;
+    display:block;
   }
 
-  .share-icon { width:20px; height:20px; display:inline-block; flex:0 0 20px; }
-  .share-copy { position: relative; }
-  .share-tooltip {
-    position:absolute; top:-36px; left:50%; transform:translateX(-50%);
-    background:#111;color:#fff;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;
-    opacity:0;pointer-events:none;transition:opacity .12s;
-  }
-  .share-copy.show .share-tooltip { opacity:1; pointer-events:auto; }
+  #cs-results::-webkit-scrollbar { width:8px; }
+  #cs-results::-webkit-scrollbar-track { background:#f1f1f1; border-radius:8px; }
+  #cs-results::-webkit-scrollbar-thumb { background:#0b63d4; border-radius:8px; }
+  #cs-results::-webkit-scrollbar-thumb:hover { background:#084fb2; }
 
-  /* close/hide button */
-  .sw-actions { display:flex; gap:6px; align-items:center; margin-left:6px; }
-  .sw-hide {
-    background:transparent; border:1px solid rgba(11,99,212,0.12); padding:8px; border-radius:8px; cursor:pointer;
-    font-size:13px; font-weight:600;
-  }
-  .sw-hide:focus { outline:3px solid rgba(11,99,212,0.18); outline-offset:2px; }
+  .cs-results-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
 
-  /* floating accent strip to make widget pop */
-  .share-widget::before{
-    content:''; position:absolute; left:0; top:0; height:100%; width:6px;
-    border-top-left-radius:12px; border-bottom-left-radius:12px;
-    background: linear-gradient(180deg, var(--accent), var(--accent-hover));
-    transform: translateX(-6px); box-shadow: 0 6px 18px rgba(11,99,212,0.08);
-    pointer-events: none;
+  .cs-card {
+    background:linear-gradient(180deg,#fff,#fbfdff);
+    border-radius:10px;
+    padding:12px;
+    border:1px solid #0b63d4;  /* stronger visible border */
+    transition:transform .18s ease, box-shadow .18s ease;
+    overflow:hidden;
   }
 
-  /* Show tab that appears when widget is hidden */
-  .share-show-tab {
-    position: fixed;
-    right: 6px;
-    bottom: 50px;
-    z-index: 99999;
-    background: var(--accent);
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 999px;
-    font-weight:700;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(11,99,212,0.18);
-    border: 2px solid rgba(255,255,255,0.06);
-    display: none; /* shown via JS when widget hidden */
-  }
-  .share-show-tab:focus { outline: 3px solid rgba(255,255,255,0.12); }
+  .cs-card:hover { transform:translateY(-6px); box-shadow:0 18px 34px rgba(11,99,212,0.08); }
+  .cs-card h3 { margin:0 0 6px 0; font-size:1.05rem; color:#0b63d4; line-height:1.25; }
+  .cs-meta { font-size:0.82rem; color:#6b7280; margin-bottom:8px; }
+  .cs-summary { color:#333; font-size:0.95rem; margin-bottom:8px; }
+  .cs-url { font-size:0.8rem; color:#084fb2; word-break:break-all; margin-bottom:6px; }
+  .cs-url a { color:#084fb2; text-decoration:underline; }
+  .cs-url a:hover { text-decoration:none; }
+  .cs-tag { display:inline-block; background:rgba(255,153,51,0.12); color:#c75b00; padding:4px 8px; border-radius:999px; margin-right:6px; margin-bottom:6px; font-weight:600; }
 
-  /* smaller screens */
+  /* Small screens */
   @media (max-width:520px){
-    .share-btn { padding:9px; font-size:14px; }
-    .share-icon { width:18px; height:18px; }
-    .share-widget { right:12px; bottom:22px; padding:8px; border-radius:10px; }
-    .share-widget::before { width:5px; transform: translateX(-5px); }
-    .share-show-tab { right:8px; bottom:18px; padding:7px 10px; font-size:13px; }
+    #champak-search{padding:10px;border-radius:8px}
+    .cs-controls{gap:6px}
+    input[type="search"]{min-width:120px;flex:1 1 100%}
+    select{flex:1 1 48%}
   }
 
-  /* reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    .share-widget, .share-widget.revealed { animation: none !important; transform: none !important; opacity:1 !important; }
-  }
+  /* Debug banner (hidden unless printed by script) */
+  #cs-debug { display:none; font-size:0.9rem; color:#b91c1c; margin-bottom:8px; }
+  #cs-loading { color:#666; font-size:0.95rem; margin-bottom:8px; }
 </style>
 
-<!-- Visible widget -->
-<div class="share-widget" id="shareWidget" data-mode="auto" role="region" aria-label="Share widget">
-  <div class="sw-row" role="toolbar" aria-label="Share links">
-    <!-- share buttons (SVGs kept inline) -->
-    <a class="share-btn" id="share-whatsapp" title="Share on WhatsApp" aria-label="Share on WhatsApp" role="button">
-      <span class="share-icon" aria-hidden="true">
-        <!-- WhatsApp SVG -->
-        <svg viewbox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20.52 3.48A11.95 11.95 0 0 0 12 0C5.373 0 0 5.373 0 12c0 2.116.555 4.066 1.61 5.82L0 24l6.36-1.657A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12 0-3.204-1.247-6.18-3.48-8.52zM12 21.5c-1.84 0-3.565-.5-5.06-1.436l-.36-.228-3.75.977.997-3.65-.233-.37A9.5 9.5 0 1 1 21.5 12 9.5 9.5 0 0 1 12 21.5z"/><path d="M17.6 14.14c-.28-.14-1.66-.82-1.92-.92-.26-.1-.45-.14-.64.14-.18.28-.72.92-.88 1.11-.16.19-.32.21-.6.07-.28-.14-1.18-.43-2.25-1.39-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.12-.12.28-.32.42-.48.14-.16.18-.28.28-.46.1-.18.04-.33-.02-.46-.06-.12-.64-1.54-.88-2.12-.23-.56-.47-.48-.64-.49-.16 0-.35-.01-.54-.01-.19 0-.5.07-.76.33-.26.26-1 1-1 2.44 0 1.44 1.03 2.83 1.17 3.03.14.2 2.02 3.08 4.9 4.32 2.88 1.24 2.88.83 3.4.78.52-.05 1.66-.68 1.9-1.33.24-.65.24-1.2.17-1.33-.07-.13-.26-.18-.55-.32z"/></path></path></svg>
-      </span>
-      WhatsApp
-    </a>
+<div id="champak-search" aria-label="Explore posts — Champak's Search">
+  <div id="cs-debug" role="status" aria-live="polite"></div>
+  <div id="cs-loading">Initializing widget…</div>
 
-    <a class="share-btn" id="share-facebook" title="Share on Facebook" aria-label="Share on Facebook" role="button">
-      <span class="share-icon" aria-hidden="true">
-        <!-- Facebook SVG -->
-        <svg viewbox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M22.676 0H1.326C.594 0 0 .593 0 1.326v21.348C0 23.407.593 24 1.326 24H12.82V14.708h-3.3v-3.61h3.3V8.412c0-3.273 1.993-5.058 4.904-5.058 1.396 0 2.59.104 2.94.15v3.41h-2.02c-1.586 0-1.894.754-1.894 1.86v2.436h3.788l-.494 3.61h-3.294V24h6.456C23.407 24 24 23.407 24 22.674V1.326C24 .593 23.407 0 22.676 0z"/></path></svg>
-      </span>
-      Facebook
-    </a>
-
-    <a class="share-btn" id="share-x" title="Share on X" aria-label="Share on X" role="button">
-      <span class="share-icon" aria-hidden="true">
-        <!-- X/Twitter-like SVG -->
-        <svg viewbox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M22.162 5.656c-.64.284-1.33.476-2.055.562.74-.444 1.308-1.148 1.576-1.988-.692.41-1.46.71-2.277.872C18.7 4.46 17.79 4 16.78 4c-1.7 0-3.083 1.382-3.083 3.084 0 .242.028.478.08.704C10.12 7.674 7.094 5.9 5.03 3.316c-.266.457-.418.99-.418 1.56 0 1.076.548 2.026 1.382 2.583-.51-.016-.99-.157-1.41-.39v.04c0 1.504 1.07 2.758 2.49 3.042-.26.064-.536.098-.817.098-.2 0-.39-.02-.58-.056.39 1.21 1.52 2.09 2.86 2.116C7.77 14.8 6.36 15.4 4.86 15.4c-.324 0-.644-.02-.955-.058 1.787 1.146 3.9 1.814 6.18 1.814 7.42 0 11.486-6.145 11.486-11.48 0-.174-.004-.347-.01-.518.79-.57 1.477-1.284 2.02-2.095-.72.318-1.5.533-2.31.63z"/></path></svg>
-      </span>
-      X
-    </a>
-
-    <a class="share-btn" id="share-linkedin" title="Share on LinkedIn" aria-label="Share on LinkedIn" role="button">
-      <span class="share-icon" aria-hidden="true">
-        <!-- LinkedIn SVG -->
-        <svg viewbox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.026-3.036-1.85-3.036-1.853 0-2.136 1.445-2.136 2.94v5.664H9.353V9h3.414v1.56h.05c.476-.9 1.637-1.85 3.37-1.85 3.603 0 4.27 2.37 4.27 5.455v6.287zM5.337 7.433c-1.144 0-2.07-.927-2.07-2.07 0-1.144.926-2.07 2.07-2.07 1.144 0 2.07.926 2.07 2.07 0 1.144-.926 2.07-2.07 2.07zM6.718 20.452H3.957V9h2.761v11.452z"/></path></svg>
-      </span>
-      LinkedIn
-    </a>
-
-    <a class="share-btn" id="share-telegram" title="Share on Telegram" aria-label="Share on Telegram" role="button">
-      <span class="share-icon" aria-hidden="true">
-        <!-- Telegram SVG -->
-        <svg viewbox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.3 3.438 9.8 8.205 11.387.6.11.82-.26.82-.577 0-.285-.01-1.04-.016-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.385-1.333-1.754-1.333-1.754-1.09-.745.084-.73.084-.73 1.205.084 1.84 1.237 1.84 1.237 1.07 1.835 2.809 1.305 3.495.998.108-.775.42-1.305.763-1.605-2.665-.305-5.467-1.335-5.467-5.93 0-1.31.47-2.38 1.236-3.22-.124-.304-.536-1.523.117-3.176 0 0 1.008-.323 3.3 1.23A11.5 11.5 0 0 1 12 5.8c1.02.004 2.046.137 3.006.402 2.29-1.553 3.296-1.23 3.296-1.23.656 1.653.244 2.872.12 3.176.77.84 1.235 1.91 1.235 3.22 0 4.61-2.807 5.62-5.48 5.917.431.372.815 1.102.815 2.222 0 1.606-.015 2.902-.015 3.295 0 .32.216.694.825.576C20.565 21.796 24 17.296 24 12 24 5.373 18.627 0 12 0z"/></path></svg>
-      </span>
-      Telegram
-    </a>
-
-    <a class="share-btn" id="share-email" title="Share by Email" aria-label="Share by Email" role="button">
-      <span class="share-icon" aria-hidden="true">
-        <!-- Mail SVG -->
-        <svg viewbox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 13.065L.5 4.5V20c0 1.105.895 2 2 2h19c1.105 0 2-.895 2-2V4.5L12 13.065zM12 11.435L23.5 3H.5L12 11.435z"/></path></svg>
-      </span>
-      Email
-    </a>
-
-    <button class="share-btn share-copy" id="share-copy" title="Copy link" aria-label="Copy link">
-      <span class="share-icon" aria-hidden="true">
-        <!-- Copy SVG -->
-        <svg viewbox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M16 1H4c-1.1 0-2 .9-2 2v12h2V3h12V1zM19 5H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></path></svg>
-      </span>
-      Copy link
-      <span class="share-tooltip" id="copyTooltip">Copied!</span>
-    </button>
-
-    <!-- Hide button -->
-    <button class="sw-hide" id="shareHide" title="Hide share widget" aria-label="Hide share widget">Hide</button>
+  <div class="cs-controls" id="cs-controls">
+    <input id="cs-search-input" type="search" placeholder="Search posts by title, summary or topic" aria-label="Search posts" />
+    <select id="cs-filter-label" aria-label="Filter by topic"><option value="" />All topics</select>
+    <select id="cs-sort" aria-label="Sort posts">
+      <option value="date-desc" />Newest first
+      <option value="date-asc" />Oldest first
+      <option value="title-asc" />Title A → Z
+      <option value="title-desc" />Title Z → A
+    </select>
+    <button id="cs-refresh" class="cs-btn" title="Refresh posts">Refresh</button>
   </div>
+
+  <div class="cs-stats" id="cs-stats" style="display:none">Items found: <strong id="cs-count">—</strong></div>
+
+  <div id="cs-results" class="cs-results-grid" aria-live="polite"></div>
 </div>
 
-<!-- Small show tab that appears when widget hidden -->
-<button class="share-show-tab" id="shareShowTab" aria-label="Show share widget" title="Show share widget">Share</button>
-
 <script>
+/* Champak's Search — robust visibility + paginated fetch (500 per page) */
 (function(){
-  const WIDGET_KEY = 'shareWidget-visibility'; // 'visible' | 'hidden'
-  const widget = document.getElementById('shareWidget');
-  const showTab = document.getElementById('shareShowTab');
-  const hideBtn = document.getElementById('shareHide');
+  function ready(fn){
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
 
-  // Build share URLs (reusing your logic)
-  const getUrl = () => {
-    const canon = document.querySelector('link[rel=canonical]');
-    return (canon && canon.href) ? canon.href : (location.href.split('#')[0]);
-  };
-  const getTitle = () => {
-    const og = document.querySelector('meta[property="og:title"]') || document.querySelector('meta[name="og:title"]');
-    return (og && og.content) ? og.content : document.title || '';
-  };
-  const urlRaw = getUrl();
-  const url = encodeURIComponent(urlRaw);
-  const title = encodeURIComponent(getTitle());
+  ready(function(){
+    const resultsEl = document.getElementById('cs-results');
+    const countEl = document.getElementById('cs-count');
+    const searchInput = document.getElementById('cs-search-input');
+    const filterLabel = document.getElementById('cs-filter-label');
+    const sortSelect = document.getElementById('cs-sort');
+    const refreshBtn = document.getElementById('cs-refresh');
+    const controlsWrap = document.getElementById('cs-controls');
+    const statsWrap = document.getElementById('cs-stats');
+    const debugEl = document.getElementById('cs-debug');
+    const loadingEl = document.getElementById('cs-loading');
 
-  const whatsappHref = `https://wa.me/?text=${title}%20${url}`;
-  const facebookHref = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-  const xHref = `https://twitter.com/intent/tweet?text=${title}&url=${url}`;
-  const linkedinHref = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
-  const telegramHref = `https://t.me/share/url?url=${url}&text=${title}`;
-  const emailHref = `mailto:?subject=${title}&body=${title}%0A%0A${url}`;
-
-  // Assign hrefs to anchors
-  const setHref = (id, href) => {
-    const el = document.getElementById(id);
-    if(!el) return;
-    if(el.tagName.toLowerCase() === 'a') {
-      el.setAttribute('href', href);
-      el.setAttribute('target', '_blank');
-      el.setAttribute('rel', 'noopener noreferrer');
-    } else {
-      el.addEventListener('click', () => window.open(href, '_blank', 'noopener'));
+    const container = document.getElementById('champak-search');
+    if(container){
+      container.style.display = 'block';
+      container.style.visibility = 'visible';
+      container.style.zIndex = 9999;
     }
-  };
-  setHref('share-whatsapp', whatsappHref);
-  setHref('share-facebook', facebookHref);
-  setHref('share-x', xHref);
-  setHref('share-linkedin', linkedinHref);
-  setHref('share-telegram', telegramHref);
-  setHref('share-email', emailHref);
 
-  // Copy link behaviour
-  const copyBtn = document.getElementById('share-copy');
-  const tooltip = document.getElementById('copyTooltip');
-  copyBtn.addEventListener('click', async function(){
-    try {
-      await navigator.clipboard.writeText(urlRaw);
-      copyBtn.classList.add('show');
-      tooltip.textContent = 'Copied!';
-      setTimeout(()=> copyBtn.classList.remove('show'), 1500);
-    } catch (e) {
-      const ta = document.createElement('textarea');
-      ta.value = urlRaw; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); tooltip.textContent = 'Copied!'; }
-      catch (err) { tooltip.textContent = 'Press Ctrl+C to copy'; }
-      ta.remove();
-      copyBtn.classList.add('show');
-      setTimeout(()=> copyBtn.classList.remove('show'), 1800);
+    const CACHE_KEY = 'champak_posts_cache_plain_v2';
+    const CACHE_TTL_MS = 1000 * 60 * 15;
+    let posts = [];
+    let labelsSet = new Set();
+
+    function escapeHtml(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+    function htmlToPlainText(html){
+      const d=document.createElement('div'); d.innerHTML=html||'';
+      const bad=d.querySelectorAll('script,style,iframe,object,embed'); bad.forEach(n=>n.remove());
+      return (d.textContent||d.innerText||'').replace(/\s+/g,' ').trim();
     }
-  });
+    function truncateText(text,maxChars){ return text && text.length>maxChars ? text.slice(0,maxChars).trim()+'…' : text; }
+    function highlightPlain(text,q){
+      if(!q) return escapeHtml(text);
+      try{
+        const safeQ=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+        const re=new RegExp('('+safeQ+')','ig');
+        return escapeHtml(text).replace(re,'<mark>$1</mark>');
+      }catch(e){return escapeHtml(text);}
+    }
 
-  // Keyboard accessibility for share buttons
-  Array.from(widget.querySelectorAll('.share-btn[role="button"]')).forEach(btn=>{
-    btn.tabIndex = 0;
-    btn.addEventListener('keydown', (ev)=>{
-      if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); btn.click(); }
+    async function fetchJsonTry(url){ const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); }
+
+    function makeBaseFeedUrls(){
+      const loc=window.location;
+      const baseOrigin = loc.origin.endsWith('/') ? loc.origin : loc.origin + '/';
+      return [
+        '/feeds/posts/default?alt=json',
+        baseOrigin + 'feeds/posts/default?alt=json',
+        window.location.href.replace(/\/[^\/]*$/,'/') + 'feeds/posts/default?alt=json'
+      ];
+    }
+
+    async function fetchAllPosts(){
+      loadingEl.textContent = 'Loading posts…';
+      debugEl.style.display = 'none';
+      try{
+        const cached = JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
+        if(cached && (Date.now()-cached.t < CACHE_TTL_MS) && cached.data){
+          hydratePosts(cached.data);
+          loadingEl.style.display = 'none';
+          return;
+        }
+      }catch(e){}
+
+      const baseUrls = makeBaseFeedUrls();
+      let lastError = null;
+      for(const base of baseUrls){
+        try{
+          const allEntries = await fetchPagedFeed(base);
+          const data = { feed: { entry: allEntries } };
+          try{ localStorage.setItem(CACHE_KEY, JSON.stringify({t:Date.now(), data})); }catch(e){}
+          hydratePosts(data);
+          loadingEl.style.display = 'none';
+          return;
+        }catch(err){
+          lastError = err;
+        }
+      }
+      loadingEl.textContent = 'Unable to load posts. Open console for details.';
+      debugEl.style.display = 'block';
+      debugEl.textContent = 'Feed error: ' + String(lastError);
+      resultsEl.innerHTML = '<div style="padding:12px;color:crimson">Unable to load posts. ('+escapeHtml(String(lastError))+')</div>';
+      if(countEl) countEl.textContent = '0';
+    }
+
+    async function fetchPagedFeed(baseUrl){
+      const pageSize = 500;
+      let startIndex = 1;
+      let allEntries = [];
+      while(true){
+        const sep = baseUrl.includes('?') ? '&' : '?';
+        const url = `${baseUrl}${sep}max-results=${pageSize}&start-index=${startIndex}&alt=json`;
+        const json = await fetchJsonTry(url);
+        const entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
+        if(entries.length === 0) break;
+        allEntries = allEntries.concat(entries);
+        loadingEl.textContent = `Loaded ${allEntries.length} posts so far…`;
+        if(entries.length < pageSize) break;
+        startIndex += pageSize;
+        await new Promise(res => setTimeout(res, 120));
+      }
+      return allEntries;
+    }
+
+    function hydratePosts(data){
+      const items = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
+      posts = items.map(entry=>{
+        const title = entry.title ? entry.title.$t : '(no title)';
+        const url = (entry.link||[]).find(l=>l.rel==='alternate')?.href || (entry.link && entry.link[0] && entry.link[0].href) || '#';
+        const published = entry.published ? entry.published.$t : '';
+        const contentHtml = (entry.summary && entry.summary.$t) || (entry.content && entry.content.$t) || '';
+        const contentPlain = htmlToPlainText(contentHtml);
+        const labels = (entry.category||[]).map(c=>c.term).filter(Boolean);
+        labels.forEach(l=>labelsSet.add(l));
+        return { title, url, published, contentPlain, labels };
+      });
+
+      controlsWrap.style.display = 'flex';
+      statsWrap.style.display = 'block';
+
+      populateLabelFilter();
+      renderPosts();
+    }
+
+    function populateLabelFilter(){
+      const prev = filterLabel.value || '';
+      const labels = Array.from(labelsSet).sort((a,b)=>a.localeCompare(b));
+      filterLabel.innerHTML = '<option value="">All topics</option>' + labels.map(l=>`<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
+      if(prev) filterLabel.value = prev;
+    }
+
+    function renderPosts(){
+      const q = (searchInput.value||'').trim().toLowerCase();
+      const activeLabel = filterLabel.value;
+      let list = posts.slice();
+      list = list.filter(p=>{
+        if(activeLabel && (!p.labels || p.labels.indexOf(activeLabel)===-1)) return false;
+        if(!q) return true;
+        const hay = (p.title + ' ' + p.contentPlain + ' ' + (p.labels||[]).join(' ')).toLowerCase();
+        return hay.indexOf(q) !== -1;
+      });
+      const sortVal = sortSelect.value || 'date-desc';
+      list.sort((a,b)=>{
+        if(sortVal==='title-asc') return a.title.localeCompare(b.title);
+        if(sortVal==='title-desc') return b.title.localeCompare(a.title);
+        if(sortVal==='date-asc') return new Date(a.published) - new Date(b.published);
+        return new Date(b.published) - new Date(a.published);
+      });
+      countEl.textContent = list.length;
+      if(!list.length){
+        resultsEl.innerHTML = '<div style="padding:12px;color:#666">No posts match your search or filter.</div>';
+        return;
+      }
+      resultsEl.innerHTML = list.map(p=>{
+        const dateStr = p.published ? new Date(p.published).toLocaleDateString() : '';
+        const summaryPlain = truncateText(p.contentPlain,220);
+        const titleHtml = highlightPlain(p.title,q);
+        const summaryHtml = highlightPlain(summaryPlain,q);
+        const labelsHtml = (p.labels||[]).map(l=>`<span class="cs-tag">${escapeHtml(l)}</span>`).join('');
+        const urlHtml = `<div class="cs-url"><a href="${p.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.url)}</a></div>`;
+        return `<article class="cs-card">
+          <h3><a href="${p.url}" target="_blank" rel="noopener noreferrer">${titleHtml}</a></h3>
+          <div class="cs-meta">${escapeHtml(dateStr)}</div>
+          <div class="cs-summary">${summaryHtml}</div>
+          ${urlHtml}
+          ${labelsHtml?`<div class="cs-labels">${labelsHtml}</div>`:''}
+        </article>`;
+      }).join('');
+    }
+
+    let tId = 0;
+    searchInput.addEventListener('input', ()=>{ clearTimeout(tId); tId = setTimeout(renderPosts, 220); });
+    filterLabel.addEventListener('change', renderPosts);
+    sortSelect.addEventListener('change', renderPosts);
+    refreshBtn.addEventListener('click', ()=>{ try{ localStorage.removeItem(CACHE_KEY); }catch(e){} fetchAllPosts(); });
+
+    fetchAllPosts().catch(err => {
+      loadingEl.textContent = 'Error loading posts. See console.';
+      console.error('[champak-search] load error', err);
+      debugEl.style.display = 'block';
+      debugEl.textContent = String(err);
     });
   });
-
-  // Visibility helpers
-  function setVisibility(visible) {
-    try { localStorage.setItem(WIDGET_KEY, visible ? 'visible' : 'hidden'); } catch(e){ /* ignore */ }
-    if(visible) {
-      showTab.style.display = 'none';
-      widget.style.display = ''; // restore
-      // reveal animation
-      setTimeout(()=> widget.classList.add('revealed'), 50);
-    } else {
-      widget.classList.remove('revealed');
-      // hide widget then show tab
-      widget.style.display = 'none';
-      showTab.style.display = 'block';
+})();
+</script>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
+          <b:widget id='HTML10' locked='false' title='' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Python Editor Modal Widget -->
+<div style="text-align:center; margin:10px 8px; font-family:Arial, sans-serif;">
+  <style>
+    .editor-widget-wrap { text-align:center; margin:10px 8px; font-family:Arial, sans-serif; }
+    .editor-widget-btn {
+      display:inline-block; padding:10px 16px;
+      background:linear-gradient(135deg,#0b63d4,#1e90ff);
+      color:#fff; font-size:15px; font-weight:600;
+      border-radius:10px; text-decoration:none;
+      box-shadow:0 6px 14px rgba(11,99,212,0.18);
+      transition:transform .15s ease, box-shadow .15s ease;
+      cursor:pointer;
     }
-  }
-
-  // Show tab click — show the widget
-  showTab.addEventListener('click', function(){
-    setVisibility(true);
-    // focus first share button for accessibility
-    const firstBtn = widget.querySelector('.share-btn');
-    if(firstBtn) firstBtn.focus();
-  });
-  showTab.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showTab.click(); } });
-
-  // Hide button inside widget
-  hideBtn.addEventListener('click', function(){
-    setVisibility(false);
-  });
-  hideBtn.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hideBtn.click(); } });
-
-  // Auto-mode behaviour: show only on posts (same detection as before)
-  const isPost = !!document.querySelector('article') || /\/\d{4}\/\d{2}\//.test(location.pathname);
-  const mode = widget.getAttribute('data-mode');
-
-  // Initialize from localStorage (default: visible on post pages only)
-  let stored = null;
-  try { stored = localStorage.getItem(WIDGET_KEY); } catch(e){ stored = null; }
-  if(stored === 'hidden') {
-    // user hid previously -> keep hidden and show tab
-    widget.style.display = 'none';
-    showTab.style.display = 'block';
-  } else if(stored === 'visible') {
-    // user forced visible before
-    widget.style.display = '';
-    showTab.style.display = 'none';
-    // reveal (after small delay so animation runs)
-    setTimeout(()=> widget.classList.add('revealed'), 50);
-  } else {
-    // no stored preference -> default behaviour: float only on posts if data-mode="auto"
-    if(mode === 'auto' && !isPost) {
-      widget.style.display = 'none';
-      showTab.style.display = 'none'; // don't show tab on non-post homepage
-    } else {
-      widget.style.display = '';
-      showTab.style.display = 'none';
-      setTimeout(()=> widget.classList.add('revealed'), 50);
+    .editor-widget-btn:hover {
+      transform:translateY(-3px);
+      box-shadow:0 10px 22px rgba(11,99,212,0.22);
     }
-  }
+    .editor-modal-overlay {
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.6);
+      display:none; align-items:center; justify-content:center;
+      z-index:99999; padding:20px;
+    }
+    .editor-modal {
+      width:100%; max-width:1100px;
+      height:80vh; max-height:900px;
+      background:#fff; border-radius:10px; overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,0.4);
+      display:flex; flex-direction:column; position:relative;
+    }
+    .editor-modal-header {
+      display:flex; align-items:center; justify-content:space-between; gap:8px;
+      padding:10px 12px;
+      background:linear-gradient(90deg,#eef6ff,#f7fbff);
+      border-bottom:1px solid rgba(0,0,0,0.06);
+    }
+    .editor-modal-title { font-weight:700; font-size:15px; color:#0b63d4; }
+    .editor-modal-actions { display:flex; gap:8px; align-items:center; }
+    .modal-action-btn {
+      border:0; padding:6px 10px; border-radius:8px; font-weight:600;
+      background:#f1f5ff; cursor:pointer;
+    }
+    .modal-action-btn:hover { transform:translateY(-2px); }
+    .editor-modal-close {
+      background:#ff5e6c; color:#fff;
+      border:0; padding:8px 10px; border-radius:8px; cursor:pointer;
+    }
+    .editor-modal-body { flex:1; position:relative; background:#fff; min-height:200px; }
+    .editor-loader {
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      font-size:14px; color:#666; display:flex; align-items:center; gap:10px;
+      background:rgba(255,255,255,0.95); padding:10px 14px; border-radius:8px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    }
+    .editor-spinner {
+      width:18px; height:18px; border-radius:50%;
+      border:3px solid rgba(11,99,212,0.18); border-top-color:#0b63d4;
+      animation:spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .editor-modal iframe { width:100%; height:100%; border:0; display:block; }
+    @media (max-width:640px){
+      .editor-modal { height:92vh; max-width:98%; border-radius:8px; }
+      .editor-modal-header { padding:8px; }
+      .editor-widget-btn { padding:10px 12px; font-size:14px; }
+    }
+  </style>
 
-  // If the user navigates or SPA updates could re-run — keep state consistent by listening to storage events
-  window.addEventListener('storage', (e) => {
-    if(e.key === WIDGET_KEY) {
-      const v = e.newValue;
-      if(v === 'hidden') {
-        widget.style.display = 'none';
-        showTab.style.display = 'block';
-      } else if(v === 'visible') {
-        showTab.style.display = 'none';
-        widget.style.display = '';
-        setTimeout(()=> widget.classList.add('revealed'), 50);
+  <div class="editor-widget-wrap">
+    <a class="editor-widget-btn" id="openEditorBtn" role="button" aria-haspopup="dialog" aria-controls="editorModal">🚀 Open Python Editor</a>
+  </div>
+
+  <div class="editor-modal-overlay" id="editorModalOverlay" aria-hidden="true">
+    <div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editorModalLabel">
+      <div class="editor-modal-header">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="editor-modal-title" id="editorModalLabel">Python Editor</div>
+          <div style="font-size:12px;color:#666">Run Python in your browser (Pyodide)</div>
+        </div>
+        <div class="editor-modal-actions">
+          <button class="modal-action-btn" id="openInNewTabBtn" title="Open in new tab">↗ New tab</button>
+          <button class="modal-action-btn" id="toggleFullscreenBtn" title="Toggle fullscreen">⤢ Fullscreen</button>
+          <button class="editor-modal-close" id="closeEditorBtn" aria-label="Close editor">✕</button>
+        </div>
+      </div>
+      <div class="editor-modal-body" id="editorModalBody">
+        <div class="editor-loader" id="editorLoader" style="display:none;">
+          <div class="editor-spinner" aria-hidden="true"></div>
+          <div>Loading editor...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const editorUrl = "https://varanasisoftwarejunction.blogspot.com/2025/09/python-editor.html";
+    const openBtn = document.getElementById('openEditorBtn');
+    const overlay = document.getElementById('editorModalOverlay');
+    const closeBtn = document.getElementById('closeEditorBtn');
+    const bodyArea = document.getElementById('editorModalBody');
+    const loader = document.getElementById('editorLoader');
+    const newTabBtn = document.getElementById('openInNewTabBtn');
+    const fsBtn = document.getElementById('toggleFullscreenBtn');
+
+    let iframeEl = null, isOpen = false, isFullscreen = false;
+
+    function trapFocus(element) {
+      const focusable = element.querySelectorAll('a[href], button, textarea, input, iframe, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      element.addEventListener('keydown', function (e) {
+        if (e.key === 'Tab') {
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      });
+      setTimeout(()=> first.focus(), 50);
+    }
+
+    function openModal(){
+      if (isOpen) return;
+      isOpen = true;
+      overlay.style.display = "flex";
+      overlay.setAttribute('aria-hidden','false');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      if (!iframeEl) {
+        loader.style.display = 'flex';
+        iframeEl = document.createElement('iframe');
+        iframeEl.src = editorUrl + (editorUrl.indexOf('?') === -1 ? '?embed=1' : '&embed=1');
+        iframeEl.setAttribute('title','Python Editor');
+        iframeEl.onload = function(){ loader.style.display = 'none'; };
+        iframeEl.onerror = function(){
+          loader.style.display = 'none';
+          const err = document.createElement('div');
+          err.style.padding = '18px'; err.style.color = '#b00020';
+          err.innerText = 'Failed to load editor — opening in a new tab instead.';
+          bodyArea.appendChild(err);
+          window.open(editorUrl, '_blank');
+        };
+        bodyArea.appendChild(iframeEl);
+      }
+      trapFocus(overlay);
+    }
+
+    function closeModal(){
+      if (!isOpen) return;
+      isOpen = false;
+      overlay.style.display = "none";
+      overlay.setAttribute('aria-hidden','true');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      if (isFullscreen) toggleFullscreen();
+      openBtn.focus();
+    }
+
+    function toggleFullscreen(){
+      const modal = overlay.querySelector('.editor-modal');
+      if (!modal) return;
+      if (!isFullscreen){
+        modal.style.width = '100%'; modal.style.height = '100vh';
+        modal.style.maxWidth = '100%'; modal.style.maxHeight = '100%';
+        modal.style.borderRadius = '0'; isFullscreen = true;
+        fsBtn.innerText = '⤡ Exit';
+      } else {
+        modal.style.width = ''; modal.style.height = '';
+        modal.style.maxWidth = ''; modal.style.maxHeight = '';
+        modal.style.borderRadius = ''; isFullscreen = false;
+        fsBtn.innerText = '⤢ Fullscreen';
       }
     }
-  });
 
-})();
-</script>
-<!-- END: Share Widget for Blogger -->]]></b:widget-setting>
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e=>{ if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e=>{ if (e.key === 'Escape') closeModal(); });
+    newTabBtn.addEventListener('click', ()=> window.open(editorUrl, '_blank'));
+    fsBtn.addEventListener('click', toggleFullscreen);
+    openBtn.title = "Open Python Editor (click or press)";
+    openBtn.addEventListener('keydown', e=>{ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); } });
+  })();
+  </script>
+</div>]]></b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
   <b:include name='widget-title'/>
@@ -2416,83 +1982,188 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
           </b:widget>
           <b:widget id='HTML26' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- Bookmark Widget -->
-<div id="bookmark-widget" style="margin: 10px 0; font-family: Arial, sans-serif;">
-  <button onclick="saveBookmark()"
-          style="padding: 8px 12px; font-size: 14px; background:#0b63d4; color:white; border:none; border-radius:5px; cursor:pointer;">
-    📌 Bookmark this page
-  </button>
-  <div id="bookmark-status" style="margin-top: 6px; font-size: 13px; color: green;"></div>
+              <b:widget-setting name='content'><![CDATA[<!-- Personal Bookmarks Widget (improved, safe DOM usage) -->
+<div id="bookmark-widget" style="margin:10px 0; font-family:Arial, sans-serif; max-width:360px;">
+  <style>
+    /* Bookmark widget styles */
+    #bookmark-widget .bm-header {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      justify-content:space-between;
+      margin-bottom:10px;
+    }
+    #bookmark-widget h4 { margin:0; color:#0b63d4; font-size:16px; }
+    #bookmark-widget .controls { display:flex; gap:6px; align-items:center; }
+    #bookmark-widget button.action {
+      padding:8px 12px; font-size:14px; border:none; border-radius:6px; cursor:pointer;
+      background:#0b63d4; color:#fff;
+      box-shadow:0 2px 6px rgba(11,99,212,0.18);
+    }
+    #bookmark-widget button.ghost {
+      background:transparent; color:#0b63d4; border:1px solid #0b63d4; padding:7px 10px;
+    }
+    #bookmark-widget .status {
+      margin-top:6px; font-size:13px; color: #117a00; min-height:18px;
+    }
+    #bookmark-widget .list-wrap {
+      border:1px solid #e0e0e0; border-radius:8px; padding:8px; margin-top:10px;
+      background:#fafafa;
+    }
+    #bookmark-widget ul { list-style:none; padding:0; margin:0; }
+    #bookmark-widget li {
+      display:flex; gap:8px; align-items:center; padding:8px; border-radius:6px;
+      margin-bottom:8px;
+    }
+    #bookmark-widget li.current { background:#e8f7e8; }
+    #bookmark-widget a.item-link { text-decoration:none; color:#333; flex:1; word-break:break-word; }
+    #bookmark-widget button.delete {
+      background:#ff4d4d; color:#fff; border:none; padding:6px 8px; border-radius:5px;
+      cursor:pointer;
+    }
+    #bookmark-widget .empty { color:#777; font-size:13px; padding:8px; text-align:center; }
+    @media (max-width:420px) {
+      #bookmark-widget { max-width:100%; }
+      #bookmark-widget .bm-header { flex-direction:column; align-items:flex-start; gap:6px; }
+    }
+  </style>
 
-  <h4 style="margin-top:15px;">📑 Saved Bookmarks</h4>
-  <div id="bookmark-container"
-       style="border: 1px solid #ccc; border-radius: 6px; padding: 10px; margin-top: 8px; background:#f9f9f9;">
-    <ul id="bookmark-list" style="list-style:none; padding-left:0; font-size:14px; margin:0;"></ul>
+  <div class="bm-header">
+    <h4>🔖 My Bookmarks</h4>
+    <div class="controls">
+      <button id="bookmark-btn" class="action" title="Save this page">📌 Bookmark this page</button>
+      <button id="clear-btn" class="ghost" title="Clear all bookmarks">Clear all</button>
+    </div>
+  </div>
+
+  <div id="bookmark-status" class="status" aria-live="polite"></div>
+
+  <div class="list-wrap" aria-label="Saved bookmarks">
+    <ul id="bookmark-list"></ul>
+    <div id="bookmark-empty" class="empty" style="display:none;">No bookmarks yet. Click "Bookmark this page" to save.</div>
   </div>
 </div>
 
 <script>
-  function saveBookmark() {
-    const pageTitle = document.title;
-    const pageURL = window.location.href;
-    const bookmark = { title: pageTitle, url: pageURL };
+(function(){
+  const STORAGE_KEY = 'blogBookmarks';
+  const btn = document.getElementById('bookmark-btn');
+  const listEl = document.getElementById('bookmark-list');
+  const statusEl = document.getElementById('bookmark-status');
+  const emptyEl = document.getElementById('bookmark-empty');
+  const clearBtn = document.getElementById('clear-btn');
 
-    // Retrieve existing bookmarks
-    let bookmarks = JSON.parse(localStorage.getItem("blogBookmarks")) || [];
+  function loadBookmarks(){
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch(e) {
+      console.error('Bookmarks load error', e);
+      return [];
+    }
+  }
 
-    // Check if already bookmarked
-    const exists = bookmarks.some(b => b.url === pageURL);
-    if (exists) {
-      document.getElementById("bookmark-status").innerHTML = "✅ Already bookmarked!";
+  function saveBookmarks(arr){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  function showStatus(msg, timeout = 3500){
+    statusEl.textContent = msg;
+    if(timeout > 0){
+      clearTimeout(showStatus._t);
+      showStatus._t = setTimeout(()=> { statusEl.textContent = ''; }, timeout);
+    }
+  }
+
+  function renderBookmarks(){
+    const bookmarks = loadBookmarks();
+    listEl.innerHTML = ''; // safe because we create nodes below
+
+    if(bookmarks.length === 0){
+      emptyEl.style.display = 'block';
+      return;
+    } else {
+      emptyEl.style.display = 'none';
+    }
+
+    const currentURL = location.href;
+
+    bookmarks.forEach((b, i) => {
+      const li = document.createElement('li');
+      if(b.url === currentURL) li.classList.add('current');
+
+      // index label
+      const idx = document.createElement('span');
+      idx.textContent = (i+1) + '.';
+      idx.style.fontWeight = '600';
+      idx.style.color = '#0b63d4';
+      idx.style.marginRight = '8px';
+      li.appendChild(idx);
+
+      // link
+      const a = document.createElement('a');
+      a.className = 'item-link';
+      a.href = b.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = b.title || b.url;
+      a.title = b.url;
+      li.appendChild(a);
+
+      // delete button
+      const del = document.createElement('button');
+      del.className = 'delete';
+      del.type = 'button';
+      del.title = 'Remove bookmark';
+      del.textContent = '❌';
+      del.addEventListener('click', function(){
+        deleteBookmark(i);
+      });
+      li.appendChild(del);
+
+      listEl.appendChild(li);
+    });
+  }
+
+  function deleteBookmark(index){
+    const bookmarks = loadBookmarks();
+    if(index >= 0 && index < bookmarks.length){
+      bookmarks.splice(index,1);
+      saveBookmarks(bookmarks);
+      renderBookmarks();
+    }
+  }
+
+  function clearAllBookmarks(){
+    if(!confirm('Clear all saved bookmarks?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    renderBookmarks();
+    showStatus('All bookmarks cleared.');
+  }
+
+  function saveBookmark(){
+    const title = document.title || location.href;
+    const url = location.href;
+    let bookmarks = loadBookmarks();
+
+    if(bookmarks.some(b => b.url === url)){
+      showStatus('✅ Already bookmarked!');
       renderBookmarks();
       return;
     }
 
-    // Save new bookmark
-    bookmarks.push(bookmark);
-    localStorage.setItem("blogBookmarks", JSON.stringify(bookmarks));
-    document.getElementById("bookmark-status").innerHTML = "✅ Page bookmarked!";
+    bookmarks.push({ title: title, url: url });
+    saveBookmarks(bookmarks);
+    showStatus('✅ Page bookmarked!');
     renderBookmarks();
   }
 
-  function renderBookmarks() {
-    let bookmarks = JSON.parse(localStorage.getItem("blogBookmarks")) || [];
-    const list = document.getElementById("bookmark-list");
-    list.innerHTML = "";
-    const currentURL = window.location.href;
+  // attach events
+  btn.addEventListener('click', saveBookmark);
+  clearBtn.addEventListener('click', clearAllBookmarks);
 
-    bookmarks.forEach((b, index) => {
-      const li = document.createElement("li");
-      li.style.marginBottom = "8px";
-      li.style.display = "flex";
-      li.style.alignItems = "center";
-      li.style.padding = "6px 8px";
-      li.style.borderRadius = "4px";
-
-      // Highlight current page bookmark
-      if (b.url === currentURL) {
-        li.style.background = "#d4f8d4";  // light green background
-      }
-
-      li.innerHTML = `<span style="margin-right:8px; font-weight:bold; color:#0b63d4;">${index + 1}.</span>
-        <a href="${b.url}" target="_blank" style="text-decoration:none; color:#333; flex-grow:1;">${b.title}</a>
-        <button onclick="deleteBookmark(${index})"
-          style="margin-left:8px; font-size:12px; padding:2px 6px; border:none; border-radius:3px; cursor:pointer; background:#ff4d4d; color:white;">
-          ❌
-        </button>`;
-      list.appendChild(li);
-    });
-  }
-
-  function deleteBookmark(index) {
-    let bookmarks = JSON.parse(localStorage.getItem("blogBookmarks")) || [];
-    bookmarks.splice(index, 1);
-    localStorage.setItem("blogBookmarks", JSON.stringify(bookmarks));
-    renderBookmarks();
-  }
-
-  // Render on load
+  // initial render
   renderBookmarks();
+})();
 </script>]]></b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
@@ -2615,157 +2286,35 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   </div>
 </b:includable>
           </b:widget>
-          <b:widget id='HTML22' locked='false' title='' type='HTML' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- Styled original Blogger Search widget with left avatar + icon button -->
-<img src="https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_umQwJV8MuDDto5fvP9ow5V1Ckvs_erUHxwyRi9lltBs1578-SCs8UWuy8ukohtMpHurJ40i8MaZvF8Tq2EnnJSUyAzgxm4WrJHPK3wPWA-bMqD_YumMhK21vbaqq1AlwXctmG3kMQadxlRNmQsrwwDwT8=w640"
-     style="display:none;" alt="widget-avatar" />
-
-<b:widget id='Search1' locked='false' title='Search This Blog' type='BlogSearch' class="cppp">
-  <b:widget-settings>
-    <!-- fixed typo in title -->
-    <b:widget-setting name='title'>What do you need to find?</b:widget-setting>
-  </b:widget-settings>
-
-  <b:includable id='main'>
-    <style>
-      /* Container (scoped to this widget) */
-      .cppp .champakroy1970-searchbox {
-        max-width: 520px;
-
-        margin: 0 auto;
-        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-      }
-
-      /* layout: avatar | input + button */
-      .cppp .champakroy1970-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: linear-gradient(180deg, rgba(11,37,69,0.03), rgba(11,37,69,0.01));
-        padding: 8px;
-        border-radius: 14px;
-        box-shadow: 0 6px 20px rgba(11,37,69,0.06);
-        border: 1px solid rgba(11,37,69,0.06);
-      }
-
-      .cppp .champakroy1970-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        flex: 0 0 50px;
-        object-fit: cover;
-        box-shadow: 0 4px 12px rgba(10,40,80,0.08);
-      }
-
-      .cppp .champakroy1970-form {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        width: 100%;
-      }
-
-      .cppp .champakroy1970-input {
-        flex: 1;
-
-        outline: none;
-        padding: 10px 12px;
-        font-size: 15px;
-        border-radius: 10px;
-        background: rgba(255,255,255,0.85);
-        color: #06203a;
-        min-width: 80px;
-border-style: ridge;
-border-width:5px;
-      }
-
-      .cppp .champakroy1970-input::placeholder { color: #7d9ab5; }
-
-      .cppp .champakroy1970-btn {
-        display: inline-grid;
-        place-items: center;
-        width: 46px;
-        height: 46px;
-        border-radius: 10px;
-        border: 0;
-        cursor: pointer;
-        background: linear-gradient(180deg,#1877d2,#0c5fb0);
-        color: #fff;
-        box-shadow: 0 6px 18px rgba(13,67,132,0.18);
-        transition: transform .12s ease, box-shadow .12s ease;
-      }
-
-      .cppp .champakroy1970-btn:active { transform: translateY(1px) scale(.995); }
-      .cppp .champakroy1970-btn:focus { outline: 3px solid rgba(24,119,210,0.15); }
-
-      .cppp .champakroy1970-label {
-        display:block;
-        margin-bottom:6px;
-        font-weight:600;
-        color:#073050;
-        font-size:14px;
-      }
-
-      /* small screens: avatar shrinks and layout stays tidy */
-      @media (max-width:480px) {
-        .cppp .champakroy1970-row { gap:8px; padding:6px; }
-        .cppp .champakroy1970-avatar { width:40px; height:40px; flex:0 0 40px; }
-        .cppp .champakroy1970-btn { width:40px; height:40px; }
-      }
-    </style>
-
-    <div class='champakroy1970-searchbox'>
-      <label class='champakroy1970-label' for='champakroy1970-q'> </label>
-
-      <!-- outer row contains avatar + form -->
-      <div class='champakroy1970-row'>
-        <!-- avatar image (keeps the URL you provided). Use alt for accessibility. -->
-        <img class='champakroy1970-avatar'
-             src='https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_umQwJV8MuDDto5fvP9ow5V1Ckvs_erUHxwyRi9lltBs1578-SCs8UWuy8ukohtMpHurJ40i8MaZvF8Tq2EnnJSUyAzgxm4WrJHPK3wPWA-bMqD_YumMhK21vbaqq1AlwXctmG3kMQadxlRNmQsrwwDwT8=w640'
-             alt='Champak Roy avatar' />
-
-        <!-- original Blogger search form (keeps /search handling) -->
-        <form class='champakroy1970-form' action='/search' method='get' target='_top' role='search' aria-label='Search this blog'>
-          <!-- visible text input -->
-          <input id='champakroy1970-q' class='champakroy1970-input' type='text' name='q' placeholder='Look up' aria-label='Search query' />
-
-          <!-- accessible button with SVG icon (acts as submit) -->
-          <button class='champakroy1970-btn' type='submit' aria-label='Search'>
-            <!-- magnifying glass icon -->
-            <svg width='20' height='20' viewbox='0 0 24 24' fill='none' aria-hidden='true' focusable='false'>
-              <path d='M21 21l-4.35-4.35' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'></path>
-              <circle cx='11' cy='11' r='6' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'></circle>
-            </svg>
-          </button>
-        </form>
-      </div>
-    </div>
-  </b:includable>
-</b:widget>]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
           <b:widget id='HTML15' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!--
-  Updated GPay Donation Gadget for Blogspot
-  - Randomly shows either Professional or Casual card on page load
--->
-<div id="donation-gadget" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; max-width:420px; margin:12px auto;">
+              <b:widget-setting name='content'><![CDATA[<!-- Updated GPay Donation Gadget for Blogspot (Blogger-ready) -->
+<div id="donation-gadget" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial; max-width:420px; margin:12px auto;">
   <style>
+    /* core variables */
     #donation-gadget { --accent:#0b84ff; --muted:#6b7280; }
-    .dg-card{border-radius:12px; box-shadow:0 6px 18px rgba(11,12,16,0.08); padding:16px; background:linear-gradient(180deg, #ffffff, #fbfdff); margin-bottom:12px}
-    .dg-row{display:flex; gap:12px; align-items:center}
+
+    /* hide both cards initially to avoid flicker; JS will show one */
+    #card-prof, #card-cas { display: none; }
+
+    .dg-card{
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(11,12,16,0.08);
+      padding:16px;
+      background:linear-gradient(180deg,#ffffff,#fbfdff);
+      margin-bottom:12px;
+      align-items:center;
+      gap:12px;
+      display:flex;
+      flex-direction:row;
+    }
+
+    .dg-row{display:flex; gap:12px; align-items:center; width:100%}
     .dg-qr{width:106px; height:106px; border-radius:8px; background:#f3f4f6; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0}
-    .dg-qr img{width:100%; height:100%; object-fit:cover; display:block}
+    .dg-qr img{width:100%; height:100%; object-fit:contain; display:block; max-width:100%}
     .dg-title{font-size:16px; font-weight:700; margin-bottom:6px; color:#0b1220}
     .dg-desc{font-size:14px; color:var(--muted); line-height:1.35}
-    .dg-cta{display:inline-block; margin-top:12px; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:600}
+    .dg-cta{display:inline-block; margin-top:12px; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:600; cursor:pointer}
 
     /* Professional */
     .dg-professional{border-left:4px solid var(--accent)}
@@ -2775,46 +2324,122 @@ border-width:5px;
     .dg-casual{background:linear-gradient(180deg,#fff8f0,#fff); border:1px solid #fff0e6}
     .dg-casual .dg-title{color:#b53b00}
     .dg-casual .dg-cta{background:#ffe9d0; color:#8a3b00; border:1px solid rgba(0,0,0,0.04)}
+
+    /* responsive */
+    @media (max-width:420px){
+      .dg-card{flex-direction:row}
+      .dg-desc{font-size:13px}
+      .dg-qr{width:90px; height:90px}
+    }
+    @media (max-width:360px){
+      .dg-card{flex-direction:column; align-items:flex-start}
+      .dg-row{flex-direction:row; align-items:center}
+    }
+
+    /* small focus style for keyboard users */
+    .dg-cta:focus{outline:3px solid rgba(11,132,255,0.18); outline-offset:2px}
   </style>
 
   <!-- Professional card -->
   <div id="card-prof" class="dg-card dg-professional" role="region" aria-label="Support this blog - professional">
-    <div class="dg-row">
-      <div class="dg-qr">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" alt="GPay QR Code" />
-      </div>
-      <div style="flex:1">
+    <div class="dg-row" style="width:100%">
+      <div class="dg-qr" aria-hidden="false">
+        <img
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg"
+          alt="Google Pay QR code for donations"
+          loading="lazy"
+          width="106" height="106"
+        />
+      </img
+></div>
+      <div style="flex:1; min-width:0">
         <div class="dg-title">Support This Blog</div>
-        <div class="dg-desc">If my articles have helped you, please consider supporting this blog. Scan the QR code and send any amount you wish — your contribution helps keep this site running.</div>
-        <a class="dg-cta" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" target="_blank" rel="noopener">Open QR — Scan or Save</a>
+        <div class="dg-desc">If my articles have helped you, please consider supporting this blog. Scan the QR code and send any amount — your contribution helps keep this site running.</div>
+        <a class="dg-cta" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg"
+           target="_blank" rel="noopener noreferrer" aria-label="Open full QR code in a new tab — professional card">Open QR — Scan or Save</a>
       </div>
     </div>
   </div>
 
   <!-- Casual card -->
   <div id="card-cas" class="dg-card dg-casual" role="region" aria-label="Support this blog - casual">
-    <div class="dg-row">
-      <div class="dg-qr">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" alt="GPay QR Code" />
-      </div>
-      <div style="flex:1">
+    <div class="dg-row" style="width:100%">
+      <div class="dg-qr" aria-hidden="false">
+        <img
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg"
+          alt="Google Pay QR code for donations"
+          loading="lazy"
+          width="106" height="106"
+        />
+      </img
+></div>
+      <div style="flex:1; min-width:0">
         <div class="dg-title">Like My Content?</div>
-        <div class="dg-desc">Hey friend — if you enjoy my posts and want to buy me a cup of chai ☕, scan the QR and send anything you like. It's totally optional, and every little bit keeps me writing.</div>
-        <a class="dg-cta" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" target="_blank" rel="noopener">Open QR — Thanks!</a>
+        <div class="dg-desc">Hey friend — if you enjoy my posts and want to buy me a cup of chai ☕, scan the QR and send anything you like. Optional — and every little bit keeps me writing.</div>
+        <a class="dg-cta" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg"
+           target="_blank" rel="noopener noreferrer" aria-label="Open full QR code in a new tab — casual card">Open QR — Thanks!</a>
       </div>
     </div>
   </div>
 
+  <!-- noscript fallback -->
+  <noscript>
+    <div class="dg-card" style="display:block;">
+      <div style="display:flex; gap:12px; align-items:center">
+        <div style="width:90px; height:90px; background:#f3f4f6; border-radius:8px; display:flex;align-items:center;justify-content:center;overflow:hidden;">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" alt="Google Pay QR code for donations" width="90" height="90" />
+        </div>
+        <div>
+          <div style="font-weight:700">Support This Blog</div>
+          <div style="color:var(--muted)">Enable JavaScript to see a nicer donation card, or open the QR image directly.</div>
+          <div style="margin-top:8px">
+            <a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" target="_blank" rel="noopener noreferrer">Open QR</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </noscript>
+
   <script>
     (function(){
+      // elements
       var prof = document.getElementById('card-prof');
       var cas = document.getElementById('card-cas');
-      // Random pick
-      if(Math.random() < 0.5){
-        cas.style.display = 'none';
-      } else {
-        prof.style.display = 'none';
+      var container = document.getElementById('donation-gadget');
+
+      // choose either professional or casual
+      var pick = (Math.random() < 0.5) ? 'prof' : 'cas';
+
+      // helper to show chosen card and hide the other (set aria-hidden appropriately)
+      function showCard(which){
+        if(which === 'prof'){
+          prof.style.display = 'flex';
+          prof.setAttribute('aria-hidden', 'false');
+          cas.style.display = 'none';
+          cas.setAttribute('aria-hidden', 'true');
+        } else {
+          cas.style.display = 'flex';
+          cas.setAttribute('aria-hidden', 'false');
+          prof.style.display = 'none';
+          prof.setAttribute('aria-hidden', 'true');
+        }
       }
+
+      // run after DOM ready (safe for Blogger)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function(){ showCard(pick); });
+      } else {
+        showCard(pick);
+      }
+
+      // optional: keyboard accessibility — focus the CTA for screen reader users
+      try {
+        var visibleCTA = (pick === 'prof') ? prof.querySelector('.dg-cta') : cas.querySelector('.dg-cta');
+        if(visibleCTA) {
+          // don't steal focus, but add a small tabindex so it's reachable immediately
+          visibleCTA.setAttribute('tabindex','0');
+        }
+      } catch(e){}
     })();
   </script>
 </div>]]></b:widget-setting>
@@ -3231,640 +2856,6 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
   </div>
 </b:includable>
           </b:widget>
-          <b:widget id='HTML11' locked='false' title='' type='HTML' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!--
-Software Developer Interview Q&A Puzzle Gadget
-Paste into Blogger -> Layout -> Add a Gadget -> HTML/JavaScript -> Content
-Features:
-- Categories (DS, Algo, System Design, Behavioral, OOP)
-- Quiz mode (MCQ / Type-in) with explanations, timer, scoring
-- Puzzle (Match) mode — drag & drop to match Q -> correct A
-- Add / Edit questions saved to localStorage; export/import JSON
--->
-<div id="sd-gadget" style="max-width:900px;margin:18px auto;font-family:Inter, system-ui, Arial;">
-  <style>
-    :root{--primary:#0b63d4;--accent:#0b95f2;--muted:#6b7280;--card:#fff}
-    #sd-gadget .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 12px 36px rgba(10,20,40,0.06)}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
-    h2{margin:0;color:var(--primary)}
-    .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    select,input,button{padding:8px;border-radius:8px;border:1px solid #e6eefc}
-    button.btn{background:var(--primary);color:#fff;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700}
-    button.ghost{background:#fff;border:1px solid #e6eefc;color:var(--primary)}
-    .layout{display:grid;grid-template-columns:1fr 360px;gap:16px}
-    @media (max-width:980px){.layout{grid-template-columns:1fr}}
-    .panel{background:linear-gradient(180deg,#fff,#fbfdff);padding:12px;border-radius:10px;box-shadow:0 8px 20px rgba(11,99,212,0.04)}
-    .question-box{padding:14px;border-radius:10px;background:linear-gradient(180deg,#f5fbff,#fff);border:1px solid rgba(11,99,212,0.06)}
-    .prompt{color:var(--muted);margin-bottom:6px}
-    .qtext{font-size:18px;font-weight:800;color:#0b172a}
-    .choices{display:grid;gap:8px;margin-top:12px}
-    .choice{padding:10px;border-radius:8px;background:#fff;border:2px solid #eef7ff;cursor:pointer;font-weight:700}
-    .choice.correct{background:#e8fff1;border-color:#8be6a0}
-    .choice.wrong{background:#fff1f1;border-color:#ffbdbd}
-    .status-row{display:flex;gap:8px;align-items:center;margin-top:10px}
-    .stat{background:#f8fbff;padding:8px 10px;border-radius:10px;font-weight:700;color:var(--muted)}
-    .small{font-size:13px;color:var(--muted)}
-    .match-area{display:flex;gap:10px;flex-wrap:wrap}
-    .match-col{flex:1;min-width:150px}
-    .match-item{padding:10px;border-radius:8px;background:#fff;border:2px solid #eef7ff;margin-bottom:8px;cursor:grab}
-    .drop-target{min-height:40px;padding:8px;border-radius:8px;background:#f7fbff;border:2px dashed #dceffd}
-    .panel.right{position:sticky;top:18px;height:fit-content}
-    .form-row{display:flex;gap:8px;align-items:center}
-    .textarea{width:100%;min-height:70px;padding:8px;border-radius:8px;border:1px solid #e6eefc}
-    .file{display:none}
-  </style>
-
-  <div class="card">
-    <header>
-      <div>
-        <h2>Interview Q&A — Puzzle</h2>
-        <div class="small">Practice common software developer interview questions — quiz & matching puzzle</div>
-      </div>
-
-      <div class="controls">
-        <select id="sd-category">
-          <option value="all" />All Categories
-          <option value="ds" />Data Structures
-          <option value="algo" />Algorithms
-          <option value="system" />System Design
-          <option value="behavioral" />Behavioral
-          <option value="oop" />OOP / Design Patterns
-        </select>
-
-        <select id="sd-mode">
-          <option value="quiz" />Quiz
-          <option value="match" />Match (Puzzle)
-        </select>
-
-        <select id="sd-quiztype">
-          <option value="mcq" />Multiple Choice
-          <option value="type" />Type-In
-        </select>
-
-        <select id="sd-timer">
-          <option value="0" />No timer
-          <option value="30" />30s
-          <option value="60" selected />60s
-          <option value="120" />120s
-        </select>
-
-        <button class="btn" id="sd-start">Start</button>
-      </div>
-    </header>
-
-    <div class="layout">
-      <!-- Left: game area -->
-      <div>
-        <div class="panel question-box" id="sd-mainpanel">
-          <div id="sd-intro">
-            <div class="prompt">Ready to practice?</div>
-            <div class="qtext">Select category, mode and press <strong>Start</strong>.</div>
-            <div style="margin-top:12px" class="small">Tip: use Match mode to pair a question with the correct answer (good for memorizing)</div>
-          </div>
-
-          <!-- Quiz view -->
-          <div id="sd-quizview" style="display:none">
-            <div class="prompt" id="sd-qcat">Category</div>
-            <div class="qtext" id="sd-qtext">Question goes here</div>
-            <div class="small" id="sd-timer-display"></div>
-
-            <div class="choices" id="sd-choices" role="list"></div>
-
-            <div id="sd-typein-area" style="display:none;margin-top:12px">
-              <input id="sd-type-input" class="textarea" placeholder="Type your answer here"/>
-              <div style="display:flex;gap:8px;margin-top:8px">
-                <button class="btn" id="sd-submit">Submit</button>
-                <button class="ghost" id="sd-showans">Show Answer</button>
-              </div>
-            </div>
-
-            <div class="status-row">
-              <div class="stat">Score: <span id="sd-score">0</span></div>
-              <div class="stat">Streak: <span id="sd-streak">0</span></div>
-              <div class="stat">High: <span id="sd-high">0</span></div>
-              <div style="margin-left:auto"><button class="ghost" id="sd-next">Next</button></div>
-            </div>
-
-            <div style="margin-top:12px">
-              <div class="small">Explanation:</div>
-              <div id="sd-explain" class="small" style="margin-top:6px;color:#0b172a"></div>
-            </div>
-          </div>
-
-          <!-- Match view -->
-          <div id="sd-matchview" style="display:none">
-            <div class="prompt">Match questions with answers — drag the answer into the target</div>
-            <div style="margin-top:8px;font-weight:700">Round score: <span id="sd-matchscore">0</span></div>
-            <div style="margin-top:12px" id="sd-matcharea" class="match-area"></div>
-
-            <div style="margin-top:12px" class="status-row">
-              <div class="stat">Total Correct: <span id="sd-match-correct">0</span></div>
-              <div style="margin-left:auto"><button class="ghost" id="sd-match-next">New Match</button></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Right: toolbox / add / list -->
-      <div class="panel right">
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
-          <button id="sd-addtoggle" class="btn">Add Q</button>
-          <button id="sd-export" class="ghost">Export</button>
-          <button id="sd-importbtn" class="ghost">Import</button>
-          <input id="sd-importfile" type="file" class="file" accept="application/json"/>
-        </div>
-
-        <div id="sd-addform" style="display:none">
-          <div class="small">Add / Edit question (saved locally)</div>
-          <div style="margin-top:8px">
-            <label class="small">Category</label>
-            <select id="sd-new-cat"><option value="ds" />Data Structures<option value="algo" />Algorithms<option value="system" />System Design<option value="behavioral" />Behavioral<option value="oop" />OOP / Patterns</select>
-          </div>
-          <div style="margin-top:8px">
-            <label class="small">Question</label>
-            <input id="sd-new-q" type="text"/>
-          </div>
-          <div style="margin-top:8px">
-            <label class="small">Answer</label>
-            <input id="sd-new-a" type="text"/>
-          </div>
-          <div style="margin-top:8px">
-            <label class="small">Explanation (optional)</label>
-            <textarea id="sd-new-ex" class="textarea"></textarea>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:8px">
-            <button id="sd-addsave" class="btn">Save</button>
-            <button id="sd-addclear" class="ghost">Clear</button>
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <div class="small">Question list</div>
-          <div id="sd-list" style="max-height:360px;overflow:auto;margin-top:8px"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-  (function(){
-    // Storage keys
-    const KEY_Q = 'sd_questions_v1';
-    const KEY_HIGH = 'sd_high_v1';
-
-    // Default Q set — programming & system interview style
-    const DEFAULT_QUESTIONS = [
-      {id:1, cat:'ds', q:'What is the time complexity of binary search on a sorted array?', a:'O(log n)', ex:'Binary search halves the search space each step.'},
-      {id:2, cat:'algo', q:'Explain the difference between quicksort and mergesort.', a:'Quicksort is in-place and average O(n log n) but worst O(n^2); mergesort is stable, O(n log n) worst-case and needs extra space.', ex:'Quicksort partitions; mergesort divides and merges.'},
-      {id:3, cat:'system', q:'What is load balancing and why is it used?', a:'Distributing requests across servers to improve availability and throughput.', ex:'It prevents any single server from becoming a bottleneck.'},
-      {id:4, cat:'behavioral', q:'Describe a time you handled a difficult bug in production.', a:'(behavioral answer expected) Describe situation, action, result.', ex:'STAR method helps: Situation, Task, Action, Result.'},
-      {id:5, cat:'oop', q:'What is polymorphism?', a:'Ability for objects to be treated as instances of their parent type; method overriding.', ex:'Polymorphism allows calling the same method on different object types.'},
-      {id:6, cat:'ds', q:'What is a hash table and what is average lookup time?', a:'A structure mapping keys to values via hash functions; average O(1).', ex:'Collisions handled by chaining or open addressing.'},
-      {id:7, cat:'algo', q:'When is dynamic programming appropriate?', a:'When a problem has overlapping subproblems and optimal substructure.', ex:'Use memoization or tabulation to reuse results.'},
-      {id:8, cat:'system', q:'Explain eventual consistency.', a:'A model where updates propagate asynchronously; replicas become consistent over time.', ex:'Used in distributed systems favoring availability over immediate consistency.'},
-      {id:9, cat:'oop', q:'What is encapsulation?', a:'Wrapping data and methods that operate on data; hiding internal state.', ex:'Use access modifiers like private/public.'},
-      {id:10, cat:'behavioral', q:'How do you prioritize tasks when everything is urgent?', a:'Explain prioritization framework: impact, urgency, stakeholder communication.', ex:'Use tradeoffs and communicate expectations.'}
-    ];
-
-    // Elements
-    const el = id => document.getElementById(id);
-    const catSel = el('sd-category'), modeSel = el('sd-mode'), quizTypeSel = el('sd-quiztype'), timerSel = el('sd-timer');
-    const startBtn = el('sd-start');
-    const mainIntro = el('sd-intro'), quizView = el('sd-quizview'), matchView = el('sd-matchview');
-    const qcat = el('sd-qcat'), qtext = el('sd-qtext'), choicesEl = el('sd-choices'), explainEl = el('sd-explain');
-    const typeArea = el('sd-typein-area'), typeInput = el('sd-type-input'), submitBtn = el('sd-submit'), showAns = el('sd-showans');
-    const scoreEl = el('sd-score'), streakEl = el('sd-streak'), highEl = el('sd-high');
-    const nextBtn = el('sd-next'), timerDisplay = el('sd-timer-display');
-    const matchArea = el('sd-matcharea'), matchScoreEl = el('sd-matchscore'), matchCorrectEl = el('sd-match-correct');
-    const addToggle = el('sd-addtoggle'), addForm = el('sd-addform'), addSave = el('sd-addsave'), addClear = el('sd-addclear');
-    const newCat = el('sd-new-cat'), newQ = el('sd-new-q'), newA = el('sd-new-a'), newEx = el('sd-new-ex');
-    const listEl = el('sd-list'), exportBtn = el('sd-export'), importBtn = el('sd-importbtn'), importFile = el('sd-importfile'), addBtn = el('sd-addsave');
-    const matchNext = el('sd-match-next');
-
-    // State
-    let questions = [], pool = [], cur = -1, curQ = null;
-    let score = 0, streak = 0, high = 0;
-    let running = false, timer = null, timeLeft = 0;
-
-    // helpers: load/save
-    function loadQuestions(){
-      try{
-        const raw = localStorage.getItem(KEY_Q);
-        if(raw) questions = JSON.parse(raw);
-        else { questions = DEFAULT_QUESTIONS.slice(); localStorage.setItem(KEY_Q, JSON.stringify(questions)); }
-      }catch(e){ questions = DEFAULT_QUESTIONS.slice(); }
-    }
-    function saveQuestions(){ try{ localStorage.setItem(KEY_Q, JSON.stringify(questions)); }catch(e){} }
-    function loadHigh(){ try{ high = parseInt(localStorage.getItem(KEY_HIGH) || '0'); }catch(e){ high = 0; } highEl.textContent = high; }
-
-    loadQuestions(); loadHigh(); renderList();
-
-    // Start
-    startBtn.addEventListener('click', start);
-
-    function start(){
-      const cat = catSel.value;
-      const mode = modeSel.value;
-      // build pool
-      pool = questions.map((q,i)=> ({q,i})).filter(x=> cat==='all' || x.q.cat === cat);
-      if(pool.length === 0){ alert('No questions for this category. Add some in the right panel.'); return; }
-      shuffle(pool);
-      cur = -1; score = 0; streak = 0; updateStats();
-      running = true;
-      mainIntro.style.display = 'none';
-      if(mode === 'quiz'){ quizView.style.display = 'block'; matchView.style.display = 'none'; prepareNextQuiz(); }
-      else { matchView.style.display = 'block'; quizView.style.display = 'none'; prepareMatch(); }
-    }
-
-    // Quiz flow
-    function prepareNextQuiz(){
-      clearTimer();
-      cur++;
-      if(cur >= pool.length){ endRun(); return; }
-      curQ = pool[cur].q;
-      qcat.textContent = categoryLabel(curQ.cat);
-      qtext.textContent = curQ.q;
-      explainEl.textContent = '';
-      // show choices or type area
-      if(quizTypeSel.value === 'mcq'){
-        typeArea.style.display = 'none';
-        choicesEl.innerHTML = '';
-        // build 3 distractors + correct
-        const others = questions.filter(x=> x.q !== curQ).slice();
-        shuffle(others);
-        const opts = others.slice(0,3).map(o=>o.a);
-        opts.push(curQ.a);
-        shuffle(opts);
-        opts.forEach(opt=>{
-          const d = document.createElement('div'); d.className='choice'; d.tabIndex=0; d.textContent = opt;
-          d.addEventListener('click', ()=> selectChoice(d, opt));
-          d.addEventListener('keydown', e=>{ if(e.key==='Enter') selectChoice(d,opt); });
-          choicesEl.appendChild(d);
-        });
-      } else {
-        // type-in
-        choicesEl.innerHTML = '';
-        typeArea.style.display = 'block';
-        typeInput.value = '';
-      }
-      // timer
-      timeLeft = parseInt(timerSel.value,10) || 0;
-      if(timeLeft > 0){ timerDisplay.textContent = timeLeft + 's'; timer = setInterval(()=>{ timeLeft--; timerDisplay.textContent = timeLeft + 's'; if(timeLeft<=0){ clearTimer(); handleTimeout(); } }, 1000); }
-      else timerDisplay.textContent = '';
-    }
-
-    function selectChoice(elm, val){
-      disableChoices();
-      if(val.trim().toLowerCase() === curQ.a.trim().toLowerCase()){
-        elm.classList.add('correct');
-        score += 10; streak += 1;
-      } else {
-        elm.classList.add('wrong'); streak = 0;
-        // reveal correct
-        [...choicesEl.children].forEach(c=>{ if(c.textContent.trim().toLowerCase() === curQ.a.trim().toLowerCase()) c.classList.add('correct'); });
-      }
-      explainEl.textContent = curQ.ex || '';
-      updateStats();
-    }
-
-    submitBtn.addEventListener('click', ()=>{
-      if(!running) return;
-      const ans = typeInput.value.trim();
-      if(ans.length === 0) return;
-      if(ans.toLowerCase() === curQ.a.toLowerCase()){
-        typeInput.style.borderColor = '#9ee0ff';
-        score += 12; streak += 1;
-      } else {
-        typeInput.style.borderColor = '#ffbdbd'; streak = 0;
-        const note = document.createElement('div'); note.className = 'small'; note.style.marginTop='8px'; note.textContent = 'Answer: ' + curQ.a;
-        choicesEl.appendChild(note);
-      }
-      explainEl.textContent = curQ.ex || '';
-      updateStats();
-    });
-
-    showAns.addEventListener('click', ()=>{ explainEl.textContent = curQ.ex || curQ.a; });
-
-    function disableChoices(){ [...choicesEl.children].forEach(c=> c.style.pointerEvents = 'none'); clearTimer(); }
-
-    function handleTimeout(){ // treat as wrong
-      disableChoices();
-      streak = 0;
-      explainEl.textContent = 'Time up — Answer: ' + curQ.a + (curQ.ex ? ('\n\n' + curQ.ex) : '');
-      updateStats();
-    }
-
-    nextBtn.addEventListener('click', ()=>{ prepareNextQuiz(); });
-
-    function endRun(){
-      running = false;
-      alert('Round finished. Score: ' + score);
-      if(score > high){ high = score; try{ localStorage.setItem(KEY_HIGH, String(high)); }catch(e){} highEl.textContent = high; }
-      // reset UI
-      mainIntro.style.display = 'block';
-      quizView.style.display = 'none';
-    }
-
-    function updateStats(){
-      scoreEl.textContent = score; streakEl.textContent = streak; highEl.textContent = high;
-    }
-
-    function clearTimer(){ if(timer){ clearInterval(timer); timer = null; timerDisplay.textContent = ''; } }
-
-    // Match (puzzle) flow
-    function prepareMatch(){
-      matchArea.innerHTML = '';
-      matchScoreEl.textContent = '0'; matchCorrectEl.textContent = '0';
-      // select up to 6 Qs from pool
-      const count = Math.min(6, pool.length);
-      const subset = pool.slice(0, count).map(p=> p.q);
-      shuffle(subset);
-      // left: questions targets; right: answers draggable
-      const left = document.createElement('div'); left.className='match-col';
-      const right = document.createElement('div'); right.className='match-col';
-      subset.forEach((it,idx)=>{
-        const target = document.createElement('div'); target.className='drop-target'; target.dataset.index = idx;
-        target.innerHTML = '<div class="small">'+categoryLabel(it.cat)+'</div><div style="font-weight:700;margin-top:6px">'+it.q+'</div>';
-        left.appendChild(target);
-      });
-      // answers (shuffled)
-      const answers = subset.map(s=>s.a); shuffle(answers);
-      answers.forEach(ans=>{
-        const ai = document.createElement('div'); ai.className='match-item'; ai.draggable = true; ai.textContent = ans;
-        ai.addEventListener('dragstart', dragStart);
-        right.appendChild(ai);
-      });
-      // append columns
-      matchArea.appendChild(left); matchArea.appendChild(right);
-      // make targets accept drops
-      left.querySelectorAll('.drop-target').forEach(t=>{ t.addEventListener('dragover', ev=>ev.preventDefault()); t.addEventListener('drop', onDrop); });
-      // store mapping
-      matchArea.dataset.correct = JSON.stringify(subset.map(s=>s.a));
-      matchArea.dataset.subset = JSON.stringify(subset);
-    }
-
-    function dragStart(e){
-      e.dataTransfer.setData('text/plain', e.target.textContent);
-    }
-
-    function onDrop(e){
-      e.preventDefault();
-      const val = e.dataTransfer.getData('text/plain');
-      const target = e.currentTarget;
-      // place value into target area
-      target.innerHTML += '<div class="small" style="margin-top:8px;padding:6px;border-radius:6px;background:#fff;border:1px solid #eef7ff">'+val+'</div>';
-      // evaluate
-      evaluateMatch();
-    }
-
-    function evaluateMatch(){
-      const subset = JSON.parse(matchArea.dataset.subset);
-      let correct = 0;
-      matchArea.querySelectorAll('.drop-target').forEach((t,idx)=>{
-        const placed = t.querySelector('.small:last-child');
-        if(!placed) return;
-        const val = placed.textContent.trim();
-        if(val === subset[idx].a) { correct++; t.style.borderColor = '#8be6a0'; t.style.background = '#f6fff6'; }
-        else { t.style.borderColor = '#ffbdbd'; t.style.background = '#fff6f6'; }
-      });
-      matchCorrectEl.textContent = correct;
-      matchScoreEl.textContent = correct;
-    }
-
-    matchNext.addEventListener('click', prepareMatch);
-
-    // Add / Edit UI
-    addToggle.addEventListener('click', ()=>{ addForm.style.display = addForm.style.display === 'none' ? 'block' : 'none'; });
-    addClear.addEventListener('click', ()=>{ newQ.value=''; newA.value=''; newEx.value=''; });
-    addSave.addEventListener('click', ()=>{
-      const q = newQ.value.trim(); const a = newA.value.trim(); const ex = newEx.value.trim();
-      if(!q || !a){ alert('Provide both question and answer'); return; }
-      const item = { id: Date.now(), cat: newCat.value, q:q, a:a, ex:ex };
-      questions.push(item); saveQuestions(); renderList();
-      newQ.value=''; newA.value=''; newEx.value=''; addForm.style.display='none';
-    });
-
-    // list render
-    function renderList(){
-      listEl.innerHTML = '';
-      questions.forEach(it=>{
-        const d = document.createElement('div');
-        d.style.padding='8px'; d.style.borderBottom='1px solid #f1f6ff';
-        d.innerHTML = '<div style="display:flex;gap:8px;align-items:center"><div style="font-weight:800">'+it.q+'</div><div style="margin-left:auto" class="small">'+categoryLabel(it.cat)+'</div></div><div class="small" style="margin-top:6px;color:#68758a">'+it.a+'</div>';
-        d.addEventListener('click', ()=>{ previewQuestion(it); });
-        listEl.appendChild(d);
-      });
-    }
-
-    function previewQuestion(it){
-      mainIntro.style.display = 'none';
-      quizView.style.display = 'block';
-      matchView.style.display = 'none';
-      qcat.textContent = categoryLabel(it.cat);
-      qtext.textContent = it.q;
-      explainEl.textContent = it.ex || '';
-      // show answer as single choice
-      choicesEl.innerHTML = '<div class="choice correct" style="pointer-events:none">'+it.a+'</div>';
-    }
-
-    // export / import
-    exportBtn.addEventListener('click', ()=>{
-      const blob = new Blob([JSON.stringify(questions, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'sd_questions.json'; a.click(); URL.revokeObjectURL(url);
-    });
-
-    importBtn.addEventListener('click', ()=> importFile.click());
-    importFile.addEventListener('change', (e)=>{
-      const f = e.target.files[0]; if(!f) return;
-      const reader = new FileReader(); reader.onload = ()=> {
-        try{ const data = JSON.parse(reader.result); if(Array.isArray(data)){ questions = data; saveQuestions(); renderList(); alert('Imported '+data.length+' questions'); } else alert('Invalid file'); } catch(err){ alert('Import failed: '+err.message); }
-      }; reader.readAsText(f);
-    });
-
-    // utilities
-    function categoryLabel(k){
-      return {ds:'Data Structures', algo:'Algorithms', system:'System Design', behavioral:'Behavioral', oop:'OOP / Patterns'}[k] || 'General';
-    }
-    function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]] } return a; }
-
-    // init UI visibility
-    quizView.style.display = 'none'; matchView.style.display = 'none';
-
-    // cleanup timers on unload
-    window.addEventListener('beforeunload', ()=> { clearTimer(); });
-
-  })();
-  </script></div>]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
-          <b:widget id='HTML7' locked='false' title='' type='HTML' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- Styled original Blogger Search widget with left avatar + icon button -->
-<img src="https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_umQwJV8MuDDto5fvP9ow5V1Ckvs_erUHxwyRi9lltBs1578-SCs8UWuy8ukohtMpHurJ40i8MaZvF8Tq2EnnJSUyAzgxm4WrJHPK3wPWA-bMqD_YumMhK21vbaqq1AlwXctmG3kMQadxlRNmQsrwwDwT8=w640"
-     style="display:none;" alt="widget-avatar" />
-
-<b:widget id='Search1' locked='false' title='Search This Blog' type='BlogSearch' class="cppp">
-  <b:widget-settings>
-    <!-- fixed typo in title -->
-    <b:widget-setting name='title'>What do you need to find?</b:widget-setting>
-  </b:widget-settings>
-
-  <b:includable id='main'>
-    <style>
-      /* Container (scoped to this widget) */
-      .cppp .champakroy1970-searchbox {
-        max-width: 520px;
-
-        margin: 0 auto;
-        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-      }
-
-      /* layout: avatar | input + button */
-      .cppp .champakroy1970-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: linear-gradient(180deg, rgba(11,37,69,0.03), rgba(11,37,69,0.01));
-        padding: 8px;
-        border-radius: 14px;
-        box-shadow: 0 6px 20px rgba(11,37,69,0.06);
-        border: 1px solid rgba(11,37,69,0.06);
-      }
-
-      .cppp .champakroy1970-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        flex: 0 0 50px;
-        object-fit: cover;
-        box-shadow: 0 4px 12px rgba(10,40,80,0.08);
-      }
-
-      .cppp .champakroy1970-form {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        width: 100%;
-      }
-
-      .cppp .champakroy1970-input {
-        flex: 1;
-
-        outline: none;
-        padding: 10px 12px;
-        font-size: 15px;
-        border-radius: 10px;
-        background: rgba(255,255,255,0.85);
-        color: #06203a;
-        min-width: 80px;
-border-style: ridge;
-border-width:5px;
-      }
-
-      .cppp .champakroy1970-input::placeholder { color: #7d9ab5; }
-
-      .cppp .champakroy1970-btn {
-        display: inline-grid;
-        place-items: center;
-        width: 46px;
-        height: 46px;
-        border-radius: 10px;
-        border: 0;
-        cursor: pointer;
-        background: linear-gradient(180deg,#1877d2,#0c5fb0);
-        color: #fff;
-        box-shadow: 0 6px 18px rgba(13,67,132,0.18);
-        transition: transform .12s ease, box-shadow .12s ease;
-      }
-
-      .cppp .champakroy1970-btn:active { transform: translateY(1px) scale(.995); }
-      .cppp .champakroy1970-btn:focus { outline: 3px solid rgba(24,119,210,0.15); }
-
-      .cppp .champakroy1970-label {
-        display:block;
-        margin-bottom:6px;
-        font-weight:600;
-        color:#073050;
-        font-size:14px;
-      }
-
-      /* small screens: avatar shrinks and layout stays tidy */
-      @media (max-width:480px) {
-        .cppp .champakroy1970-row { gap:8px; padding:6px; }
-        .cppp .champakroy1970-avatar { width:40px; height:40px; flex:0 0 40px; }
-        .cppp .champakroy1970-btn { width:40px; height:40px; }
-      }
-    </style>
-
-    <div class='champakroy1970-searchbox'>
-      <label class='champakroy1970-label' for='champakroy1970-q'> </label>
-
-      <!-- outer row contains avatar + form -->
-      <div class='champakroy1970-row'>
-        <!-- avatar image (keeps the URL you provided). Use alt for accessibility. -->
-        <img class='champakroy1970-avatar'
-             src='https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_umQwJV8MuDDto5fvP9ow5V1Ckvs_erUHxwyRi9lltBs1578-SCs8UWuy8ukohtMpHurJ40i8MaZvF8Tq2EnnJSUyAzgxm4WrJHPK3wPWA-bMqD_YumMhK21vbaqq1AlwXctmG3kMQadxlRNmQsrwwDwT8=w640'
-             alt='Champak Roy avatar' />
-
-        <!-- original Blogger search form (keeps /search handling) -->
-        <form class='champakroy1970-form' action='/search' method='get' target='_top' role='search' aria-label='Search this blog'>
-          <!-- visible text input -->
-          <input id='champakroy1970-q' class='champakroy1970-input' type='text' name='q' placeholder='Look up' aria-label='Search query' />
-
-          <!-- accessible button with SVG icon (acts as submit) -->
-          <button class='champakroy1970-btn' type='submit' aria-label='Search'>
-            <!-- magnifying glass icon -->
-            <svg width='20' height='20' viewbox='0 0 24 24' fill='none' aria-hidden='true' focusable='false'>
-              <path d='M21 21l-4.35-4.35' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'></path>
-              <circle cx='11' cy='11' r='6' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'></circle>
-            </svg>
-          </button>
-        </form>
-      </div>
-    </div>
-  </b:includable>
-</b:widget>]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
-          <b:widget id='BlogSearch1' locked='false' title='Search This Blog' type='BlogSearch' visible='false'>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <b:include name='content'/>
-</b:includable>
-            <b:includable id='content'>
-  <div class='widget-content' role='search'>
-    <b:include name='searchForm'/>
-  </div>
-</b:includable>
-            <b:includable id='searchForm'>
-  <form expr:action='data:blog.searchUrl'>
-    <b:attr cond='not data:view.isPreview' name='target' value='_top'/>
-    <b:include name='urlParamsAsFormInput'/>
-    <div class='search-input'>
-      <input autocomplete='off' expr:aria-label='data:messages.searchThisBlog' expr:placeholder='data:messages.searchThisBlog' expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;' name='q'/>
-    </div>
-    <b:include name='searchSubmit'/>
-  </form>
-</b:includable>
-            <b:includable id='searchSubmit'>
-  <input class='search-action' expr:value='data:messages.search.escaped' type='submit'/>
-</b:includable>
-          </b:widget>
           <b:widget id='AdSense7' locked='false' title='' type='AdSense' version='2' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
@@ -3942,87 +2933,6 @@ border-width:5px;
   </div>
 </b:includable>
           </b:widget>
-          <b:widget id='HTML21' locked='false' title='Biggest Share Price Movers in India in the past month' type='HTML' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<style>
-      .happy {
-        height: 50vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .cube {
-        position: relative;
-        width: 150px;
-        height: 150px;
-        transform-style: preserve-3d;
-        animation: spin 10s infinite linear;
-      }
-
-      .cube-face {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        opacity: 0.7;
-        background-color: rgba(255, 255, 255, 0.8);
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-      }
-
-      .cube-face-front {
- background-image: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVwiikAllmxT4kvOD5OMg5P-sP6gOlj7oBAf9R5oZ3MJHY5zFBIHV7bbL0iZoN35M8lAUyBUehiFeOVIHPtpVmEGHMoLhHqr7Wfkwf9lRvxBK_qe-ycxaHKvAAkhilRq0CmtwnTWpRTxdux2WmeIMlw7044NpGvq0P1FJaXStj9oMtxl_JJfB-FpHg22c/s320/me.JPG");
-        transform: translateZ(75px);
-      }
-
-      .cube-face-back {
-background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVwiikAllmxT4kvOD5OMg5P-sP6gOlj7oBAf9R5oZ3MJHY5zFBIHV7bbL0iZoN35M8lAUyBUehiFeOVIHPtpVmEGHMoLhHqr7Wfkwf9lRvxBK_qe-ycxaHKvAAkhilRq0CmtwnTWpRTxdux2WmeIMlw7044NpGvq0P1FJaXStj9oMtxl_JJfB-FpHg22c/s320/me.JPG');
-        transform: translateZ(-75px) rotateY(180deg);
-      }
-
-      .cube-face-right {
-        transform: rotateY(90deg) translateZ(75px);
-      }
-
-      .cube-face-left {
-        transform: rotateY(-90deg) translateZ(75px);
-      }
-
-      .cube-face-top {
-        transform: rotateX(90deg) translateZ(75px);
-      }
-
-      .cube-face-bottom {
-        transform: rotateX(-90deg) translateZ(75px);
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotateY(0deg);
-        }
-        100% {
-          transform: rotateY(360deg);
-        }
-      }
-    </style>
-
-<div class="happy">
- <div class="cube">
-      <div class="cube-face cube-face-front"></div>
-      <div class="cube-face cube-face-back"></div>
-      <div class="cube-face cube-face-right"></div>
-      <div class="cube-face cube-face-left"></div>
-      <div class="cube-face cube-face-top"></div>
-      <div class="cube-face cube-face-bottom"></div>
-    </div>
-  </div>]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
           <b:widget id='HTML19' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='content'><![CDATA[<h3>If you like the content here then consider sponsoring us on Github</h3>
@@ -4045,53 +2955,6 @@ background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvX
     <data:content/>
   </div>
 </b:includable>
-          </b:widget>
-          <b:widget id='Label2' locked='false' title='Labels' type='Label' visible='false'>
-            <b:widget-settings>
-              <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
-              <b:widget-setting name='display'>CLOUD</b:widget-setting>
-              <b:widget-setting name='selectedLabelsList'>8 Queens Problem,API,Android Studio,Android Studio Kotlin,Android studio layout,Aptitude,C,Calendar,Chess Pieces move using JavaScript,Contact Us,DJango,Data Comparison,Database,Dates,Disarium number,Eight Queens problem,Events,Firebase,Firebase Flutter,Firestore Flutter,Flex Flutter,Flutter,Functions,Gmail,Google Colab,Happy Number,IMAP,If Else,Interview Question,Java Program,JavaScript,Job and Internship Search,Keras,Kotlin,Mobile Sharing,OOPs,OpenCV,Perfect Number,Programming,Pythagorean Triplets,Python,Python Syllabus,Recursion,SQL,Tensor flow,Varanasi Software Junction,Weather API,cv2,drawing shapes,imread,imwrite,matrix,models,prime number</b:widget-setting>
-              <b:widget-setting name='showType'>USER_SELECTED</b:widget-setting>
-              <b:widget-setting name='showFreqNumbers'>true</b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main' var='this'>
-      <b:include name='widget-title'/>
-      <b:include name='content'/>
-    </b:includable>
-            <b:includable id='cloud'>
-  <b:loop values='data:labels' var='label'>
-    <span class='label-size'>
-      <b:class expr:name='&quot;label-size-&quot; + data:label.cssSize'/>
-      <a class='label-name' expr:href='data:label.url'>
-        <data:label.name/>
-        <b:if cond='data:this.showFreqNumbers'>
-          <span class='label-count'><data:label.count/></span>
-        </b:if>
-      </a>
-    </span>
-  </b:loop>
-</b:includable>
-            <b:includable id='content'>
-      <div class='widget-content'>
-        <b:class expr:name='data:this.display + &quot;-label&quot;'/>
-        <b:include cond='data:this.display == &quot;list&quot;' name='list'/>
-        <b:include cond='data:this.display == &quot;cloud&quot;' name='list'/>
-      </div>
-    </b:includable>
-            <b:includable id='list'>
-      <ul>
-        <b:loop values='data:labels' var='label'>
-          <li>
-            <a class='label-name' expr:href='data:label.url'>
-              <data:label.name/>
-              <b:if cond='data:this.showFreqNumbers'>
-                <span class='label-count'><data:label.count/></span>
-              </b:if>
-            </a>
-          </li>
-        </b:loop>
-      </ul>
-    </b:includable>
           </b:widget>
           <b:widget id='Stats1' locked='false' title='Views last 30 days.' type='Stats' visible='true'>
             <b:widget-settings>
@@ -4132,135 +2995,9 @@ background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvX
   </div>
 </b:includable>
           </b:widget>
-          <b:widget id='ContactForm1' locked='false' title='Contact Varanasi Software Junction' type='ContactForm' visible='false'>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <b:include name='content'/>
-</b:includable>
-            <b:includable id='content'>
-  <div class='contact-form-widget'>
-    <div class='form'>
-      <form name='contact-form'>
-        <p/>
-        <data:contactFormNameMsg/>
-        <br/>
-        <input class='contact-form-name' expr:id='data:widget.instanceId + &quot;_contact-form-name&quot;' name='name' size='30' type='text' value=''/>
-        <p/>
-        <data:contactFormEmailMsg/> <span style='font-weight: bolder;'>*</span>
-        <br/>
-        <input class='contact-form-email' expr:id='data:widget.instanceId + &quot;_contact-form-email&quot;' name='email' size='30' type='text' value=''/>
-        <p/>
-        <data:contactFormMessageMsg/> <span style='font-weight: bolder;'>*</span>
-        <br/>
-        <textarea class='contact-form-email-message' cols='25' expr:id='data:widget.instanceId + &quot;_contact-form-email-message&quot;' name='email-message' rows='5'/>
-        <p/>
-        <input class='contact-form-button contact-form-button-submit' expr:id='data:widget.instanceId + &quot;_contact-form-submit&quot;' expr:value='data:contactFormSendMsg' type='button'/>
-        <p/>
-        <div style='text-align: center; max-width: 222px; width: 100%'>
-          <p class='contact-form-error-message' expr:id='data:widget.instanceId + &quot;_contact-form-error-message&quot;'/>
-          <p class='contact-form-success-message' expr:id='data:widget.instanceId + &quot;_contact-form-success-message&quot;'/>
-        </div>
-      </form>
-    </div>
-  </div>
-</b:includable>
-          </b:widget>
-          <b:widget id='HTML6' locked='false' title='' type='HTML' visible='false'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<a  class="champakwhatsapplink"  target="ide" href="https://developer.android.com/training/kotlinplayground"><img class="champakwhatsappimage"  title="Kotlin IDE"
- src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEitGiPzWRPheQSn81zNJT_-LaqgHfN3JVLaKq40GUfqQI_AQ46fFL2HZ6-XbgQcg4lYw8iEMtFviJVKexPYORBK32_f-7Hs7TlDrzjRqDW1i3xYKj3oKobJ-OoUgI90BUu93WswcLWXaFY/s320/kotlin-icon.png" /></a>]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
-          <b:widget id='HTML5' locked='false' title='' type='HTML' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-
-<div class="w3-container">
-
-  <div id="id01" class="w3-modal">
-    <div class="w3-modal-content w3-animate-zoom w3-card-4">
-      <header class="w3-container w3-teal">
-        <span onclick="document.getElementById('id01').style.display='none'"
-        class="w3-button w3-display-topright">&times;</span>
-        <h2>Modal Header</h2>
-      </header>
-      <div class="w3-container">
-        <p>Some text..</p>
-        <p>Some text..</p>
-      </div>
-      <footer class="w3-container w3-teal">
-        <p>Modal Footer</p>
-      </footer>
-    </div>
-  </div>
-</div>
-          <script>
-//window.setTimeout("document.getElementById('id01').style.display='block'",5000);
-
-</script>]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
-          <b:widget id='HTML4' locked='false' title='' type='HTML' visible='false'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<style>
-.champakwhatsappimage
-{
-width:100px;
-height:100px;
-}
-.champakwhatsapplink
-{
-
-  background-color: white;
-  color: black;
-
-  padding: 10px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-align:center;
-width:200px;
-height:50px;
-}
-
-.champakwhatsappimage:hover, .champakwhatsappimage:active {
-border-width:2px;
-border-style:ridge;
-border-color:green;
-
-}
-
-</style>]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
         </b:section>
         <b:section class='sidebar' id='social-widget' maxwidgets='1' name='Social Widget' showaddelement='yes'>
-          <b:widget id='LinkList75' locked='true' title='' type='LinkList' version='2' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='sorting'>NONE</b:widget-setting>
-              <b:widget-setting name='text-1'>twitter</b:widget-setting>
-              <b:widget-setting name='link-1'>https://twitter.com/VaranasiSoft</b:widget-setting>
-              <b:widget-setting name='text-0'>facebook</b:widget-setting>
-              <b:widget-setting name='link-0'>https://www.facebook.com/VaranasiSoftwareJunction/</b:widget-setting>
-            </b:widget-settings>
+          <b:widget id='LinkList75' locked='true' title='' type='LinkList' version='2' visible='false'>
             <b:includable id='main'>
   <b:include name='widget-title'/>
   <b:include name='content'/>
@@ -4277,6 +3014,296 @@ border-color:green;
           </b:widget>
         </b:section>
         <b:section class='sidebar common-widget' id='sidebar2' name='Sidebar Right (B)' showaddelement='yes'>
+          <b:widget id='HTML2' locked='false' title='' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- START: Share Widget — Hardened working More menu (paste whole block) -->
+<style>
+  :root{--sw-accent:#0b63d4;--sw-accent2:#094ea0}
+  .share-widget{--bg:#fff;--text:#0b1b2b;position:fixed;right:18px;top:50%;transform:translateX(30px) translateY(-50%);z-index:12000;
+    display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;border:1.5px solid rgba(11,99,212,0.10);
+    background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,250,250,0.98));box-shadow:0 12px 36px rgba(7,24,48,0.12);
+    will-change:transform,opacity;opacity:0;max-height:88vh;overflow:auto;min-width:220px;box-sizing:border-box;}
+  .share-widget.revealed{animation:sw-slide-in .42s cubic-bezier(.2,.9,.2,1) forwards}
+  @keyframes sw-slide-in{from{transform:translateX(30px) translateY(-50%);opacity:0}60%{transform:translateX(-6px) translateY(-50%);opacity:1}to{transform:translateX(0) translateY(-50%);opacity:1}}
+  .sw-row{display:flex;gap:10px;align-items:center;flex-wrap:nowrap}
+  .share-btn{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;background:var(--bg);border:1px solid rgba(11,99,212,0.14);cursor:pointer;font-weight:600;white-space:nowrap}
+  .share-icon{width:18px;height:18px;flex:0 0 18px;display:inline-block}
+  .sw-hide{background:transparent;border:1px solid rgba(11,99,212,0.12);padding:8px;border-radius:8px;cursor:pointer;font-size:13px}
+  .share-copy{position:relative}
+  .share-tooltip{position:absolute;top:-36px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:6px 10px;border-radius:6px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .12s}
+  .share-copy.show .share-tooltip{opacity:1;pointer-events:auto}
+
+  /* More popover base - will be appended to body */
+  .more-popover{display:flex;flex-direction:column;gap:8px;padding:8px;border-radius:10px;border:1px solid rgba(11,99,212,0.08);background:#fff;box-shadow:0 12px 40px rgba(7,24,48,0.12);min-width:170px;z-index:13000;position:fixed}
+  .more-popover .share-btn{width:100%;justify-content:flex-start;padding:8px 10px}
+
+  /* More toggle hidden by default - shown by JS when needed */
+  .more-toggle{display:none}
+
+  /* Show tab / Show button stylings (professional blue) */
+  .share-show-tab{position:fixed;right:6px;top:50%;transform:translateY(-50%);z-index:14000;background:linear-gradient(135deg,var(--sw-accent),var(--sw-accent2));color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;box-shadow:0 8px 24px rgba(11,99,212,0.25);border:none;transition:all .18s}
+  .share-show-tab:hover{transform:translateY(-50%) scale(1.04);box-shadow:0 12px 32px rgba(11,99,212,0.35)}
+  .share-show-tab:focus{outline:3px solid rgba(11,99,212,0.3);outline-offset:2px}
+  @media (max-width:520px){.share-widget{right:10px;min-width:200px;max-width:calc(100vw - 20px)}}
+  @media (prefers-reduced-motion:reduce){.share-widget,.share-widget.revealed{animation:none!important;transform:none!important;opacity:1!important;top:50%}}
+</style>
+
+<div class="share-widget" id="shareWidget" data-mode="auto" role="region" aria-label="Share widget">
+  <div class="sw-row" id="swRow" role="toolbar" aria-label="Share links">
+    <a class="share-btn" id="share-whatsapp" title="Share on WhatsApp" role="button"><span class="share-icon" aria-hidden="true">🌐</span>WhatsApp</a>
+    <a class="share-btn" id="share-x" title="Share on X" role="button"><span class="share-icon" aria-hidden="true">X</span>X</a>
+
+    <!-- Add collapse-to-more class to buttons you want moved into More -->
+    <a class="share-btn collapse-to-more" id="share-facebook" title="Share on Facebook" role="button"><span class="share-icon" aria-hidden="true">f</span>Facebook</a>
+    <a class="share-btn collapse-to-more" id="share-linkedin" title="Share on LinkedIn" role="button"><span class="share-icon" aria-hidden="true">in</span>LinkedIn</a>
+    <a class="share-btn collapse-to-more" id="share-telegram" title="Share on Telegram" role="button"><span class="share-icon" aria-hidden="true">✈️</span>Telegram</a>
+
+    <button class="share-btn share-copy" id="share-copy" title="Copy link"><span class="share-icon" aria-hidden="true">📋</span>Copy link<span class="share-tooltip" id="copyTooltip">Copied!</span></button>
+
+    <!-- More toggle (JS shows/hides by setting display) -->
+    <div style="position:relative">
+      <button class="share-btn more-toggle" id="moreToggle" aria-haspopup="true" aria-expanded="false" title="More share options">More ▾</button>
+    </div>
+
+    <button class="sw-hide" id="shareHide" title="Hide share widget" aria-label="Hide share widget">Hide</button>
+  </div>
+</div>
+
+<!-- popover placeholder - will be moved to document.body by JS -->
+<div id="morePopover" class="more-popover" role="menu" aria-label="More share options" style="display:none"></div>
+
+<button class="share-show-tab" id="shareShowTab" aria-label="Show share widget" title="Show share widget" style="display:none">Share</button>
+
+<script>
+(function(){
+  const COLLAPSE_WIDTH = 520;         // breakpoint in px (<= this: collapse)
+  const WIDGET_KEY = 'shareWidget-visibility';
+  const widget = document.getElementById('shareWidget');
+  const swRow = document.getElementById('swRow');
+  const moreToggle = document.getElementById('moreToggle');
+  const morePopover = document.getElementById('morePopover');
+  const showTab = document.getElementById('shareShowTab');
+  const hideBtn = document.getElementById('shareHide');
+
+  // ensure popover is appended to body so it's never clipped
+  if (morePopover && morePopover.parentNode !== document.body) {
+    document.body.appendChild(morePopover);
+  }
+
+  // Build share hrefs
+  const getUrl = ()=>{ const c=document.querySelector('link[rel=canonical]'); return (c&&c.href)?c.href:location.href.split('#')[0];};
+  const getTitle = ()=>{ const og=document.querySelector('meta[property="og:title"]')||document.querySelector('meta[name="og:title"]'); return (og&&og.content)?og.content:document.title||'';};
+  const urlRaw = getUrl();
+  const url = encodeURIComponent(urlRaw);
+  const title = encodeURIComponent(getTitle());
+  const hrefs = {
+    'share-whatsapp': `https://wa.me/?text=${title}%20${url}`,
+    'share-facebook': `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+    'share-x': `https://twitter.com/intent/tweet?text=${title}&url=${url}`,
+    'share-linkedin': `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+    'share-telegram': `https://t.me/share/url?url=${url}&text=${title}`,
+    'share-email': `mailto:?subject=${title}&body=${title}%0A%0A${url}`
+  };
+
+  // generic helper to make an element open a URL (preserve <a> if present)
+  function attachOpen(el, link) {
+    if(!el) return;
+    if (el.tagName.toLowerCase() === 'a') {
+      el.setAttribute('href', link);
+      el.setAttribute('target','_blank');
+      el.setAttribute('rel','noopener noreferrer');
+    } else {
+      // remove prior click handler if any by cloning (safe)
+      const clone = el.cloneNode(true);
+      el.parentNode.replaceChild(clone, el);
+      clone.addEventListener('click', function(e){ e.preventDefault(); window.open(link, '_blank', 'noopener'); });
+      return clone;
+    }
+    return el;
+  }
+
+  // set up main buttons
+  Object.keys(hrefs).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) attachOpen(el, hrefs[id]);
+  });
+
+  // copy link
+  const copyBtn = document.getElementById('share-copy');
+  const tooltip = document.getElementById('copyTooltip');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async ()=>{
+      try { await navigator.clipboard.writeText(urlRaw); tooltip.textContent='Copied!'; copyBtn.classList.add('show'); setTimeout(()=>copyBtn.classList.remove('show'),1400); }
+      catch(e){ const ta=document.createElement('textarea'); ta.value=urlRaw; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); tooltip.textContent='Copied!';}catch(err){tooltip.textContent='Press Ctrl+C to copy';} ta.remove(); copyBtn.classList.add('show'); setTimeout(()=>copyBtn.classList.remove('show'),1600);}
+    });
+  }
+
+  // identify collapse candidates and store original insertion points
+  const collapseEls = Array.from(swRow.querySelectorAll('.collapse-to-more'));
+  collapseEls.forEach(el => {
+    el._origParent = el.parentNode;
+    el._origNext = el.nextElementSibling;
+    // ensure proper roles for accessibility
+    el.setAttribute('role','button');
+    el.setAttribute('tabindex','0');
+  });
+
+  // move element into popover
+  function moveToPopover(el){
+    if(!el || el._inPopover) return;
+    morePopover.appendChild(el);
+    el._inPopover = true;
+    el.setAttribute('role','menuitem');
+    el.setAttribute('tabindex','0');
+    // re-attach href in case cloning happened earlier
+    if(hrefs[el.id]) attachOpen(el, hrefs[el.id]);
+  }
+
+  // restore element to original place
+  function moveBack(el){
+    if(!el || !el._inPopover) return;
+    try {
+      if(el._origNext && el._origNext.parentNode === el._origParent) el._origParent.insertBefore(el, el._origNext);
+      else el._origParent.appendChild(el);
+    } catch(e){
+      swRow.insertBefore(el, moreToggle.parentNode);
+    }
+    el._inPopover = false;
+    el.setAttribute('role','button');
+    el.setAttribute('tabindex','0');
+    if(hrefs[el.id]) attachOpen(el, hrefs[el.id]);
+  }
+
+  // determine collapse condition
+  function shouldCollapse(){
+    if(window.innerWidth <= COLLAPSE_WIDTH) return true;
+    // fallback: if widget overflows horizontally
+    return widget.scrollWidth > widget.clientWidth;
+  }
+
+  // update collapse: move or restore elements, show/hide More toggle
+  function updateCollapseState(){
+    const collapse = shouldCollapse();
+    if(collapse){
+      collapseEls.forEach(moveToPopover);
+      moreToggle.style.display = 'inline-flex';
+    } else {
+      collapseEls.forEach(moveBack);
+      moreToggle.style.display = 'none';
+      closePopover();
+    }
+  }
+
+  // popover placement (left/right + clamp)
+  function positionPopover(){
+    if(!morePopover || !moreToggle) return;
+    morePopover.style.display = 'flex';
+    morePopover.style.visibility = 'hidden';
+    const toggleRect = moreToggle.getBoundingClientRect();
+    const popW = morePopover.offsetWidth;
+    const popH = morePopover.offsetHeight;
+    let left = toggleRect.left - popW - 8; // try left
+    let top = toggleRect.top + (toggleRect.height/2) - (popH/2);
+
+    if(left < 8) left = toggleRect.right + 8; // place right if not enough left space
+    const margin = 8;
+    if(top < margin) top = margin;
+    if(top + popH > window.innerHeight - margin) top = Math.max(margin, window.innerHeight - popH - margin);
+
+    morePopover.style.left = `${Math.round(left)}px`;
+    morePopover.style.top = `${Math.round(top)}px`;
+    morePopover.style.visibility = 'visible';
+  }
+
+  // open/close
+  function openPopover(){
+    morePopover.classList.add('show');
+    morePopover.style.display = 'flex';
+    moreToggle.setAttribute('aria-expanded','true');
+    positionPopover();
+    // focus first actionable item
+    const first = morePopover.querySelector('.share-btn');
+    if(first) first.focus();
+  }
+  function closePopover(){
+    morePopover.classList.remove('show');
+    morePopover.style.display = 'none';
+    moreToggle.setAttribute('aria-expanded','false');
+  }
+
+  // toggle button behavior
+  if(moreToggle){
+    moreToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(morePopover.classList.contains('show')) closePopover(); else { updateCollapseState(); openPopover(); }
+    });
+    moreToggle.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); moreToggle.click(); } });
+  }
+
+  // delegated click handling inside popover ensures moved nodes keep working
+  morePopover.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.share-btn');
+    if(!btn) return;
+    // if anchor with href, let browser handle; if not, preventDefault and open using hrefs mapping
+    if(btn.tagName.toLowerCase() !== 'a'){
+      e.preventDefault();
+      const link = hrefs[btn.id];
+      if(link) window.open(link,'_blank','noopener');
+    }
+    // close after a short delay so navigation works
+    setTimeout(closePopover, 140);
+  });
+
+  // close popover on outside click
+  document.addEventListener('click', (e)=>{
+    if(!morePopover.classList.contains('show')) return;
+    if(morePopover.contains(e.target) || (moreToggle && moreToggle.contains(e.target))) return;
+    closePopover();
+  });
+
+  // close on Escape
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closePopover(); });
+
+  // initialize widget visibility (keeps your previous behavior)
+  function initVisibility(){
+    let stored = null;
+    try { stored = localStorage.getItem(WIDGET_KEY); } catch(e){ stored = null; }
+    if(stored === 'hidden'){ widget.style.display='none'; showTab.style.display='block'; }
+    else if(stored === 'visible'){ widget.style.display=''; showTab.style.display='none'; setTimeout(()=>widget.classList.add('revealed'),50); }
+    else { const isPost = !!document.querySelector('article') || /\/\d{4}\/\d{2}\//.test(location.pathname); const mode = widget.getAttribute('data-mode'); if(mode==='auto' && !isPost){ widget.style.display='none'; showTab.style.display='none'; } else { widget.style.display=''; showTab.style.display='none'; setTimeout(()=>widget.classList.add('revealed'),50); } }
+  }
+
+  function setVisibility(visible){ try{ localStorage.setItem(WIDGET_KEY, visible ? 'visible':'hidden'); }catch(e){} if(visible){ showTab.style.display='none'; widget.style.display=''; setTimeout(()=>widget.classList.add('revealed'),50);} else { widget.classList.remove('revealed'); widget.style.display='none'; showTab.style.display='block'; closePopover(); } }
+  showTab.addEventListener('click', ()=>{ setVisibility(true); const f = widget.querySelector('.share-btn'); if(f) f.focus(); });
+  hideBtn.addEventListener('click', ()=> setVisibility(false));
+  showTab.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showTab.click(); } });
+  hideBtn.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); hideBtn.click(); } });
+
+  // debounce resize and update collapse state
+  let rt=0;
+  window.addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>{ updateCollapseState(); closePopover(); }, 120); });
+
+  // initial run
+  initVisibility();
+  updateCollapseState();
+
+  // ensure hrefs re-applied (safety)
+  collapseEls.forEach(el=>{ if(hrefs[el.id]) attachOpen(el, hrefs[el.id]); });
+
+  // ensure showTab uses blue professional theme (visible only when widget hidden)
+  // done via CSS above; showTab display toggled via JS earlier whenever widget hidden.
+
+})();
+</script>
+<!-- END: Share Widget — Hardened More menu -->]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
           <b:widget id='AdSense4' locked='false' title='' type='AdSense' version='2' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
@@ -4303,46 +3330,6 @@ border-color:green;
   <script>
    (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
-</b:includable>
-          </b:widget>
-          <b:widget id='HTML20' locked='false' title='Biggest Share Price Movers in India in the past month' type='HTML' visible='false'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- TradingView Widget BEGIN -->
-<div class="tradingview-widget-container">
-  <div class="tradingview-widget-container__widget"></div>
-  <div class="tradingview-widget-copyright"><a href="https://in.tradingview.com/markets/stocks-india/" rel="noopener" target="_blank"><span class="blue-text">Stocks today</span></a> by TradingView</div>
-  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async="async" >
-  {
-  "colorTheme": "dark",
-  "dateRange": "1M",
-  "exchange": "BSE",
-  "showChart": true,
-  "locale": "in",
-  "largeChartUrl": "",
-  "isTransparent": false,
-  "showSymbolLogo": true,
-  "showFloatingTooltip": true,
-  "width": "400",
-  "height": "600",
-  "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
-  "plotLineColorFalling": "rgba(41, 98, 255, 1)",
-  "gridLineColor": "rgba(240, 243, 250, 0)",
-  "scaleFontColor": "rgba(106, 109, 120, 1)",
-  "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
-  "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
-  "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-  "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
-  "symbolActiveColor": "rgba(41, 98, 255, 0.12)"
-}
-  </script>
-</div>
-<!-- TradingView Widget END -->]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
 </b:includable>
           </b:widget>
           <b:widget id='PopularPosts1' locked='false' title='Trending ...' type='PopularPosts' version='2' visible='true'>
@@ -4509,309 +3496,6 @@ border-color:green;
             <div class='post-meta'>
               <span class='post-date published' expr:datetime='data:post.date.iso8601'><data:post.date/></span>
             </div>
-          </div>
-        </div>
-      </div>
-    </b:includable>
-            <b:includable id='postJumpLink' var='post'>
-  <div class='jump-link flat-button'>
-    <a expr:href='data:post.url fragment &quot;more&quot;' expr:title='data:post.title'>
-      <b:eval expr='data:blog.jumpLinkMessage'/>
-    </a>
-  </div>
-</b:includable>
-            <b:includable id='postLabels'>
-  <span class='byline post-labels'>
-    <span class='byline-label'><data:byline.label/></span>
-    <b:loop index='i' values='data:post.labels' var='label'>
-      <a expr:href='data:label.url' rel='tag'>
-        <data:label.name/>
-      </a>
-    </b:loop>
-  </span>
-</b:includable>
-            <b:includable id='postLocation'>
-  <span class='byline post-location'>
-    <data:byline.label/>
-    <a expr:href='data:post.location.mapsUrl' target='_blank'><data:post.location.name/></a>
-  </span>
-</b:includable>
-            <b:includable id='postReactions'>
-  <span class='byline reactions'>
-    <span class='reactions-label'>
-      <data:byline.label/>
-    </span>
-    <iframe allowtransparency='true' class='reactions-iframe' expr:src='data:post.reactionsUrl' frameborder='0' name='reactions' scrolling='no'/>
-  </span>
-</b:includable>
-            <b:includable id='postShareButtons'>
-  <div class='byline post-share-buttons goog-inline-block'>
-    <b:with value='data:sharingId ?: ((data:widget.instanceId ?: &quot;sharing&quot;) + &quot;-&quot; + (data:regionName ?: &quot;byline&quot;) + &quot;-&quot; + data:post.id)' var='sharingId'>
-      <!-- Note: 'sharingButtons' includable is from the default Sharing widget markup. -->
-      <b:include data='{                                                sharingId: data:sharingId,                                                originalUrl: data:post.url,                                                platforms: data:this.sharing.platforms,                                                shareUrl: data:post.shareUrl,                                                shareTitle: data:post.title,                                              }' name='sharingButtons'/>
-    </b:with>
-  </div>
-</b:includable>
-            <b:includable id='postTimestamp'>
-  <span class='byline post-timestamp'>
-    <data:byline.label/>
-    <b:if cond='data:post.url'>
-      <meta expr:content='data:post.url.canonical'/>
-      <a class='timestamp-link' expr:href='data:post.url' rel='bookmark' title='permanent link'>
-        <time class='published' expr:datetime='data:post.date.iso8601' expr:title='data:post.date.iso8601'>
-          <data:post.date/>
-        </time>
-      </a>
-    </b:if>
-  </span>
-</b:includable>
-            <b:includable id='sharingButton'>
-  <span expr:aria-label='data:platform.shareMessage' expr:class='&quot;sharing-platform-button sharing-element-&quot; + data:platform.key' expr:data-href='data:shareUrl + &quot;&amp;target=&quot; + data:platform.target' expr:data-url='data:originalUrl' expr:title='data:platform.shareMessage' role='menuitem' tabindex='-1'>
-    <b:include name='sharingPlatformIcon'/>
-    <span class='platform-sharing-text'><data:platform.name/></span>
-  </span>
-</b:includable>
-            <b:includable id='sharingButtonContent'>
-  <div class='flat-icon-button ripple'>
-    <b:include name='shareIcon'/>
-  </div>
-</b:includable>
-            <b:includable id='sharingButtons'>
-  <div class='sharing' expr:aria-owns='&quot;sharing-popup-&quot; + data:sharingId' expr:data-title='data:shareTitle'>
-    <button class='sharing-button touch-icon-button' expr:aria-controls='&quot;sharing-popup-&quot; + data:sharingId' expr:aria-label='data:messages.share.escaped' expr:id='&quot;sharing-button-&quot; + data:sharingId' role='button'>
-      <b:include name='sharingButtonContent'/>
-    </button>
-    <b:include name='sharingButtonsMenu'/>
-  </div>
-</b:includable>
-            <b:includable id='sharingButtonsMenu'>
-  <div class='share-buttons-container'>
-    <ul aria-hidden='true' class='share-buttons hidden' expr:aria-label='data:messages.share.escaped' expr:id='&quot;sharing-popup-&quot; + data:sharingId' role='menu'>
-      <b:loop values='(data:platforms ?: data:blog.sharing.platforms) filter (p =&gt; p.key not in {&quot;blogThis&quot;})' var='platform'>
-        <li>
-          <b:include name='sharingButton'/>
-        </li>
-      </b:loop>
-      <li aria-hidden='true' class='hidden'>
-        <b:include name='otherSharingButton'/>
-      </li>
-    </ul>
-  </div>
-</b:includable>
-            <b:includable id='sharingPlatformIcon'>
-  <b:include data='{ iconClass: (&quot;touch-icon sharing-&quot; + data:platform.key) }' expr:name='data:platform.key + &quot;Icon&quot;'/>
-</b:includable>
-            <b:includable id='snippetedPostByline'>
-  <b:with value='(data:widgets first (w =&gt; w.type == &quot;Blog&quot;)).allBylineItems' var='blogBylines'>
-    <div class='item-byline'>
-      <b:with value='data:blogBylines first (i =&gt; i.name == &quot;author&quot;)' var='byline'>
-        <b:include cond='data:byline and data:this.postDisplay.showAuthor' data='post' name='postAuthor'/>
-      </b:with>
-      <b:with value='data:blogBylines first (i =&gt; i.name == &quot;timestamp&quot;)' var='byline'>
-        <b:include cond='data:byline and data:this.postDisplay.showDate' data='post' name='postTimestamp'/>
-      </b:with>
-    </div>
-  </b:with>
-</b:includable>
-            <b:includable id='snippetedPostContent'>
-  <div class='post-content'>
-    <b:include cond='data:this.postDisplay.showTitle' name='snippetedPostTitle'/>
-    <b:include cond='data:this.postDisplay.showDate or data:this.postDisplay.showAuthor' name='snippetedPostByline'/>
-    <b:include cond='data:this.postDisplay.showSnippet' data='post' name='postSnippet'/>
-    <b:include cond='data:this.postDisplay.showFeaturedImage and data:post.featuredImage' name='snippetedPostThumbnail'/>
-  </div>
-</b:includable>
-            <b:includable id='snippetedPostThumbnail'>
-  <div class='item-thumbnail'>
-    <a expr:href='data:post.url'>
-      <b:include data='{                         image: data:post.featuredImage,                         imageSizes: [72, 144],                         imageRatio: &quot;1:1&quot;,                         sourceSizes: &quot;72px&quot;                        }' name='responsiveImage'/>
-    </a>
-  </div>
-</b:includable>
-            <b:includable id='snippetedPostTitle'>
-  <b:if cond='data:post.title != &quot;&quot;'>
-    <h3 class='post-title'><a expr:href='data:post.url'><data:post.title/></a></h3>
-  </b:if>
-</b:includable>
-            <b:includable id='snippetedPosts'>
-  <div role='feed'>
-    <!-- Don't render the post that we're currently already looking at. -->
-    <b:loop values='data:posts filter (p =&gt; p.id != data:view.postId)' var='post'>
-      <article class='post' role='article'>
-        <b:include name='snippetedPostContent'/>
-      </article>
-    </b:loop>
-  </div>
-</b:includable>
-          </b:widget>
-          <b:widget id='FeaturedPost1' locked='false' title='Trending Post' type='FeaturedPost' version='2' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='showSnippet'>true</b:widget-setting>
-              <b:widget-setting name='showPostTitle'>true</b:widget-setting>
-              <b:widget-setting name='postId'>515406918822325314</b:widget-setting>
-              <b:widget-setting name='showFirstImage'>true</b:widget-setting>
-              <b:widget-setting name='useMostRecentPost'>false</b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main' var='this'>
-      <b:include name='widget-title'/>
-      <div class='widget-content'>
-        <b:loop values='data:posts' var='post'>
-          <b:include data='post' name='postContent'/>
-        </b:loop>
-      </div>
-    </b:includable>
-            <b:includable id='blogThisShare'>
-  <b:with value='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=270,width=475\&quot;); return false;&quot;' var='onclick'>
-    <b:include name='platformShare'/>
-  </b:with>
-</b:includable>
-            <b:includable id='bylineByName' var='byline'>
-  <b:switch var='data:byline.name'>
-  <b:case value='share'/>
-    <b:include cond='data:post.shareUrl' name='postShareButtons'/>
-  <b:case value='comments'/>
-    <b:include cond='data:post.allowComments' name='postCommentsLink'/>
-  <b:case value='location'/>
-    <b:include cond='data:post.location' name='postLocation'/>
-  <b:case value='timestamp'/>
-    <b:include cond='not data:view.isPage' name='postTimestamp'/>
-  <b:case value='author'/>
-    <b:include name='postAuthor'/>
-  <b:case value='labels'/>
-    <b:include cond='data:post.labels' name='postLabels'/>
-  <b:case value='icons'/>
-    <b:include cond='data:post.emailPostUrl' name='emailPostIcon'/>
-  <b:case value='reactions'/>
-    <b:include cond='data:post.reactionsUrl' name='postReactions'/>
-  </b:switch>
-</b:includable>
-            <b:includable id='bylineRegion' var='regionItems'>
-  <b:loop values='data:regionItems' var='byline'>
-    <b:include data='byline' name='bylineByName'/>
-  </b:loop>
-</b:includable>
-            <b:includable id='commentsLink'>
-  <a class='comment-link' expr:href='data:post.commentsUrl' expr:onclick='data:post.commentsUrlOnclick'>
-    <b:if cond='data:post.numberOfComments &gt; 0'>
-      <b:message name='messages.numberOfComments'>
-        <b:param expr:value='data:post.numberOfComments' name='numComments'/>
-      </b:message>
-    <b:else/>
-      <data:messages.postAComment/>
-    </b:if>
-  </a>
-</b:includable>
-            <b:includable id='commentsLinkIframe'>
-  <span class='cmt_count_iframe_holder' expr:data-count='data:post.numberOfComments' expr:data-onclick='data:post.commentsUrlOnclick' expr:data-post-url='data:post.url' expr:data-url='data:post.url.canonical.http'>
-  </span>
-</b:includable>
-            <b:includable id='emailPostIcon'>
-  <span class='byline post-icons'>
-    <!-- email post links -->
-    <span class='item-action'>
-      <a expr:href='data:post.emailPostUrl' expr:title='data:messages.emailPost'>
-        <b:include data='{ iconClass: &quot;touch-icon sharing-icon&quot; }' name='emailIcon'/>
-      </a>
-    </span>
-  </span>
-</b:includable>
-            <b:includable id='facebookShare'>+
-  <b:with value='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=430,width=640\&quot;); return false;&quot;' var='onclick'>
-    <b:include name='platformShare'/>
-  </b:with>
-</b:includable>
-            <b:includable id='footerBylines'>
-  <b:if cond='data:widgets.Blog.first.footerBylines'>
-    <b:loop index='i' values='data:widgets.Blog.first.footerBylines' var='region'>
-      <b:if cond='not data:region.items.empty'>
-        <div expr:class='&quot;post-footer-line post-footer-line-&quot; + (data:i + 1)'>
-          <b:with value='&quot;footer-&quot; + (data:i + 1)' var='regionName'>
-            <b:include data='region.items' name='bylineRegion'/>
-          </b:with>
-        </div>
-      </b:if>
-    </b:loop>
-  </b:if>
-</b:includable>
-            <b:includable id='googlePlusShare'>
-  <div class='goog-inline-block google-plus-share-container'>
-    <g:plusone annotation='inline' expr:href='data:originalUrl.canonical.http' size='medium' source='blogger:blog:plusone'/>
-  </div>
-</b:includable>
-            <b:includable id='headerByline'>
-  <b:if cond='data:widgets.Blog.first.headerByline'>
-    <div class='post-header'>
-      <div class='post-header-line-1'>
-        <b:with value='&quot;header-1&quot;' var='regionName'>
-          <b:include data='data:widgets.Blog.first.headerByline.items' name='bylineRegion'/>
-        </b:with>
-      </div>
-    </div>
-  </b:if>
-</b:includable>
-            <b:includable id='linkShare'>
-  <b:with value='&quot;window.prompt(\&quot;Copy to clipboard: Ctrl+C, Enter\&quot;, \&quot;&quot; + data:originalUrl + &quot;\&quot;); return false;&quot;' var='onclick'>
-    <b:include name='platformShare'/>
-  </b:with>
-</b:includable>
-            <b:includable id='otherSharingButton'>
-  <span class='sharing-platform-button sharing-element-other' expr:aria-label='data:messages.shareToOtherApps.escaped' expr:data-url='data:originalUrl' expr:title='data:messages.shareToOtherApps.escaped' role='menuitem' tabindex='-1'>
-    <b:with value='{key: &quot;sharingOther&quot;}' var='platform'>
-      <b:include name='sharingPlatformIcon'/>
-    </b:with>
-    <span class='platform-sharing-text'><data:messages.shareOtherApps.escaped/></span>
-  </span>
-</b:includable>
-            <b:includable id='platformShare'>
-  <a expr:class='&quot;goog-inline-block sharing-&quot; + data:platform.key' expr:data-url='data:originalUrl' expr:href='data:shareUrl + &quot;&amp;target=&quot; + data:platform.target' expr:onclick='data:onclick ? data:onclick : &quot;&quot;' expr:title='data:platform.shareMessage' target='_blank'>
-    <span class='share-button-link-text'>
-      <data:platform.shareMessage/>
-    </span>
-  </a>
-</b:includable>
-            <b:includable id='postAuthor'>
-  <span class='byline post-author vcard'>
-    <span class='post-author-label'>
-      <data:byline.label/>
-    </span>
-    <span class='fn'>
-      <b:if cond='data:post.author.profileUrl'>
-        <meta expr:content='data:post.author.profileUrl'/>
-        <a class='g-profile' expr:href='data:post.author.profileUrl' rel='author' title='author profile'>
-          <span><data:post.author.name/></span>
-        </a>
-      <b:else/>
-        <span><data:post.author.name/></span>
-      </b:if>
-    </span>
-  </span>
-</b:includable>
-            <b:includable id='postCommentsLink'>
-  <span class='byline post-comment-link container'>
-    <b:include cond='data:post.commentSource != 1' name='commentsLink'/>
-    <b:include cond='data:post.commentSource == 1' name='commentsLinkIframe'/>
-  </span>
-</b:includable>
-            <b:includable id='postContent' var='post'>
-      <div class='post'>
-        <div class='post-content'>
-          <a class='post-image-link' expr:href='data:post.url'>
-            <b:if cond='data:post.featuredImage'>
-              <img class='post-thumb' expr:alt='data:post.title' expr:src='data:post.featuredImage resizeImage 640'/>
-              <b:else/>
-              <img class='post-thumb' expr:alt='data:post.title' src='https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/w640/nth.png'/>
-            </b:if>
-            <span class='post-tag'><data:post.labels.last.name/></span>
-          </a>
-          <div class='post-info'>
-            <h2 class='post-title'>
-              <a expr:href='data:post.url'><data:post.title/></a>
-            </h2>
-            <div class='post-meta'>
-              <span class='post-author'><data:post.author.name/></span>
-              <span class='post-date published' expr:datetime='data:post.date.iso8601'><data:post.date/></span>
-            </div>
-            <p class='post-snippet'><b:eval expr='data:post.snippets.short snippet { length: 87 }'/></p>
           </div>
         </div>
       </div>
@@ -5278,23 +3962,7 @@ border-color:green;
 </b:includable>
         </b:widget>
       </b:section>
-      <b:section class='footer common-widget' id='footer-sec2' maxwidgets='3' name='Section (Center)' showaddelement='yes'>
-        <b:widget id='HTML1' locked='false' title='' type='HTML' visible='false'>
-          <b:widget-settings>
-            <b:widget-setting name='content'><![CDATA[<script async="async" src="https://cse.google.com/cse.js?cx=fdb7fcb4c37bc3640">
-</script>
-<img src="https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_umQwJV8MuDDto5fvP9ow5V1Ckvs_erUHxwyRi9lltBs1578-SCs8UWuy8ukohtMpHurJ40i8MaZvF8Tq2EnnJSUyAzgxm4WrJHPK3wPWA-bMqD_YumMhK21vbaqq1AlwXctmG3kMQadxlRNmQsrwwDwT8=w640" style="width:50px;border-radius:50%;"/>
-<div class="gcse-search"></div>
-<h2>Search Champak's Blog</h2>]]></b:widget-setting>
-          </b:widget-settings>
-          <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-        </b:widget>
-      </b:section>
+      <b:section class='footer common-widget' id='footer-sec2' maxwidgets='3' name='Section (Center)' showaddelement='yes'/>
       <b:section class='footer common-widget' id='footer-sec3' maxwidgets='3' name='Section (Right)' showaddelement='yes'>
         <b:widget id='AdSense3' locked='false' title='' type='AdSense' version='2' visible='true'>
           <b:widget-settings>
@@ -5503,7 +4171,7 @@ background-color: gray;
   <script src='https://varanasi-software-junction.github.io/search/branding/branding.js'/>
   <div style='position:relative;'>
    
-  <a href='#txtup' style='right:20px; bottom:20px; position:fixed; z-index:1000;            padding:8px 12px; background:#0b63d4; color:#fff;            border-radius:6px; text-decoration:none; font-family:sans-serif; font-size:14px;' title='Go up'>
+  <a href='#txtup' style='right:20px; bottom:20px; position:fixed; z-index:1000;            padding:8px 12px; background:#0b63d4; color:#fff;            border-radius:6px; text-decoration:none; font-family:sans-serif; font-size:50px;' title='Go up'>
     &#8593;
 </a>
 
@@ -5512,121 +4180,7 @@ background-color: gray;
 
   
   <script>
-(function() {
-  const mainSel = &#39;#main-wrapper&#39;;
-  const sidebarSel = &#39;#sidebar-wrapper&#39;;
-  const STORAGE_KEY = &#39;blog_sidebar_hidden&#39;;
-  // Common header-like insertion points (tries in order)
-  const headerCandidates = [
-    &#39;#header-wrap .container&#39;,
-    &#39;#top-bar .container&#39;,
-    &#39;#top-bar&#39;,
-    &#39;#header-wrap&#39;,
-    &#39;#main-menu&#39;,
-    &#39;.header-header .container&#39;,
-    &#39;.header-header&#39;,
-    &#39;body&#39; // fallback to body last
-  ];
 
-  function createButton() {
-    const btn = document.createElement(&#39;button&#39;);
-    btn.className = &#39;toggle-sidebar-btn&#39;;
-    btn.setAttribute(&#39;aria-pressed&#39;, &#39;false&#39;);
-    btn.title = &#39;Hide sidebar / Show sidebar&#39;;
-    btn.innerHTML = &#39;&lt;span class=&quot;ts-icon&quot; aria-hidden=&quot;true&quot;&gt;&#9776;&lt;/span&gt;&lt;span class=&quot;ts-text&quot; style=&quot;margin-left:6px;&quot;&gt;Hide Sidebar&lt;/span&gt;&#39;;
-    return btn;
-  }
-
-  function updateButtonText(btn, hidden) {
-    if(!btn) return;
-    const text = btn.querySelector(&#39;.ts-text&#39;);
-    const icon = btn.querySelector(&#39;.ts-icon&#39;);
-    if (hidden) {
-      if (text) text.innerHTML = &#39;Show Sidebar&#39;;
-      if (icon) icon.innerHTML = &#39;&#9636;&#39;;
-      btn.setAttribute(&#39;aria-pressed&#39;, &#39;true&#39;);
-    } else {
-      if (text) text.innerHTML = &#39;Hide Sidebar&#39;;
-      if (icon) icon.innerhtML = &#39;&#9776;&#39;;
-      btn.setAttribute(&#39;aria-pressed&#39;, &#39;false&#39;);
-    }
-  }
-
-  function applyState(hidden) {
-    const el = document.documentElement || document.body;
-    if (hidden) el.classList.add(&#39;sidebar-hidden&#39;);
-    else el.classList.remove(&#39;sidebar-hidden&#39;);
-  }
-
-  function tryInsertButton(btn) {
-    for (let sel of headerCandidates) {
-      const parent = document.querySelector(sel);
-      if (!parent) continue;
-      try {
-        if (parent === document.body) {
-          btn.classList.add(&#39;fixed-fallback&#39;);
-          document.body.appendChild(btn);
-          return { inserted:true, mode:&#39;fixed-fallback&#39;, parentSel: sel };
-        } else {
-          const computed = window.getComputedStyle(parent);
-          if (computed.position === &#39;static&#39;) {
-            parent.style.position = &#39;relative&#39;;
-          }
-          parent.appendChild(btn);
-          return { inserted:true, mode:&#39;in-header&#39;, parentSel: sel };
-        }
-      } catch (e) {
-        continue;
-      }
-    }
-    return { inserted:false };
-  }
-
-  function init() {
-    const main = document.querySelector(mainSel);
-    const sidebar = document.querySelector(sidebarSel);
-
-    const btn = createButton();
-    const result = tryInsertButton(btn);
-
-    if (!result.inserted) {
-      try {
-        btn.classList.add(&#39;fixed-fallback&#39;);
-        document.documentElement.appendChild(btn);
-      } catch(e) {
-        return;
-      }
-    }
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const initialHidden = saved === &#39;1&#39;;
-    applyState(initialHidden);
-    updateButtonText(btn, initialHidden);
-
-    btn.addEventListener(&#39;click&#39;, function () {
-      const nowHidden = document.documentElement.classList.contains(&#39;sidebar-hidden&#39;);
-      const nextHidden = !nowHidden;
-      applyState(nextHidden);
-      updateButtonText(btn, nextHidden);
-      try { localStorage.setItem(STORAGE_KEY, nextHidden ? &#39;1&#39; : &#39;0&#39;); } catch(e) {}
-      window.dispatchEvent(new Event(&#39;resize&#39;));
-    });
-
-    // Accessibility: toggle on &quot;S&quot; key (Shift+S) if not typing in input
-    document.addEventListener(&#39;keydown&#39;, function(e){
-      const active = document.activeElement;
-      if ( (e.key === &#39;s&#39; || e.key === &#39;S&#39;) &amp;&amp; !(active &amp;&amp; (active.tagName===&#39;INPUT&#39; || active.tagName===&#39;TEXTAREA&#39; || active.isContentEditable)) ) {
-        btn.click();
-      }
-    });
-  }
-
-  if (document.readyState === &#39;loading&#39;) {
-    document.addEventListener(&#39;DOMContentLoaded&#39;, init);
-  } else {
-    init();
-  }
-})();
 </script>
 
   

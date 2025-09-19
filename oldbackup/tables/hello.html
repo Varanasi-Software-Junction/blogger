@@ -1,0 +1,314 @@
+<!-- Champak's Search Widget — Fixed visibility + 150 per batch (reliable paging) -->
+<style>
+  /* Container */
+  #champak-search {
+    display: block !important;
+    visibility: visible !important;
+    position: relative;
+    z-index: 9999;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    max-width:1000px;
+    width: calc(100% - 24px);
+    margin: 12px auto;
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(11,99,212,0.06);
+    border: 1px solid rgba(11,99,212,0.06);
+    color: #222;
+  }
+
+  .cs-controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+
+  input[type="search"], select {
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #e6e9ef;
+    font-size:0.95rem;
+    outline:none;
+    min-width:160px;
+    color:#0b63d4;
+    background-color:#fdfcf9;
+    font-weight:500;
+  }
+
+  input::placeholder { color:#888; opacity:0.85; }
+  input[type="search"]:focus, select:focus { box-shadow:0 0 0 3px rgba(11,99,212,0.15); border-color:#0b63d4; }
+
+  button.cs-btn {
+    background: linear-gradient(180deg,#0b63d4,#084fb2);
+    color:#fff;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    box-shadow:0 6px 12px rgba(11,99,212,0.12);
+  }
+
+  .cs-stats { margin-bottom:10px; color:#444; font-size:0.95rem; }
+
+  /* Results area */
+  #cs-results {
+    max-height:600px;
+    overflow-y:auto;
+    padding-right:6px;
+    display:block;
+  }
+
+  #cs-results::-webkit-scrollbar { width:8px; }
+  #cs-results::-webkit-scrollbar-track { background:#f1f1f1; border-radius:8px; }
+  #cs-results::-webkit-scrollbar-thumb { background:#0b63d4; border-radius:8px; }
+  #cs-results::-webkit-scrollbar-thumb:hover { background:#084fb2; }
+
+  .cs-results-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
+
+  .cs-card {
+    background:linear-gradient(180deg,#fff,#fbfdff);
+    border-radius:10px;
+    padding:12px;
+    border:1px solid rgba(11,99,212,0.06);
+    transition:transform .18s ease, box-shadow .18s ease;
+    overflow:hidden;
+  }
+
+  .cs-card:hover { transform:translateY(-6px); box-shadow:0 18px 34px rgba(11,99,212,0.06); }
+  .cs-card h3 { margin:0 0 6px 0; font-size:1.05rem; color:#0b63d4; line-height:1.25; }
+  .cs-meta { font-size:0.82rem; color:#6b7280; margin-bottom:8px; }
+  .cs-summary { color:#333; font-size:0.95rem; max-height:7.5em; overflow:hidden; text-overflow:ellipsis; white-space:normal; }
+  .cs-tag { display:inline-block; background:rgba(255,153,51,0.12); color:#c75b00; padding:4px 8px; border-radius:999px; margin-right:6px; margin-bottom:6px; font-weight:600; }
+
+  /* Small screens */
+  @media (max-width:520px){
+    #champak-search{padding:10px;border-radius:8px}
+    .cs-controls{gap:6px}
+    input[type="search"]{min-width:120px;flex:1 1 100%}
+    select{flex:1 1 48%}
+  }
+
+  /* Debug banner (hidden unless printed by script) */
+  #cs-debug { display:none; font-size:0.9rem; color:#b91c1c; margin-bottom:8px; }
+  #cs-loading { color:#666; font-size:0.95rem; margin-bottom:8px; }
+</style>
+
+<div id="champak-search" aria-label="Explore posts — Champak's Search">
+  <div id="cs-debug" role="status" aria-live="polite"></div>
+  <div id="cs-loading">Initializing widget…</div>
+
+  <div class="cs-controls" style="display:none" id="cs-controls">
+    <input id="cs-search-input" type="search" placeholder="Search posts by title, summary or topic" aria-label="Search posts" />
+    <select id="cs-filter-label" aria-label="Filter by topic"><option value="" />All topics</select>
+    <select id="cs-sort" aria-label="Sort posts">
+      <option value="date-desc" />Newest first
+      <option value="date-asc" />Oldest first
+      <option value="title-asc" />Title A → Z
+      <option value="title-desc" />Title Z → A
+    </select>
+    <button id="cs-refresh" class="cs-btn" title="Refresh posts">Refresh</button>
+  </div>
+
+  <div class="cs-stats" id="cs-stats" style="display:none">Items found: <strong id="cs-count">—</strong></div>
+
+  <div id="cs-results" class="cs-results-grid" aria-live="polite"></div>
+</div>
+
+<script>
+/* Champak's Search — robust visibility + paginated fetch (150 per page to avoid server truncation) */
+(function(){
+  function ready(fn){
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+
+  ready(function(){
+    const resultsEl = document.getElementById('cs-results');
+    const countEl = document.getElementById('cs-count');
+    const searchInput = document.getElementById('cs-search-input');
+    const filterLabel = document.getElementById('cs-filter-label');
+    const sortSelect = document.getElementById('cs-sort');
+    const refreshBtn = document.getElementById('cs-refresh');
+    const controlsWrap = document.getElementById('cs-controls');
+    const statsWrap = document.getElementById('cs-stats');
+    const debugEl = document.getElementById('cs-debug');
+    const loadingEl = document.getElementById('cs-loading');
+
+    // ensure container visible
+    const container = document.getElementById('champak-search');
+    if(container){
+      container.style.display = 'block';
+      container.style.visibility = 'visible';
+      container.style.zIndex = 9999;
+    }
+
+    const CACHE_KEY = 'champak_posts_cache_plain_v2';
+    const CACHE_TTL_MS = 1000 * 60 * 15;
+    let posts = [];
+    let labelsSet = new Set();
+
+    function escapeHtml(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+    function htmlToPlainText(html){
+      const d=document.createElement('div'); d.innerHTML=html||'';
+      const bad=d.querySelectorAll('script,style,iframe,object,embed'); bad.forEach(n=>n.remove());
+      return (d.textContent||d.innerText||'').replace(/\s+/g,' ').trim();
+    }
+    function truncateText(text,maxChars){ return text && text.length>maxChars ? text.slice(0,maxChars).trim()+'…' : text; }
+    function highlightPlain(text,q){
+      if(!q) return escapeHtml(text);
+      try{
+        const safeQ=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+        const re=new RegExp('('+safeQ+')','ig');
+        return escapeHtml(text).replace(re,'<mark>$1</mark>');
+      }catch(e){return escapeHtml(text);}
+    }
+
+    async function fetchJsonTry(url){ const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); }
+
+    function makeBaseFeedUrls(){
+      const loc=window.location;
+      const baseOrigin = loc.origin.endsWith('/') ? loc.origin : loc.origin + '/';
+      return [
+        '/feeds/posts/default?alt=json',
+        baseOrigin + 'feeds/posts/default?alt=json',
+        window.location.href.replace(/\/[^\/]*$/,'/') + 'feeds/posts/default?alt=json'
+      ];
+    }
+
+    async function fetchAllPosts(){
+      loadingEl.textContent = 'Loading posts…';
+      debugEl.style.display = 'none';
+      // try cache
+      try{
+        const cached = JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
+        if(cached && (Date.now()-cached.t < CACHE_TTL_MS) && cached.data){
+          hydratePosts(cached.data);
+          loadingEl.style.display = 'none';
+          return;
+        }
+      }catch(e){ /* ignore cache errors */ }
+
+      const baseUrls = makeBaseFeedUrls();
+      let lastError = null;
+      for(const base of baseUrls){
+        try{
+          const allEntries = await fetchPagedFeed(base);
+          const data = { feed: { entry: allEntries } };
+          try{ localStorage.setItem(CACHE_KEY, JSON.stringify({t:Date.now(), data})); }catch(e){}
+          hydratePosts(data);
+          loadingEl.style.display = 'none';
+          return;
+        }catch(err){
+          lastError = err;
+        }
+      }
+      loadingEl.textContent = 'Unable to load posts. Open console for details.';
+      debugEl.style.display = 'block';
+      debugEl.textContent = 'Feed error: ' + String(lastError);
+      resultsEl.innerHTML = '<div style="padding:12px;color:crimson">Unable to load posts. ('+escapeHtml(String(lastError))+')</div>';
+      if(countEl) countEl.textContent = '0';
+    }
+
+    // fetch in pages of 150 until done (safer against server truncation)
+    async function fetchPagedFeed(baseUrl){
+      const pageSize = 150;             // <-- changed to conservative 150
+      let startIndex = 1;
+      let allEntries = [];
+      while(true){
+        const sep = baseUrl.includes('?') ? '&' : '?';
+        const url = `${baseUrl}${sep}max-results=${pageSize}&start-index=${startIndex}&alt=json`;
+        // debug log: uncomment for troubleshooting
+        // console.log('[champak-search] fetching', url);
+        const json = await fetchJsonTry(url);
+        const entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
+        if(entries.length === 0) break;
+        allEntries = allEntries.concat(entries);
+        // quick visible status while loading large blogs
+        loadingEl.textContent = `Loaded ${allEntries.length} posts so far…`;
+        if(entries.length < pageSize) break;
+        startIndex += pageSize; // advance by pageSize (150)
+        // polite small delay
+        await new Promise(res => setTimeout(res, 120));
+      }
+      return allEntries;
+    }
+
+    function hydratePosts(data){
+      const items = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
+      posts = items.map(entry=>{
+        const title = entry.title ? entry.title.$t : '(no title)';
+        const url = (entry.link||[]).find(l=>l.rel==='alternate')?.href || (entry.link && entry.link[0] && entry.link[0].href) || '#';
+        const published = entry.published ? entry.published.$t : '';
+        const contentHtml = (entry.summary && entry.summary.$t) || (entry.content && entry.content.$t) || '';
+        const contentPlain = htmlToPlainText(contentHtml);
+        const labels = (entry.category||[]).map(c=>c.term).filter(Boolean);
+        labels.forEach(l=>labelsSet.add(l));
+        return { title, url, published, contentPlain, labels };
+      });
+
+      // show controls only after hydrate to avoid flash-of-empty UI
+      controlsWrap.style.display = 'flex';
+      statsWrap.style.display = 'block';
+
+      populateLabelFilter();
+      renderPosts();
+    }
+
+    function populateLabelFilter(){
+      const prev = filterLabel.value || '';
+      const labels = Array.from(labelsSet).sort((a,b)=>a.localeCompare(b));
+      filterLabel.innerHTML = '<option value="">All topics</option>' + labels.map(l=>`<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
+      if(prev) filterLabel.value = prev;
+    }
+
+    function renderPosts(){
+      const q = (searchInput.value||'').trim().toLowerCase();
+      const activeLabel = filterLabel.value;
+      let list = posts.slice();
+      list = list.filter(p=>{
+        if(activeLabel && (!p.labels || p.labels.indexOf(activeLabel)===-1)) return false;
+        if(!q) return true;
+        const hay = (p.title + ' ' + p.contentPlain + ' ' + (p.labels||[]).join(' ')).toLowerCase();
+        return hay.indexOf(q) !== -1;
+      });
+      const sortVal = sortSelect.value || 'date-desc';
+      list.sort((a,b)=>{
+        if(sortVal==='title-asc') return a.title.localeCompare(b.title);
+        if(sortVal==='title-desc') return b.title.localeCompare(a.title);
+        if(sortVal==='date-asc') return new Date(a.published) - new Date(b.published);
+        return new Date(b.published) - new Date(a.published);
+      });
+      countEl.textContent = list.length;
+      if(!list.length){
+        resultsEl.innerHTML = '<div style="padding:12px;color:#666">No posts match your search or filter.</div>';
+        return;
+      }
+      resultsEl.innerHTML = list.map(p=>{
+        const dateStr = p.published ? new Date(p.published).toLocaleDateString() : '';
+        const summaryPlain = truncateText(p.contentPlain,220);
+        const titleHtml = highlightPlain(p.title,q);
+        const summaryHtml = highlightPlain(summaryPlain,q);
+        const labelsHtml = (p.labels||[]).map(l=>`<span class="cs-tag">${escapeHtml(l)}</span>`).join('');
+        return `<article class="cs-card">
+          <h3><a href="${p.url}" target="_blank" rel="noopener noreferrer">${titleHtml}</a></h3>
+          <div class="cs-meta">${escapeHtml(dateStr)}</div>
+          <div class="cs-summary">${summaryHtml}</div>
+          ${labelsHtml?`<div class="cs-labels">${labelsHtml}</div>`:''}
+        </article>`;
+      }).join('');
+    }
+
+    let tId = 0;
+    searchInput.addEventListener('input', ()=>{ clearTimeout(tId); tId = setTimeout(renderPosts, 220); });
+    filterLabel.addEventListener('change', renderPosts);
+    sortSelect.addEventListener('change', renderPosts);
+    refreshBtn.addEventListener('click', ()=>{ try{ localStorage.removeItem(CACHE_KEY); }catch(e){} fetchAllPosts(); });
+
+    // start loading
+    fetchAllPosts().catch(err => {
+      loadingEl.textContent = 'Error loading posts. See console.';
+      console.error('[champak-search] load error', err);
+      debugEl.style.display = 'block';
+      debugEl.textContent = String(err);
+    });
+  });
+})();
+</script>
