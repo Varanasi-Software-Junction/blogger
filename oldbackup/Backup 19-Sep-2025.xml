@@ -461,36 +461,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
             </b:widget>
           </b:section>
         <br/><br/><br/><br/><br/><br/>
-          <b:section class='header-ads' id='header-ads' maxwidgets='1' name='Header Ads 728x90' showaddelement='yes'>
-            <b:widget id='AdSense2' locked='false' title='' type='AdSense' version='2' visible='true'>
-              <b:widget-settings>
-                <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.layout'>728x90</b:widget-setting>
-                <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <div class='widget-content'>
-    <b:if cond='data:adCode'>
-      <data:adCode/>
-    <b:else/>
-      <b:include name='defaultAdUnit'/>
-    </b:if>
-  </div>
-</b:includable>
-              <b:includable id='defaultAdUnit'>
-  <ins class='adsbygoogle' data-ad-format='auto' expr:data-ad-client='data:adClientId ?: data:blog.adsenseClientId' expr:data-ad-host='data:blog.adsenseHostId' expr:style='data:style ?: &quot;display: block;&quot;'>
-    <b:attr cond='not data:blog.analytics4' expr:value='data:blog.analyticsAccountNumber' name='data-analytics-uacct'/>
-  </ins>
-  <script>
-   (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</b:includable>
-            </b:widget>
-          </b:section>
+          <b:section class='header-ads' id='header-ads' maxwidgets='1' name='Header Ads 728x90' showaddelement='yes'/>
 <div class='clearfix'/>
       </div>
     </div>
@@ -1422,36 +1393,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
         <b:if cond='data:view.isHomepage'>
           <div class='clearfix'/>
-          <b:section class='featured-posts' id='featured-posts-3' name='Featured Posts 03' showaddelement='yes'>
-            <b:widget id='AdSense6' locked='false' title='' type='AdSense' version='2' visible='true'>
-              <b:widget-settings>
-                <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.layout'>160x600</b:widget-setting>
-                <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
-                <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
-              </b:widget-settings>
-              <b:includable id='main'>
-  <div class='widget-content'>
-    <b:if cond='data:adCode'>
-      <data:adCode/>
-    <b:else/>
-      <b:include name='defaultAdUnit'/>
-    </b:if>
-  </div>
-</b:includable>
-              <b:includable id='defaultAdUnit'>
-  <ins class='adsbygoogle' data-ad-format='auto' expr:data-ad-client='data:adClientId ?: data:blog.adsenseClientId' expr:data-ad-host='data:blog.adsenseHostId' expr:style='data:style ?: &quot;display: block;&quot;'>
-    <b:attr cond='not data:blog.analytics4' expr:value='data:blog.analyticsAccountNumber' name='data-analytics-uacct'/>
-  </ins>
-  <script>
-   (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</b:includable>
-            </b:widget>
-          </b:section>
+          <b:section class='featured-posts' id='featured-posts-3' name='Featured Posts 03' showaddelement='yes'/>
         </b:if>
       </div>
 
@@ -1468,7 +1410,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
           </b:widget>
           <b:widget id='HTML12' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- Champak's Search Widget — with borders + URLs -->
+              <b:widget-setting name='content'><![CDATA[<!-- Champak's Search Gadget — Gadget-ready (paste into Layout → Add a Gadget → HTML/JavaScript) -->
 <style>
   /* Container */
   #champak-search {
@@ -1502,7 +1444,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
     font-weight:500;
   }
 
-  input::placeholder { color:#888; opacity:0.85; }
+  input[type="search"]::placeholder { color:#888; opacity:0.85; }
   input[type="search"]:focus, select:focus { box-shadow:0 0 0 3px rgba(11,99,212,0.15); border-color:#0b63d4; }
 
   button.cs-btn {
@@ -1537,7 +1479,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
     background:linear-gradient(180deg,#fff,#fbfdff);
     border-radius:10px;
     padding:12px;
-    border:1px solid #0b63d4;  /* stronger visible border */
+    border:1px solid rgba(11,99,212,0.08);
     transition:transform .18s ease, box-shadow .18s ease;
     overflow:hidden;
   }
@@ -1566,9 +1508,9 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
 <div id="champak-search" aria-label="Explore posts — Champak's Search">
   <div id="cs-debug" role="status" aria-live="polite"></div>
-  <div id="cs-loading">Initializing widget…</div>
+  <div id="cs-loading" aria-live="polite">Initializing widget…</div>
 
-  <div class="cs-controls" id="cs-controls">
+  <div class="cs-controls" id="cs-controls" aria-hidden="true">
     <input id="cs-search-input" type="search" placeholder="Search posts by title, summary or topic" aria-label="Search posts" />
     <select id="cs-filter-label" aria-label="Filter by topic"><option value="" />All topics</select>
     <select id="cs-sort" aria-label="Sort posts">
@@ -1586,7 +1528,12 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 </div>
 
 <script>
-/* Champak's Search — robust visibility + paginated fetch (500 per page) */
+/* Champak's Search — robust visibility + paginated fetch (500 per page)
+   Improvements:
+   - fixed option tags
+   - safer DOM-based card creation (reduces injection risk)
+   - placeholder selector fixed
+*/
 (function(){
   function ready(fn){
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
@@ -1647,7 +1594,9 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
     async function fetchAllPosts(){
       loadingEl.textContent = 'Loading posts…';
+      loadingEl.style.display = '';
       debugEl.style.display = 'none';
+      controlsWrap.setAttribute('aria-hidden','true');
       try{
         const cached = JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
         if(cached && (Date.now()-cached.t < CACHE_TTL_MS) && cached.data){
@@ -1712,6 +1661,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
       controlsWrap.style.display = 'flex';
       statsWrap.style.display = 'block';
+      controlsWrap.setAttribute('aria-hidden','false');
 
       populateLabelFilter();
       renderPosts();
@@ -1720,8 +1670,61 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
     function populateLabelFilter(){
       const prev = filterLabel.value || '';
       const labels = Array.from(labelsSet).sort((a,b)=>a.localeCompare(b));
+      // build options safely
       filterLabel.innerHTML = '<option value="">All topics</option>' + labels.map(l=>`<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
       if(prev) filterLabel.value = prev;
+    }
+
+    function clearChildren(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+
+    function createCardNode(p, q){
+      const card = document.createElement('article');
+      card.className = 'cs-card';
+
+      const h3 = document.createElement('h3');
+      const a = document.createElement('a');
+      a.href = p.url || '#';
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.title = p.title;
+      a.innerHTML = highlightPlain(p.title, q);
+      h3.appendChild(a);
+
+      const meta = document.createElement('div');
+      meta.className = 'cs-meta';
+      meta.textContent = p.published ? new Date(p.published).toLocaleDateString() : '';
+
+      const summary = document.createElement('div');
+      summary.className = 'cs-summary';
+      summary.innerHTML = highlightPlain(truncateText(p.contentPlain, 220), q);
+
+      const urlDiv = document.createElement('div');
+      urlDiv.className = 'cs-url';
+      const urlA = document.createElement('a');
+      urlA.href = p.url || '#';
+      urlA.target = '_blank';
+      urlA.rel = 'noopener noreferrer';
+      urlA.textContent = p.url || '';
+      urlDiv.appendChild(urlA);
+
+      card.appendChild(h3);
+      card.appendChild(meta);
+      card.appendChild(summary);
+      card.appendChild(urlDiv);
+
+      if(p.labels && p.labels.length){
+        const labelsWrap = document.createElement('div');
+        labelsWrap.className = 'cs-labels';
+        p.labels.forEach(l=>{
+          const span = document.createElement('span');
+          span.className = 'cs-tag';
+          span.textContent = l;
+          labelsWrap.appendChild(span);
+        });
+        card.appendChild(labelsWrap);
+      }
+
+      return card;
     }
 
     function renderPosts(){
@@ -1742,29 +1745,26 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
         return new Date(b.published) - new Date(a.published);
       });
       countEl.textContent = list.length;
+      clearChildren(resultsEl);
       if(!list.length){
-        resultsEl.innerHTML = '<div style="padding:12px;color:#666">No posts match your search or filter.</div>';
+        const msg = document.createElement('div');
+        msg.style.padding = '12px';
+        msg.style.color = '#666';
+        msg.textContent = 'No posts match your search or filter.';
+        resultsEl.appendChild(msg);
         return;
       }
-      resultsEl.innerHTML = list.map(p=>{
-        const dateStr = p.published ? new Date(p.published).toLocaleDateString() : '';
-        const summaryPlain = truncateText(p.contentPlain,220);
-        const titleHtml = highlightPlain(p.title,q);
-        const summaryHtml = highlightPlain(summaryPlain,q);
-        const labelsHtml = (p.labels||[]).map(l=>`<span class="cs-tag">${escapeHtml(l)}</span>`).join('');
-        const urlHtml = `<div class="cs-url"><a href="${p.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.url)}</a></div>`;
-        return `<article class="cs-card">
-          <h3><a href="${p.url}" target="_blank" rel="noopener noreferrer">${titleHtml}</a></h3>
-          <div class="cs-meta">${escapeHtml(dateStr)}</div>
-          <div class="cs-summary">${summaryHtml}</div>
-          ${urlHtml}
-          ${labelsHtml?`<div class="cs-labels">${labelsHtml}</div>`:''}
-        </article>`;
-      }).join('');
+      const frag = document.createDocumentFragment();
+      list.forEach(p => {
+        const card = createCardNode(p, q);
+        frag.appendChild(card);
+      });
+      resultsEl.appendChild(frag);
     }
 
     let tId = 0;
-    searchInput.addEventListener('input', ()=>{ clearTimeout(tId); tId = setTimeout(renderPosts, 220); });
+    const debounceTime = 220;
+    searchInput.addEventListener('input', ()=>{ clearTimeout(tId); tId = setTimeout(renderPosts, debounceTime); });
     filterLabel.addEventListener('change', renderPosts);
     sortSelect.addEventListener('change', renderPosts);
     refreshBtn.addEventListener('click', ()=>{ try{ localStorage.removeItem(CACHE_KEY); }catch(e){} fetchAllPosts(); });
@@ -2067,10 +2067,10 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   }
 
   function showStatus(msg, timeout = 3500){
-    statusEl.textContent = msg;
+    statusEl.innerHTML = msg;
     if(timeout > 0){
       clearTimeout(showStatus._t);
-      showStatus._t = setTimeout(()=> { statusEl.textContent = ''; }, timeout);
+      showStatus._t = setTimeout(()=> { statusEl.innerHTML = ''; }, timeout);
     }
   }
 
@@ -2093,7 +2093,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
       // index label
       const idx = document.createElement('span');
-      idx.textContent = (i+1) + '.';
+      idx.innerHTML= (i+1) + '.';
       idx.style.fontWeight = '600';
       idx.style.color = '#0b63d4';
       idx.style.marginRight = '8px';
@@ -2105,7 +2105,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       a.href = b.url;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
-      a.textContent = b.title || b.url;
+      a.innerHTML= b.title || b.url;
       a.title = b.url;
       li.appendChild(a);
 
@@ -2114,7 +2114,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       del.className = 'delete';
       del.type = 'button';
       del.title = 'Remove bookmark';
-      del.textContent = '❌';
+      del.innerHTML= '❌';
       del.addEventListener('click', function(){
         deleteBookmark(i);
       });
@@ -2856,62 +2856,6 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
   </div>
 </b:includable>
           </b:widget>
-          <b:widget id='AdSense7' locked='false' title='' type='AdSense' version='2' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.layout'>125x125</b:widget-setting>
-              <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <div class='widget-content'>
-    <b:if cond='data:adCode'>
-      <data:adCode/>
-    <b:else/>
-      <b:include name='defaultAdUnit'/>
-    </b:if>
-  </div>
-</b:includable>
-            <b:includable id='defaultAdUnit'>
-  <ins class='adsbygoogle' data-ad-format='auto' expr:data-ad-client='data:adClientId ?: data:blog.adsenseClientId' expr:data-ad-host='data:blog.adsenseHostId' expr:style='data:style ?: &quot;display: block;&quot;'>
-    <b:attr cond='not data:blog.analytics4' expr:value='data:blog.analyticsAccountNumber' name='data-analytics-uacct'/>
-  </ins>
-  <script>
-   (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</b:includable>
-          </b:widget>
-          <b:widget id='AdSense1' locked='false' title='' type='AdSense' version='2' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.layout'>1x1</b:widget-setting>
-              <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <div class='widget-content'>
-    <b:if cond='data:adCode'>
-      <data:adCode/>
-    <b:else/>
-      <b:include name='defaultAdUnit'/>
-    </b:if>
-  </div>
-</b:includable>
-            <b:includable id='defaultAdUnit'>
-  <ins class='adsbygoogle' data-ad-format='auto' expr:data-ad-client='data:adClientId ?: data:blog.adsenseClientId' expr:data-ad-host='data:blog.adsenseHostId' expr:style='data:style ?: &quot;display: block;&quot;'>
-    <b:attr cond='not data:blog.analytics4' expr:value='data:blog.analyticsAccountNumber' name='data-analytics-uacct'/>
-  </ins>
-  <script>
-   (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</b:includable>
-          </b:widget>
           <b:widget id='HTML23' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='content'><![CDATA[<!-- WhatsApp Group Invite Button -->
@@ -3304,34 +3248,6 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
   </div>
 </b:includable>
           </b:widget>
-          <b:widget id='AdSense4' locked='false' title='' type='AdSense' version='2' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.layout'>200x200</b:widget-setting>
-              <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <div class='widget-content'>
-    <b:if cond='data:adCode'>
-      <data:adCode/>
-    <b:else/>
-      <b:include name='defaultAdUnit'/>
-    </b:if>
-  </div>
-</b:includable>
-            <b:includable id='defaultAdUnit'>
-  <ins class='adsbygoogle' data-ad-format='auto' expr:data-ad-client='data:adClientId ?: data:blog.adsenseClientId' expr:data-ad-host='data:blog.adsenseHostId' expr:style='data:style ?: &quot;display: block;&quot;'>
-    <b:attr cond='not data:blog.analytics4' expr:value='data:blog.analyticsAccountNumber' name='data-analytics-uacct'/>
-  </ins>
-  <script>
-   (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</b:includable>
-          </b:widget>
           <b:widget id='PopularPosts1' locked='false' title='Trending ...' type='PopularPosts' version='2' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='numItemsToShow'>3</b:widget-setting>
@@ -3643,34 +3559,6 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
   <div class='container row'>
     <div class='footer-widgets-wrap'>
       <b:section class='footer common-widget' id='footer-sec1' maxwidgets='3' name='Section (Left)' showaddelement='yes'>
-        <b:widget id='AdSense5' locked='false' title='' type='AdSense' version='2' visible='true'>
-          <b:widget-settings>
-            <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.layout'>336x280</b:widget-setting>
-            <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
-          </b:widget-settings>
-          <b:includable id='main'>
-  <div class='widget-content'>
-    <b:if cond='data:adCode'>
-      <data:adCode/>
-    <b:else/>
-      <b:include name='defaultAdUnit'/>
-    </b:if>
-  </div>
-</b:includable>
-          <b:includable id='defaultAdUnit'>
-  <ins class='adsbygoogle' data-ad-format='auto' expr:data-ad-client='data:adClientId ?: data:blog.adsenseClientId' expr:data-ad-host='data:blog.adsenseHostId' expr:style='data:style ?: &quot;display: block;&quot;'>
-    <b:attr cond='not data:blog.analytics4' expr:value='data:blog.analyticsAccountNumber' name='data-analytics-uacct'/>
-  </ins>
-  <script>
-   (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</b:includable>
-        </b:widget>
         <b:widget id='PopularPosts2' locked='false' title='Most Active Posts' type='PopularPosts' version='2' visible='true'>
           <b:widget-settings>
             <b:widget-setting name='numItemsToShow'>5</b:widget-setting>
@@ -3963,36 +3851,7 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
         </b:widget>
       </b:section>
       <b:section class='footer common-widget' id='footer-sec2' maxwidgets='3' name='Section (Center)' showaddelement='yes'/>
-      <b:section class='footer common-widget' id='footer-sec3' maxwidgets='3' name='Section (Right)' showaddelement='yes'>
-        <b:widget id='AdSense3' locked='false' title='' type='AdSense' version='2' visible='true'>
-          <b:widget-settings>
-            <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.layout'>468x60</b:widget-setting>
-            <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
-          </b:widget-settings>
-          <b:includable id='main'>
-  <div class='widget-content'>
-    <b:if cond='data:adCode'>
-      <data:adCode/>
-    <b:else/>
-      <b:include name='defaultAdUnit'/>
-    </b:if>
-  </div>
-</b:includable>
-          <b:includable id='defaultAdUnit'>
-  <ins class='adsbygoogle' data-ad-format='auto' expr:data-ad-client='data:adClientId ?: data:blog.adsenseClientId' expr:data-ad-host='data:blog.adsenseHostId' expr:style='data:style ?: &quot;display: block;&quot;'>
-    <b:attr cond='not data:blog.analytics4' expr:value='data:blog.analyticsAccountNumber' name='data-analytics-uacct'/>
-  </ins>
-  <script>
-   (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</b:includable>
-        </b:widget>
-      </b:section>
+      <b:section class='footer common-widget' id='footer-sec3' maxwidgets='3' name='Section (Right)' showaddelement='yes'/>
     </div>
   </div>
 
