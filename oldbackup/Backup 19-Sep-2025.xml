@@ -49,11 +49,7 @@ document.addEventListener(&#39;DOMContentLoaded&#39;, function() {
 <!-- Template Style CSS -->
 <b:skin version='1.0.0'><![CDATA[/*
 -----------------------------------------------
-Blogger Template Style
-Name:        Smag
-Version:     Free Version
-Author:      Champak 
-Author Url:  https://varanasisoftwarejunction.blogspot.com
+Designed by Champak Roy
 ----------------------------------------------- */
 
 /*
