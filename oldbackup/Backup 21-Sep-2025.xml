@@ -311,7 +311,10 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
    
 
-</head>
+
+  <link href='https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css' rel='stylesheet'/>
+
+  </head>
 <body expr:class='data:blog.pageType'>
   <div style='position:relative'>
  
@@ -4578,7 +4581,8 @@ background-color: gray;
 
   
   
-  
+  <script defer='defer' src='https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js'/>
+
 
 </body>
 </html>
