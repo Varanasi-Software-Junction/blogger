@@ -1,0 +1,279 @@
+<!-- Floating Follow, WhatsApp & Today's Tip Buttons (JSONP fetch + clear "no tip" handling) -->
+<div id="floating-buttons">
+  <!-- Desktop Buttons -->
+  <a target="_blank"
+     href="https://www.blogger.com/follow.g?view=FOLLOW&blogID=146130669343976599"
+     class="floating-btn follow-btn desktop-btn">
+     👉 Follow This Blog
+  </a>
+
+  <a target="_blank"
+     href="https://wa.me/919335874326?text=Hi%20Champak%20Roy%2C%20I%20came%20from%20your%20blog!"
+     class="floating-btn whatsapp-btn desktop-btn">
+     💬 Contact on WhatsApp
+  </a>
+
+  <a href="javascript:void(0)"
+     id="todays-tip-btn"
+     class="floating-btn tip-btn desktop-btn"
+     aria-label="Today's Tip">
+     💡 Today's Tip
+  </a>
+
+  <!-- Mobile Icon Buttons (horizontal) -->
+  <div class="mobile-btn mobile-icons" aria-hidden="false">
+    <a target="_blank"
+       href="https://www.blogger.com/follow.g?view=FOLLOW&blogID=146130669343976599"
+       class="floating-icon follow-icon">
+       ⭐
+    </a>
+
+    <a target="_blank"
+       href="https://wa.me/919335874326?text=Hi%20Champak%20Roy%2C%20I%20came%20from%20your%20blog!"
+       class="floating-icon whatsapp-icon">
+       💬
+    </a>
+
+    <a href="javascript:void(0)"
+       id="todays-tip-icon"
+       class="floating-icon tip-icon"
+       aria-label="Today's Tip">
+       💡
+    </a>
+  </div>
+</div>
+
+<style>
+/* Container */
+#floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+}
+
+/* Full-width buttons (Desktop) */
+.floating-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  box-shadow: 6px 6px 12px rgba(0,0,0,0.3);
+  transition: transform 0.18s ease, background-color 0.18s ease;
+  animation: pulse 2s infinite;
+}
+
+/* Specific button colors */
+.follow-btn { background-color: teal; color: pink; }
+.follow-btn:hover { background-color: #008080; transform: scale(1.12); }
+
+.whatsapp-btn { background-color: #25D366; }
+.whatsapp-btn:hover { background-color: #1ebe5d; transform: scale(1.12); }
+
+.tip-btn { background-color: #ff8c00; } /* orange for tip */
+.tip-btn:hover { background-color: #e07b00; transform: scale(1.12); }
+
+/* Round Icons (Mobile) */
+.floating-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.18s ease, background-color 0.18s ease;
+  animation: pulse 2s infinite;
+}
+
+.follow-icon { background-color: teal; }
+.whatsapp-icon { background-color: #25D366; }
+.tip-icon { background-color: #ff8c00; }
+
+.floating-icon:hover { transform: scale(1.18); }
+
+/* Pulse animation */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* 📱 Mobile Responsive: show icons (horizontal) */
+@media (max-width: 600px) {
+  .desktop-btn { display: none; }
+  .mobile-btn { display: flex; }
+  .mobile-icons {
+    flex-direction: row;
+    gap: 12px;
+  }
+  #floating-buttons {
+    bottom: 15px;
+    right: 15px;
+    gap: 0;
+  }
+}
+
+/* 💻 Desktop: show text buttons */
+@media (min-width: 601px) {
+  .desktop-btn { display: inline-block; }
+  .mobile-btn { display: none; }
+}
+</style>
+
+<script>
+(function () {
+  const blogId = '146130669343976599';
+  const label = 'python';
+
+  // Build base feed URL (we will request JSONP)
+  const baseFeedUrl = `https://www.blogger.com/feeds/${blogId}/posts/default/-/${encodeURIComponent(label)}`;
+
+  // JSONP fetch helper that returns a Promise which resolves with the JSON object
+  function fetchJSONP(url, timeoutMs = 10000) {
+    alert('Please wait while we fetch a tip for you...');
+    return new Promise((resolve, reject) => {
+      const cbName = 'cb_blogger_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+      const script = document.createElement('script');
+
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('Feed request timed out'));
+      }, timeoutMs);
+
+      function cleanup() {
+        clearTimeout(timer);
+        if (script.parentNode) script.parentNode.removeChild(script);
+        try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+      }
+
+      window[cbName] = function (data) {
+        cleanup();
+        resolve(data);
+      };
+
+      // use alt=json-in-script and callback param as required by Blogger JSONP
+      const sep = url.indexOf('?') === -1 ? '?' : '&';
+      script.src = url + sep + 'alt=json-in-script&callback=' + cbName;
+      script.onerror = function () {
+        cleanup();
+        reject(new Error('Feed script failed to load'));
+      };
+
+      document.head.appendChild(script);
+    });
+  }
+
+  // Extract entries (title + alternate link)
+  function entriesFromFeed(json) {
+    try {
+      const entries = json.feed && json.feed.entry ? json.feed.entry : [];
+      return entries.map(e => {
+        const title = (e.title && e.title.$t) ? e.title.$t : '(Untitled)';
+        let href = '';
+        if (e.link && Array.isArray(e.link)) {
+          const alt = e.link.find(l => l.rel === 'alternate');
+          if (alt) href = alt.href;
+        }
+        if (!href && e.id && e.id.$t) href = e.id.$t;
+        return { title, href };
+      }).filter(x => x.href);
+    } catch (err) {
+      return [];
+    }
+  }
+
+  // Fetch a random tip entry via JSONP
+  async function fetchRandomTip() {
+    const url = baseFeedUrl; // JSONP will be appended by helper
+    const json = await fetchJSONP(url);
+    const entries = entriesFromFeed(json);
+    if (!entries.length) throw new Error('No tip found');
+    const idx = Math.floor(Math.random() * entries.length);
+    return entries[idx];
+  }
+
+  // show friendly messages
+  function showMessage(text) {
+    // prefer non-blocking native toast-like alert if available, otherwise fallback to alert()
+    // We'll use a temporary small toast element
+    const id = 'floating-tip-toast';
+    let el = document.getElementById(id);
+    if (!el) {
+      el = document.createElement('div');
+      el.id = id;
+      el.style.position = 'fixed';
+      el.style.bottom = '90px';
+      el.style.right = '20px';
+      el.style.maxWidth = '320px';
+      el.style.background = 'rgba(0,0,0,0.85)';
+      el.style.color = '#fff';
+      el.style.padding = '10px 14px';
+      el.style.borderRadius = '8px';
+      el.style.fontFamily = 'Arial, sans-serif';
+      el.style.fontSize = '14px';
+      el.style.zIndex = '10000';
+      el.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 200ms ease, transform 200ms ease';
+      document.body.appendChild(el);
+    }
+    el.textContent = text;
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+    clearTimeout(el._hideTimer);
+    el._hideTimer = setTimeout(() => {
+      el.style.opacity = '0';
+      el._hideTimer2 = setTimeout(() => {
+        try { el.parentNode && el.parentNode.removeChild(el); } catch (e) {}
+      }, 220);
+    }, 3000);
+  }
+
+  // click handler
+  async function onTipClick(ev) {
+    ev && ev.preventDefault();
+    const btn = ev && ev.currentTarget;
+    if (btn) {
+      btn.style.transform = 'scale(0.95)';
+      setTimeout(() => (btn.style.transform = ''), 150);
+    }
+    try {
+      showMessage('Loading tip...');
+      const entry = await fetchRandomTip();
+      if (entry && entry.href) {
+        // open in new tab
+        window.open(entry.href, '_blank');
+      } else {
+        showMessage('No tip found');
+      }
+    } catch (err) {
+      // Explicitly show "No tip found" when that's the message
+      if (err && err.message && err.message.toLowerCase().includes('no tip')) {
+        showMessage('No tip found');
+      } else {
+        showMessage('Could not load tip. Try again later.');
+        console.error('Tip fetch error:', err);
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const desktopBtn = document.getElementById('todays-tip-btn');
+    const mobileBtn = document.getElementById('todays-tip-icon');
+    if (desktopBtn) desktopBtn.addEventListener('click', onTipClick);
+    if (mobileBtn) mobileBtn.addEventListener('click', onTipClick);
+  });
+})();
+</script>

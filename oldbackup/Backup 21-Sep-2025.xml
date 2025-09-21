@@ -1396,7 +1396,235 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       <!-- Sidebar Wrapper -->
       <div id='sidebar-wrapper'>
         <b:section class='sidebar common-widget' id='sidebar1' name='Sidebar Right (A)' showaddelement='yes'>
-          <b:widget id='HTML1' locked='false' title='' type='HTML' visible='false'>
+          <b:widget id='HTML3' locked='false' title='Tip' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Floating Follow, WhatsApp & Today's Tip Buttons
+     - Uses Blogger JSON feed to fetch posts with label "Champak Roy"
+     - Picks a deterministic post for the day (date-based index)
+-->
+<div id="floating-buttons">
+  <!-- Desktop Buttons -->
+  <a target="_blank" 
+     href="https://www.blogger.com/follow.g?view=FOLLOW&blogID=146130669343976599" 
+     class="floating-btn follow-btn desktop-btn">
+     👉 Follow This Blog
+  </a>
+
+  <a target="_blank" 
+     href="https://wa.me/919335874326?text=Hi%20Champak%20Roy%2C%20I%20came%20from%20your%20blog!"
+     class="floating-btn whatsapp-btn desktop-btn">
+     💬 Contact on WhatsApp
+  </a>
+
+  <a href="javascript:void(0)" 
+     id="todays-tip-btn"
+     class="floating-btn tip-btn desktop-btn"
+     aria-label="Today's Tip">
+     💡 Today's Tip
+  </a>
+
+  <!-- Mobile Icon Buttons (horizontal) -->
+  <div class="mobile-btn mobile-icons">
+    <a target="_blank" 
+       href="https://www.blogger.com/follow.g?view=FOLLOW&blogID=146130669343976599" 
+       class="floating-icon follow-icon">
+       ⭐
+    </a>
+
+    <a target="_blank" 
+       href="https://wa.me/919335874326?text=Hi%20Champak%20Roy%2C%20I%20came%20from%20your%20blog!"
+       class="floating-icon whatsapp-icon">
+       💬
+    </a>
+
+    <a href="javascript:void(0)" 
+       id="todays-tip-icon"
+       class="floating-icon tip-icon">
+       💡
+    </a>
+  </div>
+</div>
+
+<style>
+/* Container */
+#floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+}
+
+/* Full-width buttons (Desktop) */
+.floating-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  box-shadow: 6px 6px 12px rgba(0,0,0,0.3);
+  transition: transform 0.18s ease, background-color 0.18s ease;
+  animation: pulse 2s infinite;
+}
+
+/* Specific button colors */
+.follow-btn { background-color: teal; color: pink; }
+.follow-btn:hover { background-color: #008080; transform: scale(1.12); }
+
+.whatsapp-btn { background-color: #25D366; }
+.whatsapp-btn:hover { background-color: #1ebe5d; transform: scale(1.12); }
+
+.tip-btn { background-color: #ff8c00; } /* orange for tip */
+.tip-btn:hover { background-color: #e07b00; transform: scale(1.12); }
+
+/* Round Icons (Mobile) */
+.floating-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.18s ease, background-color 0.18s ease;
+  animation: pulse 2s infinite;
+}
+
+.follow-icon { background-color: teal; }
+.whatsapp-icon { background-color: #25D366; }
+.tip-icon { background-color: #ff8c00; } /* orange */
+
+.floating-icon:hover { transform: scale(1.18); }
+
+/* Pulse animation */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* 📱 Mobile Responsive: show icons (horizontal) */
+@media (max-width: 600px) {
+  .desktop-btn { display: none; }
+  .mobile-btn { display: flex; }
+  .mobile-icons {
+    flex-direction: row; /* horizontal layout */
+    gap: 12px;
+  }
+  #floating-buttons {
+    bottom: 15px;
+    right: 15px;
+    gap: 0;
+  }
+}
+
+/* 💻 Desktop: show text buttons */
+@media (min-width: 601px) {
+  .desktop-btn { display: inline-block; }
+  .mobile-btn { display: none; }
+}
+</style>
+
+<script>
+(function(){
+  const blogId = '146130669343976599';
+  const label = 'Champak Roy';
+  // Use the Blogger feed JSON endpoint (no API key). If your blog has a custom domain, adjust the URL to that domain's feed.
+  const feedUrl = `https://www.blogger.com/feeds/${blogId}/posts/default/-/${encodeURIComponent(label)}?alt=json`;
+
+  // Utility: pick deterministic index based on today's date (so tip changes daily)
+  function pickIndexForToday(length) {
+    if (!length) return 0;
+    const today = new Date();
+    // Use UTC date to avoid timezone flips; you can change to local if preferred
+    const daySeed = today.getFullYear()*10000 + (today.getMonth()+1)*100 + today.getDate();
+    return daySeed % length;
+  }
+
+  // Parse feed entries to extract title + link
+  function entriesFromFeed(json) {
+    try {
+      const entries = json.feed && json.feed.entry ? json.feed.entry : [];
+      return entries.map(e => {
+        const title = (e.title && e.title.$t) ? e.title.$t : '(Untitled)';
+        // find alternate link
+        let href = '';
+        if (e.link && Array.isArray(e.link)) {
+          const alt = e.link.find(l => l.rel === 'alternate');
+          if (alt) href = alt.href;
+        }
+        // fallback: try id.$t (contains a URL in some cases)
+        if (!href && e.id && e.id.$t) href = e.id.$t;
+        return { title, href };
+      }).filter(x => x.href);
+    } catch(err) {
+      return [];
+    }
+  }
+
+  async function fetchTipEntry() {
+    try {
+      const res = await fetch(feedUrl);
+      if (!res.ok) throw new Error('Feed fetch failed');
+      const json = await res.json();
+      const entries = entriesFromFeed(json);
+      if (!entries.length) throw new Error('No posts found with label "' + label + '".');
+      const idx = pickIndexForToday(entries.length);
+      return entries[idx];
+    } catch (err) {
+      console.error('Todays Tip error:', err);
+      throw err;
+    }
+  }
+
+  // Click handlers for desktop button and mobile icon
+  async function onTipClick(ev) {
+    ev && ev.preventDefault();
+    const btn = ev && ev.currentTarget;
+    if (btn) {
+      // small visual feedback
+      btn.style.transform = 'scale(0.98)';
+      setTimeout(()=>btn.style.transform='',160);
+    }
+    try {
+      const entry = await fetchTipEntry();
+      // open the post in a new tab if href present
+      if (entry && entry.href) {
+        window.open(entry.href, '_blank');
+      } else {
+        alert('Could not find a tip right now. Please try again later.');
+      }
+    } catch (err) {
+      alert(err && err.message ? err.message : 'Could not load Today\\'s Tip. Try again later.');
+    }
+  }
+
+  // Attach handlers
+  document.addEventListener('DOMContentLoaded', function(){
+    const desktopBtn = document.getElementById('todays-tip-btn');
+    const mobileBtn  = document.getElementById('todays-tip-icon');
+    if (desktopBtn) desktopBtn.addEventListener('click', onTipClick);
+    if (mobileBtn) mobileBtn.addEventListener('click', onTipClick);
+
+    // Optional: preload the chosen tip title as a tooltip (non-blocking)
+    fetchTipEntry().then(entry=>{
+      const title = entry && entry.title ? entry.title : '';
+      if (desktopBtn) desktopBtn.setAttribute('title', title ? `Open tip: ${title}` : 'Today\\'s Tip');
+      if (mobileBtn) mobileBtn.setAttribute('title', title ? `Open tip: ${title}` : 'Today\\'s Tip');
+    }).catch(()=>{/* ignore tooltip on failure */});
+  });
+})();
+</script>]]></b:widget-setting>
+            </b:widget-settings>
             <b:includable id='main'>
   <b:include name='widget-title'/>
   <div class='widget-content'>
@@ -1404,7 +1632,214 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   </div>
 </b:includable>
           </b:widget>
-          <b:widget id='HTML12' locked='false' title='' type='HTML' visible='true'>
+          <b:widget id='HTML1' locked='false' title='Share' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Floating Share Gadget (fixed: buttons now compute URL at runtime) -->
+<div id="floating-share" aria-live="polite">
+  <a class="share-btn fb" href="#" data-share="facebook" aria-label="Share on Facebook" rel="noopener noreferrer">
+    <!-- facebook svg -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 320 512"><path fill="white" d="M279.14 288l14.22-92.66h-88.91V127.27c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S293.12 0 268.08 0c-73.14 0-121.08 44.38-121.08 124.72v70.62H86.41V288h60.59v224h92.66V288z"/></path></svg>
+  </a>
+
+  <a class="share-btn tw" href="#" data-share="twitter" aria-label="Share on Twitter" rel="noopener noreferrer">
+    <!-- twitter svg -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path fill="white" d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.7-298.7 298.7-59.5 0-114.7-17.2-161.2-47.1 8.4 1 16.8 1.6 25.6 1.6 49.5 0 95-16.8 131.1-45.5-46.4-1-85.3-31.5-98.8-73.6 6.4 1 12.8 1.6 19.6 1.6 9.1 0 18-1.2 26.4-3.6-48.6-9.7-85.1-52.5-85.1-103.7v-1c14.2 7.9 30.5 12.8 47.8 13.4-28.5-19-47.1-51.3-47.1-87.9 0-19.1 5.2-36.6 14.2-51.9 51.9 63.7 129.3 105.3 216.2 109.7-1.6-7.6-2.5-15.8-2.5-24.1 0-57.5 46.7-104.2 104.2-104.2 30 0 57.1 12.8 76.2 33.5 23.6-4.5 46.1-13.4 66.4-25.6-7.6 24.1-23.6 44.5-44.5 57.5 21-2.5 41.5-8.1 60.1-16.4-14.3 20.8-32.1 39.2-52.5 54.4z"/></path></svg>
+  </a>
+
+  <a class="share-btn wa" href="#" data-share="whatsapp" aria-label="Share on WhatsApp" rel="noopener noreferrer">
+    <!-- whatsapp svg -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path fill="white" d="M380.9 97.1C339 55.1 283.2 32 224.1 32 100.7 32 .1 132.3.1 255.8c0 45.2 11.8 89.3 34.3 128.2L0 480l98.6-33.5c36.2 19.9 76.8 30.3 118.6 30.3h.1c123.4 0 223.9-100.2 223.9-223.7 0-59.2-23-115-64.9-156.9zM224.1 438.7h-.1c-37.3 0-73.8-10-105.5-28.8l-7.6-4.5-58.4 19.9 19.3-56.8-5-8.1c-21.1-33.7-32.2-72.5-32.2-112.8C34.1 146.5 120.6 60 224.1 60c53.5 0 103.7 20.9 141.4 58.7 37.7 37.7 58.6 88 58.6 141.4 0 110.4-89.7 199-199.1 199z"/></path></svg>
+  </a>
+
+  <a class="share-btn em" href="#" data-share="email" aria-label="Share via Email" rel="noopener noreferrer">
+    <!-- email svg -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path fill="white" d="M502.3 190.8l-192-160c-27-22.5-68.6-22.5-95.6 0l-192 160c-16.6 13.9-22.3 36.4-14.3 56.6s26.4 34.6 48.6 34.6h16v160c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64V282h16c22.2 0 41.7-13.9 48.6-34.6s2.3-42.7-14.3-56.6zM256 64l192 160H64L256 64zm0 352c-52.9 0-96-43.1-96-96h192c0 52.9-43.1 96-96 96z"/></path></svg>
+  </a>
+
+  <!-- Copy link button -->
+  <button id="share-copy" class="share-btn cp" aria-label="Copy post link" title="Copy link">
+    <!-- clipboard svg -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path fill="white" d="M336 64h-80l-16-32H144l-16 32H48C21.5 64 0 85.5 0 112v320c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM192 400c-44.2 0-80-35.8-80-80s35.8-80 80-80 80 35.8 80 80-35.8 80-80 80z"/></path></svg>
+  </button>
+</div>
+
+<!-- toast -->
+<div id="share-toast" role="status" aria-live="polite" aria-atomic="true">Link copied!</div>
+
+<style>
+/* container */
+#floating-share {
+  position: fixed;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 9999;
+  user-select: none;
+}
+
+/* buttons */
+#floating-share .share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;   /* bigger */
+  height: 54px;  /* bigger */
+  border-radius: 50%;
+  text-decoration: none;
+  transition: transform 0.18s ease, filter 0.18s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  background: #666; /* fallback */
+}
+
+/* brand colors */
+#floating-share .fb { background: #3b5998; }
+#floating-share .tw { background: #1da1f2; }
+#floating-share .wa { background: #25d366; }
+#floating-share .em { background: #dd4b39; }
+#floating-share .cp { background: #4b5563; } /* neutral clipboard */
+
+/* svg sizing */
+#floating-share svg { width: 26px; height: 26px; }
+
+/* hover */
+#floating-share .share-btn:hover {
+  transform: scale(1.15);
+  filter: brightness(1.08);
+}
+
+/* toast */
+#share-toast {
+  position: fixed;
+  left: 80px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px);
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10000;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* show toast */
+#share-toast.show {
+  opacity: 1;
+  transform: translateY(-50%) translateX(10px);
+  pointer-events: auto;
+}
+
+/* responsive */
+@media (max-width: 420px) {
+  #floating-share .share-btn { width: 44px; height: 44px; }
+  #floating-share svg { width: 20px; height: 20px; }
+  #share-toast { left: 65px; font-size: 12px; }
+}
+</style>
+
+<script>
+(function () {
+  // find best URL for the current page/post
+  function detectUrl() {
+    // 1) try canonical link tag
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical && canonical.href) return canonical.href;
+    // 2) try og:url
+    const og = document.querySelector('meta[property="og:url"], meta[name="og:url"]');
+    if (og && og.content) return og.content;
+    // 3) try <link href> with itemprop="url"
+    const item = document.querySelector('link[itemprop="url"]');
+    if (item && item.href) return item.href;
+    // fallback
+    return window.location.href;
+  }
+
+  function openShareWindow(url, name, w = 600, h = 460) {
+    const left = (screen.width / 2) - (w / 2);
+    const top = (screen.height / 2) - (h / 2);
+    window.open(url, name, `toolbar=0,status=0,width=${w},height=${h},top=${top},left=${left}`);
+  }
+
+  function showToast(msg = 'Link copied!', ms = 1400) {
+    const toast = document.getElementById('share-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('show'), ms);
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showToast('Link copied!'); }
+    catch { showToast('Copy failed'); }
+    document.body.removeChild(ta);
+  }
+
+  // main
+  document.addEventListener('DOMContentLoaded', function () {
+    const url = detectUrl();
+    const encoded = encodeURIComponent(url);
+    const buttons = document.querySelectorAll('#floating-share [data-share]');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const kind = btn.getAttribute('data-share');
+
+        if (kind === 'facebook') {
+          const href = 'https://www.facebook.com/sharer/sharer.php?u=' + encoded;
+          openShareWindow(href, 'fbshare');
+        } else if (kind === 'twitter') {
+          const text = encodeURIComponent(document.title || '');
+          const href = 'https://twitter.com/intent/tweet?url=' + encoded + '&text=' + text;
+          openShareWindow(href, 'twshare');
+        } else if (kind === 'whatsapp') {
+          // whatsapp mobile app or web
+          const href = 'https://api.whatsapp.com/send?text=' + encoded;
+          // on desktop you may prefer wa.me or web.whatsapp.com; API works
+          openShareWindow(href, 'washare', 740, 700);
+        } else if (kind === 'email') {
+          const subj = encodeURIComponent('I wanted to share this with you');
+          const body = encodeURIComponent((document.title ? document.title + '\n' : '') + url);
+          location.href = 'mailto:?subject=' + subj + '&body=' + body;
+        }
+      });
+    });
+
+    // copy button
+    const copyBtn = document.getElementById('share-copy');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const finalUrl = url;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(finalUrl).then(() => showToast('Link copied!'), () => fallbackCopy(finalUrl));
+        } else {
+          fallbackCopy(finalUrl);
+        }
+      });
+    }
+  });
+})();
+</script>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
+          <b:widget id='HTML12' locked='false' title='Search' type='HTML' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='content'><![CDATA[<!-- Champak's Search Gadget — Gadget-ready (paste into Layout → Add a Gadget → HTML/JavaScript) -->
 <style>
@@ -1415,91 +1850,192 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
     position: relative;
     z-index: 9999;
     font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    max-width:1000px;
+    max-width: 1000px;
     width: calc(100% - 24px);
     margin: 12px auto;
     padding: 12px;
     background: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(11,99,212,0.06);
-    border: 1px solid rgba(11,99,212,0.06);
+    box-shadow: 0 6px 18px rgba(11, 99, 212, 0.06);
+    border: 1px solid rgba(11, 99, 212, 0.06);
     color: #222;
   }
 
-  .cs-controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
-
-  input[type="search"], select {
-    padding:10px 12px;
-    border-radius:8px;
-    border:1px solid #e6e9ef;
-    font-size:0.95rem;
-    outline:none;
-    min-width:160px;
-    color:#0b63d4;
-    background-color:#fdfcf9;
-    font-weight:500;
+  .cs-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
   }
 
-  input[type="search"]::placeholder { color:#888; opacity:0.85; }
-  input[type="search"]:focus, select:focus { box-shadow:0 0 0 3px rgba(11,99,212,0.15); border-color:#0b63d4; }
+  input[type="search"],
+  select {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #e6e9ef;
+    font-size: 0.95rem;
+    outline: none;
+    min-width: 160px;
+    color: #0b63d4;
+    background-color: #fdfcf9;
+    font-weight: 500;
+  }
+
+  input[type="search"]::placeholder {
+    color: #888;
+    opacity: 0.85;
+  }
+
+  input[type="search"]:focus,
+  select:focus {
+    box-shadow: 0 0 0 3px rgba(11, 99, 212, 0.15);
+    border-color: #0b63d4;
+  }
 
   button.cs-btn {
-    background: linear-gradient(180deg,#0b63d4,#084fb2);
-    color:#fff;
-    border:none;
-    padding:10px 14px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:600;
-    box-shadow:0 6px 12px rgba(11,99,212,0.12);
+    background: linear-gradient(180deg, #0b63d4, #084fb2);
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 6px 12px rgba(11, 99, 212, 0.12);
   }
 
-  .cs-stats { margin-bottom:10px; color:#444; font-size:0.95rem; }
+  .cs-stats {
+    margin-bottom: 10px;
+    color: #444;
+    font-size: 0.95rem;
+  }
 
   /* Results area */
   #cs-results {
-    max-height:600px;
-    overflow-y:auto;
-    padding-right:6px;
-    display:block;
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 6px;
+    display: block;
   }
 
-  #cs-results::-webkit-scrollbar { width:8px; }
-  #cs-results::-webkit-scrollbar-track { background:#f1f1f1; border-radius:8px; }
-  #cs-results::-webkit-scrollbar-thumb { background:#0b63d4; border-radius:8px; }
-  #cs-results::-webkit-scrollbar-thumb:hover { background:#084fb2; }
+  #cs-results::-webkit-scrollbar {
+    width: 8px;
+  }
 
-  .cs-results-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
+  #cs-results::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+  }
+
+  #cs-results::-webkit-scrollbar-thumb {
+    background: #0b63d4;
+    border-radius: 8px;
+  }
+
+  #cs-results::-webkit-scrollbar-thumb:hover {
+    background: #084fb2;
+  }
+
+  .cs-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+  }
 
   .cs-card {
-    background:linear-gradient(180deg,#fff,#fbfdff);
-    border-radius:10px;
-    padding:12px;
-    border:1px solid rgba(11,99,212,0.08);
-    transition:transform .18s ease, box-shadow .18s ease;
-    overflow:hidden;
+    background: linear-gradient(180deg, #fff, #fbfdff);
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid rgba(11, 99, 212, 0.08);
+    transition: transform .18s ease, box-shadow .18s ease;
+    overflow: hidden;
   }
 
-  .cs-card:hover { transform:translateY(-6px); box-shadow:0 18px 34px rgba(11,99,212,0.08); }
-  .cs-card h3 { margin:0 0 6px 0; font-size:1.05rem; color:#0b63d4; line-height:1.25; }
-  .cs-meta { font-size:0.82rem; color:#6b7280; margin-bottom:8px; }
-  .cs-summary { color:#333; font-size:0.95rem; margin-bottom:8px; }
-  .cs-url { font-size:0.8rem; color:#084fb2; word-break:break-all; margin-bottom:6px; }
-  .cs-url a { color:#084fb2; text-decoration:underline; }
-  .cs-url a:hover { text-decoration:none; }
-  .cs-tag { display:inline-block; background:rgba(255,153,51,0.12); color:#c75b00; padding:4px 8px; border-radius:999px; margin-right:6px; margin-bottom:6px; font-weight:600; }
+  .cs-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 34px rgba(11, 99, 212, 0.08);
+  }
+
+  .cs-card h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.05rem;
+    color: #0b63d4;
+    line-height: 1.25;
+  }
+
+  .cs-meta {
+    font-size: 0.82rem;
+    color: #6b7280;
+    margin-bottom: 8px;
+  }
+
+  .cs-summary {
+    color: #333;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+
+  .cs-url {
+    font-size: 0.8rem;
+    color: #084fb2;
+    word-break: break-all;
+    margin-bottom: 6px;
+  }
+
+  .cs-url a {
+    color: #084fb2;
+    text-decoration: underline;
+  }
+
+  .cs-url a:hover {
+    text-decoration: none;
+  }
+
+  .cs-tag {
+    display: inline-block;
+    background: rgba(255, 153, 51, 0.12);
+    color: #c75b00;
+    padding: 4px 8px;
+    border-radius: 999px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
 
   /* Small screens */
-  @media (max-width:520px){
-    #champak-search{padding:10px;border-radius:8px}
-    .cs-controls{gap:6px}
-    input[type="search"]{min-width:120px;flex:1 1 100%}
-    select{flex:1 1 48%}
+  @media (max-width:520px) {
+    #champak-search {
+      padding: 10px;
+      border-radius: 8px
+    }
+
+    .cs-controls {
+      gap: 6px
+    }
+
+    input[type="search"] {
+      min-width: 120px;
+      flex: 1 1 100%
+    }
+
+    select {
+      flex: 1 1 48%
+    }
   }
 
   /* Debug banner (hidden unless printed by script) */
-  #cs-debug { display:none; font-size:0.9rem; color:#b91c1c; margin-bottom:8px; }
-  #cs-loading { color:#666; font-size:0.95rem; margin-bottom:8px; }
+  #cs-debug {
+    display: none;
+    font-size: 0.9rem;
+    color: #b91c1c;
+    margin-bottom: 8px;
+  }
+
+  #cs-loading {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
 </style>
 
 <div id="champak-search" aria-label="Explore posts — Champak's Search">
@@ -1507,8 +2043,11 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
   <div id="cs-loading" aria-live="polite">Initializing widget…</div>
 
   <div class="cs-controls" id="cs-controls" aria-hidden="true">
-    <input id="cs-search-input" type="search" placeholder="Search posts by title, summary or topic" aria-label="Search posts" />
-    <select id="cs-filter-label" aria-label="Filter by topic"><option value="" />All topics</select>
+    <input id="cs-search-input" type="search" placeholder="Search posts by title, summary or topic"
+      aria-label="Search posts" />
+    <select id="cs-filter-label" aria-label="Filter by topic">
+      <option value="" />All topics
+    </select>
     <select id="cs-sort" aria-label="Sort posts">
       <option value="date-desc" />Newest first
       <option value="date-asc" />Oldest first
@@ -1524,255 +2063,264 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 </div>
 
 <script>
-/* Champak's Search — robust visibility + paginated fetch (500 per page)
-   Improvements:
-   - fixed option tags
-   - safer DOM-based card creation (reduces injection risk)
-   - placeholder selector fixed
-*/
-(function(){
-  function ready(fn){
-    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
-    else fn();
-  }
-
-  ready(function(){
-    const resultsEl = document.getElementById('cs-results');
-    const countEl = document.getElementById('cs-count');
-    const searchInput = document.getElementById('cs-search-input');
-    const filterLabel = document.getElementById('cs-filter-label');
-    const sortSelect = document.getElementById('cs-sort');
-    const refreshBtn = document.getElementById('cs-refresh');
-    const controlsWrap = document.getElementById('cs-controls');
-    const statsWrap = document.getElementById('cs-stats');
-    const debugEl = document.getElementById('cs-debug');
-    const loadingEl = document.getElementById('cs-loading');
-
-    const container = document.getElementById('champak-search');
-    if(container){
-      container.style.display = 'block';
-      container.style.visibility = 'visible';
-      container.style.zIndex = 9999;
+  /* Champak's Search — robust visibility + paginated fetch (500 per page)
+     Improvements:
+     - fixed option tags
+     - safer DOM-based card creation (reduces injection risk)
+     - placeholder selector fixed
+  */
+  (function () {
+    function ready(fn) {
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+      else fn();
     }
 
-    const CACHE_KEY = 'champak_posts_cache_plain_v2';
-    const CACHE_TTL_MS = 1000 * 60 * 15;
-    let posts = [];
-    let labelsSet = new Set();
+    ready(function () {
+      const resultsEl = document.getElementById('cs-results');
+      const countEl = document.getElementById('cs-count');
+      const searchInput = document.getElementById('cs-search-input');
+      const filterLabel = document.getElementById('cs-filter-label');
+      const sortSelect = document.getElementById('cs-sort');
+      const refreshBtn = document.getElementById('cs-refresh');
+      const controlsWrap = document.getElementById('cs-controls');
+      const statsWrap = document.getElementById('cs-stats');
+      const debugEl = document.getElementById('cs-debug');
+      const loadingEl = document.getElementById('cs-loading');
 
-    function escapeHtml(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-    function htmlToPlainText(html){
-      const d=document.createElement('div'); d.innerHTML=html||'';
-      const bad=d.querySelectorAll('script,style,iframe,object,embed'); bad.forEach(n=>n.remove());
-      return (d.textContent||d.innerText||'').replace(/\s+/g,' ').trim();
-    }
-    function truncateText(text,maxChars){ return text && text.length>maxChars ? text.slice(0,maxChars).trim()+'…' : text; }
-    function highlightPlain(text,q){
-      if(!q) return escapeHtml(text);
-      try{
-        const safeQ=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-        const re=new RegExp('('+safeQ+')','ig');
-        return escapeHtml(text).replace(re,'<mark>$1</mark>');
-      }catch(e){return escapeHtml(text);}
-    }
-
-    async function fetchJsonTry(url){ const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); }
-
-    function makeBaseFeedUrls(){
-      const loc=window.location;
-      const baseOrigin = loc.origin.endsWith('/') ? loc.origin : loc.origin + '/';
-      return [
-        '/feeds/posts/default?alt=json',
-        baseOrigin + 'feeds/posts/default?alt=json',
-        window.location.href.replace(/\/[^\/]*$/,'/') + 'feeds/posts/default?alt=json'
-      ];
-    }
-
-    async function fetchAllPosts(){
-      loadingEl.textContent = 'Loading posts…';
-      loadingEl.style.display = '';
-      debugEl.style.display = 'none';
-      controlsWrap.setAttribute('aria-hidden','true');
-      try{
-        const cached = JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
-        if(cached && (Date.now()-cached.t < CACHE_TTL_MS) && cached.data){
-          hydratePosts(cached.data);
-          loadingEl.style.display = 'none';
-          return;
-        }
-      }catch(e){}
-
-      const baseUrls = makeBaseFeedUrls();
-      let lastError = null;
-      for(const base of baseUrls){
-        try{
-          const allEntries = await fetchPagedFeed(base);
-          const data = { feed: { entry: allEntries } };
-          try{ localStorage.setItem(CACHE_KEY, JSON.stringify({t:Date.now(), data})); }catch(e){}
-          hydratePosts(data);
-          loadingEl.style.display = 'none';
-          return;
-        }catch(err){
-          lastError = err;
-        }
+      const container = document.getElementById('champak-search');
+      if (container) {
+        container.style.display = 'block';
+        container.style.visibility = 'visible';
+        container.style.zIndex = 9999;
       }
-      loadingEl.textContent = 'Unable to load posts. Open console for details.';
-      debugEl.style.display = 'block';
-      debugEl.textContent = 'Feed error: ' + String(lastError);
-      resultsEl.innerHTML = '<div style="padding:12px;color:crimson">Unable to load posts. ('+escapeHtml(String(lastError))+')</div>';
-      if(countEl) countEl.textContent = '0';
-    }
 
-    async function fetchPagedFeed(baseUrl){
-      const pageSize = 500;
-      let startIndex = 1;
-      let allEntries = [];
-      while(true){
-        const sep = baseUrl.includes('?') ? '&' : '?';
-        const url = `${baseUrl}${sep}max-results=${pageSize}&start-index=${startIndex}&alt=json`;
-        const json = await fetchJsonTry(url);
-        const entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
-        if(entries.length === 0) break;
-        allEntries = allEntries.concat(entries);
-        loadingEl.textContent = `Loaded ${allEntries.length} posts so far…`;
-        if(entries.length < pageSize) break;
-        startIndex += pageSize;
-        await new Promise(res => setTimeout(res, 120));
+      const CACHE_KEY = 'champak_posts_cache_plain_v2';
+      const CACHE_TTL_MS = 1000 * 60 * 15;
+      let posts = [];
+      let labelsSet = new Set();
+
+      function escapeHtml(s) {
+        // return "Me";
+        let searchdd = s;
+        console.log("s", searchdd);
+        console.log("&position = ",searchdd.search("&"));
+        return (s || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
       }
-      return allEntries;
-    }
+      function htmlToPlainText(html) {
+        const d = document.createElement('div'); d.innerHTML = html || '';
+        const bad = d.querySelectorAll('script,style,iframe,object,embed'); bad.forEach(n => n.remove());
+        return (d.textContent || d.innerText || '').replace(/\s+/g, ' ').trim();
+      }
+      function truncateText(text, maxChars) { return text && text.length > maxChars ? text.slice(0, maxChars).trim() + '…' : text; }
+      function highlightPlain(text, q) {
+        console.log("q", q);
+        if (!q) return escapeHtml(text);
+        try {
+          console.log("Here");
+          const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const re = new RegExp('(' + safeQ + ')', 'ig');
 
-    function hydratePosts(data){
-      const items = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
-      posts = items.map(entry=>{
-        const title = entry.title ? entry.title.$t : '(no title)';
-        const url = (entry.link||[]).find(l=>l.rel==='alternate')?.href || (entry.link && entry.link[0] && entry.link[0].href) || '#';
-        const published = entry.published ? entry.published.$t : '';
-        const contentHtml = (entry.summary && entry.summary.$t) || (entry.content && entry.content.$t) || '';
-        const contentPlain = htmlToPlainText(contentHtml);
-        const labels = (entry.category||[]).map(c=>c.term).filter(Boolean);
-        labels.forEach(l=>labelsSet.add(l));
-        return { title, url, published, contentPlain, labels };
-      });
+          return escapeHtml(text).replace(re, '<mark>$1</mark>');
+        } catch (e) { return escapeHtml(text); }
+      }
 
-      controlsWrap.style.display = 'flex';
-      statsWrap.style.display = 'block';
-      controlsWrap.setAttribute('aria-hidden','false');
+      async function fetchJsonTry(url) { const r = await fetch(url); if (!r.ok) throw new Error('HTTP ' + r.status); return await r.json(); }
 
-      populateLabelFilter();
-      renderPosts();
-    }
+      function makeBaseFeedUrls() {
+        const loc = window.location;
+        const baseOrigin = loc.origin.endsWith('/') ? loc.origin : loc.origin + '/';
+        return [
+          '/feeds/posts/default?alt=json',
+          baseOrigin + 'feeds/posts/default?alt=json',
+          window.location.href.replace(/\/[^\/]*$/, '/') + 'feeds/posts/default?alt=json'
+        ];
+      }
 
-    function populateLabelFilter(){
-      const prev = filterLabel.value || '';
-      const labels = Array.from(labelsSet).sort((a,b)=>a.localeCompare(b));
-      // build options safely
-      filterLabel.innerHTML = '<option value="">All topics</option>' + labels.map(l=>`<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
-      if(prev) filterLabel.value = prev;
-    }
+      async function fetchAllPosts() {
+        loadingEl.textContent = 'Loading posts…';
+        loadingEl.style.display = '';
+        debugEl.style.display = 'none';
+        controlsWrap.setAttribute('aria-hidden', 'true');
+        try {
+          const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+          if (cached && (Date.now() - cached.t < CACHE_TTL_MS) && cached.data) {
+            hydratePosts(cached.data);
+            loadingEl.style.display = 'none';
+            return;
+          }
+        } catch (e) { }
 
-    function clearChildren(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+        const baseUrls = makeBaseFeedUrls();
+        let lastError = null;
+        for (const base of baseUrls) {
+          try {
+            const allEntries = await fetchPagedFeed(base);
+            const data = { feed: { entry: allEntries } };
+            try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data })); } catch (e) { }
+            hydratePosts(data);
+            loadingEl.style.display = 'none';
+            return;
+          } catch (err) {
+            lastError = err;
+          }
+        }
+        loadingEl.textContent = 'Unable to load posts. Open console for details.';
+        debugEl.style.display = 'block';
+        debugEl.textContent = 'Feed error: ' + String(lastError);
+        resultsEl.innerHTML = '<div style="padding:12px;color:crimson">Unable to load posts. (' + escapeHtml(String(lastError)) + ')</div>';
+        if (countEl) countEl.textContent = '0';
+      }
 
-    function createCardNode(p, q){
-      const card = document.createElement('article');
-      card.className = 'cs-card';
+      async function fetchPagedFeed(baseUrl) {
+        const pageSize = 500;
+        let startIndex = 1;
+        let allEntries = [];
+        while (true) {
+          const sep = baseUrl.includes('?') ? '&' : '?';
+          const url = `${baseUrl}${sep}max-results=${pageSize}&start-index=${startIndex}&alt=json`;
+          const json = await fetchJsonTry(url);
+          const entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
+          if (entries.length === 0) break;
+          allEntries = allEntries.concat(entries);
+          loadingEl.textContent = `Loaded ${allEntries.length} posts so far…`;
+          if (entries.length < pageSize) break;
+          startIndex += pageSize;
+          await new Promise(res => setTimeout(res, 120));
+        }
+        return allEntries;
+      }
 
-      const h3 = document.createElement('h3');
-      const a = document.createElement('a');
-      a.href = p.url || '#';
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.title = p.title;
-      a.innerHTML = highlightPlain(p.title, q);
-      h3.appendChild(a);
-
-      const meta = document.createElement('div');
-      meta.className = 'cs-meta';
-      meta.textContent = p.published ? new Date(p.published).toLocaleDateString() : '';
-
-      const summary = document.createElement('div');
-      summary.className = 'cs-summary';
-      summary.innerHTML = highlightPlain(truncateText(p.contentPlain, 220), q);
-
-      const urlDiv = document.createElement('div');
-      urlDiv.className = 'cs-url';
-      const urlA = document.createElement('a');
-      urlA.href = p.url || '#';
-      urlA.target = '_blank';
-      urlA.rel = 'noopener noreferrer';
-      urlA.textContent = p.url || '';
-      urlDiv.appendChild(urlA);
-
-      card.appendChild(h3);
-      card.appendChild(meta);
-      card.appendChild(summary);
-      card.appendChild(urlDiv);
-
-      if(p.labels && p.labels.length){
-        const labelsWrap = document.createElement('div');
-        labelsWrap.className = 'cs-labels';
-        p.labels.forEach(l=>{
-          const span = document.createElement('span');
-          span.className = 'cs-tag';
-          span.textContent = l;
-          labelsWrap.appendChild(span);
+      function hydratePosts(data) {
+        const items = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
+        posts = items.map(entry => {
+          const title = entry.title ? entry.title.$t : '(no title)';
+          const url = (entry.link || []).find(l => l.rel === 'alternate')?.href || (entry.link && entry.link[0] && entry.link[0].href) || '#';
+          const published = entry.published ? entry.published.$t : '';
+          const contentHtml = (entry.summary && entry.summary.$t) || (entry.content && entry.content.$t) || '';
+          const contentPlain = htmlToPlainText(contentHtml);
+          const labels = (entry.category || []).map(c => c.term).filter(Boolean);
+          labels.forEach(l => labelsSet.add(l));
+          return { title, url, published, contentPlain, labels };
         });
-        card.appendChild(labelsWrap);
+
+        controlsWrap.style.display = 'flex';
+        statsWrap.style.display = 'block';
+        controlsWrap.setAttribute('aria-hidden', 'false');
+
+        populateLabelFilter();
+        renderPosts();
       }
 
-      return card;
-    }
-
-    function renderPosts(){
-      const q = (searchInput.value||'').trim().toLowerCase();
-      const activeLabel = filterLabel.value;
-      let list = posts.slice();
-      list = list.filter(p=>{
-        if(activeLabel && (!p.labels || p.labels.indexOf(activeLabel)===-1)) return false;
-        if(!q) return true;
-        const hay = (p.title + ' ' + p.contentPlain + ' ' + (p.labels||[]).join(' ')).toLowerCase();
-        return hay.indexOf(q) !== -1;
-      });
-      const sortVal = sortSelect.value || 'date-desc';
-      list.sort((a,b)=>{
-        if(sortVal==='title-asc') return a.title.localeCompare(b.title);
-        if(sortVal==='title-desc') return b.title.localeCompare(a.title);
-        if(sortVal==='date-asc') return new Date(a.published) - new Date(b.published);
-        return new Date(b.published) - new Date(a.published);
-      });
-      countEl.textContent = list.length;
-      clearChildren(resultsEl);
-      if(!list.length){
-        const msg = document.createElement('div');
-        msg.style.padding = '12px';
-        msg.style.color = '#666';
-        msg.textContent = 'No posts match your search or filter.';
-        resultsEl.appendChild(msg);
-        return;
+      function populateLabelFilter() {
+        const prev = filterLabel.value || '';
+        const labels = Array.from(labelsSet).sort((a, b) => a.localeCompare(b));
+        // build options safely
+        filterLabel.innerHTML = '<option value="">All topics</option>' + labels.map(l => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
+        if (prev) filterLabel.value = prev;
       }
-      const frag = document.createDocumentFragment();
-      list.forEach(p => {
-        const card = createCardNode(p, q);
-        frag.appendChild(card);
+
+      function clearChildren(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+
+      function createCardNode(p, q) {
+        const card = document.createElement('article');
+        card.className = 'cs-card';
+
+        const h3 = document.createElement('h3');
+        const a = document.createElement('a');
+        a.href = p.url || '#';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.title = p.title;
+        a.innerHTML = highlightPlain(p.title, q);
+        h3.appendChild(a);
+
+        const meta = document.createElement('div');
+        meta.className = 'cs-meta';
+        meta.textContent = p.published ? new Date(p.published).toLocaleDateString() : '';
+
+        const summary = document.createElement('div');
+        summary.className = 'cs-summary';
+        summary.innerHTML = highlightPlain(truncateText(p.contentPlain, 220), q);
+
+        const urlDiv = document.createElement('div');
+        urlDiv.className = 'cs-url';
+        const urlA = document.createElement('a');
+        urlA.href = p.url || '#';
+        urlA.target = '_blank';
+        urlA.rel = 'noopener noreferrer';
+        urlA.textContent = p.url || '';
+        urlDiv.appendChild(urlA);
+
+        card.appendChild(h3);
+        card.appendChild(meta);
+        card.appendChild(summary);
+        card.appendChild(urlDiv);
+
+        if (p.labels && p.labels.length) {
+          const labelsWrap = document.createElement('div');
+          labelsWrap.className = 'cs-labels';
+          p.labels.forEach(l => {
+            const span = document.createElement('span');
+            span.className = 'cs-tag';
+            span.textContent = l;
+            labelsWrap.appendChild(span);
+          });
+          card.appendChild(labelsWrap);
+        }
+
+        return card;
+      }
+
+      function renderPosts() {
+        const q = (searchInput.value || '').trim().toLowerCase();
+        const activeLabel = filterLabel.value;
+        let list = posts.slice();
+        list = list.filter(p => {
+          if (activeLabel && (!p.labels || p.labels.indexOf(activeLabel) === -1)) return false;
+          if (!q) return true;
+          const hay = (p.title + ' ' + p.contentPlain + ' ' + (p.labels || []).join(' ')).toLowerCase();
+          return hay.indexOf(q) !== -1;
+        });
+        const sortVal = sortSelect.value || 'date-desc';
+        list.sort((a, b) => {
+          if (sortVal === 'title-asc') return a.title.localeCompare(b.title);
+          if (sortVal === 'title-desc') return b.title.localeCompare(a.title);
+          if (sortVal === 'date-asc') return new Date(a.published) - new Date(b.published);
+          return new Date(b.published) - new Date(a.published);
+        });
+        countEl.textContent = list.length;
+        clearChildren(resultsEl);
+        if (!list.length) {
+          const msg = document.createElement('div');
+          msg.style.padding = '12px';
+          msg.style.color = '#666';
+          msg.textContent = 'No posts match your search or filter.';
+          resultsEl.appendChild(msg);
+          return;
+        }
+        const frag = document.createDocumentFragment();
+        list.forEach(p => {
+          const card = createCardNode(p, q);
+          frag.appendChild(card);
+        });
+        resultsEl.appendChild(frag);
+      }
+
+      let tId = 0;
+      const debounceTime = 220;
+      searchInput.addEventListener('input', () => { clearTimeout(tId); tId = setTimeout(renderPosts, debounceTime); });
+      filterLabel.addEventListener('change', renderPosts);
+      sortSelect.addEventListener('change', renderPosts);
+      refreshBtn.addEventListener('click', () => { try { localStorage.removeItem(CACHE_KEY); } catch (e) { } fetchAllPosts(); });
+
+      fetchAllPosts().catch(err => {
+        loadingEl.textContent = 'Error loading posts. See console.';
+        console.error('[champak-search] load error', err);
+        debugEl.style.display = 'block';
+        debugEl.textContent = String(err);
       });
-      resultsEl.appendChild(frag);
-    }
-
-    let tId = 0;
-    const debounceTime = 220;
-    searchInput.addEventListener('input', ()=>{ clearTimeout(tId); tId = setTimeout(renderPosts, debounceTime); });
-    filterLabel.addEventListener('change', renderPosts);
-    sortSelect.addEventListener('change', renderPosts);
-    refreshBtn.addEventListener('click', ()=>{ try{ localStorage.removeItem(CACHE_KEY); }catch(e){} fetchAllPosts(); });
-
-    fetchAllPosts().catch(err => {
-      loadingEl.textContent = 'Error loading posts. See console.';
-      console.error('[champak-search] load error', err);
-      debugEl.style.display = 'block';
-      debugEl.textContent = String(err);
     });
-  });
-})();
+  })();
 </script>]]></b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
@@ -2925,8 +3473,285 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
           </b:widget>
           <b:widget id='HTML9' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<a target="Varanasi Software Junction" href="https://www.blogger.com/follow.g?view=FOLLOW&blogID=146130669343976599">
-<h2 style="background-color:teal; color:pink; border-radius:10px; padding:10px;box-shadow: 10px 10px 5px grey;">Click here to follow this blog</h2></a>]]></b:widget-setting>
+              <b:widget-setting name='content'><![CDATA[<!-- Floating Follow, WhatsApp & Today's Tip Buttons (JSONP fetch + clear "no tip" handling) -->
+<div id="floating-buttons">
+  <!-- Desktop Buttons -->
+  <a target="_blank"
+     href="https://www.blogger.com/follow.g?view=FOLLOW&blogID=146130669343976599"
+     class="floating-btn follow-btn desktop-btn">
+     👉 Follow This Blog
+  </a>
+
+  <a target="_blank"
+     href="https://wa.me/919335874326?text=Hi%20Champak%20Roy%2C%20I%20came%20from%20your%20blog!"
+     class="floating-btn whatsapp-btn desktop-btn">
+     💬 Contact on WhatsApp
+  </a>
+
+  <a href="javascript:void(0)"
+     id="todays-tip-btn"
+     class="floating-btn tip-btn desktop-btn"
+     aria-label="Today's Tip">
+     💡 Today's Tip
+  </a>
+
+  <!-- Mobile Icon Buttons (horizontal) -->
+  <div class="mobile-btn mobile-icons" aria-hidden="false">
+    <a target="_blank"
+       href="https://www.blogger.com/follow.g?view=FOLLOW&blogID=146130669343976599"
+       class="floating-icon follow-icon">
+       ⭐
+    </a>
+
+    <a target="_blank"
+       href="https://wa.me/919335874326?text=Hi%20Champak%20Roy%2C%20I%20came%20from%20your%20blog!"
+       class="floating-icon whatsapp-icon">
+       💬
+    </a>
+
+    <a href="javascript:void(0)"
+       id="todays-tip-icon"
+       class="floating-icon tip-icon"
+       aria-label="Today's Tip">
+       💡
+    </a>
+  </div>
+</div>
+
+<style>
+/* Container */
+#floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+}
+
+/* Full-width buttons (Desktop) */
+.floating-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  box-shadow: 6px 6px 12px rgba(0,0,0,0.3);
+  transition: transform 0.18s ease, background-color 0.18s ease;
+  animation: pulse 2s infinite;
+}
+
+/* Specific button colors */
+.follow-btn { background-color: teal; color: pink; }
+.follow-btn:hover { background-color: #008080; transform: scale(1.12); }
+
+.whatsapp-btn { background-color: #25D366; }
+.whatsapp-btn:hover { background-color: #1ebe5d; transform: scale(1.12); }
+
+.tip-btn { background-color: #ff8c00; } /* orange for tip */
+.tip-btn:hover { background-color: #e07b00; transform: scale(1.12); }
+
+/* Round Icons (Mobile) */
+.floating-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.18s ease, background-color 0.18s ease;
+  animation: pulse 2s infinite;
+}
+
+.follow-icon { background-color: teal; }
+.whatsapp-icon { background-color: #25D366; }
+.tip-icon { background-color: #ff8c00; }
+
+.floating-icon:hover { transform: scale(1.18); }
+
+/* Pulse animation */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* 📱 Mobile Responsive: show icons (horizontal) */
+@media (max-width: 600px) {
+  .desktop-btn { display: none; }
+  .mobile-btn { display: flex; }
+  .mobile-icons {
+    flex-direction: row;
+    gap: 12px;
+  }
+  #floating-buttons {
+    bottom: 15px;
+    right: 15px;
+    gap: 0;
+  }
+}
+
+/* 💻 Desktop: show text buttons */
+@media (min-width: 601px) {
+  .desktop-btn { display: inline-block; }
+  .mobile-btn { display: none; }
+}
+</style>
+
+<script>
+(function () {
+  const blogId = '146130669343976599';
+  const label = 'python';
+
+  // Build base feed URL (we will request JSONP)
+  const baseFeedUrl = `https://www.blogger.com/feeds/${blogId}/posts/default/-/${encodeURIComponent(label)}`;
+
+  // JSONP fetch helper that returns a Promise which resolves with the JSON object
+  function fetchJSONP(url, timeoutMs = 10000) {
+    alert('Please wait while we fetch a tip for you...');
+    return new Promise((resolve, reject) => {
+      const cbName = 'cb_blogger_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+      const script = document.createElement('script');
+
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('Feed request timed out'));
+      }, timeoutMs);
+
+      function cleanup() {
+        clearTimeout(timer);
+        if (script.parentNode) script.parentNode.removeChild(script);
+        try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+      }
+
+      window[cbName] = function (data) {
+        cleanup();
+        resolve(data);
+      };
+
+      // use alt=json-in-script and callback param as required by Blogger JSONP
+      const sep = url.indexOf('?') === -1 ? '?' : '&';
+      script.src = url + sep + 'alt=json-in-script&callback=' + cbName;
+      script.onerror = function () {
+        cleanup();
+        reject(new Error('Feed script failed to load'));
+      };
+
+      document.head.appendChild(script);
+    });
+  }
+
+  // Extract entries (title + alternate link)
+  function entriesFromFeed(json) {
+    try {
+      const entries = json.feed && json.feed.entry ? json.feed.entry : [];
+      return entries.map(e => {
+        const title = (e.title && e.title.$t) ? e.title.$t : '(Untitled)';
+        let href = '';
+        if (e.link && Array.isArray(e.link)) {
+          const alt = e.link.find(l => l.rel === 'alternate');
+          if (alt) href = alt.href;
+        }
+        if (!href && e.id && e.id.$t) href = e.id.$t;
+        return { title, href };
+      }).filter(x => x.href);
+    } catch (err) {
+      return [];
+    }
+  }
+
+  // Fetch a random tip entry via JSONP
+  async function fetchRandomTip() {
+    const url = baseFeedUrl; // JSONP will be appended by helper
+    const json = await fetchJSONP(url);
+    const entries = entriesFromFeed(json);
+    if (!entries.length) throw new Error('No tip found');
+    const idx = Math.floor(Math.random() * entries.length);
+    return entries[idx];
+  }
+
+  // show friendly messages
+  function showMessage(text) {
+    // prefer non-blocking native toast-like alert if available, otherwise fallback to alert()
+    // We'll use a temporary small toast element
+    const id = 'floating-tip-toast';
+    let el = document.getElementById(id);
+    if (!el) {
+      el = document.createElement('div');
+      el.id = id;
+      el.style.position = 'fixed';
+      el.style.bottom = '90px';
+      el.style.right = '20px';
+      el.style.maxWidth = '320px';
+      el.style.background = 'rgba(0,0,0,0.85)';
+      el.style.color = '#fff';
+      el.style.padding = '10px 14px';
+      el.style.borderRadius = '8px';
+      el.style.fontFamily = 'Arial, sans-serif';
+      el.style.fontSize = '14px';
+      el.style.zIndex = '10000';
+      el.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 200ms ease, transform 200ms ease';
+      document.body.appendChild(el);
+    }
+    el.textContent = text;
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+    clearTimeout(el._hideTimer);
+    el._hideTimer = setTimeout(() => {
+      el.style.opacity = '0';
+      el._hideTimer2 = setTimeout(() => {
+        try { el.parentNode && el.parentNode.removeChild(el); } catch (e) {}
+      }, 220);
+    }, 3000);
+  }
+
+  // click handler
+  async function onTipClick(ev) {
+    ev && ev.preventDefault();
+    const btn = ev && ev.currentTarget;
+    if (btn) {
+      btn.style.transform = 'scale(0.95)';
+      setTimeout(() => (btn.style.transform = ''), 150);
+    }
+    try {
+      showMessage('Loading tip...');
+      const entry = await fetchRandomTip();
+      if (entry && entry.href) {
+        // open in new tab
+        window.open(entry.href, '_blank');
+      } else {
+        showMessage('No tip found');
+      }
+    } catch (err) {
+      // Explicitly show "No tip found" when that's the message
+      if (err && err.message && err.message.toLowerCase().includes('no tip')) {
+        showMessage('No tip found');
+      } else {
+        showMessage('Could not load tip. Try again later.');
+        console.error('Tip fetch error:', err);
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const desktopBtn = document.getElementById('todays-tip-btn');
+    const mobileBtn = document.getElementById('todays-tip-icon');
+    if (desktopBtn) desktopBtn.addEventListener('click', onTipClick);
+    if (mobileBtn) mobileBtn.addEventListener('click', onTipClick);
+  });
+})();
+</script>]]></b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
   <b:include name='widget-title'/>
@@ -2954,296 +3779,6 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
           </b:widget>
         </b:section>
         <b:section class='sidebar common-widget' id='sidebar2' name='Sidebar Right (B)' showaddelement='yes'>
-          <b:widget id='HTML2' locked='false' title='' type='HTML' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- START: Share Widget — Hardened working More menu (paste whole block) -->
-<style>
-  :root{--sw-accent:#0b63d4;--sw-accent2:#094ea0}
-  .share-widget{--bg:#fff;--text:#0b1b2b;position:fixed;right:18px;top:50%;transform:translateX(30px) translateY(-50%);z-index:12000;
-    display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;border:1.5px solid rgba(11,99,212,0.10);
-    background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,250,250,0.98));box-shadow:0 12px 36px rgba(7,24,48,0.12);
-    will-change:transform,opacity;opacity:0;max-height:88vh;overflow:auto;min-width:220px;box-sizing:border-box;}
-  .share-widget.revealed{animation:sw-slide-in .42s cubic-bezier(.2,.9,.2,1) forwards}
-  @keyframes sw-slide-in{from{transform:translateX(30px) translateY(-50%);opacity:0}60%{transform:translateX(-6px) translateY(-50%);opacity:1}to{transform:translateX(0) translateY(-50%);opacity:1}}
-  .sw-row{display:flex;gap:10px;align-items:center;flex-wrap:nowrap}
-  .share-btn{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;background:var(--bg);border:1px solid rgba(11,99,212,0.14);cursor:pointer;font-weight:600;white-space:nowrap}
-  .share-icon{width:18px;height:18px;flex:0 0 18px;display:inline-block}
-  .sw-hide{background:transparent;border:1px solid rgba(11,99,212,0.12);padding:8px;border-radius:8px;cursor:pointer;font-size:13px}
-  .share-copy{position:relative}
-  .share-tooltip{position:absolute;top:-36px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:6px 10px;border-radius:6px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .12s}
-  .share-copy.show .share-tooltip{opacity:1;pointer-events:auto}
-
-  /* More popover base - will be appended to body */
-  .more-popover{display:flex;flex-direction:column;gap:8px;padding:8px;border-radius:10px;border:1px solid rgba(11,99,212,0.08);background:#fff;box-shadow:0 12px 40px rgba(7,24,48,0.12);min-width:170px;z-index:13000;position:fixed}
-  .more-popover .share-btn{width:100%;justify-content:flex-start;padding:8px 10px}
-
-  /* More toggle hidden by default - shown by JS when needed */
-  .more-toggle{display:none}
-
-  /* Show tab / Show button stylings (professional blue) */
-  .share-show-tab{position:fixed;right:6px;top:50%;transform:translateY(-50%);z-index:14000;background:linear-gradient(135deg,var(--sw-accent),var(--sw-accent2));color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;box-shadow:0 8px 24px rgba(11,99,212,0.25);border:none;transition:all .18s}
-  .share-show-tab:hover{transform:translateY(-50%) scale(1.04);box-shadow:0 12px 32px rgba(11,99,212,0.35)}
-  .share-show-tab:focus{outline:3px solid rgba(11,99,212,0.3);outline-offset:2px}
-  @media (max-width:520px){.share-widget{right:10px;min-width:200px;max-width:calc(100vw - 20px)}}
-  @media (prefers-reduced-motion:reduce){.share-widget,.share-widget.revealed{animation:none!important;transform:none!important;opacity:1!important;top:50%}}
-</style>
-
-<div class="share-widget" id="shareWidget" data-mode="auto" role="region" aria-label="Share widget">
-  <div class="sw-row" id="swRow" role="toolbar" aria-label="Share links">
-    <a class="share-btn" id="share-whatsapp" title="Share on WhatsApp" role="button"><span class="share-icon" aria-hidden="true">🌐</span>WhatsApp</a>
-    <a class="share-btn" id="share-x" title="Share on X" role="button"><span class="share-icon" aria-hidden="true">X</span>X</a>
-
-    <!-- Add collapse-to-more class to buttons you want moved into More -->
-    <a class="share-btn collapse-to-more" id="share-facebook" title="Share on Facebook" role="button"><span class="share-icon" aria-hidden="true">f</span>Facebook</a>
-    <a class="share-btn collapse-to-more" id="share-linkedin" title="Share on LinkedIn" role="button"><span class="share-icon" aria-hidden="true">in</span>LinkedIn</a>
-    <a class="share-btn collapse-to-more" id="share-telegram" title="Share on Telegram" role="button"><span class="share-icon" aria-hidden="true">✈️</span>Telegram</a>
-
-    <button class="share-btn share-copy" id="share-copy" title="Copy link"><span class="share-icon" aria-hidden="true">📋</span>Copy link<span class="share-tooltip" id="copyTooltip">Copied!</span></button>
-
-    <!-- More toggle (JS shows/hides by setting display) -->
-    <div style="position:relative">
-      <button class="share-btn more-toggle" id="moreToggle" aria-haspopup="true" aria-expanded="false" title="More share options">More ▾</button>
-    </div>
-
-    <button class="sw-hide" id="shareHide" title="Hide share widget" aria-label="Hide share widget">Hide</button>
-  </div>
-</div>
-
-<!-- popover placeholder - will be moved to document.body by JS -->
-<div id="morePopover" class="more-popover" role="menu" aria-label="More share options" style="display:none"></div>
-
-<button class="share-show-tab" id="shareShowTab" aria-label="Show share widget" title="Show share widget" style="display:none">Share</button>
-
-<script>
-(function(){
-  const COLLAPSE_WIDTH = 520;         // breakpoint in px (<= this: collapse)
-  const WIDGET_KEY = 'shareWidget-visibility';
-  const widget = document.getElementById('shareWidget');
-  const swRow = document.getElementById('swRow');
-  const moreToggle = document.getElementById('moreToggle');
-  const morePopover = document.getElementById('morePopover');
-  const showTab = document.getElementById('shareShowTab');
-  const hideBtn = document.getElementById('shareHide');
-
-  // ensure popover is appended to body so it's never clipped
-  if (morePopover && morePopover.parentNode !== document.body) {
-    document.body.appendChild(morePopover);
-  }
-
-  // Build share hrefs
-  const getUrl = ()=>{ const c=document.querySelector('link[rel=canonical]'); return (c&&c.href)?c.href:location.href.split('#')[0];};
-  const getTitle = ()=>{ const og=document.querySelector('meta[property="og:title"]')||document.querySelector('meta[name="og:title"]'); return (og&&og.content)?og.content:document.title||'';};
-  const urlRaw = getUrl();
-  const url = encodeURIComponent(urlRaw);
-  const title = encodeURIComponent(getTitle());
-  const hrefs = {
-    'share-whatsapp': `https://wa.me/?text=${title}%20${url}`,
-    'share-facebook': `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-    'share-x': `https://twitter.com/intent/tweet?text=${title}&url=${url}`,
-    'share-linkedin': `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-    'share-telegram': `https://t.me/share/url?url=${url}&text=${title}`,
-    'share-email': `mailto:?subject=${title}&body=${title}%0A%0A${url}`
-  };
-
-  // generic helper to make an element open a URL (preserve <a> if present)
-  function attachOpen(el, link) {
-    if(!el) return;
-    if (el.tagName.toLowerCase() === 'a') {
-      el.setAttribute('href', link);
-      el.setAttribute('target','_blank');
-      el.setAttribute('rel','noopener noreferrer');
-    } else {
-      // remove prior click handler if any by cloning (safe)
-      const clone = el.cloneNode(true);
-      el.parentNode.replaceChild(clone, el);
-      clone.addEventListener('click', function(e){ e.preventDefault(); window.open(link, '_blank', 'noopener'); });
-      return clone;
-    }
-    return el;
-  }
-
-  // set up main buttons
-  Object.keys(hrefs).forEach(id => {
-    const el = document.getElementById(id);
-    if (el) attachOpen(el, hrefs[id]);
-  });
-
-  // copy link
-  const copyBtn = document.getElementById('share-copy');
-  const tooltip = document.getElementById('copyTooltip');
-  if (copyBtn) {
-    copyBtn.addEventListener('click', async ()=>{
-      try { await navigator.clipboard.writeText(urlRaw); tooltip.textContent='Copied!'; copyBtn.classList.add('show'); setTimeout(()=>copyBtn.classList.remove('show'),1400); }
-      catch(e){ const ta=document.createElement('textarea'); ta.value=urlRaw; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); tooltip.textContent='Copied!';}catch(err){tooltip.textContent='Press Ctrl+C to copy';} ta.remove(); copyBtn.classList.add('show'); setTimeout(()=>copyBtn.classList.remove('show'),1600);}
-    });
-  }
-
-  // identify collapse candidates and store original insertion points
-  const collapseEls = Array.from(swRow.querySelectorAll('.collapse-to-more'));
-  collapseEls.forEach(el => {
-    el._origParent = el.parentNode;
-    el._origNext = el.nextElementSibling;
-    // ensure proper roles for accessibility
-    el.setAttribute('role','button');
-    el.setAttribute('tabindex','0');
-  });
-
-  // move element into popover
-  function moveToPopover(el){
-    if(!el || el._inPopover) return;
-    morePopover.appendChild(el);
-    el._inPopover = true;
-    el.setAttribute('role','menuitem');
-    el.setAttribute('tabindex','0');
-    // re-attach href in case cloning happened earlier
-    if(hrefs[el.id]) attachOpen(el, hrefs[el.id]);
-  }
-
-  // restore element to original place
-  function moveBack(el){
-    if(!el || !el._inPopover) return;
-    try {
-      if(el._origNext && el._origNext.parentNode === el._origParent) el._origParent.insertBefore(el, el._origNext);
-      else el._origParent.appendChild(el);
-    } catch(e){
-      swRow.insertBefore(el, moreToggle.parentNode);
-    }
-    el._inPopover = false;
-    el.setAttribute('role','button');
-    el.setAttribute('tabindex','0');
-    if(hrefs[el.id]) attachOpen(el, hrefs[el.id]);
-  }
-
-  // determine collapse condition
-  function shouldCollapse(){
-    if(window.innerWidth <= COLLAPSE_WIDTH) return true;
-    // fallback: if widget overflows horizontally
-    return widget.scrollWidth > widget.clientWidth;
-  }
-
-  // update collapse: move or restore elements, show/hide More toggle
-  function updateCollapseState(){
-    const collapse = shouldCollapse();
-    if(collapse){
-      collapseEls.forEach(moveToPopover);
-      moreToggle.style.display = 'inline-flex';
-    } else {
-      collapseEls.forEach(moveBack);
-      moreToggle.style.display = 'none';
-      closePopover();
-    }
-  }
-
-  // popover placement (left/right + clamp)
-  function positionPopover(){
-    if(!morePopover || !moreToggle) return;
-    morePopover.style.display = 'flex';
-    morePopover.style.visibility = 'hidden';
-    const toggleRect = moreToggle.getBoundingClientRect();
-    const popW = morePopover.offsetWidth;
-    const popH = morePopover.offsetHeight;
-    let left = toggleRect.left - popW - 8; // try left
-    let top = toggleRect.top + (toggleRect.height/2) - (popH/2);
-
-    if(left < 8) left = toggleRect.right + 8; // place right if not enough left space
-    const margin = 8;
-    if(top < margin) top = margin;
-    if(top + popH > window.innerHeight - margin) top = Math.max(margin, window.innerHeight - popH - margin);
-
-    morePopover.style.left = `${Math.round(left)}px`;
-    morePopover.style.top = `${Math.round(top)}px`;
-    morePopover.style.visibility = 'visible';
-  }
-
-  // open/close
-  function openPopover(){
-    morePopover.classList.add('show');
-    morePopover.style.display = 'flex';
-    moreToggle.setAttribute('aria-expanded','true');
-    positionPopover();
-    // focus first actionable item
-    const first = morePopover.querySelector('.share-btn');
-    if(first) first.focus();
-  }
-  function closePopover(){
-    morePopover.classList.remove('show');
-    morePopover.style.display = 'none';
-    moreToggle.setAttribute('aria-expanded','false');
-  }
-
-  // toggle button behavior
-  if(moreToggle){
-    moreToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if(morePopover.classList.contains('show')) closePopover(); else { updateCollapseState(); openPopover(); }
-    });
-    moreToggle.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); moreToggle.click(); } });
-  }
-
-  // delegated click handling inside popover ensures moved nodes keep working
-  morePopover.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.share-btn');
-    if(!btn) return;
-    // if anchor with href, let browser handle; if not, preventDefault and open using hrefs mapping
-    if(btn.tagName.toLowerCase() !== 'a'){
-      e.preventDefault();
-      const link = hrefs[btn.id];
-      if(link) window.open(link,'_blank','noopener');
-    }
-    // close after a short delay so navigation works
-    setTimeout(closePopover, 140);
-  });
-
-  // close popover on outside click
-  document.addEventListener('click', (e)=>{
-    if(!morePopover.classList.contains('show')) return;
-    if(morePopover.contains(e.target) || (moreToggle && moreToggle.contains(e.target))) return;
-    closePopover();
-  });
-
-  // close on Escape
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closePopover(); });
-
-  // initialize widget visibility (keeps your previous behavior)
-  function initVisibility(){
-    let stored = null;
-    try { stored = localStorage.getItem(WIDGET_KEY); } catch(e){ stored = null; }
-    if(stored === 'hidden'){ widget.style.display='none'; showTab.style.display='block'; }
-    else if(stored === 'visible'){ widget.style.display=''; showTab.style.display='none'; setTimeout(()=>widget.classList.add('revealed'),50); }
-    else { const isPost = !!document.querySelector('article') || /\/\d{4}\/\d{2}\//.test(location.pathname); const mode = widget.getAttribute('data-mode'); if(mode==='auto' && !isPost){ widget.style.display='none'; showTab.style.display='none'; } else { widget.style.display=''; showTab.style.display='none'; setTimeout(()=>widget.classList.add('revealed'),50); } }
-  }
-
-  function setVisibility(visible){ try{ localStorage.setItem(WIDGET_KEY, visible ? 'visible':'hidden'); }catch(e){} if(visible){ showTab.style.display='none'; widget.style.display=''; setTimeout(()=>widget.classList.add('revealed'),50);} else { widget.classList.remove('revealed'); widget.style.display='none'; showTab.style.display='block'; closePopover(); } }
-  showTab.addEventListener('click', ()=>{ setVisibility(true); const f = widget.querySelector('.share-btn'); if(f) f.focus(); });
-  hideBtn.addEventListener('click', ()=> setVisibility(false));
-  showTab.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showTab.click(); } });
-  hideBtn.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); hideBtn.click(); } });
-
-  // debounce resize and update collapse state
-  let rt=0;
-  window.addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>{ updateCollapseState(); closePopover(); }, 120); });
-
-  // initial run
-  initVisibility();
-  updateCollapseState();
-
-  // ensure hrefs re-applied (safety)
-  collapseEls.forEach(el=>{ if(hrefs[el.id]) attachOpen(el, hrefs[el.id]); });
-
-  // ensure showTab uses blue professional theme (visible only when widget hidden)
-  // done via CSS above; showTab display toggled via JS earlier whenever widget hidden.
-
-})();
-</script>
-<!-- END: Share Widget — Hardened More menu -->]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
           <b:widget id='PopularPosts1' locked='false' title='Trending ...' type='PopularPosts' version='2' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='numItemsToShow'>3</b:widget-setting>
@@ -4031,6 +4566,9 @@ background-color: gray;
 </a>
 
   </div>
+  
+  
+  
   <span id='txtdown'/>
 
   
