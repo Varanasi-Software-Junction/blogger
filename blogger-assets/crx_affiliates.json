@@ -1,0 +1,46 @@
+{
+  "products": [
+    {
+      "id": "py_crash",
+      "title": "Python Crash Course (2nd Edition)",
+      "img": "https://m.media-amazon.com/images/I/51uwTnh7L4L.jpg",
+      "url": "https://www.amazon.in/dp/1593279280?tag=YOUR_AFFILIATE_TAG",
+      "desc": "A hands-on, project-based introduction to Python — ideal for beginners."
+    },
+    {
+      "id": "clrs",
+      "title": "Introduction to Algorithms (CLRS)",
+      "img": "https://m.media-amazon.com/images/I/41+e3refnZL.jpg",
+      "url": "https://www.amazon.in/dp/026204630X?tag=YOUR_AFFILIATE_TAG",
+      "desc": "Comprehensive algorithms guide — great as a reference for serious learners."
+    },
+    {
+      "id": "dsa_python",
+      "title": "Data Structures and Algorithms in Python",
+      "img": "https://m.media-amazon.com/images/I/41jEbK-jG+L.jpg",
+      "url": "https://www.amazon.in/dp/1118290275?tag=YOUR_AFFILIATE_TAG",
+      "desc": "Practical DSA in Python with clear explanations and examples."
+    },
+    {
+      "id": "py_theory",
+      "title": "Fluent Python",
+      "img": "https://m.media-amazon.com/images/I/41b7u6ZkzRL.jpg",
+      "url": "https://www.amazon.in/dp/1491946008?tag=YOUR_AFFILIATE_TAG",
+      "desc": "Write idiomatic, efficient Python using advanced features and techniques."
+    },
+    {
+      "id": "algorithms_explained",
+      "title": "Grokking Algorithms",
+      "img": "https://m.media-amazon.com/images/I/51b5YG6Y1rL.jpg",
+      "url": "https://www.amazon.in/dp/1617292230?tag=YOUR_AFFILIATE_TAG",
+      "desc": "Friendly, illustrated guide to algorithms for beginners."
+    },
+    {
+      "id": "practice_problems",
+      "title": "Cracking the Coding Interview",
+      "img": "https://m.media-amazon.com/images/I/41J2Q0wT6AL.jpg",
+      "url": "https://www.amazon.in/dp/0984782850?tag=YOUR_AFFILIATE_TAG",
+      "desc": "Great for interview practice: problems, solutions and tips."
+    }
+  ]
+}
