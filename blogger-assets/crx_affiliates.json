@@ -1,11 +1,11 @@
 {
   "products": [
     {
-      "id": "py_crash",
-      "title": "Python Crash Course (2nd Edition)",
-      "img": "https://m.media-amazon.com/images/I/51uwTnh7L4L.jpg",
-      "url": "https://www.amazon.in/dp/1593279280?tag=YOUR_AFFILIATE_TAG",
-      "desc": "A hands-on, project-based introduction to Python — ideal for beginners."
+      "id": "1",
+      "title": "Laptops under ₹50,000",
+      "img": "https://m.media-amazon.com/images/I/61TRKPzWmBL._AC_UY218_.jpg",
+      "url": "https://amzn.to/4gywBZD",
+      "desc": "Laptops under ₹50,000"
     },
     {
       "id": "clrs",

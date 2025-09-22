@@ -92,3 +92,7 @@
   .crx_affiliate { flex-direction:column; align-items:flex-start; }
   .crx_affiliate_img { width:100%; height:auto; }
 }
+.crx_comment_box{
+background-color: wheat;
+color: teal;
+}
