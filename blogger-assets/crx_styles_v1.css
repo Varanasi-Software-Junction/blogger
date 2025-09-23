@@ -213,3 +213,8 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
       background-color: black;
       font: Helvetica;
     }
+    .comment-timestamp{
+
+        color: white !important ;
+      background-color: black !important;
+    }
