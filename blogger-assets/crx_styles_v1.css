@@ -141,100 +141,57 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
 /* -----------------------------
    CRX: Comments Styling
    ----------------------------- */
-.comments-section {
-  margin-top: 18px;
-  padding: 12px;
-  border-radius: 10px;
-  background: #ffffff;
-  border: 1px solid #e6e9ef;
-  box-shadow: 0 6px 18px rgba(11,12,16,0.03);
-    background-color: #0b63d4 !important;
-  color: #fff  !important;
+
+   /* ---------- CRX: Force comment form contrast + donate fragment tweaks ---------- */
+
+/* Make comment forms and textarea clearly visible on any theme */
+.comments-section,
+.comments-section .comment-form,
+.comments-section form#commentForm {
+  background: #f8fafc !important; /* subtle off-white so textarea sits on visible surface */
+  border: 1px solid #e6ecf5 !important;
+  box-shadow: 0 6px 18px rgba(11,12,16,0.02);
+  color: #0f1724 !important;
 }
-.comments-section .comments,
-.comments-section .comment-thread,
-.comments-section ol.comment-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-    background: #0b63d4 !important;
-  color: #fff  !important;
-}
-.comments-section .comment {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  padding: 12px;
-  border-radius: 8px;
-  background: #fbfcff;
-  border: 1px solid rgba(14,20,30,0.03);
-  margin-bottom: 10px;
-    background: #0b63d4 !important;
-  color: #fff  !important;
-}
-/*Up */
-.comments-section .comment .avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  overflow: hidden;
-  flex-shrink: 0;
-  border: 1px solid rgba(0,0,0,0.04);
-    background: #0b63d4 !important;
-  color: #fff  !important;
-}
-.comments-section .comment .comment-author,
-.comments-section .comment .fn {
-  font-weight: 700;
-    background: #0b63d4 !important;
-  color: #fff  !important;
-}
-.comments-section .comment .comment-date,
-.comments-section .comment time {
-  font-size: 12px;
-  color: #6b7280;
-    background: #0b63d4 !important;
-  color: #fff  !important;
-}
-.comments-section .comment .comment-body {
-  margin-top: 6px;
-  font-size: 14px;
-  color: #1f2937;
-  line-height: 1.55;
-    background: #0b63d4 !important;
-  color: #fff  !important;
-}
-.comments-section .comment a {
-  color: #0b63d4;
-  text-decoration: none;
-  font-weight: 600;
-    background: #0b63d4 !important;
-  color: #fff  !important;
-}
-.comments-section .comment a:hover { text-decoration: underline; }
+
+/* Textarea / inputs contrast */
 .comments-section textarea,
 .comments-section input[type="text"],
 .comments-section input[type="email"] {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #e6e9ef;
-  resize: vertical;
-  min-height: 80px;
-  box-sizing: border-box;
-  font-size: 14px;
-  color: #111827 !important ;
-  background-color: lightpink !important ;
+  background: #ffffff !important;
+  color: #0b1220 !important;
+  border: 1px solid #dbe7f5 !important;
+  box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
 }
-.comments-section input[type="submit"] {
-  margin-top: 8px;
-  padding: 8px 12px;
+
+/* Placeholder color so grey on white isn't invisible */
+.comments-section textarea::placeholder,
+.comments-section input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Submit / action button (make obvious) */
+.comments-section input[type="submit"],
+.comments-section .crx_btn {
   background: #0b63d4 !important;
-  color: #fff  !important;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: 700;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 8px 22px rgba(11,99,212,0.12);
+}
+
+/* Donate fragment safety: ensure visible card if theme overrides global "card" rules */
+.crx_donate_card {
+  background: linear-gradient(180deg,#ffffff,#fbfdff) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(0,0,0,0.03) !important;
+  box-shadow: 0 10px 30px rgba(11,12,16,0.04) !important;
+}
+.crx_donate_qr img { display:block; max-width:100%; height:auto; }
+
+/* If a theme sets textarea background to transparent, force readable background */
+.comments-section textarea[style], .comments-section input[style] {
+  background: #ffffff !important;
+  color: #0b1220 !important;
 }
 @media (max-width:520px) {
   .comments-section .comment { flex-direction: row; gap: 8px; }
