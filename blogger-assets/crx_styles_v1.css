@@ -404,7 +404,7 @@ pre {
 }
 
 .crx_avatar {
-  width: 200px;
+  max-height: 200px;
   
   object-fit: cover;         /* keeps aspect ratio, fills circle */
   display: block;
