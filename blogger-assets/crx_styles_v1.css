@@ -190,7 +190,7 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
 
 /* If a theme sets textarea background to transparent, force readable background */
 .comments-section textarea[style], .comments-section input[style] {
-  background: #ffffff !important;
+  background: #000000 !important;
   color: #0b1220 !important;
 }
 @media (max-width:520px) {
