@@ -146,6 +146,8 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   background: #ffffff;
   border: 1px solid #e6e9ef;
   box-shadow: 0 6px 18px rgba(11,12,16,0.03);
+    background-color: #0b63d4 !important;
+  color: #fff  !important;
 }
 .comments-section .comments,
 .comments-section .comment-thread,
@@ -153,6 +155,8 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   list-style: none;
   margin: 0;
   padding: 0;
+    background: #0b63d4 !important;
+  color: #fff  !important;
 }
 .comments-section .comment {
   display: flex;
@@ -163,7 +167,10 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   background: #fbfcff;
   border: 1px solid rgba(14,20,30,0.03);
   margin-bottom: 10px;
+    background: #0b63d4 !important;
+  color: #fff  !important;
 }
+/*Up */
 .comments-section .comment .avatar {
   width: 44px;
   height: 44px;
