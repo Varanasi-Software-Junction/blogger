@@ -8,39 +8,26 @@
       "desc": "Laptops under ₹50,000"
     },
     {
-      "id": "clrs",
-      "title": "Introduction to Algorithms (CLRS)",
-      "img": "https://m.media-amazon.com/images/I/41+e3refnZL.jpg",
-      "url": "https://www.amazon.in/dp/026204630X?tag=YOUR_AFFILIATE_TAG",
-      "desc": "Comprehensive algorithms guide — great as a reference for serious learners."
+      "id": "2",
+      "title": "Books on Recursion and OOPs",
+      "img": "https://m.media-amazon.com/images/I/71IhjIt5BwL._AC_CR0%2C0%2C0%2C0_SX480_SY360_.jpg",
+      "url": "https://amzn.to/46yAx8i",
+      "desc": "Comprehensive guide — great  for serious learners."
     },
     {
-      "id": "dsa_python",
-      "title": "Data Structures and Algorithms in Python",
-      "img": "https://m.media-amazon.com/images/I/41jEbK-jG+L.jpg",
-      "url": "https://www.amazon.in/dp/1118290275?tag=YOUR_AFFILIATE_TAG",
+      "id": "3",
+      "title": "Sorting and Searching-- Donald Knuth",
+      "img": "https://m.media-amazon.com/images/I/61anV1kKPyL._SY385_.jpg",
+      "url": "https://amzn.to/4n9URUq",
       "desc": "Practical DSA in Python with clear explanations and examples."
     },
     {
-      "id": "py_theory",
-      "title": "Fluent Python",
-      "img": "https://m.media-amazon.com/images/I/41b7u6ZkzRL.jpg",
-      "url": "https://www.amazon.in/dp/1491946008?tag=YOUR_AFFILIATE_TAG",
-      "desc": "Write idiomatic, efficient Python using advanced features and techniques."
-    },
-    {
-      "id": "algorithms_explained",
-      "title": "Grokking Algorithms",
-      "img": "https://m.media-amazon.com/images/I/51b5YG6Y1rL.jpg",
-      "url": "https://www.amazon.in/dp/1617292230?tag=YOUR_AFFILIATE_TAG",
-      "desc": "Friendly, illustrated guide to algorithms for beginners."
-    },
-    {
-      "id": "practice_problems",
-      "title": "Cracking the Coding Interview",
-      "img": "https://m.media-amazon.com/images/I/41J2Q0wT6AL.jpg",
-      "url": "https://www.amazon.in/dp/0984782850?tag=YOUR_AFFILIATE_TAG",
-      "desc": "Great for interview practice: problems, solutions and tips."
-    }
+      "id": "4",
+      "title": "Art of Computer Programming, The: Fundamental Algorithms",
+      "img": "https://m.media-amazon.com/images/I/61fiSM2bf6L._SY385_.jpg",
+      "url": "https://amzn.to/42Ea6fZ",
+      "desc": "Art of Computer Programming, The: Fundamental Algorithms"
+    } 
+ 
   ]
 }
