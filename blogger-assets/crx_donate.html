@@ -1,7 +1,155 @@
-<!-- crx_donate.html -->
-<div style="padding:10px; border-radius:8px; border:1px solid #eef2f7; background:#fff; text-align:center;">
-  <div style="font-weight:700; color:#0a2a43; margin-bottom:6px;">Support This Blog</div>
-  <!-- donation-gadget is a custom element; ensure its script is loaded in theme -->
-  <donation-gadget qr="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" prof-title="Support Champak" cas-title="Buy me a tea ☕"></donation-gadget>
-  <div style="font-size:12px;color:#666;margin-top:8px;">Small donations help keep tutorials free. Thank you!</div>
+<!-- Updated GPay Donation Gadget for Blogspot (Blogger-ready) -->
+<div id="donation-gadget" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial; max-width:420px; margin:12px auto;">
+  <style>
+    /* core variables */
+    #donation-gadget { --accent:#0b84ff; --muted:#6b7280; }
+
+    /* hide both cards initially to avoid flicker; JS will show one */
+    #card-prof, #card-cas { display: none; }
+
+    .dg-card{
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(11,12,16,0.08);
+      padding:16px;
+      background:linear-gradient(180deg,#ffffff,#fbfdff);
+      margin-bottom:12px;
+      align-items:center;
+      gap:12px;
+      display:flex;
+      flex-direction:row;
+    }
+
+    .dg-row{display:flex; gap:12px; align-items:center; width:100%}
+    .dg-qr{width:106px; height:106px; border-radius:8px; background:#f3f4f6; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0}
+    .dg-qr img{width:100%; height:100%; object-fit:contain; display:block; max-width:100%}
+    .dg-title{font-size:16px; font-weight:700; margin-bottom:6px; color:#0b1220}
+    .dg-desc{font-size:14px; color:var(--muted); line-height:1.35}
+    .dg-cta{display:inline-block; margin-top:12px; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:600; cursor:pointer}
+
+    /* Professional */
+    .dg-professional{border-left:4px solid var(--accent)}
+    .dg-professional .dg-cta{background:var(--accent); color:white}
+
+    /* Casual */
+    .dg-casual{background:linear-gradient(180deg,#fff8f0,#fff); border:1px solid #fff0e6}
+    .dg-casual .dg-title{color:#b53b00}
+    .dg-casual .dg-cta{background:#ffe9d0; color:#8a3b00; border:1px solid rgba(0,0,0,0.04)}
+
+    /* responsive */
+    @media (max-width:420px){
+      .dg-card{flex-direction:row}
+      .dg-desc{font-size:13px}
+      .dg-qr{width:90px; height:90px}
+    }
+    @media (max-width:360px){
+      .dg-card{flex-direction:column; align-items:flex-start}
+      .dg-row{flex-direction:row; align-items:center}
+    }
+
+    /* small focus style for keyboard users */
+    .dg-cta:focus{outline:3px solid rgba(11,132,255,0.18); outline-offset:2px}
+  </style>
+
+  <!-- Professional card -->
+  <div id="card-prof" class="dg-card dg-professional" role="region" aria-label="Support this blog - professional">
+    <div class="dg-row" style="width:100%">
+      <div class="dg-qr" aria-hidden="false">
+        <img
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg"
+          alt="Google Pay QR code for donations"
+          loading="lazy"
+          width="106" height="106"
+        />
+      </img
+></div>
+      <div style="flex:1; min-width:0">
+        <div class="dg-title">Support This Blog</div>
+        <div class="dg-desc">If my articles have helped you, please consider supporting this blog. Scan the QR code and send any amount — your contribution helps keep this site running.</div>
+        <a class="dg-cta" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg"
+           target="_blank" rel="noopener noreferrer" aria-label="Open full QR code in a new tab — professional card">Open QR — Scan or Save</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Casual card -->
+  <div id="card-cas" class="dg-card dg-casual" role="region" aria-label="Support this blog - casual">
+    <div class="dg-row" style="width:100%">
+      <div class="dg-qr" aria-hidden="false">
+        <img
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg"
+          alt="Google Pay QR code for donations"
+          loading="lazy"
+          width="106" height="106"
+        />
+      </img
+></div>
+      <div style="flex:1; min-width:0">
+        <div class="dg-title">Like My Content?</div>
+        <div class="dg-desc">Hey friend — if you enjoy my posts and want to buy me a cup of chai ☕, scan the QR and send anything you like. Optional — and every little bit keeps me writing.</div>
+        <a class="dg-cta" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg"
+           target="_blank" rel="noopener noreferrer" aria-label="Open full QR code in a new tab — casual card">Open QR — Thanks!</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- noscript fallback -->
+  <noscript>
+    <div class="dg-card" style="display:block;">
+      <div style="display:flex; gap:12px; align-items:center">
+        <div style="width:90px; height:90px; background:#f3f4f6; border-radius:8px; display:flex;align-items:center;justify-content:center;overflow:hidden;">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" alt="Google Pay QR code for donations" width="90" height="90" />
+        </div>
+        <div>
+          <div style="font-weight:700">Support This Blog</div>
+          <div style="color:var(--muted)">Enable JavaScript to see a nicer donation card, or open the QR image directly.</div>
+          <div style="margin-top:8px">
+            <a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDyiJrvzm0OBoPPFZcp_U62xZNmCtIHVYPMtURicRP2b-_uARIPRZ67rCKAhzVd60qSko1feqIeruUtNphniJHbl8CbRqIuy2h4yTi4a8F4FIU3FuYCeIjoz0kEgfC627fcot-V3oRphmIFiKmup2Ub7VfXCOijS8Qo9YQRK0tZblLp_FIQ6jZikbdz5E/s1600/1000014358.jpg" target="_blank" rel="noopener noreferrer">Open QR</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </noscript>
+
+  <script>
+    (function(){
+      // elements
+      var prof = document.getElementById('card-prof');
+      var cas = document.getElementById('card-cas');
+      var container = document.getElementById('donation-gadget');
+
+      // choose either professional or casual
+      var pick = (Math.random() < 0.5) ? 'prof' : 'cas';
+
+      // helper to show chosen card and hide the other (set aria-hidden appropriately)
+      function showCard(which){
+        if(which === 'prof'){
+          prof.style.display = 'flex';
+          prof.setAttribute('aria-hidden', 'false');
+          cas.style.display = 'none';
+          cas.setAttribute('aria-hidden', 'true');
+        } else {
+          cas.style.display = 'flex';
+          cas.setAttribute('aria-hidden', 'false');
+          prof.style.display = 'none';
+          prof.setAttribute('aria-hidden', 'true');
+        }
+      }
+
+      // run after DOM ready (safe for Blogger)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function(){ showCard(pick); });
+      } else {
+        showCard(pick);
+      }
+
+      // optional: keyboard accessibility — focus the CTA for screen reader users
+      try {
+        var visibleCTA = (pick === 'prof') ? prof.querySelector('.dg-cta') : cas.querySelector('.dg-cta');
+        if(visibleCTA) {
+          // don't steal focus, but add a small tabindex so it's reachable immediately
+          visibleCTA.setAttribute('tabindex','0');
+        }
+      } catch(e){}
+    })();
+  </script>
 </div>
