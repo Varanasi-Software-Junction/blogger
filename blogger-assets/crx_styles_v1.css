@@ -195,7 +195,7 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
 }
 @media (max-width:520px) {
   .comments-section .comment { flex-direction: row; gap: 8px; }
-  .comments-section .comment .avatar { width: 36px; height: 36px; }
+  .comments-section .comment .avatar { width: 360px; height: 36px; }
   .comments-section .comment .comment-body { font-size: 13px; }
 }
 #crx_speechCurrent  
@@ -207,14 +207,4 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   color: white  !important;
   background-color: lightskyblue !important;
 }
-  .comments blockquote {
-      border: 1px solid black;
-      color: white;
-      background-color: black;
-      font: Helvetica;
-    }
-    .comment-timestamp{
-
-        color: white !important ;
-      background-color: black !important;
-    }
+  
