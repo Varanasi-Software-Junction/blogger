@@ -222,3 +222,12 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   .comments-section .comment .avatar { width: 36px; height: 36px; }
   .comments-section .comment .comment-body { font-size: 13px; }
 }
+#crx_speechCurrent  
+{
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.4px;
+  color: white;
+  background-color: lightskyblue;
+}
