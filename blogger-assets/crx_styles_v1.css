@@ -145,39 +145,14 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
    /* ---------- CRX: Force comment form contrast + donate fragment tweaks ---------- */
 
 /* Make comment forms and textarea clearly visible on any theme */
-.comments-section,
-.comments-section .comment-form,
-.comments-section form#commentForm {
-  background: #f8fafc !important; /* subtle off-white so textarea sits on visible surface */
-  border: 1px solid #e6ecf5 !important;
-  box-shadow: 0 6px 18px rgba(11,12,16,0.02);
-  color: #0f1724 !important;
-}
-
+ 
 /* Textarea / inputs contrast */
-.comments-section textarea,
-.comments-section input[type="text"],
-.comments-section input[type="email"] {
-  background: #ffffff !important;
-  color: #0b1220 !important;
-  border: 1px solid #dbe7f5 !important;
-  box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
-}
 
 /* Placeholder color so grey on white isn't invisible */
-.comments-section textarea::placeholder,
-.comments-section input::placeholder {
-  color: #94a3b8 !important;
-}
+ 
 
 /* Submit / action button (make obvious) */
-.comments-section input[type="submit"],
-.comments-section .crx_btn {
-  background: #0b63d4 !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: 0 8px 22px rgba(11,99,212,0.12);
-}
+
 
 /* Donate fragment safety: ensure visible card if theme overrides global "card" rules */
 .crx_donate_card {
@@ -189,15 +164,8 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
 .crx_donate_qr img { display:block; max-width:100%; height:auto; }
 
 /* If a theme sets textarea background to transparent, force readable background */
-.comments-section textarea[style], .comments-section input[style] {
-  background: #000000 !important;
-  color: #0b1220 !important;
-}
-@media (max-width:520px) {
-  .comments-section .comment { flex-direction: row; gap: 8px; }
-  .comments-section .comment .avatar { width: 360px; height: 36px; }
-  .comments-section .comment .comment-body { font-size: 13px; }
-}
+ 
+ 
 #crx_speechCurrent  
 {
   font-size: 20px;
