@@ -228,6 +228,6 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   font-weight: 700;
   text-align: center;
   letter-spacing: 0.4px;
-  color: white;
-  background-color: lightskyblue;
+  color: white  !important;
+  background-color: lightskyblue !important;
 }
