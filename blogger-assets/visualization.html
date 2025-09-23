@@ -1,8 +1,4 @@
-
-<img src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257"/>
-<br>
-
-<!-- Bubble Sort Visualizer — with dark-green final border -->
+<!-- Bubble Sort Visualizer — finalized border color/thickness + event log -->
 <style>
   /* basic styles (kept minimal so you can drop into Blogger) */
   #crx_container { position:relative; width:100%; height:220px; border:2px solid #333; margin-top:10px; overflow-x:auto; padding:10px; box-sizing:border-box; background:#fafafa; }
@@ -12,9 +8,9 @@
   /* highlight used during compare */
   .crx_highlight { transform: scale(1.08); box-shadow: 0 10px 26px rgba(11,99,212,0.24) !important; }
 
-  /* Finalized box: dark green border */
+  /* Finalized box: deeper green and thicker */
   .crx_final {
-    border: 3px solid darkgreen !important;
+    border: 4px solid #0b6623 !important; /* deeper green, thicker */
     box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
   }
 
@@ -22,40 +18,71 @@
   #crx_speechBar { margin-top:16px; padding:10px; background:#0b63d4; color:#fff; border-radius:6px; min-height:46px; display:flex; flex-direction:column; gap:6px; }
   #crx_speechCurrent { font-size:18px; font-weight:700; text-align:center; letter-spacing:0.4px; }
   #crx_speechQueue { font-size:13px; opacity:0.95; text-align:center; }
+
+  /* Event log */
+  #crx_eventLog { min-width:320px; max-width:720px; box-sizing:border-box; padding:8px; border-radius:6px; border:1px solid #ccc; background:#fff; font-family:monospace; }
+  #crx_controls_wrap { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+  .crx_log_controls { display:flex; gap:8px; align-items:center; }
+  .crx_legend { background:#f3f7f5; border:1px solid rgba(11,102,35,0.08); padding:8px 10px; border-radius:6px; color:#083d26; font-size:13px; max-width:720px; }
 </style>
 
 <div style="font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial; color:#222; line-height:1.55;">
   <h2 style="color:#0a66c2; margin-bottom:6px;">Bubble Sort Visualizer — three modes + early exit</h2>
 
-  <div id="crx_controls" style="margin-bottom:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-    <label style="font-weight:700;">Numbers:</label>
-    <input id="crx_numbers" type="text" value="1,6,0,1,1,9,7,0" style="min-width:320px; padding:8px; border-radius:6px; border:1px solid #ccc;"></input>
+  <div id="crx_controls_wrap">
+    <div id="crx_controls" style="margin-bottom:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <label style="font-weight:700;">Numbers:</label>
+      <input id="crx_numbers" type="text" value="1,6,0,1,1,9,7,0" style="min-width:320px; padding:8px; border-radius:6px; border:1px solid #ccc;"></input>
 
-    <button id="crx_createBtn" style="padding:8px 12px; border-radius:6px; border:1px solid #0b63d4; background:#0b63d4; color:#fff; cursor:pointer;">Create Boxes</button>
-    <button id="crx_sortBtn" style="padding:8px 12px; border-radius:6px; border:1px solid #0b63d4; background:#0b63d4; color:#fff; cursor:pointer;">Run Bubble Sort</button>
+      <button id="crx_createBtn" style="padding:8px 12px; border-radius:6px; border:1px solid #0b63d4; background:#0b63d4; color:#fff; cursor:pointer;">Create Boxes</button>
+      <button id="crx_sortBtn" style="padding:8px 12px; border-radius:6px; border:1px solid #0b63d4; background:#0b63d4; color:#fff; cursor:pointer;">Run Bubble Sort</button>
 
-    <label style="margin-left:8px; display:flex; gap:6px; align-items:center;">
-      <input id="crx_speechToggle" type="checkbox" checked="checked"></input>
-      <span style="font-weight:600;">Speak (comparisons & swaps)</span>
-    </label>
+      <label style="margin-left:8px; display:flex; gap:6px; align-items:center;">
+        <input id="crx_speechToggle" type="checkbox" checked="checked"></input>
+        <span style="font-weight:600;">Speak (comparisons & swaps)</span>
+      </label>
 
-    <label style="margin-left:8px; display:flex; gap:6px; align-items:center;">
-      <span style="font-weight:600;">Mode:</span>
-      <select id="crx_mode" style="padding:6px 8px; border-radius:6px; border:1px solid #ccc;">
-        <option value="ltr">Left → Right</option>
-        <option value="rtl">Right → Left</option>
-        <option value="alt">Alternating (L→R then R→L)</option>
-      </select>
-    </label>
+      <label style="margin-left:8px; display:flex; gap:6px; align-items:center;">
+        <span style="font-weight:600;">Mode:</span>
+        <select id="crx_mode" style="padding:6px 8px; border-radius:6px; border:1px solid #ccc;">
+          <option value="ltr">Left → Right</option>
+          <option value="rtl">Right → Left</option>
+          <option value="alt">Alternating (L→R then R→L)</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Legend explaining the finalized border meaning -->
+    <div class="crx_legend" title="Finalized element meaning">
+      <strong>What the dark-green border means:</strong>
+      <div style="margin-top:6px; font-size:13px;">
+        A box with a <span style="border-bottom:2px solid #0b6623; padding-bottom:1px;">dark-green border</span> is <em>finalized</em> — it has reached its correct, sorted position and will not move again. Boxes get finalized one-by-one as the algorithm finishes each pass.
+      </div>
+    </div>
   </div>
 
   <div id="crx_container">
     <div class="crx_spacer" style="height:160px;"></div>
   </div>
 
-  <div id="crx_speechBar" aria-live="polite">
-    <div id="crx_speechCurrent">Ready...</div>
-    <div id="crx_speechQueue"></div>
+  <div style="display:flex; gap:12px; margin-top:12px; align-items:flex-start; flex-wrap:wrap;">
+    <div style="flex:1; min-width:320px;">
+      <div id="crx_speechBar" aria-live="polite">
+        <div id="crx_speechCurrent">Ready...</div>
+        <div id="crx_speechQueue"></div>
+      </div>
+    </div>
+
+    <div style="min-width:320px; max-width:720px;">
+      <label style="display:block; font-weight:700; margin-bottom:6px;">Event Log (comparisons, swaps, finalizations):</label>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <select id="crx_eventLog" multiple size="8"></select>
+        <div class="crx_log_controls">
+          <button id="crx_clearLog" style="padding:8px 10px; border-radius:6px; border:1px solid #999; background:#fff; cursor:pointer;">Clear Log</button>
+        </div>
+      </div>
+      <div style="font-size:12px; color:#666; margin-top:6px;">The top (selected) entry is the newest event; the log records every compare and swap as the visual run proceeds.</div>
+    </div>
   </div>
 </div>
 
@@ -70,6 +97,8 @@
   const speechCurrent = document.getElementById('crx_speechCurrent');
   const speechQueueDiv = document.getElementById('crx_speechQueue');
   const modeSelect = document.getElementById('crx_mode');
+  const eventLog = document.getElementById('crx_eventLog');
+  const clearLogBtn = document.getElementById('crx_clearLog');
 
   // state
   let boxes = [];    // DOM elements
@@ -84,6 +113,9 @@
   const stageMs = 420;
   const swapTotalMs = stageMs * 3;
   const compareMs = 900; // comparison duration
+
+  // log cap
+  const LOG_CAP = 500;
 
   // helpers: color mapping
   function numberToColorMagnitude(magnitude, maxAbs) {
@@ -124,6 +156,25 @@
   function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   function enqueuePhrase(phrase){ phraseQueue.push(phrase); updateSpeechBarUI(); }
   function dequeuePhrase(){ phraseQueue.shift(); updateSpeechBarUI(); }
+
+  // event log functions
+  function logEvent(text) {
+    // newest at bottom; we'll keep scroll to bottom by selecting last index
+    const opt = document.createElement('option');
+    opt.text = text;
+    eventLog.add(opt, 0); // add at top so newest appear at top
+    // Ensure cap
+    while (eventLog.options.length > LOG_CAP) {
+      eventLog.remove(eventLog.options.length - 1);
+    }
+    // select first (newest) so it shows
+    if (eventLog.options.length) {
+      eventLog.selectedIndex = 0;
+    }
+  }
+  function clearLog() {
+    eventLog.innerHTML = '';
+  }
 
   // speak with duration target
   function speakPhraseForDuration(phrase, targetMs){
@@ -207,6 +258,8 @@
     container.style.minWidth = (parsed.length * spacing + 20) + 'px';
     phraseQueue = [];
     updateSpeechBarUI();
+    clearLog(); // clear previous events when creating new boxes
+    logEvent(`Created ${parsed.length} boxes: [${parsed.join(', ')}]`);
     recenterBoxes();
   }
 
@@ -231,6 +284,8 @@
     if (i<0||j<0||i>=boxes.length||j>=boxes.length) return;
     const a = boxes[i], b = boxes[j];
     const phrase = `Comparing ${values[i]} and ${values[j]}`;
+    // Log the comparison (newest on top)
+    logEvent(`Compare: indices ${i} vs ${j} — values ${values[i]} vs ${values[j]}`);
     addHighlight(a); addHighlight(b);
     const sp = speakPhraseForDuration(phrase, compareMs);
     await delay(compareMs);
@@ -246,6 +301,10 @@
     const leftA = slotLeft(i), leftB = slotLeft(j);
     const dAB = leftB - leftA, dBA = leftA - leftB;
     const phrase = `Swapping ${valA} and ${valB}`;
+
+    // Log the swap
+    logEvent(`Swap: indices ${i} <-> ${j} — values ${valA} <-> ${valB}`);
+
     const speechPromise = speakPhraseForDuration(phrase, swapTotalMs);
 
     // up
@@ -300,6 +359,8 @@
     let pass = 0;
     let swappedThisPass = true;
 
+    logEvent(`Start sorting (mode=${modeSelect.value})`);
+
     while (pass < n - 1 && swappedThisPass) {
       swappedThisPass = false;
       // determine direction for this pass
@@ -308,6 +369,8 @@
       if (mode === 'ltr') dir = 'ltr';
       else if (mode === 'rtl') dir = 'rtl';
       else if (mode === 'alt') dir = (pass % 2 === 0) ? 'ltr' : 'rtl';
+
+      logEvent(`Pass ${pass + 1} — direction: ${dir.toUpperCase()}`);
 
       if (dir === 'ltr') {
         // i = 0 .. n-2-pass
@@ -323,6 +386,7 @@
         if (boxes[finalizedIdx]) {
           removeHighlight(boxes[finalizedIdx]); // remove any blue highlight
           boxes[finalizedIdx].classList.add('crx_final');
+          logEvent(`Finalized: index ${finalizedIdx} — value ${values[finalizedIdx]}`);
         }
       } else {
         // dir === 'rtl'
@@ -340,16 +404,26 @@
         if (boxes[finalizedIdx]) {
           removeHighlight(boxes[finalizedIdx]);
           boxes[finalizedIdx].classList.add('crx_final');
+          logEvent(`Finalized: index ${finalizedIdx} — value ${values[finalizedIdx]}`);
         }
       }
 
       pass++;
       // If no swap happened in this whole pass, early exit
-      if (!swappedThisPass) break;
+      if (!swappedThisPass) {
+        logEvent(`No swaps in pass ${pass}; early exit`);
+        break;
+      }
     }
 
-    // After loop finishes, mark any remaining items as finalized
-    boxes.forEach(b => { removeHighlight(b); b.classList.add('crx_final'); });
+    // After loop finishes, mark any remaining items as finalized (in case early exit left some)
+    boxes.forEach((b, idx) => {
+      removeHighlight(b);
+      if (!b.classList.contains('crx_final')) {
+        b.classList.add('crx_final');
+        logEvent(`Finalized (end): index ${idx} — value ${values[idx]}`);
+      }
+    });
 
     busy = false; createBtn.disabled = false; sortBtn.disabled = false;
 
@@ -365,10 +439,11 @@
 
   // events
   createBtn.addEventListener('click', () => {
-    // remove final class if recreating
     createBoxes();
   });
   sortBtn.addEventListener('click', bubbleSort);
+
+  clearLogBtn.addEventListener('click', ()=>{ clearLog(); logEvent('Log cleared'); });
 
   // recenter on resize
   let resizeTimer = null;
