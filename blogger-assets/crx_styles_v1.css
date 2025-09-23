@@ -205,7 +205,8 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   min-height: 80px;
   box-sizing: border-box;
   font-size: 14px;
-  color: #111827;
+  color: #111827 !important ;
+  background-color: lightpink !important ;
 }
 .comments-section input[type="submit"] {
   margin-top: 8px;
