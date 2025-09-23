@@ -171,27 +171,36 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   overflow: hidden;
   flex-shrink: 0;
   border: 1px solid rgba(0,0,0,0.04);
+    background: #0b63d4 !important;
+  color: #fff  !important;
 }
 .comments-section .comment .comment-author,
 .comments-section .comment .fn {
   font-weight: 700;
-  color: #0a2a43;
+    background: #0b63d4 !important;
+  color: #fff  !important;
 }
 .comments-section .comment .comment-date,
 .comments-section .comment time {
   font-size: 12px;
   color: #6b7280;
+    background: #0b63d4 !important;
+  color: #fff  !important;
 }
 .comments-section .comment .comment-body {
   margin-top: 6px;
   font-size: 14px;
   color: #1f2937;
   line-height: 1.55;
+    background: #0b63d4 !important;
+  color: #fff  !important;
 }
 .comments-section .comment a {
   color: #0b63d4;
   text-decoration: none;
   font-weight: 600;
+    background: #0b63d4 !important;
+  color: #fff  !important;
 }
 .comments-section .comment a:hover { text-decoration: underline; }
 .comments-section textarea,
@@ -211,8 +220,8 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
 .comments-section input[type="submit"] {
   margin-top: 8px;
   padding: 8px 12px;
-  background: #0b63d4;
-  color: #fff;
+  background: #0b63d4 !important;
+  color: #fff  !important;
   border-radius: 8px;
   border: none;
   cursor: pointer;
