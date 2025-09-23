@@ -1,26 +1,32 @@
 
-<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhHhnIC5wh8NojPDIbxCx3wyeM16iFH4uBNphGTfeqG7xuyqC_EqTrb5USYeAR90qWeh18I3tQmjILUCnrDG7gWsDvmKryfi598NhyphenhyphenhmJMY-SrMLrc8MO_TdHyWV9ObaXpqfiB77OVZaKlSi25RyYAW2XFyEOkP2g5n2uodhe17vFRTNMVNj6u6d2VkhuI/s16000/bubsort.png"/>
+<img src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257"/>
+<br>
 
-<!-- Bubble Sort Visualizer — Blogger Post -->
+<!-- Bubble Sort Visualizer — with dark-green final border -->
+<style>
+  /* basic styles (kept minimal so you can drop into Blogger) */
+  #crx_container { position:relative; width:100%; height:220px; border:2px solid #333; margin-top:10px; overflow-x:auto; padding:10px; box-sizing:border-box; background:#fafafa; }
+  .crx_box { position:absolute; width:56px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-weight:700; user-select:none; box-shadow:0 6px 14px rgba(0,0,0,0.08); transition: transform 0.35s ease, box-shadow 0.35s ease, left 0.25s ease; }
+  .crx_box .idx { position:absolute; right:-10px; top:-10px; font-size:10px; background:rgba(255,255,255,0.85); padding:2px 4px; border-radius:6px; border:1px solid rgba(0,0,0,0.06); font-weight:600; }
+
+  /* highlight used during compare */
+  .crx_highlight { transform: scale(1.08); box-shadow: 0 10px 26px rgba(11,99,212,0.24) !important; }
+
+  /* Finalized box: dark green border */
+  .crx_final {
+    border: 3px solid darkgreen !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+  }
+
+  /* Speech bar (keeps visual from original) */
+  #crx_speechBar { margin-top:16px; padding:10px; background:#0b63d4; color:#fff; border-radius:6px; min-height:46px; display:flex; flex-direction:column; gap:6px; }
+  #crx_speechCurrent { font-size:18px; font-weight:700; text-align:center; letter-spacing:0.4px; }
+  #crx_speechQueue { font-size:13px; opacity:0.95; text-align:center; }
+</style>
+
 <div style="font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial; color:#222; line-height:1.55;">
-
   <h2 style="color:#0a66c2; margin-bottom:6px;">Bubble Sort Visualizer — three modes + early exit</h2>
 
-  <p>
-    This interactive demo shows Bubble Sort visually with spoken comparisons and swaps.
-    Use the controls to create the boxes and run the sort in one of three modes:
-  </p>
-  <ul>
-    <li><strong>Left → Right</strong> — classic direction (compare i and i+1 left to right).</li>
-    <li><strong>Right → Left</strong> — mirror direction (compare i and i-1 right to left).</li>
-    <li><strong>Alternating</strong> — odd passes left→right, even passes right→left (cocktail-shaker style).</li>
-  </ul>
-
-  <p style="font-size:14px; color:#555;">
-    Sorting will end early if a complete pass makes <em>no swaps</em> (i.e., array already sorted).
-  </p>
-
-  <!-- Controls -->
   <div id="crx_controls" style="margin-bottom:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
     <label style="font-weight:700;">Numbers:</label>
     <input id="crx_numbers" type="text" value="1,6,0,1,1,9,7,0" style="min-width:320px; padding:8px; border-radius:6px; border:1px solid #ccc;"></input>
@@ -43,36 +49,16 @@
     </label>
   </div>
 
-  <!-- Visual container -->
-  <div id="crx_container" style="position:relative; width:100%; height:220px; border:2px solid #333; margin-top:10px; overflow-x:auto; padding:10px; box-sizing:border-box; background:#fafafa;">
+  <div id="crx_container">
     <div class="crx_spacer" style="height:160px;"></div>
   </div>
 
-  <!-- speech caption + queue -->
-  <div id="crx_speechBar" aria-live="polite" style="margin-top:16px; padding:10px; background:#0b63d4; color:#fff; border-radius:6px; min-height:46px; display:flex; flex-direction:column; gap:6px;">
-    <div id="crx_speechCurrent" style="font-size:18px; font-weight:700; text-align:center; letter-spacing:0.4px;">Ready...</div>
-    <div id="crx_speechQueue" style="font-size:13px; opacity:0.95; text-align:center;"></div>
+  <div id="crx_speechBar" aria-live="polite">
+    <div id="crx_speechCurrent">Ready...</div>
+    <div id="crx_speechQueue"></div>
   </div>
-
-  <!-- short explanation / pseudocode -->
-  <h3 style="color:#0a66c2; margin-top:14px;">How it works (pseudocode)</h3>
-  <div style="background:#f9f9fb; padding:10px; border-radius:6px; border:1px solid #eef2f7;">
-<pre style="margin:0; font-family:monospace;">
-repeat until no swaps in a full pass:
-  if mode == left-to-right:
-    for i from 0 to n-2:
-      compare a[i] and a[i+1]; swap if needed
-  else if mode == right-to-left:
-    for i from n-1 down to 1:
-      compare a[i] and a[i-1]; swap if needed
-  else if mode == alternating:
-    on odd pass do left-to-right, on even pass do right-to-left
-</pre>
-  </div>
-
 </div>
 
-<!-- Inline script for visualization (paste this entire block in the post's HTML) -->
 <script>
 (function(){
   // DOM refs
@@ -206,18 +192,10 @@ repeat until no swaps in a full pass:
       box.style.top = ypos + 'px';
       box.style.background = rgbToString(bg);
       box.style.color = rgbToString(fg);
+      box.style.border = '1px solid rgba(0,0,0,0.06)';
 
       const lbl = document.createElement('div');
       lbl.className = 'idx';
-      lbl.style.position = 'absolute';
-      lbl.style.right = '-10px';
-      lbl.style.top = '-10px';
-      lbl.style.fontSize = '10px';
-      lbl.style.background = 'rgba(255,255,255,0.85)';
-      lbl.style.padding = '2px 4px';
-      lbl.style.borderRadius = '6px';
-      lbl.style.border = '1px solid rgba(0,0,0,0.06)';
-      lbl.style.fontWeight = '600';
       lbl.textContent = idx;
       box.appendChild(lbl);
 
@@ -233,7 +211,7 @@ repeat until no swaps in a full pass:
   }
 
   // visual helpers
-  function addHighlight(el){ el.classList.add('crx_highlight'); el.style.transform='scale(1.08)'; el.style.boxShadow='0 10px 26px rgba(11,99,212,0.24)'; }
+  function addHighlight(el){ if(!el.classList.contains('crx_final')) { el.classList.add('crx_highlight'); el.style.transform='scale(1.08)'; el.style.boxShadow='0 10px 26px rgba(11,99,212,0.24)'; } }
   function removeHighlight(el){ el.classList.remove('crx_highlight'); el.style.transform=''; el.style.boxShadow='0 6px 14px rgba(0,0,0,0.08)'; }
 
   function commitBoxToSlotWithoutJump(box, targetSlotLeftPx){
@@ -340,6 +318,12 @@ repeat until no swaps in a full pass:
             swappedThisPass = true;
           }
         }
+        // mark the element at position (n-1-pass) as finalized
+        const finalizedIdx = n - 1 - pass;
+        if (boxes[finalizedIdx]) {
+          removeHighlight(boxes[finalizedIdx]); // remove any blue highlight
+          boxes[finalizedIdx].classList.add('crx_final');
+        }
       } else {
         // dir === 'rtl'
         // i = n-1 .. 1+pass
@@ -351,6 +335,12 @@ repeat until no swaps in a full pass:
             swappedThisPass = true;
           }
         }
+        // mark the element at position (pass) as finalized
+        const finalizedIdx = pass;
+        if (boxes[finalizedIdx]) {
+          removeHighlight(boxes[finalizedIdx]);
+          boxes[finalizedIdx].classList.add('crx_final');
+        }
       }
 
       pass++;
@@ -358,10 +348,14 @@ repeat until no swaps in a full pass:
       if (!swappedThisPass) break;
     }
 
+    // After loop finishes, mark any remaining items as finalized
+    boxes.forEach(b => { removeHighlight(b); b.classList.add('crx_final'); });
+
     busy = false; createBtn.disabled = false; sortBtn.disabled = false;
-    // final highlight to show sorted
-    boxes.forEach(b => { addHighlight(b); });
-    setTimeout(()=> boxes.forEach(b => removeHighlight(b)), 600);
+
+    // small sorted highlight flash (kept for familiarity)
+    boxes.forEach(b => { b.classList.add('crx_highlight'); });
+    setTimeout(()=> boxes.forEach(b => b.classList.remove('crx_highlight')), 600);
 
     phraseQueue = ['Sorting complete!']; updateSpeechBarUI();
     setTimeout(()=>{ phraseQueue = []; updateSpeechBarUI(); }, 1600);
@@ -370,7 +364,10 @@ repeat until no swaps in a full pass:
   }
 
   // events
-  createBtn.addEventListener('click', createBoxes);
+  createBtn.addEventListener('click', () => {
+    // remove final class if recreating
+    createBoxes();
+  });
   sortBtn.addEventListener('click', bubbleSort);
 
   // recenter on resize
