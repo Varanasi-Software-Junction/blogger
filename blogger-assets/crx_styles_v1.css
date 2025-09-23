@@ -41,6 +41,8 @@ input.crx_input, textarea.crx_input, select.crx_input {
 input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   outline: 3px solid rgba(11,132,255,0.18);
   outline-offset: 2px;
+  background-color: #0b63d4 !important;
+  color: #fff  !important;
 }
 
 /* -----------------------------
