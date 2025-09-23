@@ -1,98 +1,224 @@
-/* crx_styles_v1.css
-   Champak Roy (crx_) prefixed site styles v1
-   Host at: https://varanasi-software-junction.github.io/blogger/crx_styles_v1.css
-*/
+/* ======================================
+   CRX Global Styles v1
+   For Blogger widgets, posts, quizzes, visualizers
+   Prefixed with crx_ to avoid conflicts
+   ====================================== */
 
-/* Container */
-.crx_container {
-  font-family: "Inter", Arial, sans-serif;
-  color: #222;
-  line-height: 1.6;
-  margin: 16px auto;
-  padding: 14px;
+/* Reset-like basics */
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.55;
+  color: #1f2937;
+  background-color: #ffffff;
+}
+
+/* -----------------------------
+   CRX: Generic Buttons & Inputs
+   ----------------------------- */
+.crx_btn,
+button.crx_btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #0b63d4;
+  background: #0b63d4;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+.crx_btn:hover { background: #094ba5; }
+.crx_btn:active { transform: scale(0.97); }
+.crx_btn[disabled] { opacity: 0.55; cursor: default; }
+
+input.crx_input, textarea.crx_input, select.crx_input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e6e9ef;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
+  outline: 3px solid rgba(11,132,255,0.18);
+  outline-offset: 2px;
+}
+
+/* -----------------------------
+   CRX: Visualizer & Overlay Styles
+   ----------------------------- */
+.crx_box {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 8px;
+  font-weight: 700;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, left 0.25s ease;
+  user-select: none;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  will-change: transform, left;
+  z-index: 2;
+}
+.crx_box .idx {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  font-size: 10px;
+  background: rgba(255,255,255,0.88);
+  padding: 2px 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.06);
+  font-weight: 600;
+  pointer-events: none;
+}
+.crx_highlight {
+  transform: scale(1.08) !important;
+  box-shadow: 0 10px 26px rgba(11,99,212,0.24) !important;
+}
+.crx_spacer { height: 160px; }
+
+.crx_overlay {
+  position: absolute;
+  top: 8px;
+  height: 176px;
+  pointer-events: none;
+  border-radius: 6px;
+  transition: left 0.25s ease, width 0.25s ease, opacity 0.25s ease;
+  opacity: 0.95;
+  z-index: 0;
+}
+.crx_overlay_left, .crx_overlay_right {
+  background: rgba(34,197,94,0.18);
+  border: 1px solid rgba(34,197,94,0.45);
+}
+.crx_overlay_unsorted {
+  background: rgba(250,204,21,0.12);
+  border: 1px solid rgba(250,204,21,0.28);
+}
+
+/* Speech bar */
+.crx_speechbar {
+  margin-top: 16px;
+  padding: 10px;
+  background: #0b63d4;
+  color: #fff;
+  border-radius: 6px;
+  min-height: 46px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.crx_speech_current {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.4px;
+}
+.crx_speech_queue {
+  font-size: 13px;
+  opacity: 0.95;
+  text-align: center;
+}
+.crx_speech_queue .upcoming {
+  display: block;
+  color: rgba(255,255,255,0.9);
+}
+
+/* Responsive tweaks */
+@media (max-width: 720px) {
+  .crx_box { width: 48px; height: 48px; }
+  .crx_spacer { height: 140px; }
+}
+@media (max-width: 480px) {
+  .crx_box { width: 44px; height: 44px; font-size: 14px; }
+  .crx_overlay { top: 6px; height: 150px; }
+}
+
+/* -----------------------------
+   CRX: Comments Styling
+   ----------------------------- */
+.comments-section {
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 10px;
   background: #ffffff;
-  max-width: 940px;
+  border: 1px solid #e6e9ef;
+  box-shadow: 0 6px 18px rgba(11,12,16,0.03);
 }
-
-/* Headings */
-.crx_heading { color: #0a66c2; margin: 14px 0 10px; font-weight:600; }
-
-/* Buttons */
-.crx_btn {
-  display:inline-block;
-  background: #0a66c2;
-  color:#fff;
-  padding:8px 12px;
-  border-radius:6px;
-  border:0;
-  cursor:pointer;
-  font-weight:600;
-  text-decoration:none;
+.comments-section .comments,
+.comments-section .comment-thread,
+.comments-section ol.comment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.crx_btn:focus { outline:3px solid rgba(10,102,194,0.18); outline-offset:2px; }
-
-/* QA boxes */
-.crx_qa_box {
-  border:1px solid #e6e9ef;
-  padding:12px;
-  border-radius:8px;
-  margin:12px 0;
-  background:#fafbff;
+.comments-section .comment {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fbfcff;
+  border: 1px solid rgba(14,20,30,0.03);
+  margin-bottom: 10px;
 }
-.crx_qa_answer { display:none; margin-top:8px; color:#0a2a43; font-weight:600; }
-
-/* Code blocks */
-.crx_code {
-  background:#f9f9fb;
-  padding:10px;
-  border-radius:6px;
-  overflow-x:auto;
-  font-family: "Courier New", Consolas, monospace;
-  margin:12px 0;
-  border:1px solid #eef2f7;
+.comments-section .comment .avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.04);
 }
-.crx_code pre { margin:0; }
-
-/* Affiliate card */
-.crx_affiliate {
-  border:1px solid #e6e9ef;
-  padding:12px;
-  border-radius:8px;
-  background:#fff;
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-  margin:12px 0;
+.comments-section .comment .comment-author,
+.comments-section .comment .fn {
+  font-weight: 700;
+  color: #0a2a43;
 }
-.crx_affiliate_img { width:120px; height:auto; border-radius:6px; object-fit:cover; flex-shrink:0; }
-.crx_affiliate_title { margin:0 0 6px 0; font-size:16px; color:#0a2a43; }
-.crx_affiliate_desc { margin:0; color:#5b6b7a; font-size:14px; }
-
-/* Donation container */
-.crx_donation { margin:20px 0; text-align:center; }
-
-/* Slider skeleton */
-.crx_slider { width:100%; margin:18px 0; }
-.crx_slidecard {
-  border-radius:8px;
-  overflow:hidden;
-  background:#fff;
-  border:1px solid #e6e9ef;
-  padding:10px;
+.comments-section .comment .comment-date,
+.comments-section .comment time {
+  font-size: 12px;
+  color: #6b7280;
 }
-.crx_slide_img { width:100%; height:140px; object-fit:cover; border-radius:6px; }
-
-/* Responsive */
-@media (max-width:720px){
-  .crx_affiliate { flex-direction:row; }
-  .crx_affiliate_img { width:100px; }
+.comments-section .comment .comment-body {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #1f2937;
+  line-height: 1.55;
 }
-@media (max-width:480px){
-  .crx_affiliate { flex-direction:column; align-items:flex-start; }
-  .crx_affiliate_img { width:100%; height:auto; }
+.comments-section .comment a {
+  color: #0b63d4;
+  text-decoration: none;
+  font-weight: 600;
 }
-.crx_comment_box{
-background-color: wheat;
-color: teal;
+.comments-section .comment a:hover { text-decoration: underline; }
+.comments-section textarea,
+.comments-section input[type="text"],
+.comments-section input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #e6e9ef;
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #111827;
+}
+.comments-section input[type="submit"] {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #0b63d4;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+@media (max-width:520px) {
+  .comments-section .comment { flex-direction: row; gap: 8px; }
+  .comments-section .comment .avatar { width: 36px; height: 36px; }
+  .comments-section .comment .comment-body { font-size: 13px; }
 }

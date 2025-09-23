@@ -1,0 +1,343 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Bubble Sort — comparisons spoken</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+            padding: 18px;
+        }
+
+        #controls {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            min-width: 320px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #0b63d4;
+            background: #0b63d4;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button[disabled] {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        label {
+            font-weight: 600;
+        }
+
+        #container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            border: 2px solid #333;
+            margin-top: 10px;
+            overflow-x: auto;
+            padding: 10px;
+            box-sizing: border-box;
+            background: #fafafa;
+        }
+
+        .spacer {
+            height: 160px;
+        }
+
+        .box {
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            user-select: none;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+        }
+
+        .box.highlight {
+            transform: scale(1.08);
+            box-shadow: 0 10px 26px rgba(11, 99, 212, 0.24);
+        }
+
+        .idx {
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            font-size: 10px;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 2px 4px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="controls">
+        <label>Numbers:</label>
+        <input id="numbers" type="text" value="5,-3,8,1,-4,7" />
+        <button id="createBtn">Create Boxes</button>
+        <button id="sortBtn">Run Bubble Sort</button>
+        <label style="margin-left:8px;">
+            <input id="speechToggle" type="checkbox" checked />
+            Speak (comparisons & swaps)
+        </label>
+    </div>
+
+    <div id="container">
+        <div class="spacer"></div>
+    </div>
+
+    <script>
+        // ---- DOM refs & state ----
+        const container = document.getElementById('container');
+        const createBtn = document.getElementById('createBtn');
+        const sortBtn = document.getElementById('sortBtn');
+        const input = document.getElementById('numbers');
+        const speechToggle = document.getElementById('speechToggle');
+
+        let boxes = [];   // DOM elements in array order
+        let values = [];  // numeric values in same order
+        let busy = false;
+
+        // layout timings
+        const spacing = 80;
+        const ypos = 60;
+        const stageMs = 420;          // each swap stage timing (up/cross/down)
+        const swapTotalMs = stageMs * 3; // total swap animation length
+        const compareMs = 520;        // highlight+speech duration for comparisons
+
+        // ---- color helpers (kept previous positive/negative rule) ----
+        function numberToColorMagnitude(magnitude, maxAbs) {
+            if (maxAbs === 0) return { r: 80, g: 130, b: 220 };
+            let t = magnitude / maxAbs;
+            return {
+                r: Math.round(t * 255),
+                g: Math.round((1 - Math.abs(t - 0.5) * 2) * 255),
+                b: Math.round((1 - t) * 255)
+            };
+        }
+        function invertColor({ r, g, b }) { return { r: 255 - r, g: 255 - g, b: 255 - b }; }
+        function rgbToString({ r, g, b }) { return `rgb(${r},${g},${b})`; }
+        function slotLeft(index) { return index * spacing; }
+
+        // ---- utility delays ----
+        function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        function refreshIndices() {
+            boxes.forEach((b, idx) => {
+                const lbl = b.querySelector('.idx');
+                if (lbl) lbl.textContent = idx;
+            });
+        }
+
+        function currentLeftRelToContainer(elem) {
+            const rect = elem.getBoundingClientRect();
+            const cont = container.getBoundingClientRect();
+            return rect.left - cont.left + container.scrollLeft;
+        }
+
+        // ---- create visual boxes from input ----
+        function createBoxes() {
+            const raw = input.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            const nums = raw.map(s => Number(s)).filter(n => !Number.isNaN(n));
+            if (nums.length === 0) { alert('Enter at least one number'); return; }
+
+            container.innerHTML = '<div class="spacer"></div>';
+            boxes = []; values = [];
+
+            const maxAbs = Math.max(...nums.map(n => Math.abs(n)));
+            nums.forEach((val, idx) => {
+                const mag = Math.abs(val);
+                const posBg = numberToColorMagnitude(mag, maxAbs);
+                const posText = invertColor(posBg);
+                const bg = val >= 0 ? posBg : posText;
+                const fg = val >= 0 ? posText : posBg;
+
+                const box = document.createElement('div');
+                box.className = 'box';
+                box.textContent = val;
+                box.style.left = slotLeft(idx) + 'px';
+                box.style.top = ypos + 'px';
+                box.style.background = rgbToString(bg);
+                box.style.color = rgbToString(fg);
+
+                const lbl = document.createElement('div');
+                lbl.className = 'idx';
+                lbl.textContent = idx;
+                box.appendChild(lbl);
+
+                container.appendChild(box);
+                boxes.push(box);
+                values.push(val);
+            });
+
+            container.style.minWidth = (nums.length * spacing + 20) + 'px';
+            refreshIndices();
+        }
+
+        // ---- speech helper returning promise when done.
+        //     Attempts to stretch/shrink speech to targetMs by adjusting rate.
+        function speakPhraseForDuration(phrase, targetMs) {
+            return new Promise(resolve => {
+                if (!speechToggle.checked || typeof speechSynthesis === 'undefined') {
+                    resolve(); return;
+                }
+                const words = phrase.trim().split(/\s+/).filter(Boolean).length || 1;
+                const estMsAtRate1 = (words / 3) * 1000; // ~3 words/sec baseline
+                let rate = estMsAtRate1 / targetMs;
+                if (rate < 0.4) rate = 0.4;
+                if (rate > 2.5) rate = 2.5;
+
+                const u = new SpeechSynthesisUtterance(phrase);
+                u.rate = rate;
+                // prefer an english voice if available
+                const voices = speechSynthesis.getVoices();
+                if (voices && voices.length) {
+                    const v = voices.find(v => /en-|english/i.test(v.name)) || voices[0];
+                    if (v) u.voice = v;
+                }
+                u.onend = () => resolve();
+                u.onerror = () => resolve();
+                speechSynthesis.cancel();
+                speechSynthesis.speak(u);
+            });
+        }
+
+        // ---- highlight two boxes briefly while speaking the "comparing" phrase ----
+        async function highlightAndSpeakCompare(i, j) {
+            if (i < 0 || j < 0 || i >= boxes.length || j >= boxes.length) return;
+            const a = boxes[i], b = boxes[j];
+            const phrase = `Comparing ${values[i]} and ${values[j]}`;
+            // apply highlight class
+            a.classList.add('highlight');
+            b.classList.add('highlight');
+
+            // start speech with same duration as compareMs
+            const sp = speakPhraseForDuration(phrase, compareMs);
+
+            // keep highlight visible for compareMs
+            await delay(compareMs);
+
+            // remove highlight
+            a.classList.remove('highlight');
+            b.classList.remove('highlight');
+
+            await sp; // ensure speech finished (if it hasn't)
+        }
+
+        // ---- swap animation which speaks "Swapping X and Y" and performs the up/cross/down animation.
+        //     After animation, commits absolute positions and swaps arrays.
+        async function swapAnimationSpeak(i, j) {
+            // assume valid i,j and UI already disabled
+            const boxA = boxes[i], boxB = boxes[j];
+            const valA = values[i], valB = values[j];
+            const leftA = slotLeft(i), leftB = slotLeft(j);
+            const dAB = leftB - leftA, dBA = leftA - leftB;
+            const phrase = `Swapping ${valA} and ${valB}`;
+
+            // start speech concurrently with animation
+            const speechPromise = speakPhraseForDuration(phrase, swapTotalMs);
+
+            // 1) up
+            boxA.style.transition = `transform ${stageMs / 1000}s ease`;
+            boxB.style.transition = `transform ${stageMs / 1000}s ease`;
+            boxA.style.transform = 'translateY(-70px)';
+            boxB.style.transform = 'translateY(-70px)';
+            await delay(stageMs);
+
+            // 2) cross
+            boxA.style.transform = `translate(${dAB}px, -70px)`;
+            boxB.style.transform = `translate(${dBA}px, -70px)`;
+            await delay(stageMs);
+
+            // 3) down
+            boxA.style.transform = `translate(${dAB}px, 0px)`;
+            boxB.style.transform = `translate(${dBA}px, 0px)`;
+            await delay(stageMs);
+
+            // wait for speech if still going
+            await speechPromise;
+            // alert();
+            // commit positions without jump
+            const curA = currentLeftRelToContainer(boxA);
+            const curB = currentLeftRelToContainer(boxB);
+            boxA.style.transition = 'none';
+            boxB.style.transition = 'none';
+            boxA.style.left = Math.round(curA) + 'px';
+            boxB.style.left = Math.round(curB) + 'px';
+            // alert();
+            // force reflow
+            void container.offsetWidth;
+            // clear transforms and restore transition
+            boxA.style.transform = '';
+            boxB.style.transform = '';
+            boxA.style.transition = 'transform 0.35s ease';
+            boxB.style.transition = 'transform 0.35s ease';
+
+            // swap logical arrays to match new order
+            [boxes[i], boxes[j]] = [boxes[j], boxes[i]];
+            [values[i], values[j]] = [values[j], values[i]];
+            refreshIndices();
+        }
+
+        // ---- bubble sort driver with spoken comparisons and animated swaps ----
+        async function bubbleSort() {
+            if (busy) return;
+            if (values.length < 2) return;
+            busy = true;
+            createBtn.disabled = true;
+            sortBtn.disabled = true;
+
+            const n = values.length;
+            for (let pass = 0; pass < n - 1; pass++) {
+                for (let j = 0; j < n - 1 - pass; j++) {
+                    // highlight & speak comparison
+                    await highlightAndSpeakCompare(j, j + 1);
+
+                    // if out of order, swap
+                    if (values[j] > values[j + 1]) {
+                        await swapAnimationSpeak(j, j + 1);
+                    }
+                }
+            }
+
+            busy = false;
+            createBtn.disabled = false;
+            sortBtn.disabled = false;
+            // final small highlight to show sorted (optional)
+            boxes.forEach(b => { b.classList.add('highlight'); });
+            setTimeout(() => boxes.forEach(b => b.classList.remove('highlight')), 600);
+            alert('Sorting complete!');
+        }
+
+        // ---- event wiring ----
+        createBtn.addEventListener('click', createBoxes);
+        sortBtn.addEventListener('click', bubbleSort);
+
+        // create initial boxes
+        createBoxes();
+    </script>
+</body>
+
+</html>
