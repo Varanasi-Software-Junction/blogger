@@ -207,3 +207,9 @@ input.crx_input:focus, textarea.crx_input:focus, select.crx_input:focus {
   color: white  !important;
   background-color: lightskyblue !important;
 }
+  .comments blockquote {
+      border: 1px solid black;
+      color: white;
+      background-color: black;
+      font: Helvetica;
+    }
