@@ -375,7 +375,8 @@ ol.comment-list li:last-child {
 
 /* ensure code blocks, quiz answers etc look consistent */
 pre {
-  background: #f7fafc;
+  background-color: lightcoral !important;
+  color: darkblue !important;
   padding: 10px;
   border-radius: 6px;
   overflow-x: auto;
