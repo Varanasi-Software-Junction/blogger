@@ -106,10 +106,7 @@ Designed by Champak Roy
   width: 80%; /* Sets width for the main content */
 }
 
-.KHxj8b, .tL9Q4c, textarea, .w68ot
-{
-background-color:yellow !important;
-}
+ 
 
 ]]></b:skin>
 <style>
@@ -3966,7 +3963,7 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
     </b:section>
     <div style='text-indent:-99999px;'>
 
-    <div class='copyright-area'>Created By <a href='http://soratemplates.com/' id='mycontent' rel='dofollow' title='Blogspot Templates'>Varanasi Software Junction</a> | Distributed By <a href='https://gooyaabitemplates.com/' rel='dofollow' style='color:#ff00ba;' target='_blank'>GooyaabiTemplates</a>
+    <div class='copyright-area'>Created By <a href='https://varanasisoftwarejunction.blogspot.com/' id='mycontent' rel='dofollow' title='Blogspot Templates'>Varanasi Software Junction</a> | Distributed By <a href='https://gooyaabitemplates.com/' rel='dofollow' style='color:#ff00ba;' target='_blank'>GooyaabiTemplates</a>
     </div>
 
     </div>
