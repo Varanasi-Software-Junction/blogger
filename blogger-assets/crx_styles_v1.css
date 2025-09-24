@@ -508,10 +508,11 @@ pre {
 
 .crx_affiliate
 {
+  margin: 5px;
   border-style: ridge;
   border-width: 7px;
   padding: 10px;
   border-radius: 10px;
-  border-top: teal;
+  border-color: teal;
 
 }
