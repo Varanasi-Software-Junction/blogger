@@ -99,6 +99,7 @@
         card.className = "crx_affiliate";
         card.innerHTML = `
         <div class="crx_affiliate">
+        <center>
         <br>
  <div style="font-size:12px; ">Product on Amazon<br>*As an Amazon Associate I earn from qualifying purchases.</div>
  <br>
@@ -111,6 +112,7 @@
             </div>
             <div style="font-size:12px;color:#666;margin-top:8px;">*As an Amazon Associate I earn from qualifying purchases.</div>
           </div>
+          </center>
           </div>
         `;
         tgt.appendChild(card);
