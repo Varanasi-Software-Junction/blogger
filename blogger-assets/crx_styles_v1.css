@@ -504,3 +504,12 @@ pre {
 
 /* compact variant when you want minimal spacing */
 .crx_section--compact { padding: 10px; }
+
+
+.crx_affiliate
+{
+  border-style: ridge;
+  border-width: 7px;
+  padding: 10px;
+
+}
