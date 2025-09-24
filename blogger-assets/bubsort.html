@@ -1,343 +1,910 @@
-<!doctype html>
-<html>
+<!-- ===========================
+     Bubble Sort — Blog Post (HTML for Blogger)
+     NOTE: Uses your existing CRX CSS (no new classes added).
+     Each section is explicitly marked with BEGIN / END comments.
+     Paste into Blogger HTML editor or gadget.
+     =========================== -->
 
-<head>
-    <meta charset="utf-8" />
-    <title>Bubble Sort — comparisons spoken</title>
-    <style>
-        body {
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-            padding: 18px;
-        }
+<!-- POST: START -->
+<div style="font-family:Inter, system-ui, Arial, sans-serif; max-width:960px; margin:20px auto; line-height:1.6; color:#0f1724;">
 
-        #controls {
-            margin-bottom: 12px;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+  <!-- SECTION: Title BEGIN -->
+  <header>
+    <h1 style="color:#0b63d4; text-align:center; margin-bottom:10px;">🟦 Bubble Sort: A Classic Sorting Algorithm</h1>
+    <p style="text-align:center; color:#475569; margin-top:0;">A clear, practical write-up for learners and interview preparation — pseudo code, examples, MCQs, assignments (C / Java / Python), and further reading.</p>
+  </header>
+  <!-- SECTION: Title END -->
 
-        input[type="text"] {
-            min-width: 320px;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
+  <!-- SECTION: Introduction BEGIN -->
+  <section id="introduction" aria-label="Introduction">
+    <h2 style="color:#0b63d4; margin-top:22px;">🔹 Introduction</h2>
+    <p>Sorting is one of the most fundamental problems in computer science. It appears frequently in interviews, coding tests, and day-to-day software tasks. <strong>Bubble Sort</strong>, while not the most efficient for large datasets, is an excellent pedagogical tool: it helps beginners understand comparisons, swaps, loops, and basic complexity analysis.</p>
 
-        button {
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid #0b63d4;
-            background: #0b63d4;
-            color: #fff;
-            cursor: pointer;
-        }
+    <ul>
+      <li>Builds a strong <strong>foundation in algorithm analysis</strong>.</li>
+      <li>Common in teaching <strong>Data Structures &amp; Algorithms (DSA)</strong>.</li>
+      <li>Useful for interview questions that test understanding of loops, in-place operations, and optimization flags.</li>
+    </ul>
+  </section>
+  <!-- SECTION: Introduction END -->
 
-        button[disabled] {
-            opacity: 0.5;
-            cursor: default;
-        }
+  <!-- SECTION: What is Bubble Sort BEGIN -->
+  <section id="what-is" aria-label="What is Bubble Sort">
+    <h2 style="color:#0b63d4; margin-top:18px;">🔹 What is Bubble Sort?</h2>
+    <p>Bubble Sort is a <em>comparison-based</em> algorithm that repeatedly steps through a list, compares adjacent elements, and swaps them if they are in the wrong order. The largest elements gradually "bubble" to the end of the list after every pass.</p>
 
-        label {
-            font-weight: 600;
-        }
+    <!-- Subsection: Pseudo Code BEGIN -->
+    <h3 style="margin-top:12px;">✨ Pseudo Code</h3>
+    <pre>
+procedure bubbleSort(A)
+    n = length(A)
+    repeat
+        swapped = false
+        for i = 1 to n-1
+            if A[i] > A[i+1] then
+                swap(A[i], A[i+1])
+                swapped = true
+        end for
+    until not swapped
+end procedure
+    </pre>
+    <!-- Subsection: Pseudo Code END -->
 
-        #container {
-            position: relative;
-            width: 100%;
-            height: 220px;
-            border: 2px solid #333;
-            margin-top: 10px;
-            overflow-x: auto;
-            padding: 10px;
-            box-sizing: border-box;
-            background: #fafafa;
-        }
+    <!-- Subsection: Illustration BEGIN -->
+    <h3 style="margin-top:12px;">🔹 Illustration (sample run)</h3>
+    <p><strong>Input:</strong> [5, 3, 8, 4, 2]</p>
+    <ol>
+      <li>After Pass 1: [3, 5, 4, 2, 8]</li>
+      <li>After Pass 2: [3, 4, 2, 5, 8]</li>
+      <li>After Pass 3: [3, 2, 4, 5, 8]</li>
+      <li>After Pass 4: [2, 3, 4, 5, 8] — Sorted</li>
+    </ol>
+    <!-- Subsection: Illustration END -->
+  </section>
+  <!-- SECTION: What is Bubble Sort END -->
 
-        .spacer {
-            height: 160px;
-        }
+  <!-- SECTION: Implementations BEGIN -->
+  <section id="implementations" aria-label="Implementations and Complexity">
+    <h2 style="color:#0b63d4; margin-top:18px;">🔹 Different Implementations</h2>
 
-        .box {
-            position: absolute;
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            font-weight: 700;
-            transition: transform 0.35s ease, box-shadow 0.35s ease;
-            user-select: none;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-        }
+    <!-- Implementation: Standard BEGIN -->
+    <article>
+      <h3 style="margin-top:12px;">1) Standard Bubble Sort</h3>
+      <pre>
+for i = 0 to n-1
+    for j = 0 to n-i-1
+        if A[j] > A[j+1]
+            swap(A[j], A[j+1])
+      </pre>
+      <p><strong>Time Complexity</strong>: Best O(n)*, Average O(n²), Worst O(n²). <br>
+      <strong>Space Complexity</strong>: O(1) (in-place)</p>
+      <p><small>*Best-case O(n) when you use the 'swapped' optimization and the array is already sorted.</small></p>
+    </article>
+    <!-- Implementation: Standard END -->
 
-        .box.highlight {
-            transform: scale(1.08);
-            box-shadow: 0 10px 26px rgba(11, 99, 212, 0.24);
-        }
+    <!-- Implementation: Optimized BEGIN -->
+    <article>
+      <h3 style="margin-top:12px;">2) Optimized Bubble Sort (early stop)</h3>
+      <pre>
+for i = 0 to n-1
+    swapped = false
+    for j = 0 to n-i-1
+        if A[j] > A[j+1]
+            swap(A[j], A[j+1])
+            swapped = true
+    if not swapped
+        break
+      </pre>
+      <p>The optimization stops early if no swaps happen during a full pass (array already sorted), reducing passes and giving a best-case of O(n).</p>
+    </article>
+    <!-- Implementation: Optimized END -->
 
-        .idx {
-            position: absolute;
-            right: -10px;
-            top: -10px;
-            font-size: 10px;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 2px 4px;
-            border-radius: 6px;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            font-weight: 600;
-        }
-    </style>
-</head>
+    <!-- Implementation: Recursive BEGIN -->
+    <article>
+      <h3 style="margin-top:12px;">3) Recursive Bubble Sort (conceptual)</h3>
+      <pre>
+procedure recursiveBubble(A, n)
+    if n == 1 then return
+    for i = 0 to n-2
+        if A[i] > A[i+1] then swap(A[i], A[i+1])
+    recursiveBubble(A, n-1)
+      </pre>
+      <p>Equivalent O(n²) time complexity; offered for academic completeness, but iterative versions are preferred in practice.</p>
+    </article>
+    <!-- Implementation: Recursive END -->
+  </section>
+  <!-- SECTION: Implementations END -->
 
-<body>
-    <div id="controls">
-        <label>Numbers:</label>
-        <input id="numbers" type="text" value="5,-3,8,1,-4,7" />
-        <button id="createBtn">Create Boxes</button>
-        <button id="sortBtn">Run Bubble Sort</button>
-        <label style="margin-left:8px;">
-            <input id="speechToggle" type="checkbox" checked />
-            Speak (comparisons & swaps)
-        </label>
+  <!-- SECTION: Spin-offs BEGIN -->
+  <section id="spin-offs" aria-label="Spin-offs and utility">
+    <h2 style="color:#0b63d4; margin-top:18px;">🔹 Spin-offs &amp; Useful Tricks</h2>
+    <p>Because Bubble Sort naturally places the largest element at the end after the first pass, it becomes convenient for related tasks:</p>
+    <ul>
+      <li><strong>Find largest:</strong> After one pass, the last element is the largest.</li>
+      <li><strong>Find 2nd largest:</strong> After two passes, the second-last element is the second largest.</li>
+      <li><strong>Find nth largest/smallest:</strong> Run Bubble Sort for n passes and read the required position.</li>
+    </ul>
+    <p>These tricks are useful for small datasets or as educational exercises, but for production use on large data prefer selection/heap algorithms or partial selection algorithms (like Quickselect).</p>
+  </section>
+  <!-- SECTION: Spin-offs END -->
+
+  <!-- SECTION: History BEGIN -->
+  <section id="history" aria-label="History">
+    <h2 style="color:#0b63d4; margin-top:18px;">🔹 History of Bubble Sort</h2>
+    <p>Bubble Sort is one of the earliest sorting algorithms taught in computer science. Its simple compare-and-swap approach made it an ideal first example in textbooks and classrooms. Though not widely used in high-performance systems, its role in teaching fundamentals of sorting and algorithmic complexity is timeless.</p>
+  </section>
+  <!-- SECTION: History END -->
+
+  <!-- SECTION: MCQs BEGIN -->
+  <section id="mcqs" aria-label="Multiple choice questions">
+    <h2 style="color:#0b63d4; margin-top:18px;">🔹 10 MCQs (options shown — click to reveal answer)</h2>
+
+    <!-- Q1 -->
+    <div style="margin-top:10px;">
+      <p style="margin:2px 0;"><strong>1. Bubble Sort is an example of?</strong></p>
+      <ul>
+        <li>A) Divide and Conquer</li>
+        <li>B) Comparison-based Sorting</li>
+        <li>C) Hashing</li>
+        <li>D) Dynamic Programming</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Comparison-based Sorting</div>
+      </details>
     </div>
 
-    <div id="container">
-        <div class="spacer"></div>
+    <!-- Q2 -->
+    <div style="margin-top:12px;">
+      <p style="margin:2px 0;"><strong>2. Worst-case time complexity of Bubble Sort?</strong></p>
+      <ul>
+        <li>A) O(n)</li>
+        <li>B) O(log n)</li>
+        <li>C) O(n²)</li>
+        <li>D) O(n log n)</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">C) O(n²)</div>
+      </details>
     </div>
 
-    <script>
-        // ---- DOM refs & state ----
-        const container = document.getElementById('container');
-        const createBtn = document.getElementById('createBtn');
-        const sortBtn = document.getElementById('sortBtn');
-        const input = document.getElementById('numbers');
-        const speechToggle = document.getElementById('speechToggle');
+    <!-- Q3 -->
+    <div style="margin-top:12px;">
+      <p style="margin:2px 0;"><strong>3. Best-case complexity of Bubble Sort?</strong></p>
+      <ul>
+        <li>A) O(n)</li>
+        <li>B) O(n²)</li>
+        <li>C) O(log n)</li>
+        <li>D) O(n log n)</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">A) O(n) — with early-stop optimization</div>
+      </details>
+    </div>
 
-        let boxes = [];   // DOM elements in array order
-        let values = [];  // numeric values in same order
-        let busy = false;
+    <!-- Q4 -->
+    <div style="margin-top:12px;">
+      <p style="margin:2px 0;"><strong>4. Is Bubble Sort stable?</strong></p>
+      <ul>
+        <li>A) No</li>
+        <li>B) Yes</li>
+        <li>C) Depends on implementation</li>
+        <li>D) None of the above</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Yes — Bubble Sort is stable (preserves relative order of equal elements)</div>
+      </details>
+    </div>
 
-        // layout timings
-        const spacing = 80;
-        const ypos = 60;
-        const stageMs = 420;          // each swap stage timing (up/cross/down)
-        const swapTotalMs = stageMs * 3; // total swap animation length
-        const compareMs = 520;        // highlight+speech duration for comparisons
+    <!-- Q5 -->
+    <div style="margin-top:12px;">
+      <p style="margin:2px 0;"><strong>5. Bubble Sort is an ____ algorithm?</strong></p>
+      <ul>
+        <li>A) In-place</li>
+        <li>B) Out-of-place</li>
+        <li>C) Recursive only</li>
+        <li>D) None of the above</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">A) In-place</div>
+      </details>
+    </div>
 
-        // ---- color helpers (kept previous positive/negative rule) ----
-        function numberToColorMagnitude(magnitude, maxAbs) {
-            if (maxAbs === 0) return { r: 80, g: 130, b: 220 };
-            let t = magnitude / maxAbs;
-            return {
-                r: Math.round(t * 255),
-                g: Math.round((1 - Math.abs(t - 0.5) * 2) * 255),
-                b: Math.round((1 - t) * 255)
-            };
+    <!-- Q6 -->
+    <div style="margin-top:12px;">
+      <p style="margin:2px 0;"><strong>6. Bubble Sort is suitable for?</strong></p>
+      <ul>
+        <li>A) Large datasets</li>
+        <li>B) Small datasets</li>
+        <li>C) Any size dataset</li>
+        <li>D) Streaming data</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Small datasets</div>
+      </details>
+    </div>
+
+    <!-- Q7 -->
+    <div style="margin-top:12px;">
+      <p style="margin:2px 0;"><strong>7. Bubble Sort is also known as?</strong></p>
+      <ul>
+        <li>A) Quick Sort</li>
+        <li>B) Sinking Sort</li>
+        <li>C) Selection Sort</li>
+        <li>D) Merge Sort</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Sinking Sort</div>
+      </details>
+    </div>
+
+    <!-- Q8 -->
+    <div style="margin-top:12px;">
+      <p style="margin:2px 0;"><strong>8. Which method shares adjacent swap logic?</strong></p>
+      <ul>
+        <li>A) Insertion Sort</li>
+        <li>B) Merge Sort</li>
+        <li>C) Quick Sort</li>
+        <li>D) Heap Sort</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">A) Insertion Sort (when expressed as adjacent swaps / shifts)</div>
+      </details>
+    </div>
+
+    <!-- Q9 -->
+    <div style="margin-top:12px;">
+      <p style="margin:2px 0;"><strong>9. Can Bubble Sort detect already sorted arrays early?</strong></p>
+      <ul>
+        <li>A) No</li>
+        <li>B) Yes, with optimization</li>
+        <li>C) Sometimes</li>
+        <li>D) None of the above</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Yes, with early-stop optimization (swapped flag)</div>
+      </details>
+    </div>
+
+    <!-- Q10 -->
+    <div style="margin-top:12px; margin-bottom:10px;">
+      <p style="margin:2px 0;"><strong>10. Space complexity of Bubble Sort?</strong></p>
+      <ul>
+        <li>A) O(n)</li>
+        <li>B) O(log n)</li>
+        <li>C) O(1)</li>
+        <li>D) O(n log n)</li>
+      </ul>
+      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
+        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">C) O(1)</div>
+      </details>
+    </div>
+
+  </section>
+  <!-- SECTION: MCQs END -->
+
+  
+  <!-- Gadget Begins-->
+<div id="champak_bubble_gadget" style="font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial; color:#222; line-height:1.55;">
+ 
+
+  <div id="crx_controls_wrap" style="margin-top:8px; display:flex; gap:12px; flex-direction:column;">
+    <div id="crx_controls" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <label style="font-weight:700;">Numbers:</label>
+      <input id="crx_numbers" type="text" value="1,6,0,1,1,9,7,0" style="min-width:320px; padding:8px; border-radius:6px; border:1px solid #ccc;" />
+
+      <button id="crx_createBtn" style="padding:8px 12px; border-radius:6px; border:1px solid #0b63d4; background:#0b63d4; color:#fff; cursor:pointer;">Create Boxes</button>
+      <button id="crx_sortBtn" style="padding:8px 12px; border-radius:6px; border:1px solid #0b63d4; background:#0b63d4; color:#fff; cursor:pointer;">Run Bubble Sort</button>
+
+      <label style="display:flex; gap:6px; align-items:center;">
+        <input id="crx_speechToggle" type="checkbox" checked="checked" />
+        <span style="font-weight:600;">Speak (comparisons & swaps)</span>
+      </label>
+
+      <label style="display:flex; gap:6px; align-items:center;">
+        <span style="font-weight:600;">Mode:</span>
+        <select id="crx_mode" style="padding:6px 8px; border-radius:6px; border:1px solid #ccc;">
+          <option value="ltr">Left → Right</option>
+          <option value="rtl">Right → Left</option>
+          <option value="alt">Alternating (L→R then R→L)</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="crx_legend" style="background:#f3f7f5; border:1px solid rgba(11,102,35,0.08); padding:8px 10px; border-radius:6px; color:#083d26; font-size:13px; max-width:720px;">
+      <strong>What the dark-green border means:</strong>
+      <div style="margin-top:6px; font-size:13px;">
+        A box with a <span style="border-bottom:2px solid #0b6623; padding-bottom:1px;">dark-green border</span> is <em>finalized</em> — it has reached its correct, sorted position and will not move again.
+      </div>
+    </div>
+  </div>
+
+  <div id="crx_container" style="position:relative; width:100%; height:220px; border:2px solid #333; margin-top:10px; overflow-x:auto; padding:10px; box-sizing:border-box; background:#fafafa;">
+    <div class="crx_spacer" style="height:160px;"></div>
+  </div>
+
+  <div style="display:flex; gap:12px; margin-top:12px; align-items:flex-start; flex-wrap:wrap;">
+    <div style="flex:1; min-width:320px;">
+      <div id="crx_speechBar" aria-live="polite" style="margin-top:16px; padding:10px; background:#0b63d4; color:#fff; border-radius:6px; min-height:46px; display:flex; flex-direction:column; gap:6px;">
+        <div id="crx_speechCurrent" style="font-size:18px; font-weight:700; text-align:center; letter-spacing:0.4px;">Ready...</div>
+        <div id="crx_speechQueue" style="font-size:13px; opacity:0.95; text-align:center;"></div>
+      </div>
+    </div>
+
+    <div style="min-width:320px; max-width:720px;">
+      <label style="display:block; font-weight:700; margin-bottom:6px;">Event Log (comparisons, swaps, finalizations):</label>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <select id="crx_eventLog" multiple size="8" style="min-width:320px; max-width:720px; box-sizing:border-box; padding:8px; border-radius:6px; border:1px solid #ccc; background:#fff; font-family:monospace;"></select>
+        <div class="crx_log_controls" style="display:flex; gap:8px; align-items:center;">
+          <button id="crx_clearLog" style="padding:8px 10px; border-radius:6px; border:1px solid #999; background:#fff; cursor:pointer;">Clear Log</button>
+        </div>
+      </div>
+      <div style="font-size:12px; color:#666; margin-top:6px;">The top (selected) entry is the newest event; the log records every compare and swap as the visual run proceeds.</div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  /* gadget scoped CSS */
+  #champak_bubble_gadget .crx_box { position:absolute; width:56px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-weight:700; user-select:none; box-shadow:0 6px 14px rgba(0,0,0,0.08); transition: transform 0.35s ease, box-shadow 0.35s ease, left 0.25s ease; }
+  #champak_bubble_gadget .crx_box .idx { position:absolute; right:-10px; top:-10px; font-size:10px; background:rgba(255,255,255,0.85); padding:2px 4px; border-radius:6px; border:1px solid rgba(0,0,0,0.06); font-weight:600; }
+  #champak_bubble_gadget .crx_highlight { transform: scale(1.08); box-shadow: 0 10px 26px rgba(11,99,212,0.24) !important; }
+  #champak_bubble_gadget .crx_final { border: 4px solid #0b6623 !important; box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important; }
+</style>
+
+<script type="text/javascript">
+(function(){
+  // DOM refs
+  const base = document.getElementById('champak_bubble_gadget');
+  const container = document.getElementById('crx_container');
+  const createBtn = document.getElementById('crx_createBtn');
+  const sortBtn = document.getElementById('crx_sortBtn');
+  const input = document.getElementById('crx_numbers');
+  const speechToggle = document.getElementById('crx_speechToggle');
+  const speechCurrent = document.getElementById('crx_speechCurrent');
+  const speechQueueDiv = document.getElementById('crx_speechQueue');
+  const modeSelect = document.getElementById('crx_mode');
+  const eventLog = document.getElementById('crx_eventLog');
+  const clearLogBtn = document.getElementById('crx_clearLog');
+
+  // state
+  let boxes = [];    // DOM elements
+  let values = [];   // numeric values
+  let busy = false;
+  let needRecenter = false;
+  let phraseQueue = [];
+
+  // layout/timings
+  const spacing = 80;
+  const ypos = 60;
+  const stageMs = 420;
+  const swapTotalMs = stageMs * 3;
+  const compareMs = 900; // comparison duration
+
+  // log cap
+  const LOG_CAP = 500;
+
+  // helpers: color mapping
+  function numberToColorMagnitude(magnitude, maxAbs) {
+    if (maxAbs === 0) return { r: 80, g: 130, b: 220 };
+    let t = magnitude / maxAbs;
+    return {
+      r: Math.round(t * 255),
+      g: Math.round((1 - Math.abs(t - 0.5) * 2) * 255),
+      b: Math.round((1 - t) * 255)
+    };
+  }
+  function invertColor({ r, g, b }) { return { r: 255 - r, g: 255 - g, b: 255 - b }; }
+  function rgbToString({ r, g, b }) { return `rgb(${r},${g},${b})`; }
+
+  // centering
+  function computeOffset() {
+    const totalWidth = values.length * spacing;
+    const containerWidth = container.clientWidth;
+    return Math.max(0, (containerWidth - totalWidth) / 2);
+  }
+  function slotLeft(index) { return computeOffset() + index * spacing; }
+
+  // speech UI
+  function updateSpeechBarUI() {
+    if (phraseQueue.length === 0) {
+      speechCurrent.textContent = 'Ready...';
+      speechQueueDiv.innerHTML = '';
+      return;
+    }
+    speechCurrent.textContent = phraseQueue[0] || '';
+    if (phraseQueue.length > 1) {
+      const upcoming = phraseQueue.slice(1, 7).map((p, i) => `<span class="upcoming" style="display:block; color: rgba(255,255,255,0.9);">${i+1}. ${escapeHtml(p)}</span>`).join('');
+      speechQueueDiv.innerHTML = upcoming;
+    } else {
+      speechQueueDiv.innerHTML = '';
+    }
+  }
+  function escapeHtml(s) { return String(s).replace(/[&<>\"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function enqueuePhrase(phrase){ phraseQueue.push(phrase); updateSpeechBarUI(); }
+  function dequeuePhrase(){ phraseQueue.shift(); updateSpeechBarUI(); }
+
+  // event log functions
+  function logEvent(text) {
+    const opt = document.createElement('option');
+    opt.innerHTML = text;
+    eventLog.add(opt, 0);
+    while (eventLog.options.length > LOG_CAP) { eventLog.remove(eventLog.options.length - 1); }
+    if (eventLog.options.length) { eventLog.selectedIndex = 0; }
+  }
+  function clearLog() { eventLog.innerHTML = ''; }
+
+  // speak with duration target
+  function speakPhraseForDuration(phrase, targetMs){
+    enqueuePhrase(phrase);
+    return new Promise(resolve => {
+      if (!speechToggle.checked || typeof speechSynthesis === 'undefined') {
+        setTimeout(()=>{ dequeuePhrase(); resolve(); }, Math.max(30, targetMs));
+        return;
+      }
+      const words = phrase.trim().split(/\s+/).length || 1;
+      const estMsAtRate1 = (words / 3) * 1000;
+      let rate = estMsAtRate1 / targetMs;
+      if (rate < 0.35) rate = 0.35; if (rate > 2.5) rate = 2.5;
+      const u = new SpeechSynthesisUtterance(phrase);
+      u.rate = rate;
+      const voices = speechSynthesis.getVoices();
+      if (voices && voices.length) {
+        const v = voices.find(v => /en-|english/i.test(v.name)) || voices[0];
+        if (v) u.voice = v;
+      }
+      u.onend = ()=>{ dequeuePhrase(); resolve(); };
+      u.onerror = ()=>{ dequeuePhrase(); resolve(); };
+      speechSynthesis.speak(u);
+    });
+  }
+
+  // utilities
+  function delay(ms){ return new Promise(r=>setTimeout(r, ms)); }
+  function refreshIndices(){ boxes.forEach((b,i)=>{ const lbl=b.querySelector('.idx'); if(lbl) lbl.textContent=i; }); }
+  function currentLeftRelToContainer(elem){
+    const rect = elem.getBoundingClientRect();
+    const cont = container.getBoundingClientRect();
+    return rect.left - cont.left + container.scrollLeft;
+  }
+
+  // create boxes
+  function createBoxes(){
+    const raw = input.value.split(',').map(s=>s.trim()).filter(s=>s.length>0);
+    const parsed = raw.map(s=>Number(s)).filter(n=>!Number.isNaN(n));
+    if (parsed.length===0){ alert('Enter at least one number'); return; }
+    container.innerHTML = '<div class="crx_spacer" style="height:160px;"></div>';
+    boxes=[]; values=[];
+    const maxAbs = Math.max(...parsed.map(n=>Math.abs(n)));
+    parsed.forEach((val, idx)=>{
+      const mag = Math.abs(val);
+      const posBg = numberToColorMagnitude(mag, maxAbs);
+      const posText = invertColor(posBg);
+      const bg = val >= 0 ? posBg : posText;
+      const fg = val >= 0 ? posText : posBg;
+
+      const box = document.createElement('div');
+      box.className = 'crx_box';
+      box.textContent = val;
+      box.style.position = 'absolute';
+      box.style.width = '56px';
+      box.style.height = '56px';
+      box.style.display = 'flex';
+      box.style.alignItems = 'center';
+      box.style.justifyContent = 'center';
+      box.style.borderRadius = '8px';
+      box.style.fontWeight = '700';
+      box.style.transition = 'transform 0.35s ease, box-shadow 0.35s ease, left 0.25s ease';
+      box.style.userSelect = 'none';
+      box.style.boxShadow = '0 6px 14px rgba(0,0,0,0.08)';
+      box.style.left = slotLeft(idx) + 'px';
+      box.style.top = ypos + 'px';
+      box.style.background = rgbToString(bg);
+      box.style.color = rgbToString(fg);
+      box.style.border = '1px solid rgba(0,0,0,0.06)';
+
+      const lbl = document.createElement('div');
+      lbl.className = 'idx';
+      lbl.textContent = idx;
+      box.appendChild(lbl);
+
+      container.appendChild(box);
+      boxes.push(box);
+      values.push(val);
+    });
+
+    container.style.minWidth = (parsed.length * spacing + 20) + 'px';
+    phraseQueue = [];
+    updateSpeechBarUI();
+    clearLog();
+    logEvent(`Created ${parsed.length} boxes: [${parsed.join(', ')}]`);
+    recenterBoxes();
+  }
+
+  // visual helpers
+  function addHighlight(el){ if(!el.classList.contains('crx_final')) { el.classList.add('crx_highlight'); el.style.transform='scale(1.08)'; el.style.boxShadow='0 10px 26px rgba(11,99,212,0.24)'; } }
+  function removeHighlight(el){ el.classList.remove('crx_highlight'); el.style.transform=''; el.style.boxShadow='0 6px 14px rgba(0,0,0,0.08)'; }
+
+  function commitBoxToSlotWithoutJump(box, targetSlotLeftPx){
+    const curLeft = currentLeftRelToContainer(box);
+    const fix = curLeft - targetSlotLeftPx;
+    box.style.transition = 'none';
+    box.style.left = Math.round(targetSlotLeftPx) + 'px';
+    box.style.transform = `translate(${Math.round(fix)}px, 0px)`;
+    void box.offsetWidth;
+    box.style.transform = '';
+    void box.offsetWidth;
+    box.style.transition = 'transform 0.35s ease, box-shadow 0.35s ease, left 0.25s ease';
+  }
+
+  // highlight and speak comparison
+  async function highlightAndSpeakCompare(i, j){
+    if (i<0||j<0||i>=boxes.length||j>=boxes.length) return;
+    const a = boxes[i], b = boxes[j];
+    const phrase = `Comparing ${values[i]} and ${values[j]}`;
+    logEvent(`Compare: indices ${i} vs ${j} — values ${values[i]} vs ${values[j]}`);
+    addHighlight(a); addHighlight(b);
+    const sp = speakPhraseForDuration(phrase, compareMs);
+    await delay(compareMs);
+    removeHighlight(a); removeHighlight(b);
+    await sp;
+  }
+
+  // swap animation with speech
+  async function swapAnimationSpeak(i, j){
+    if (i===j) return;
+    const boxA = boxes[i], boxB = boxes[j];
+    const valA = values[i], valB = values[j];
+    const leftA = slotLeft(i), leftB = slotLeft(j);
+    const dAB = leftB - leftA, dBA = leftA - leftB;
+    const phrase = `Swapping ${valA} and ${valB}`;
+
+    logEvent(`Swap: indices ${i} <-> ${j} — values ${valA} <-> ${valB}`);
+
+    const speechPromise = speakPhraseForDuration(phrase, swapTotalMs);
+
+    // up
+    boxA.style.transition = `transform ${stageMs/1000}s ease`;
+    boxB.style.transition = `transform ${stageMs/1000}s ease`;
+    boxA.style.transform = 'translateY(-70px)';
+    boxB.style.transform = 'translateY(-70px)';
+    await delay(stageMs);
+
+    // cross
+    boxA.style.transform = `translate(${dAB}px, -70px)`;
+    boxB.style.transform = `translate(${dBA}px, -70px)`;
+    await delay(stageMs);
+
+    // down
+    boxA.style.transform = `translate(${dAB}px, 0px)`;
+    boxB.style.transform = `translate(${dBA}px, 0px)`;
+    await delay(stageMs);
+
+    await speechPromise;
+
+    // commit positions without jump
+    const targetLeftA = slotLeft(j);
+    const targetLeftB = slotLeft(i);
+    commitBoxToSlotWithoutJump(boxA, targetLeftA);
+    commitBoxToSlotWithoutJump(boxB, targetLeftB);
+
+    // swap logical arrays
+    [boxes[i], boxes[j]] = [boxes[j], boxes[i]];
+    [values[i], values[j]] = [values[j], values[i]];
+    refreshIndices();
+
+    if (needRecenter) { needRecenter=false; recenterBoxes(); }
+  }
+
+  // recenter
+  function recenterBoxes(){
+    if (boxes.length===0) return;
+    if (busy) { needRecenter=true; return; }
+    boxes.forEach((box, idx)=>{ box.style.transition='none'; box.style.left = Math.round(slotLeft(idx)) + 'px'; });
+    void container.offsetWidth;
+    boxes.forEach(box=>{ box.style.transition = 'transform 0.35s ease, box-shadow 0.35s ease, left 0.25s ease'; });
+  }
+
+  // bubble sort driver
+  async function bubbleSort(){
+    if (busy) return;
+    if (values.length < 2) return;
+    busy = true; createBtn.disabled = true; sortBtn.disabled = true;
+
+    const n = values.length;
+    let pass = 0;
+    let swappedThisPass = true;
+
+    logEvent(`Start sorting (mode=${modeSelect.value})`);
+
+    while (pass < n - 1 && swappedThisPass) {
+      swappedThisPass = false;
+      const mode = modeSelect.value; // 'ltr', 'rtl', 'alt'
+      let dir = 'ltr';
+      if (mode === 'ltr') dir = 'ltr';
+      else if (mode === 'rtl') dir = 'rtl';
+      else if (mode === 'alt') dir = (pass % 2 === 0) ? 'ltr' : 'rtl';
+
+      logEvent(`Pass ${pass + 1} — direction: ${dir.toUpperCase()}`);
+
+      if (dir === 'ltr') {
+        for (let i = 0; i < n - 1 - pass; i++) {
+          await highlightAndSpeakCompare(i, i+1);
+          if (values[i] > values[i+1]) {
+            await swapAnimationSpeak(i, i+1);
+            swappedThisPass = true;
+          }
         }
-        function invertColor({ r, g, b }) { return { r: 255 - r, g: 255 - g, b: 255 - b }; }
-        function rgbToString({ r, g, b }) { return `rgb(${r},${g},${b})`; }
-        function slotLeft(index) { return index * spacing; }
-
-        // ---- utility delays ----
-        function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-        function refreshIndices() {
-            boxes.forEach((b, idx) => {
-                const lbl = b.querySelector('.idx');
-                if (lbl) lbl.textContent = idx;
-            });
+        const finalizedIdx = n - 1 - pass;
+        if (boxes[finalizedIdx]) {
+          removeHighlight(boxes[finalizedIdx]);
+          boxes[finalizedIdx].classList.add('crx_final');
+          logEvent(`Finalized: index ${finalizedIdx} — value ${values[finalizedIdx]}`);
         }
-
-        function currentLeftRelToContainer(elem) {
-            const rect = elem.getBoundingClientRect();
-            const cont = container.getBoundingClientRect();
-            return rect.left - cont.left + container.scrollLeft;
+      } else {
+        for (let i = n - 1; i > pass; i--) {
+          await highlightAndSpeakCompare(i, i-1);
+          if (values[i-1] > values[i]) {
+            await swapAnimationSpeak(i-1, i);
+            swappedThisPass = true;
+          }
         }
-
-        // ---- create visual boxes from input ----
-        function createBoxes() {
-            const raw = input.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
-            const nums = raw.map(s => Number(s)).filter(n => !Number.isNaN(n));
-            if (nums.length === 0) { alert('Enter at least one number'); return; }
-
-            container.innerHTML = '<div class="spacer"></div>';
-            boxes = []; values = [];
-
-            const maxAbs = Math.max(...nums.map(n => Math.abs(n)));
-            nums.forEach((val, idx) => {
-                const mag = Math.abs(val);
-                const posBg = numberToColorMagnitude(mag, maxAbs);
-                const posText = invertColor(posBg);
-                const bg = val >= 0 ? posBg : posText;
-                const fg = val >= 0 ? posText : posBg;
-
-                const box = document.createElement('div');
-                box.className = 'box';
-                box.textContent = val;
-                box.style.left = slotLeft(idx) + 'px';
-                box.style.top = ypos + 'px';
-                box.style.background = rgbToString(bg);
-                box.style.color = rgbToString(fg);
-
-                const lbl = document.createElement('div');
-                lbl.className = 'idx';
-                lbl.textContent = idx;
-                box.appendChild(lbl);
-
-                container.appendChild(box);
-                boxes.push(box);
-                values.push(val);
-            });
-
-            container.style.minWidth = (nums.length * spacing + 20) + 'px';
-            refreshIndices();
+        const finalizedIdx = pass;
+        if (boxes[finalizedIdx]) {
+          removeHighlight(boxes[finalizedIdx]);
+          boxes[finalizedIdx].classList.add('crx_final');
+          logEvent(`Finalized: index ${finalizedIdx} — value ${values[finalizedIdx]}`);
         }
+      }
 
-        // ---- speech helper returning promise when done.
-        //     Attempts to stretch/shrink speech to targetMs by adjusting rate.
-        function speakPhraseForDuration(phrase, targetMs) {
-            return new Promise(resolve => {
-                if (!speechToggle.checked || typeof speechSynthesis === 'undefined') {
-                    resolve(); return;
-                }
-                const words = phrase.trim().split(/\s+/).filter(Boolean).length || 1;
-                const estMsAtRate1 = (words / 3) * 1000; // ~3 words/sec baseline
-                let rate = estMsAtRate1 / targetMs;
-                if (rate < 0.4) rate = 0.4;
-                if (rate > 2.5) rate = 2.5;
+      pass++;
+      if (!swappedThisPass) { logEvent(`No swaps in pass ${pass}; early exit`); break; }
+    }
 
-                const u = new SpeechSynthesisUtterance(phrase);
-                u.rate = rate;
-                // prefer an english voice if available
-                const voices = speechSynthesis.getVoices();
-                if (voices && voices.length) {
-                    const v = voices.find(v => /en-|english/i.test(v.name)) || voices[0];
-                    if (v) u.voice = v;
-                }
-                u.onend = () => resolve();
-                u.onerror = () => resolve();
-                speechSynthesis.cancel();
-                speechSynthesis.speak(u);
-            });
+    boxes.forEach((b, idx) => { removeHighlight(b); if (!b.classList.contains('crx_final')) { b.classList.add('crx_final'); logEvent(`Finalized (end): index ${idx} — value ${values[idx]}`); } });
+
+    busy = false; createBtn.disabled = false; sortBtn.disabled = false;
+
+    boxes.forEach(b => { b.classList.add('crx_highlight'); });
+    setTimeout(()=> boxes.forEach(b => b.classList.remove('crx_highlight')), 600);
+
+    phraseQueue = ['Sorting complete!']; updateSpeechBarUI();
+    setTimeout(()=>{ phraseQueue = []; updateSpeechBarUI(); }, 1600);
+
+    alert('Sorting complete!');
+  }
+
+  // events
+  createBtn.addEventListener('click', createBoxes);
+  sortBtn.addEventListener('click', bubbleSort);
+  clearLogBtn.addEventListener('click', ()=>{ clearLog(); logEvent('Log cleared'); });
+
+  // recenter on resize
+  let resizeTimer = null;
+  window.addEventListener('resize', ()=>{ clearTimeout(resizeTimer); resizeTimer = setTimeout(()=>{ if (busy) needRecenter=true; else recenterBoxes(); }, 120); });
+
+  // init
+  createBoxes();
+
+})();
+</script>
+<!-- End of gadget code -->
+  
+  
+  <!-- SECTION: Assignments BEGIN -->
+  <section id="assignments" aria-label="Assignments and Solutions">
+    <h2 style="color:#0b63d4; margin-top:18px;">🔹 10 Assignments (solutions hidden — click to view)</h2>
+
+    <!-- Assignment 1 BEGIN -->
+    <article style="margin-top:12px;">
+      <h3>Assignment 1 — Implement Bubble Sort in C</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution (C)</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+<pre>
+#include &lt;stdio.h&gt;
+
+void bubbleSort(int arr[], int n) {
+    for (int i=0; i&lt;n-1; i++) {
+        for (int j=0; j&lt;n-i-1; j++) {
+            if (arr[j] &gt; arr[j+1]) {
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
         }
+    }
+}
 
-        // ---- highlight two boxes briefly while speaking the "comparing" phrase ----
-        async function highlightAndSpeakCompare(i, j) {
-            if (i < 0 || j < 0 || i >= boxes.length || j >= boxes.length) return;
-            const a = boxes[i], b = boxes[j];
-            const phrase = `Comparing ${values[i]} and ${values[j]}`;
-            // apply highlight class
-            a.classList.add('highlight');
-            b.classList.add('highlight');
+int main() {
+    int arr[] = {5, 3, 8, 4, 2};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    bubbleSort(arr, n);
+    for (int i=0; i&lt;n; i++) printf("%d ", arr[i]);
+    return 0;
+}
+</pre>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 1 END -->
 
-            // start speech with same duration as compareMs
-            const sp = speakPhraseForDuration(phrase, compareMs);
-
-            // keep highlight visible for compareMs
-            await delay(compareMs);
-
-            // remove highlight
-            a.classList.remove('highlight');
-            b.classList.remove('highlight');
-
-            await sp; // ensure speech finished (if it hasn't)
-        }
-
-        // ---- swap animation which speaks "Swapping X and Y" and performs the up/cross/down animation.
-        //     After animation, commits absolute positions and swaps arrays.
-        async function swapAnimationSpeak(i, j) {
-            // assume valid i,j and UI already disabled
-            const boxA = boxes[i], boxB = boxes[j];
-            const valA = values[i], valB = values[j];
-            const leftA = slotLeft(i), leftB = slotLeft(j);
-            const dAB = leftB - leftA, dBA = leftA - leftB;
-            const phrase = `Swapping ${valA} and ${valB}`;
-
-            // start speech concurrently with animation
-            const speechPromise = speakPhraseForDuration(phrase, swapTotalMs);
-
-            // 1) up
-            boxA.style.transition = `transform ${stageMs / 1000}s ease`;
-            boxB.style.transition = `transform ${stageMs / 1000}s ease`;
-            boxA.style.transform = 'translateY(-70px)';
-            boxB.style.transform = 'translateY(-70px)';
-            await delay(stageMs);
-
-            // 2) cross
-            boxA.style.transform = `translate(${dAB}px, -70px)`;
-            boxB.style.transform = `translate(${dBA}px, -70px)`;
-            await delay(stageMs);
-
-            // 3) down
-            boxA.style.transform = `translate(${dAB}px, 0px)`;
-            boxB.style.transform = `translate(${dBA}px, 0px)`;
-            await delay(stageMs);
-
-            // wait for speech if still going
-            await speechPromise;
-            // alert();
-            // commit positions without jump
-            const curA = currentLeftRelToContainer(boxA);
-            const curB = currentLeftRelToContainer(boxB);
-            boxA.style.transition = 'none';
-            boxB.style.transition = 'none';
-            boxA.style.left = Math.round(curA) + 'px';
-            boxB.style.left = Math.round(curB) + 'px';
-            // alert();
-            // force reflow
-            void container.offsetWidth;
-            // clear transforms and restore transition
-            boxA.style.transform = '';
-            boxB.style.transform = '';
-            boxA.style.transition = 'transform 0.35s ease';
-            boxB.style.transition = 'transform 0.35s ease';
-
-            // swap logical arrays to match new order
-            [boxes[i], boxes[j]] = [boxes[j], boxes[i]];
-            [values[i], values[j]] = [values[j], values[i]];
-            refreshIndices();
-        }
-
-        // ---- bubble sort driver with spoken comparisons and animated swaps ----
-        async function bubbleSort() {
-            if (busy) return;
-            if (values.length < 2) return;
-            busy = true;
-            createBtn.disabled = true;
-            sortBtn.disabled = true;
-
-            const n = values.length;
-            for (let pass = 0; pass < n - 1; pass++) {
-                for (let j = 0; j < n - 1 - pass; j++) {
-                    // highlight & speak comparison
-                    await highlightAndSpeakCompare(j, j + 1);
-
-                    // if out of order, swap
-                    if (values[j] > values[j + 1]) {
-                        await swapAnimationSpeak(j, j + 1);
-                    }
+    <!-- Assignment 2 BEGIN -->
+    <article style="margin-top:12px;">
+      <h3>Assignment 2 — Implement Bubble Sort in Java</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution (Java)</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+<pre>
+public class BubbleSort {
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
+        for (int i=0; i&lt;n-1; i++) {
+            for (int j=0; j&lt;n-i-1; j++) {
+                if (arr[j] &gt; arr[j+1]) {
+                    int tmp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = tmp;
                 }
             }
-
-            busy = false;
-            createBtn.disabled = false;
-            sortBtn.disabled = false;
-            // final small highlight to show sorted (optional)
-            boxes.forEach(b => { b.classList.add('highlight'); });
-            setTimeout(() => boxes.forEach(b => b.classList.remove('highlight')), 600);
-            alert('Sorting complete!');
         }
+    }
+    public static void main(String[] args) {
+        int[] arr = {5,3,8,4,2};
+        bubbleSort(arr);
+        for (int v : arr) System.out.print(v + " ");
+    }
+}
+</pre>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 2 END -->
 
-        // ---- event wiring ----
-        createBtn.addEventListener('click', createBoxes);
-        sortBtn.addEventListener('click', bubbleSort);
+    <!-- Assignment 3 BEGIN -->
+    <article style="margin-top:12px;">
+      <h3>Assignment 3 — Implement Bubble Sort in Python</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution (Python)</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+<pre>
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if arr[j] &gt; arr[j+1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
 
-        // create initial boxes
-        createBoxes();
-    </script>
-</body>
+if __name__ == "__main__":
+    arr = [5,3,8,4,2]
+    bubble_sort(arr)
+    print(arr)
+</pre>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 3 END -->
 
-</html>
+    <!-- Assignment 4 BEGIN -->
+    <article style="margin-top:12px;">
+      <h3>Assignment 4 — Modify Bubble Sort to sort in descending order</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Hint / Solution</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+          <p>Change the comparison from <code>&gt;</code> to <code>&lt;</code>. For example, in Python: <code>if arr[j] &lt; arr[j+1]: swap(...)</code></p>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 4 END -->
+
+    <!-- Assignment 5 BEGIN -->
+    <article style="margin-top:12px;">
+      <h3>Assignment 5 — Find the second largest element using Bubble Sort idea</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Hint / Solution</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+          <p>Run Bubble Sort for two passes; after the second pass the second-last element is the 2nd largest. Or maintain the largest and second-largest while scanning in O(n).</p>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 5 END -->
+
+    <!-- Assignment 6 BEGIN -->
+    <article style="margin-top:12px;">
+      <h3>Assignment 6 — Count the number of swaps performed</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+<pre>
+# Python example
+def bubble_swap_count(arr):
+    n = len(arr)
+    swaps = 0
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if arr[j] &gt; arr[j+1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+                swaps += 1
+    return swaps
+</pre>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 6 END -->
+
+    <!-- Assignment 7 BEGIN -->
+    <article style="margin-top:12px;">
+      <h3>Assignment 7 — Detect a sorted array early (use swapped flag)</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+          <p>Use a boolean <code>swapped</code> flag inside the outer loop. If after a full inner loop no swaps occurred, break early.</p>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 7 END -->
+
+    <!-- Assignment 8 BEGIN -->
+    <article style="margin-top:12px;">
+      <h3>Assignment 8 — Implement Bubble Sort on a linked list</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Hint</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+          <p>Swap node data or adjust node links while iterating until no swaps remain. Complexity is O(n²) still.</p>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 8 END -->
+
+    <!-- Assignment 9 BEGIN -->
+    <article style="margin-top:12px;">
+      <h3>Assignment 9 — Implement recursive Bubble Sort</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Hint</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+          <p>Bubble the largest to end, then call recursion on n-1 elements. Base case n==1.</p>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 9 END -->
+
+    <!-- Assignment 10 BEGIN -->
+    <article style="margin-top:12px; margin-bottom:14px;">
+      <h3>Assignment 10 — Compare Bubble Sort with Selection Sort</h3>
+      <details>
+        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Notes</summary>
+        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
+          <p>Both have O(n²) time. Selection Sort typically performs fewer swaps (O(n) swaps) while Bubble Sort may do many swaps. Selection Sort is not stable by default; Bubble Sort is stable.</p>
+        </div>
+      </details>
+    </article>
+    <!-- Assignment 10 END -->
+
+  </section>
+  <!-- SECTION: Assignments END -->
+<!-- Further Reading SECTION: BEGIN -->
+<section id="further-reading" class="crx_section" aria-label="Further reading and links">
+  <h2 class="crx_section__title">🔹 Further Reading</h2>
+
+  <ul class="crx_links_list">
+    
+
+    <li class="crx_link_item">
+      <a class="crx_link_anchor" href="https://en.wikipedia.org/wiki/Bubble_sort" target="_blank" rel="noopener">
+        Wikipedia — Bubble Sort
+      </a>
+    </li>
+
+   
+  </ul>
+</section>
+<!-- Further Reading SECTION: END -->
+
+  <!-- SECTION: Footer BEGIN -->
+  <footer style="margin-top:22px; padding-top:12px; border-top:1px solid #e6e9ef;">
+    <p style="color:#475569; font-size:14px;">
+  </footer>
+  <!-- SECTION: Footer END -->
+
+</div>
+<!-- POST: END -->
