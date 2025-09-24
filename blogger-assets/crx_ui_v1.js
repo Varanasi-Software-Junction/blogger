@@ -100,7 +100,7 @@
         card.innerHTML = `
         <div class="crx_affiliate">
         <br>
- <div style="font-size:12px;color:#666;margin-top:8px;">Product on Amazon<br>*As an Amazon Associate I earn from qualifying purchases.</div>
+ <div style="font-size:12px;color:#666; ">Product on Amazon<br>*As an Amazon Associate I earn from qualifying purchases.</div>
  <br>
           <img class="crx_affiliate_img" src="${escapeHtml(p.img)}" alt="${escapeHtml(p.title)}" loading="lazy" />
           <div style="flex:1">
