@@ -98,6 +98,8 @@
         const card = document.createElement("div");
         card.className = "crx_affiliate";
         card.innerHTML = `
+        <div class="crx_affiliate">
+ <div style="font-size:12px;color:#666;margin-top:8px;">Product on Amazon<br>*As an Amazon Associate I earn from qualifying purchases.</div>
           <img class="crx_affiliate_img" src="${escapeHtml(p.img)}" alt="${escapeHtml(p.title)}" loading="lazy" />
           <div style="flex:1">
             <div class="crx_affiliate_title">${escapeHtml(p.title)}</div>
@@ -106,6 +108,7 @@
               <a class="crx_btn" href="${p.url}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
             </div>
             <div style="font-size:12px;color:#666;margin-top:8px;">*As an Amazon Associate I earn from qualifying purchases.</div>
+          </div>
           </div>
         `;
         tgt.appendChild(card);
