@@ -1418,6 +1418,126 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       <!-- Sidebar Wrapper -->
       <div id='sidebar-wrapper'>
         <b:section class='sidebar common-widget' id='sidebar1' name='Sidebar Right (A)' showaddelement='yes'>
+          <b:widget id='HTML4' locked='false' title='' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Saffron Themed Splash — shows only once per day -->
+<style>
+  #saffron-splash {
+    position: fixed;
+    inset: 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(135deg, #FF9933 0%, #FFB74D 60%, #FFF3E0 100%);
+    z-index:99999;
+    color:#3b2f2f;
+    padding:20px;
+    transition: opacity .45s ease, visibility .45s ease;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+  }
+  #saffron-splash .card{
+    width: min(480px,92%);
+    background: rgba(255,255,255,0.85);
+    border-radius:18px;
+    padding:22px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    text-align:center;
+    transform: translateY(0);
+    animation: saffron-in .6s ease;
+  }
+  #saffron-splash img.logo{
+    width:96px;height:96px;border-radius:50%;object-fit:cover;margin:0 auto 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  }
+  #saffron-splash h1{margin:0;font-size:20px;color:#3b2f2f;font-weight:800}
+  #saffron-splash p{margin:8px 0 12px;font-size:14px;color:#4a3f3f}
+  .saffron-controls{display:flex;gap:10px;justify-content:center;align-items:center}
+  .saffron-btn{padding:8px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+  .saffron-btn.primary{background:#3b2f2f;color:#fff}
+  .saffron-btn.ghost{background:transparent;border:1px solid rgba(59,47,47,0.08);color:#3b2f2f}
+  .saffron-progress{height:6px;width:100%;background:rgba(59,47,47,0.06);border-radius:6px;overflow:hidden;margin-top:14px}
+  .saffron-progress > i{display:block;height:100%;width:0%;background:linear-gradient(90deg, rgba(59,47,47,0.95), rgba(59,47,47,0.6));transition:width linear}
+  #saffron-splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  @keyframes saffron-in{from{opacity:0;transform:translateY(10px) scale(.995)}to{opacity:1;transform:translateY(0) scale(1)}}
+</style>
+
+<div id="saffron-splash" role="dialog" aria-label="Welcome">
+  <div class="card" role="document">
+    <!-- Replace with your own image URL -->
+    <img class="logo" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgcBkhlCslE4dFLpRyPMkh8xNvhlu0IseVKsqeL3gLticqX9HyVBFWJBWnoVsWMB0LdfxAghcJWJE5VLfO4Ydo9QfJz4zisBu_iHfwOACXo-HXMFA7k6U_PrNlBSIX7IQkZDPvuipKrRPpTNR-Y5O7-5n7FDWrtsgL7mf3M-LKyPbTiw9xRhFYWPbllBic/w640/champaksearch.jpg" alt="Logo" />
+    <h1>Champak on the Internet.</h1>
+    <p>Welcome! Loading latest lessons and tips — thanks for dropping by.</p>
+
+    <div class="saffron-progress" aria-hidden="true"><i id="saffron-progress"></i></div>
+
+    <div class="saffron-controls" style="margin-top:12px">
+      <button id="saffron-skip" class="saffron-btn primary">Skip</button>
+      <button id="saffron-dont" class="saffron-btn ghost">Don't show again</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const splash = document.getElementById('saffron-splash');
+  const skip = document.getElementById('saffron-skip');
+  const dont = document.getElementById('saffron-dont');
+  const progress = document.getElementById('saffron-progress');
+
+  // Keys for storage
+  const DAY_KEY = 'saffron_splash_day';
+  const PERM_KEY = 'saffron_splash_permanent_hide';
+  const DURATION = 2700; // ms
+
+  // Get today's date string (YYYY-MM-DD)
+  const today = new Date().toISOString().split('T')[0];
+
+  try {
+    // If permanently disabled
+    if (localStorage.getItem(PERM_KEY) === '1') {
+      splash.classList.add('hidden');
+      splash.setAttribute('aria-hidden','true');
+      return;
+    }
+    // If splash already shown today, skip
+    if (localStorage.getItem(DAY_KEY) === today) {
+      splash.classList.add('hidden');
+      splash.setAttribute('aria-hidden','true');
+      return;
+    }
+  } catch(e){}
+
+  // Otherwise: mark splash as shown today
+  try { localStorage.setItem(DAY_KEY, today); } catch(e){}
+
+  // Animate progress
+  progress.style.transition = `width ${DURATION}ms linear`;
+  setTimeout(()=>progress.style.width='100%',50);
+
+  function hide(){
+    splash.classList.add('hidden');
+    splash.setAttribute('aria-hidden','true');
+    setTimeout(()=>{ try{ splash.remove(); }catch(e){} },600);
+  }
+
+  skip.addEventListener('click', hide);
+  dont.addEventListener('click', function(){
+    try{ localStorage.setItem(PERM_KEY,'1'); }catch(e){}
+    hide();
+  });
+
+  setTimeout(hide, DURATION + 250);
+})();
+</script>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
           <b:widget id='HTML2' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='content'><![CDATA[<!--
