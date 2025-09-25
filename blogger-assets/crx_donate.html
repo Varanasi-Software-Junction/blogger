@@ -193,6 +193,7 @@
     const upi = buildUpiLink(amount);
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     if(isMobile){
+      console.log('Opening UPI link:', upi);
       // Use location.href for deep link (works on most mobiles)
       window.location.href = upi;
     } else {
@@ -207,7 +208,7 @@
   presetBtns.forEach(btnEl=>{
     btnEl.addEventListener('click', function(){
       const amt = btnEl.getAttribute('data-amount');
-      alert('You clicked to donate ₹' + amt);
+      console.log('You clicked to donate ₹' + amt);
       openPayment(amt);
     });
   });
