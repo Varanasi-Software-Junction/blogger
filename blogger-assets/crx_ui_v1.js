@@ -108,7 +108,7 @@
             <div class="crx_affiliate_title">${escapeHtml(p.title)}</div>
             <div class="crx_affiliate_desc">${escapeHtml(p.desc)}</div>
             <div style="margin-top:8px;">
-              <a class="crx_btn" href="${p.url}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+              <a class="crx_btn" style='background-color:blue;color:white;' href="${p.url}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
             </div>
             <div style="font-size:12px;color:#666;margin-top:8px;">*As an Amazon Associate I earn from qualifying purchases.</div>
           </div>
