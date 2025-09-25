@@ -264,9 +264,3 @@ pre.crx_output::before {
  
   object-fit: cover;
 }
-.footer, a{
-  text-align: center;
-  font-size: 13px;
-  background-color:white !important;
-  margin-top: 24px;
-}
