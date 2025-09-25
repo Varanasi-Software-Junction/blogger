@@ -1,41 +1,26 @@
-<!-- crx_donate.html - Fixed: UPI deep-links + preset buttons + robust fallbacks + debug -->
+<!-- crx_donate.html - Working version
+     Preset amounts as anchors (upi:// deep links) + desktop QR fallback + floating button -->
 <div class="crx_donate_card" role="region" aria-label="Support this blog - donate" id="crx_donate_fragment">
   <style>
-    /* Scoped styles so fragment looks correct if loaded into posts */
-    .crx_donate_card {
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      max-width:520px;
-      margin:12px 0;
-      padding:12px;
-      border-radius:12px;
-      box-shadow:0 6px 18px rgba(11,12,16,0.06);
-      background:linear-gradient(180deg,#ffffff,#fbfdff);
-      display:flex;
-      gap:12px;
-      align-items:center;
-    }
-    .crx_donate_qr { width:110px; height:110px; border-radius:8px; background:#f3f4f6; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
-    .crx_donate_qr img { width:100%; height:100%; object-fit:contain; display:block; }
-    .crx_donate_meta { flex:1; min-width:0; }
-    .crx_donate_title { font-size:17px; font-weight:800; margin-bottom:6px; color:#071022; }
-    .crx_donate_desc { font-size:14px; color:#6b7280; line-height:1.35; margin-bottom:8px; }
-    .crx_donate_benefits{ font-size:13px;color:#39404a;margin-bottom:10px; }
-    .crx_action_row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .crx_btn { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; text-decoration:none; font-weight:700; border:1px solid rgba(0,0,0,0.06); cursor:pointer; background:#fff; color:#071022; }
-    .crx_primary { background:#0b84ff; color:#fff; box-shadow:0 8px 20px rgba(11,132,255,0.12); }
-    .crx_preset { background:#f4f7fb; border:none; padding:8px 10px; border-radius:8px; font-weight:800; cursor:pointer; }
-    .crx_small_hint { font-size:12px; color:#6b7280; margin-top:8px; }
+    .crx_donate_card{ font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; max-width:520px; margin:12px 0; padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(11,12,16,0.06); background:linear-gradient(180deg,#ffffff,#fbfdff); display:flex; gap:12px; align-items:center; }
+    .crx_donate_qr{ width:110px; height:110px; border-radius:8px; background:#f3f4f6; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+    .crx_donate_qr img{ width:100%; height:100%; object-fit:contain; display:block; }
+    .crx_donate_meta{ flex:1; min-width:0; }
+    .crx_donate_title{ font-size:17px; font-weight:800; margin-bottom:6px; color:#071022; }
+    .crx_donate_desc{ font-size:14px; color:#6b7280; line-height:1.35; margin-bottom:8px; }
+    .crx_donate_benefits{ font-size:13px; color:#39404a; margin-bottom:10px; }
+    .crx_action_row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .crx_btn{ display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; text-decoration:none; font-weight:700; border:1px solid rgba(0,0,0,0.06); cursor:pointer; background:#fff; color:#071022; }
+    .crx_primary{ background:#0b84ff; color:#fff; box-shadow:0 8px 20px rgba(11,132,255,0.12); }
+    .crx_preset{ display:inline-flex; text-decoration:none; align-items:center; justify-content:center; background:#f4f7fb; padding:8px 10px; border-radius:8px; font-weight:800; color:#071022; border:0; cursor:pointer; }
+    .crx_small_hint{ font-size:12px; color:#6b7280; margin-top:8px; }
     .crx_donate_smallprint{ font-size:12px; color:#6b7280; margin-top:8px; }
-    /* small on-screen debug box (only visible when debug param set) */
-    #crx_debug_box { position:fixed; right:12px; bottom:12px; z-index:10010; background:rgba(0,0,0,0.65); color:#fff; padding:8px 10px; border-radius:8px; font-size:12px; display:none; }
+    #crx_debug_box{ position:fixed; right:12px; bottom:12px; z-index:10010; background:rgba(0,0,0,0.65); color:#fff; padding:8px 10px; border-radius:8px; font-size:12px; display:none; }
     @media (max-width:520px){ .crx_donate_card{ max-width:96%; } .crx_donate_qr{ width:96px; height:96px; } }
   </style>
 
   <div class="crx_donate_qr" aria-hidden="false">
-    <img 
-      src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
-      alt="QR code to donate" loading="lazy" decoding="async" width="110" height="110"
-    />
+    <img src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" alt="QR code to donate" loading="lazy" decoding="async" width="110" height="110" />
   </div>
 
   <div class="crx_donate_meta">
@@ -45,37 +30,35 @@
     <div class="crx_donate_benefits">Quick options — keeps tools free, fewer ads, and funds new tutorials.</div>
 
     <div class="crx_action_row" role="group" aria-label="Donation actions">
-      <!-- Primary: one-tap donate (default ₹50) -->
-      <button type="button" class="crx_btn crx_primary" id="crx_pay_now" aria-label="Donate ₹50 now">Donate ₹50</button>
+      <!-- Primary: anchor deep-link (defaults to 50) -->
+      <a id="crx_pay_now" class="crx_btn crx_primary" href="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=50&cu=INR" rel="noopener" aria-label="Donate ₹50 now">Donate ₹50</a>
 
-      <!-- Preset amounts (will open UPI deep-link on mobile or QR on desktop) -->
-      <div aria-hidden="false" style="display:flex;gap:6px;align-items:center;">
-        <button type="button" class="crx_preset" data-amount="20" aria-label="Donate ₹20">₹20</button>
-        <button type="button" class="crx_preset" data-amount="50" aria-label="Donate ₹50">₹50</button>
-        <button type="button" class="crx_preset" data-amount="100" aria-label="Donate ₹100">₹100</button>
-        <button type="button" class="crx_preset" data-amount="250" aria-label="Donate ₹250">₹250</button>
-      </div>
+      <!-- Preset amounts as anchors (mobile: open UPI app; desktop: fallback will open QR) -->
+      <a class="crx_preset" href="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=20&cu=INR" data-amount="20" aria-label="Donate ₹20">₹20</a>
+      <a class="crx_preset" href="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=50&cu=INR" data-amount="50" aria-label="Donate ₹50">₹50</a>
+      <a class="crx_preset" href="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=100&cu=INR" data-amount="100" aria-label="Donate ₹100">₹100</a>
+      <a class="crx_preset" href="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=250&cu=INR" data-amount="250" aria-label="Donate ₹250">₹250</a>
 
-      <!-- Open QR as fallback / for saving -->
-      <a class="crx_btn" id="crx_open_qr" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open QR code in new tab">Open QR — Save/Scan</a>
+      <!-- QR fallback -->
+      <a id="crx_open_qr" class="crx_btn" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open QR code in new tab">Open QR — Save/Scan</a>
     </div>
 
-    <div class="crx_small_hint">Tip: on mobile, tapping a Donate button will open your UPI app. On desktop it opens the QR to scan.</div>
+    <div class="crx_small_hint">Tip: on mobile, tapping a Donate link should open your UPI app. If it doesn't, use the Open QR link to scan.</div>
     <div class="crx_donate_smallprint">You’ll stay anonymous unless you choose to share details. Thanks — Champak Roy</div>
   </div>
 </div>
 
 <div id="crx_debug_box" aria-hidden="true"></div>
 
-<!-- Floating, moving, polite donate button & behavior (unchanged styles) -->
+<!-- Floating button styles -->
 <style>
-#crx_floating_donate { position:fixed; z-index:9998; --size:64px; width:var(--size); height:var(--size); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(3,10,30,0.18); background:linear-gradient(180deg,#0b84ff,#0466d7); color:white; font-weight:700; cursor:pointer; border:0; transition:transform 350ms ease, opacity 300ms ease, right 1s ease, left 1s ease, bottom 1s ease, top 1s ease; opacity:0; pointer-events:none; }
-#crx_floating_donate.visible { opacity:1; pointer-events:auto; }
-#crx_floating_label { position:fixed; z-index:9997; background:#fff; color:#071022; padding:8px 10px; border-radius:8px; box-shadow:0 8px 20px rgba(6,12,22,0.12); font-weight:700; font-size:13px; transition:opacity 200ms, transform 200ms; opacity:0; pointer-events:none; }
-#crx_floating_donate:hover + #crx_floating_label, #crx_floating_donate:focus + #crx_floating_label { opacity:1; transform:translateY(-6px); }
-#crx_floating_dismiss { position:absolute; right:-8px; top:-8px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,0.12); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center; border:0; transition:opacity .15s; }
-#crx_floating_donate:hover #crx_floating_dismiss { opacity:1; }
-@media (prefers-reduced-motion: reduce) { #crx_floating_donate, #crx_floating_label { transition: none !important; } }
+#crx_floating_donate{ position:fixed; z-index:9998; --size:64px; width:var(--size); height:var(--size); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(3,10,30,0.18); background:linear-gradient(180deg,#0b84ff,#0466d7); color:white; font-weight:700; cursor:pointer; border:0; transition:transform 350ms ease, opacity 300ms ease, right 1s ease, left 1s ease, bottom 1s ease, top 1s ease; opacity:0; pointer-events:none; }
+#crx_floating_donate.visible{ opacity:1; pointer-events:auto; }
+#crx_floating_label{ position:fixed; z-index:9997; background:#fff; color:#071022; padding:8px 10px; border-radius:8px; box-shadow:0 8px 20px rgba(6,12,22,0.12); font-weight:700; font-size:13px; transition:opacity 200ms, transform 200ms; opacity:0; pointer-events:none; }
+#crx_floating_donate:hover + #crx_floating_label, #crx_floating_donate:focus + #crx_floating_label{ opacity:1; transform:translateY(-6px); }
+#crx_floating_dismiss{ position:absolute; right:-8px; top:-8px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,0.12); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center; border:0; transition:opacity .15s; }
+#crx_floating_donate:hover #crx_floating_dismiss{ opacity:1; }
+@media (prefers-reduced-motion: reduce){ #crx_floating_donate, #crx_floating_label{ transition:none!important; } }
 </style>
 
 <button id="crx_floating_donate" aria-label="Donate — open UPI or QR" title="Donate — open UPI or QR" aria-haspopup="dialog" type="button">
@@ -86,9 +69,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  // === CONFIG ===
-  const UPI_ID = 'champaksword@okicici';
-  const UPI_NAME = 'Champak Roy';
+  // CONFIG
   const QR_FALLBACK = 'https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg';
   const config = {
     bigTimeSeconds: 120,
@@ -101,102 +82,72 @@ document.addEventListener('DOMContentLoaded', function () {
     donatedKey: 'crx_donate_done'
   };
 
-  // === DOM refs ===
-  const payNowBtn = document.getElementById('crx_pay_now');
-  const presetBtns = Array.from(document.querySelectorAll('.crx_preset'));
+  // DOM refs
+  const presetAnchors = Array.from(document.querySelectorAll('.crx_preset'));
+  const payNow = document.getElementById('crx_pay_now');
   const openQr = document.getElementById('crx_open_qr');
   const btn = document.getElementById('crx_floating_donate');
   const label = document.getElementById('crx_floating_label');
   const dismissBtn = document.getElementById('crx_floating_dismiss');
   const debugBox = document.getElementById('crx_debug_box');
 
-  // small debug helper: show debug box when URL contains ?donateTest=1
   const debugMode = location.search.indexOf('donateTest=1') !== -1;
-  if(debugMode && debugBox) { debugBox.style.display='block'; debugBox.textContent='Donate debug: ON'; }
+  if(debugMode && debugBox){ debugBox.style.display='block'; debugBox.textContent='Donate debug: ON'; }
 
-  // === helpers ===
+  // helpers
   const now = ()=>Date.now();
   const secondsSince = ts => Math.floor((now()-ts)/1000);
-  const readJSON = (k, useSession=false) => { try{ const s=(useSession?sessionStorage:localStorage).getItem(k); return s?JSON.parse(s):null; }catch(e){return null;} };
+  const readJSON = (k, useSession=false)=>{ try{ const s=(useSession?sessionStorage:localStorage).getItem(k); return s?JSON.parse(s):null;}catch(e){return null;} };
   const writeJSON = (k,v,useSession=false)=>{ try{ (useSession?sessionStorage:localStorage).setItem(k, JSON.stringify(v)); }catch(e){} };
 
   let session = readJSON(config.sessionKey, true) || { showCount:0, lastShown:0, firstSeen: now() };
   const hasDonated = !!localStorage.getItem(config.donatedKey);
-  const dismissed = (()=>{ const d=readJSON('crx_donate_dismiss'); return d && now() < d.expiry; })();
-  if(debugMode) console.log('crx: hasDonated=', hasDonated, 'dismissed=', dismissed, 'session=', session);
+  const dismissed = (()=>{ const d=readJSON('crx_donate_dismiss'); return d && now()<d.expiry; })();
+  if(debugMode) console.log('crx donate: hasDonated=', hasDonated, 'dismissed=', dismissed, 'session=', session);
 
-  // if donated or dismissed, keep inline card but hide floating UI
-  if(hasDonated || dismissed){
-    if(btn) btn.style.display='none';
-    if(label) label.style.display='none';
-  }
-
-  // Build UPI deep link
-  function buildUpiLink(amount){
-    const pa = encodeURIComponent(UPI_ID);
-    const pn = encodeURIComponent(UPI_NAME);
-    const am = (amount && amount !== '0') ? `&am=${encodeURIComponent(amount)}` : '';
-    return `upi://pay?pa=${pa}&pn=${pn}${am}&cu=INR`;
-  }
-
-  // Robust method to open UPI link:
-  //  1) location.href = upi (best on mobile)
-  //  2) create hidden iframe pointing to upi (fallback for some browsers)
-  //  3) window.open(upi, '_blank')
-  // Desktop fallback: open QR image so user can scan
-  function openPayment(amount){
-    const upi = buildUpiLink(amount);
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if(debugMode) console.log('crx.openPayment', { amount, upi, isMobile });
-
-    if(isMobile){
-      try {
-        // Primary attempt
-        location.href = upi;
-        // Also create a brief iframe fallback (some browsers allow iframe deep-links)
+  // Universal anchor behavior:
+  // - On mobile: allow default anchor navigation (upi://) to open UPI app.
+  // - On desktop: prevent default and open QR image in new tab (so user can scan).
+  function attachAnchorFallback(anchorEl){
+    if(!anchorEl) return;
+    anchorEl.addEventListener('click', function(e){
+      const href = anchorEl.getAttribute('href') || '';
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if(debugMode) console.log('crx.anchor click', {href, isMobile});
+      if(isMobile){
+        // let browser handle the upi:// link by default
+        // But provide iframe fallback after short delay in case browser blocks direct nav
         setTimeout(()=> {
-          // If still on same page after 800ms, try iframe trick
-          const iframe = document.createElement('iframe');
-          iframe.style.display = 'none';
-          iframe.src = upi;
-          document.body.appendChild(iframe);
-          setTimeout(()=> { try{ document.body.removeChild(iframe); }catch(e){} }, 1200);
-        }, 800);
-        // Give user a visual debug hint if debugMode
-        if(debugMode) debugBox.textContent = 'Attempted mobile deep link (location.href + iframe fallback).';
-      } catch (err) {
-        if(debugMode) console.warn('crx.upi primary failed', err);
-        try { window.open(upi, '_blank'); } catch(e){ if(debugMode) console.warn(e); window.open(QR_FALLBACK, '_blank', 'noopener'); }
+          // create a hidden iframe fallback (some browsers allow it)
+          try{
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = href;
+            document.body.appendChild(iframe);
+            setTimeout(()=> { try{ document.body.removeChild(iframe); }catch(e){} }, 1200);
+            if(debugMode) debugBox.textContent = 'Attempted deep link via anchor + iframe fallback.';
+          }catch(err){ if(debugMode) console.warn('crx iframe fallback failed', err); }
+        }, 500);
+        // do NOT preventDefault — allow navigation
+        return;
+      } else {
+        // desktop: prevent UPI navigation which would do nothing; open QR instead
+        e.preventDefault();
+        window.open(QR_FALLBACK, '_blank', 'noopener');
+        if(debugMode) debugBox.textContent = 'Desktop fallback: opened QR image.';
       }
-    } else {
-      // Desktop: open QR in new tab so user can scan with phone
-      window.open(QR_FALLBACK, '_blank', 'noopener');
-      if(debugMode) debugBox.textContent = 'Desktop detected: opened QR image in new tab.';
-    }
-
-    if(window.gtag) gtag('event','donation_initiated',{value: amount || 0, method:'upi'});
-  }
-
-  // Attach event listeners (safely)
-  if(Array.isArray(presetBtns) && presetBtns.length){
-    presetBtns.forEach(function(btnEl){
-      btnEl.addEventListener('click', function(e){
-        const amt = btnEl.getAttribute('data-amount');
-        if(debugMode) console.log('preset click', amt);
-        openPayment(amt);
-      });
     });
-  } else {
-    if(debugMode) console.warn('crx: no preset buttons found');
   }
 
-  if(payNowBtn){
-    payNowBtn.addEventListener('click', function(){ if(debugMode) console.log('payNow click'); openPayment('50'); });
-  } else if(debugMode) console.warn('crx: payNowBtn not found');
+  // Attach fallback to main anchor and presets
+  if(payNow) attachAnchorFallback(payNow);
+  presetAnchors.forEach(a => attachAnchorFallback(a));
+  if(openQr){
+    // openQr is a normal link to QR; keep default behavior but attach debug notice if needed
+    openQr.addEventListener('click', function(){ if(debugMode) debugBox.textContent = 'Opened QR image.'; });
+  }
 
-  // open QR fallback already is a link; nothing to attach
-
-  // === Floating behavior ===
+  // Floating behavior (polite moving + show rules)
   if(btn && !hasDonated && !dismissed){
     const corners=['br','bl','tl','tr']; let currentCornerIndex=0; const margin=16;
     function placeCorner(corner){
@@ -210,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
         case 'tr': btn.style.right = offset; btn.style.top = offset; label.style.right = `calc(${offset} + 80px)`; label.style.top = offset; break;
       }
     }
+
     let visible=false; let moveInterval=null;
     function showFloating(){
       if(visible) return;
@@ -235,11 +187,20 @@ document.addEventListener('DOMContentLoaded', function () {
       if(moveInterval){ clearInterval(moveInterval); moveInterval=null; }
     }
 
+    // Floating click — open default UPI link (same href as "Donate ₹50")
     btn.addEventListener('click', function(e){
       if(e.target && e.target.id === 'crx_floating_dismiss') return;
-      openPayment('50');
+      const anchor = document.querySelector('#crx_pay_now');
+      if(anchor){
+        // Trigger same behavior as anchor click
+        anchor.click();
+      } else {
+        // fallback open QR
+        window.open(QR_FALLBACK, '_blank', 'noopener');
+      }
     });
 
+    // dismiss
     if(dismissBtn){
       dismissBtn.addEventListener('click', function(e){
         e.stopPropagation();
@@ -249,18 +210,25 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // show logic: time on page OR scroll depth
+    // show logic: time-on-page or scroll percent
     let timerStart = now();
     setInterval(()=> {
       const timeOnPage = Math.floor((now() - timerStart) / 1000);
-      const scrolledPercent = (function(){ const d=document.documentElement; const scrollTop=(window.pageYOffset||d.scrollTop)-(d.clientTop||0); const height=Math.max(d.scrollHeight-d.clientHeight,1); return Math.min(100, Math.round(100*scrollTop/height)); })();
+      const d=document.documentElement; const scrollTop=(window.pageYOffset||d.scrollTop)-(d.clientTop||0); const height=Math.max(d.scrollHeight-d.clientHeight,1);
+      const scrolledPercent = Math.min(100, Math.round(100*scrollTop/height));
       if(!visible){
         if(timeOnPage >= config.bigTimeSeconds && timeOnPage >= config.initialDelay) showFloating();
         else if(timeOnPage >= config.initialDelay && scrolledPercent >= config.showOnScrollPercent) showFloating();
       }
     }, 1000);
 
-    // avoid obstructing footers (heuristic)
+    // hide floating when inline donate clicked
+    document.addEventListener('click', function(e){
+      const t = e.target.closest && e.target.closest('.crx_btn, .crx_preset, #crx_open_qr, #crx_pay_now');
+      if(t) hideFloating();
+    });
+
+    // avoid obstructing footers
     function avoidObstructing(){
       const footer = document.querySelector('footer, .cookie-banner, .site-footer');
       if(footer && footer.getBoundingClientRect){
@@ -273,25 +241,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     window.addEventListener('resize', avoidObstructing);
     setTimeout(avoidObstructing, 800);
+  } // end floating
 
-    // hide floating when inline donate clicked
-    document.addEventListener('click', function(e){
-      const t = e.target.closest && e.target.closest('.crx_btn, .crx_preset, #crx_open_qr');
-      if(t) hideFloating();
-    });
+  // helper to mark donated (call from thank-you flow)
+  window.crxMarkDonated = function(){ try{ localStorage.setItem(config.donatedKey, '1'); }catch(e){} const frag = document.getElementById('crx_donate_fragment'); if(frag) frag.style.display='none'; const floatBtn = document.getElementById('crx_floating_donate'); if(floatBtn) floatBtn.style.display='none'; };
 
-  } // end floating setup
-
-  // expose helper to mark donor (call from thank-you page)
-  window.crxMarkDonated = function(){
-    try{ localStorage.setItem(config.donatedKey, '1'); }catch(e){}
-    const frag = document.getElementById('crx_donate_fragment'); if(frag) frag.style.display='none';
-    const floatBtn = document.getElementById('crx_floating_donate'); if(floatBtn) floatBtn.style.display='none';
-  };
-
-  if(debugMode && debugBox){
-    debugBox.textContent = 'Debug: attached listeners. Test mobile for UPI. If nothing opens, try opening the page in the phone browser (not in-app webviews).';
-  }
-
-}); // end DOMContentLoaded
+  // debug message
+  if(debugMode && debugBox){ debugBox.textContent = 'Debug: anchors attached. Test on phone (open in Chrome/Safari). If using in-app browser, deep-links may be blocked.'; }
+});
 </script>
