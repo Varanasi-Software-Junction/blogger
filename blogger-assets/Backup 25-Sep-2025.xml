@@ -2,6 +2,11 @@
 <!DOCTYPE html>
 <html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' b:templateVersion='1.0.0' expr:class='data:blog.languageDirection' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
   <head>
+    
+   
+    
+    
+    
     <style>
     *{color:teal;
       background-color: wheat; 
@@ -1567,7 +1572,7 @@ Usage: Add this as a gadget in your Blogger Layout -> Add a Gadget -> HTML/JavaS
   <div id="vsj-suggestions" class="vsj-suggestions" style="display:none"></div>
 </div><script>
 (function(){
-  const blogBase = 'https://varanasisoftwarejunction.blogspot.com';
+  const blogBase = 'https://www.learnwithchampak.live';
   const input = document.getElementById('vsj-search-input');
   const btn = document.getElementById('vsj-search-btn');
   const suggestions = document.getElementById('vsj-suggestions');
@@ -3311,6 +3316,53 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
   <div class='container row'>
     <div class='footer-widgets-wrap'>
       <b:section class='footer common-widget' id='footer-sec1' maxwidgets='3' name='Section (Left)' showaddelement='yes'>
+        <b:widget id='Label1' locked='false' title='Labels' type='Label' visible='true'>
+          <b:widget-settings>
+            <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
+            <b:widget-setting name='display'>CLOUD</b:widget-setting>
+            <b:widget-setting name='selectedLabelsList'/>
+            <b:widget-setting name='showType'>ALL</b:widget-setting>
+            <b:widget-setting name='showFreqNumbers'>true</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main' var='this'>
+      <b:include name='widget-title'/>
+      <b:include name='content'/>
+    </b:includable>
+          <b:includable id='cloud'>
+  <b:loop values='data:labels' var='label'>
+    <span class='label-size'>
+      <b:class expr:name='&quot;label-size-&quot; + data:label.cssSize'/>
+      <a class='label-name' expr:href='data:label.url'>
+        <data:label.name/>
+        <b:if cond='data:this.showFreqNumbers'>
+          <span class='label-count'><data:label.count/></span>
+        </b:if>
+      </a>
+    </span>
+  </b:loop>
+</b:includable>
+          <b:includable id='content'>
+      <div class='widget-content'>
+        <b:class expr:name='data:this.display + &quot;-label&quot;'/>
+        <b:include cond='data:this.display == &quot;list&quot;' name='list'/>
+        <b:include cond='data:this.display == &quot;cloud&quot;' name='list'/>
+      </div>
+    </b:includable>
+          <b:includable id='list'>
+      <ul>
+        <b:loop values='data:labels' var='label'>
+          <li>
+            <a class='label-name' expr:href='data:label.url'>
+              <data:label.name/>
+              <b:if cond='data:this.showFreqNumbers'>
+                <span class='label-count'><data:label.count/></span>
+              </b:if>
+            </a>
+          </li>
+        </b:loop>
+      </ul>
+    </b:includable>
+        </b:widget>
         <b:widget id='PopularPosts2' locked='false' title='Most Active Posts' type='PopularPosts' version='2' visible='true'>
           <b:widget-settings>
             <b:widget-setting name='numItemsToShow'>5</b:widget-setting>
