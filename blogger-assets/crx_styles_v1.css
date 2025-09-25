@@ -267,6 +267,6 @@ pre.crx_output::before {
 .footer{
   text-align: center;
   font-size: 13px;
-  color: teal !important;
+  background-color: teal !important;
   margin-top: 24px;
 }
