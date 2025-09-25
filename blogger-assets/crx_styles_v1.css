@@ -256,3 +256,5 @@ pre.crx_output::before {
   line-height: 1.5;
   background-color: lightblue !important;
 }
+.crx_affiliate { margin-top: 12px; font-size: 13px; color: var(--crx-muted); }
+/* End of CRX — Post link color fixes */
