@@ -230,4 +230,28 @@ pre.crx_output::before {
     padding: 10px !important;
   }
 }
-+
+/* MCQ styles (add to crx_styles_v1.css) */
+.crx_mcqs { display:flex; flex-direction:column; gap:14px; margin:8px 0 18px; }
+.crx_mcq { padding:10px; border-radius:8px; border:1px solid rgba(11,18,32,0.04); background:var(--crx-card); }
+.crx_mcq_q { font-weight:700; margin-bottom:8px; color: #07305a; }
+.crx_mcq_opts { margin:0 0 8px 1.1rem; padding-left:0.4rem; }
+.crx_mcq_opts li { margin:6px 0; }
+.crx_mcq_ans { background: rgba(11,18,32,0.04); padding:8px; border-radius:6px; }
+.crx_mcq .crx_btn { margin-top:6px; }
+@media (max-width:640px) { .crx_mcq_opts { margin-left: 0.6rem; } }
+/* ===== CRX — Post link color fixes ===== */
+.crx_post-body a {
+  color: var(--crx-primary) !important;        /* deep blue link */
+  text-decoration: underline;
+}
+
+.crx_post-body a:hover,
+.crx_post-body a:focus {
+  color: #084298 !important;                   /* darker blue on hover/focus */
+  text-decoration: none;
+}
+
+.crx_post-body ul li {
+  margin: 6px 0; 
+  line-height: 1.5;
+}
