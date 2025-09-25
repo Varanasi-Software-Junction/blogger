@@ -254,4 +254,5 @@ pre.crx_output::before {
 .crx_post-body ul li {
   margin: 6px 0; 
   line-height: 1.5;
+  background-color: lightblue !important;
 }
