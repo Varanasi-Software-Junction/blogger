@@ -1,4 +1,4 @@
-<!-- crx_donate.html - QR-only donation (no UPI deep links) -->
+<!-- crx_donate.html - QR-only donation with robust copy fallback -->
 <div class="crx_donate_card" role="region" aria-label="Support this blog - donate" id="crx_donate_fragment">
   <style>
     .crx_donate_card{ font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; max-width:420px; margin:12px auto; padding:16px; border-radius:12px; box-shadow:0 6px 18px rgba(11,12,16,0.06); background:linear-gradient(180deg,#ffffff,#fbfdff); text-align:center; }
@@ -12,6 +12,9 @@
     .crx_small_hint{ font-size:12px; color:#6b7280; margin-top:10px; }
     .crx_donate_smallprint{ font-size:12px; color:#6b7280; margin-top:8px; }
     #crx_toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:90px; background:rgba(11,132,255,0.95); color:#fff; padding:8px 12px; border-radius:999px; font-weight:700; z-index:10030; display:none; box-shadow:0 8px 24px rgba(3,10,30,0.2); }
+    #crx_manual_copy_box{ display:none; margin-top:10px; padding:10px; border-radius:8px; background:#fff; border:1px dashed rgba(11,132,255,0.12); font-weight:700; color:#071022; }
+    #crx_manual_copy_box input{ border:0; background:transparent; width:100%; font-weight:800; font-size:14px; }
+    @media (max-width:520px){ .crx_donate_card{ max-width:96%; } .crx_donate_qr{ width:150px; height:150px; } #crx_helper{ min-width:220px; } }
   </style>
 
   <div class="crx_donate_title">Support Learning Sutras</div>
@@ -22,12 +25,16 @@
   </div>
 
   <div class="crx_action_row">
-    <a id="crx_open_qr" class="crx_btn crx_primary" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank" rel="noopener noreferrer">Open QR</a>
-    <button id="crx_copy_upi" class="crx_btn">Copy UPI ID</button>
-    <button id="crx_share" class="crx_btn">Share</button>
+    <a id="crx_open_qr" class="crx_btn crx_primary" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank" rel="noopener noreferrer" title="Open QR in new tab">Open QR</a>
+    <button id="crx_copy_upi" class="crx_btn" type="button" aria-label="Copy UPI ID">Copy UPI ID</button>
+    <button id="crx_share" class="crx_btn" type="button" aria-label="Share this page">Share</button>
   </div>
 
   <div class="crx_small_hint">UPI ID: <span id="crx_upi_text">9335874326@kotak811</span></div>
+  <div id="crx_manual_copy_box" aria-hidden="true">
+    If copy fails, select and copy manually: <input id="crx_manual_input" readonly value="9335874326@kotak811" />
+  </div>
+
   <div class="crx_donate_smallprint">You’ll stay anonymous unless you choose to share details. Thanks — Champak Roy</div>
 </div>
 
@@ -56,26 +63,70 @@ document.addEventListener('DOMContentLoaded', function () {
   const upiTextEl = document.getElementById('crx_upi_text');
   const copyBtn = document.getElementById('crx_copy_upi');
   const shareBtn = document.getElementById('crx_share');
+  const manualBox = document.getElementById('crx_manual_copy_box');
+  const manualInput = document.getElementById('crx_manual_input');
+  const openQr = document.getElementById('crx_open_qr');
   const toast = document.getElementById('crx_toast');
   const floatBtn = document.getElementById('crx_floating_donate');
   const dismissBtn = document.getElementById('crx_floating_dismiss');
 
   if(upiTextEl) upiTextEl.textContent = upiId;
+  if(manualInput) manualInput.value = upiId;
 
-  function showToast(msg){
+  function showToast(msg, ms = 1500){
     if(!toast) return;
     toast.textContent = msg;
     toast.style.display = 'block';
-    setTimeout(()=>{ toast.style.display = 'none'; }, 1800);
+    setTimeout(()=>{ toast.style.display = 'none'; }, ms);
+  }
+
+  async function copyRobust(text){
+    // Try navigator.clipboard first
+    try {
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch(e){
+      // fall through to execCommand fallback
+    }
+    // execCommand fallback
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      // Prevent scrolling to bottom
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if(ok) return true;
+    } catch(e){
+      // ignore
+    }
+    return false;
   }
 
   if(copyBtn){
-    copyBtn.addEventListener('click', async function(){
-      try{
-        await navigator.clipboard.writeText(upiId);
+    copyBtn.addEventListener('click', async function (e){
+      e.preventDefault();
+      // hide manual box initially
+      if(manualBox) { manualBox.style.display = 'none'; manualBox.setAttribute('aria-hidden','true'); }
+      const ok = await copyRobust(upiId);
+      if(ok){
         showToast('UPI ID copied');
-      }catch(e){
-        showToast('Copy failed: ' + upiId);
+      } else {
+        // show manual fallback
+        if(manualBox){
+          manualBox.style.display = 'block';
+          manualBox.setAttribute('aria-hidden','false');
+          try { manualInput.focus(); manualInput.select(); } catch(e){}
+          showToast('Tap & hold the UPI to copy manually');
+        } else {
+          showToast('Copy failed — please long-press the UPI ID to copy');
+        }
       }
     });
   }
@@ -86,27 +137,49 @@ document.addEventListener('DOMContentLoaded', function () {
       if(navigator.share){
         try{ await navigator.share(shareData); showToast('Thanks for sharing!'); return; }catch(e){}
       }
-      try{ await navigator.clipboard.writeText(location.href); showToast('Link copied — ready to share'); }catch(e){}
+      try {
+        const ok = await copyRobust(location.href);
+        if(ok){
+          showToast('Link copied — ready to share');
+          // open Twitter as lightweight composer
+          const tweetText = encodeURIComponent((shareData.text || '') + ' ' + shareData.url);
+          window.open('https://twitter.com/intent/tweet?text=' + tweetText, '_blank', 'noopener');
+        } else {
+          // final fallback: expose the link in the manual box
+          if(manualBox){
+            manualInput.value = location.href;
+            manualBox.style.display = 'block';
+            manualBox.setAttribute('aria-hidden','false');
+            manualInput.focus(); manualInput.select();
+            showToast('Couldn\'t auto-copy — select & copy the link');
+          }
+        }
+      } catch(e){
+        // nothing
+      }
     });
   }
 
-  // Floating button just opens the QR
+  if(openQr){
+    openQr.addEventListener('click', function(){ try{ window.open(QR, '_blank', 'noopener'); }catch(e){} });
+  }
+
+  // Floating button just opens the QR (and visible after a short delay)
   if(floatBtn){
     floatBtn.addEventListener('click', function(e){
       if(e.target && e.target.id === 'crx_floating_dismiss') return;
-      window.open(QR, '_blank', 'noopener');
+      try{ window.open(QR, '_blank', 'noopener'); }catch(e){}
     });
+    // show after 30s on page (polite)
+    setTimeout(()=>{ floatBtn.classList.add('visible'); }, 30000);
   }
+
   if(dismissBtn){
     dismissBtn.addEventListener('click', function(e){
       e.stopPropagation();
-      floatBtn.style.display='none';
-      document.getElementById('crx_floating_label').style.display='none';
+      if(floatBtn) floatBtn.style.display='none';
+      const label = document.getElementById('crx_floating_label'); if(label) label.style.display='none';
     });
   }
-
-  // Show floating after engagement
-  setTimeout(()=>{ floatBtn.classList.add('visible'); }, 60000); // after 60s
 });
 </script>
-<!-- End of crx_donate.html -->
