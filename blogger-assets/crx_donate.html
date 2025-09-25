@@ -207,6 +207,7 @@
   presetBtns.forEach(btnEl=>{
     btnEl.addEventListener('click', function(){
       const amt = btnEl.getAttribute('data-amount');
+      alert('You clicked to donate ₹' + amt);
       openPayment(amt);
     });
   });
