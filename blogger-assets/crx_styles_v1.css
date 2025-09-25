@@ -258,3 +258,9 @@ pre.crx_output::before {
 }
 .crx_affiliate {border-radius: 10px;border-color: darkgreen; border-style: ridge; border-width: 7px; margin : 12px;padding: 10px; font-size: 20px; color: var(--crx-muted); }
 /* End of CRX — Post link color fixes */
+.crx_avatar{
+  border-radius: 50%;
+  width: 40px;
+ 
+  object-fit: cover;
+}
