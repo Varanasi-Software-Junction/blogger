@@ -1,5 +1,4 @@
-<!-- crx_donate.html - UPI: champaksworld-1@okhdfcbank / Champak Roy
-     QR URL centralized for easy updates; helper auto-syncs from data-upi -->
+<!-- crx_donate.html - Mobile-first: aggressive UPI open attempts with QR fallback + copy helper -->
 <div class="crx_donate_card" role="region" aria-label="Support this blog - donate" id="crx_donate_fragment">
   <style>
     .crx_donate_card{ font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; max-width:520px; margin:12px 0; padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(11,12,16,0.06); background:linear-gradient(180deg,#ffffff,#fbfdff); display:flex; gap:12px; align-items:center; }
@@ -15,13 +14,14 @@
     .crx_preset{ display:inline-flex; text-decoration:none; align-items:center; justify-content:center; background:#f4f7fb; padding:8px 10px; border-radius:8px; font-weight:800; color:#071022; border:0; cursor:pointer; }
     .crx_small_hint{ font-size:12px; color:#6b7280; margin-top:8px; }
     .crx_donate_smallprint{ font-size:12px; color:#6b7280; margin-top:8px; }
+    /* small helper shown when deep-link blocked */
     #crx_helper { position:fixed; left:50%; transform:translateX(-50%); bottom:18px; z-index:10020; background:#fff; color:#071022; padding:10px 12px; border-radius:10px; box-shadow:0 10px 30px rgba(2,6,23,0.12); display:none; font-weight:700; }
     #crx_helper button{ margin-left:8px; padding:6px 8px; border-radius:8px; border:0; cursor:pointer; background:#0b84ff; color:#fff; font-weight:700; }
     @media (max-width:520px){ .crx_donate_card{ max-width:96%; } .crx_donate_qr{ width:96px; height:96px; } }
   </style>
 
   <div class="crx_donate_qr" aria-hidden="false">
-    <img id="crx_qr_image" src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" alt="QR code to donate" loading="lazy" decoding="async" width="110" height="110" />
+    <img src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" alt="QR code to donate" loading="lazy" decoding="async" width="110" height="110" />
   </div>
 
   <div class="crx_donate_meta">
@@ -31,26 +31,26 @@
     <div class="crx_donate_benefits">Quick options — keeps tools free, fewer ads, and funds new tutorials.</div>
 
     <div class="crx_action_row" role="group" aria-label="Donation actions">
-      <!-- Primary Donate: href -> QR fallback, data-upi contains UPI deep link (centralized UPI below) -->
+      <!-- href points to QR (desktop safe). data-upi contains the UPI deep link for mobile -->
       <a id="crx_pay_now" class="crx_btn crx_primary"
          href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
-         data-upi="upi://pay?pa=champaksworld-1%40okhdfcbank&pn=Champak%20Roy&am=50&cu=INR"
+         data-upi="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=50&cu=INR"
          rel="noopener" aria-label="Donate ₹50 now">Donate ₹50</a>
 
-      <!-- Preset anchors (href -> QR fallback; data-upi -> deep link) -->
+      <!-- Preset anchors -->
       <a class="crx_preset" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
-         data-upi="upi://pay?pa=champaksworld-1%40okhdfcbank&pn=Champak%20Roy&am=20&cu=INR" data-amount="20" aria-label="Donate ₹20">₹20</a>
+         data-upi="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=20&cu=INR" data-amount="20" aria-label="Donate ₹20">₹20</a>
 
       <a class="crx_preset" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
-         data-upi="upi://pay?pa=champaksworld-1%40okhdfcbank&pn=Champak%20Roy&am=50&cu=INR" data-amount="50" aria-label="Donate ₹50">₹50</a>
+         data-upi="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=50&cu=INR" data-amount="50" aria-label="Donate ₹50">₹50</a>
 
       <a class="crx_preset" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
-         data-upi="upi://pay?pa=champaksworld-1%40okhdfcbank&pn=Champak%20Roy&am=100&cu=INR" data-amount="100" aria-label="Donate ₹100">₹100</a>
+         data-upi="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=100&cu=INR" data-amount="100" aria-label="Donate ₹100">₹100</a>
 
       <a class="crx_preset" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
-         data-upi="upi://pay?pa=champaksworld-1%40okhdfcbank&pn=Champak%20Roy&am=250&cu=INR" data-amount="250" aria-label="Donate ₹250">₹250</a>
+         data-upi="upi://pay?pa=champaksword%40okicici&pn=Champak%20Roy&am=250&cu=INR" data-amount="250" aria-label="Donate ₹250">₹250</a>
 
-      <a id="crx_open_qr" class="crx_btn" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank" rel="noopener noreferrer">Open QR — Save/Scan</a>
+      <a id="crx_open_qr" class="crx_btn" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open QR code in new tab">Open QR — Save/Scan</a>
     </div>
 
     <div class="crx_small_hint">Tip: on mobile, tapping a Donate link should open your UPI app. If it doesn't, use the helper to copy UPI or scan the QR.</div>
@@ -59,11 +59,11 @@
 </div>
 
 <div id="crx_helper" role="dialog" aria-live="polite">
-  Couldn't open UPI app? <span id="crx_upi_text" style="font-weight:800;margin-left:6px"></span>
+  Couldn't open UPI app? <span id="crx_upi_text" style="font-weight:800;margin-left:6px">champaksword@okicici</span>
   <button id="crx_copy_upi">Copy UPI</button>
 </div>
 
-<!-- Floating button etc. remains unchanged -->
+<!-- Floating button (unchanged visual) -->
 <style>
 #crx_floating_donate{ position:fixed; z-index:9998; --size:64px; width:var(--size); height:var(--size); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(3,10,30,0.18); background:linear-gradient(180deg,#0b84ff,#0466d7); color:white; font-weight:700; cursor:pointer; border:0; transition:transform 350ms ease, opacity 300ms ease, right 1s ease, left 1s ease, bottom 1s ease, top 1s ease; opacity:0; pointer-events:none; }
 #crx_floating_donate.visible{ opacity:1; pointer-events:auto; }
@@ -82,12 +82,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  // Centralized QR URL (change here to update everywhere)
-  const QR = (function(){
-    const el = document.getElementById('crx_qr_image');
-    return el ? el.src : 'https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg';
-  })();
-
+  const QR = 'https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg';
   const presetAnchors = Array.from(document.querySelectorAll('.crx_preset'));
   const payNow = document.getElementById('crx_pay_now');
   const openQr = document.getElementById('crx_open_qr');
@@ -97,57 +92,72 @@ document.addEventListener('DOMContentLoaded', function () {
   const btn = document.getElementById('crx_floating_donate');
   const dismissBtn = document.getElementById('crx_floating_dismiss');
 
-  // --- AUTO-SYNC: detect first data-upi (prefer payNow) and extract pa param for helper ---
-  function extractPaFromUpiUri(uri){
-    if(!uri) return null;
-    try {
-      const q = uri.split('?')[1] || '';
-      const params = new URLSearchParams(q);
-      return params.get('pa') || null;
-    } catch (e) { return null; }
-  }
-  const sourceEl = payNow || document.querySelector('[data-upi]');
-  let detectedPa = null;
-  if(sourceEl){
-    detectedPa = extractPaFromUpiUri(sourceEl.getAttribute('data-upi'));
-  }
-  if(detectedPa && helperText){
-    helperText.textContent = decodeURIComponent(detectedPa);
-  }
+  // Your UPI id (visible in helper)
+  const UPI_ID = 'champaksword@okicici';
 
-  const UPI_ID = detectedPa ? decodeURIComponent(detectedPa) : (helperText ? helperText.textContent.trim() : '');
-
-  // simple mobile detection; deep-linking mainly for mobile
+  // simple mobile detection; deep-linking for UPI mostly relevant on Android
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  // attempt to open upi deep-link with multiple fallbacks
+  // small helper to try opening UPI deep-link using multiple attempts
   function tryOpenUpi(upiUri, fallbackOpenQr=true) {
-    try { location.href = upiUri; } catch (e) {}
+    // 1) Primary attempt: location.href (user gesture)
     try {
-      const a = document.createElement('a'); a.href = upiUri; a.style.display = 'none'; document.body.appendChild(a); a.click();
+      location.href = upiUri;
+    } catch (e) {
+      // ignore
+    }
+
+    // 2) Also create temporary anchor and click it (some browsers honor anchor click)
+    try {
+      const a = document.createElement('a');
+      a.href = upiUri;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
       setTimeout(()=>{ try{ document.body.removeChild(a); }catch(e){} }, 1200);
-    } catch(e){}
+    } catch(e){ /* ignore */ }
+
+    // 3) iframe fallback after small delay
     setTimeout(()=> {
-      try { const iframe = document.createElement('iframe'); iframe.style.display = 'none'; iframe.src = upiUri; document.body.appendChild(iframe); setTimeout(()=> { try{ document.body.removeChild(iframe); }catch(e){} }, 1200); } catch (err) {}
+      try {
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = upiUri;
+        document.body.appendChild(iframe);
+        setTimeout(()=> { try{ document.body.removeChild(iframe); }catch(e){} }, 1200);
+      } catch (err) {
+        // ignore
+      }
     }, 600);
+
+    // 4) After ~1200ms, if still on page and not switched to UPI app, show helper and open QR (desktop/browser-blocked fallback)
     setTimeout(()=> {
+      // If the page is still visible (user didn't switch)
       if (document.visibilityState === 'visible') {
-        if(helper){ helper.style.display = 'block'; setTimeout(()=> { if(helper) helper.style.display = 'none'; }, 8000); }
+        // show helper so user can copy UPI ID or scan QR
+        showHelper();
         if(fallbackOpenQr) window.open(QR, '_blank', 'noopener');
       }
     }, 1200);
   }
 
-  // copy helper
+  function showHelper(){
+    if(!helper) return;
+    helper.style.display = 'block';
+    // hide after 8s to avoid annoyance
+    setTimeout(()=> { if(helper) helper.style.display = 'none'; }, 8000);
+  }
+
+  // Copy UPI to clipboard
   if(copyBtn){
     copyBtn.addEventListener('click', function(){
-      const text = UPI_ID || (helperText ? helperText.textContent.trim() : '');
-      if(!text) return alert('UPI id not available');
+      const text = UPI_ID;
       if(navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(text).then(()=> {
           copyBtn.textContent = 'Copied';
           setTimeout(()=> copyBtn.textContent = 'Copy UPI', 1800);
         }, ()=> {
+          // fallback
           const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
           try{ document.execCommand('copy'); copyBtn.textContent='Copied'; }catch(e){ alert('Copy: ' + text); }
           document.body.removeChild(ta);
@@ -162,35 +172,41 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // attach handler that uses data-upi on mobile, QR fallback on desktop
+  // universal handler for anchors with data-upi
   function attachHandlerToAnchor(anchor){
     if(!anchor) return;
     anchor.addEventListener('click', function(e){
       const upi = anchor.getAttribute('data-upi');
       if(!upi) return;
       if(isMobile){
-        e.preventDefault();
+        // mobile: try opening UPI aggressively
+        e.preventDefault(); // we will handle fallback opening QR if needed
         tryOpenUpi(upi, true);
       } else {
-        // desktop: allow anchor href (QR) to open as-is (no upi scheme attempted)
+        // desktop: open QR (anchor href already points to QR)
+        // do not change behavior — allow default navigation to href which opens QR
+        // but in case browser tries to handle upi: (shouldn't since href=QR) do nothing
       }
     });
   }
+
+  // Attach
   if(payNow) attachHandlerToAnchor(payNow);
   presetAnchors.forEach(a => attachHandlerToAnchor(a));
+  if(openQr){ /* QR link is normal */ }
 
-  // Floating button behavior (trigger payNow click)
+  // Floating button: trigger primary anchor handler (keeps mobile attempts)
   if(btn){
     btn.addEventListener('click', function(e){
       if(e.target && e.target.id === 'crx_floating_dismiss') return;
       if(payNow){
+        // simulate a click on the primary anchor
         payNow.click();
       } else {
         window.open(QR, '_blank', 'noopener');
       }
     });
   }
-
   if(dismissBtn){
     dismissBtn.addEventListener('click', function(e){
       e.stopPropagation();
@@ -200,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Floating show behavior (light)
+  // Floating show behavior (keeps as before) — light version
   if(btn){
     const corners=['br','bl','tl','tr']; let currentCornerIndex=0; const margin=16;
     function placeCorner(corner){
@@ -222,6 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     function hideFloating(){ if(!visible) return; btn.classList.remove('visible'); visible=false; if(moveInterval){ clearInterval(moveInterval); moveInterval=null; } }
 
+    // show after some engagement
     let start = Date.now();
     setInterval(()=> {
       const secs = Math.floor((Date.now()-start)/1000);
@@ -230,10 +247,12 @@ document.addEventListener('DOMContentLoaded', function () {
       if(!visible && (secs >= 120 || (secs >= 30 && scrolledPercent >= 60))) showFloating();
     }, 1000);
 
+    // hide when user clicks inline donate
     document.addEventListener('click', function(e){
       const t = e.target.closest && e.target.closest('.crx_btn, .crx_preset, #crx_open_qr, #crx_pay_now');
       if(t) hideFloating();
     });
   }
+
 }); // end DOMContentLoaded
 </script>
