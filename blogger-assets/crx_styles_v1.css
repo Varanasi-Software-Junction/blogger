@@ -144,3 +144,90 @@ body{
   .crx_float-output { right: 8px; left: 8px; width: auto; bottom: 12px; }
   .crx_editor { height: 300px; }
 }
+/* ===== CRX — High-contrast code / output block fixes (append to crx_styles_v1.css) =====
+   Fixes white-on-white code blocks, improves textarea/code contrast and adds simple
+   copy-button visuals. Safe, namespaced and scoped to crx classes.
+   ======================================================================= */
+
+/* Strong, readable background for CRX output & code areas */
+.crx_output,
+pre.crx_output,
+.crx_post-body pre,
+.crx_post-body code,
+.crx_post-body pre code,
+textarea.crx_output,
+.crx_post-body textarea#code {
+  background: #0b122a !important;        /* deep navy for contrast */
+  color: #e6eef8 !important;             /* pale text for readability */
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  box-shadow: none !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  font-family: var(--crx-mono) !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  overflow: auto !important;
+  word-break: break-word !important;
+}
+
+/* Keep code elements transparent inside the crx_output container so they inherit color */
+.crx_output code,
+.crx_post-body pre code,
+.crx_post-body code {
+  background: transparent !important;
+  color: inherit !important;
+  font-family: var(--crx-mono) !important;
+  font-size: 13px !important;
+}
+
+/* Make textarea code area visually consistent and selectable */
+textarea.crx_output,
+.crx_post-body textarea#code {
+  resize: vertical;
+  min-height: 88px;
+  color: inherit;
+  background-clip: padding-box;
+}
+
+/* Improve contrast for <pre>:before label (if theme uses pre:before) */
+.crx_post-body pre::before,
+pre.crx_output::before {
+  display: block;
+  content: "Code";
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;            /* light but still visible */
+  background: rgba(255,255,255,0.03);
+  padding: 6px 10px;
+  margin: -12px -12px 8px -12px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+/* Make small copy buttons match CRX look (if you add copy buttons) */
+.crx_copybtn {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .25rem .5rem;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  color: #e6eef8;
+  cursor: pointer;
+}
+
+/* Accessibility: Prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .crx_output, pre.crx_output, textarea.crx_output { transition: none !important; }
+}
+
+/* Small responsive tweak: ensure blocks fit small screens */
+@media (max-width:520px) {
+  .crx_output, pre.crx_output, .crx_post-body pre, textarea.crx_output {
+    font-size: 12px !important;
+    padding: 10px !important;
+  }
+}
++
