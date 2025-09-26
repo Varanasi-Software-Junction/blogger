@@ -465,7 +465,34 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
             </b:widget>
           </b:section>
         <br/><br/><br/><br/><br/><br/>
-          <b:section class='header-ads' id='header-ads' maxwidgets='1' name='Header Ads 728x90' showaddelement='yes'/>
+          <b:section class='header-ads' id='header-ads' maxwidgets='1' name='Header Ads 728x90' showaddelement='yes'>
+            <b:widget id='HTML5' locked='false' title='' type='HTML' visible='true'>
+              <b:widget-settings>
+                <b:widget-setting name='content'><![CDATA[<style>  /* Blogger comments section fix */
+.comments .comment-author a,
+#comments .comment-author a,
+.comments .user a {
+  color: #0b84ff !important;     /* bright blue link */
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.comments .comment-author a:hover,
+#comments .comment-author a:hover,
+.comments .user a:hover {
+  color: #054f9e !important;     /* darker blue on hover */
+  text-decoration: underline;
+}
+</style>]]></b:widget-setting>
+              </b:widget-settings>
+              <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+            </b:widget>
+          </b:section>
 <div class='clearfix'/>
       </div>
     </div>
@@ -3316,53 +3343,6 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
   <div class='container row'>
     <div class='footer-widgets-wrap'>
       <b:section class='footer common-widget' id='footer-sec1' maxwidgets='3' name='Section (Left)' showaddelement='yes'>
-        <b:widget id='Label1' locked='false' title='Labels' type='Label' visible='true'>
-          <b:widget-settings>
-            <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
-            <b:widget-setting name='display'>CLOUD</b:widget-setting>
-            <b:widget-setting name='selectedLabelsList'/>
-            <b:widget-setting name='showType'>ALL</b:widget-setting>
-            <b:widget-setting name='showFreqNumbers'>true</b:widget-setting>
-          </b:widget-settings>
-          <b:includable id='main' var='this'>
-      <b:include name='widget-title'/>
-      <b:include name='content'/>
-    </b:includable>
-          <b:includable id='cloud'>
-  <b:loop values='data:labels' var='label'>
-    <span class='label-size'>
-      <b:class expr:name='&quot;label-size-&quot; + data:label.cssSize'/>
-      <a class='label-name' expr:href='data:label.url'>
-        <data:label.name/>
-        <b:if cond='data:this.showFreqNumbers'>
-          <span class='label-count'><data:label.count/></span>
-        </b:if>
-      </a>
-    </span>
-  </b:loop>
-</b:includable>
-          <b:includable id='content'>
-      <div class='widget-content'>
-        <b:class expr:name='data:this.display + &quot;-label&quot;'/>
-        <b:include cond='data:this.display == &quot;list&quot;' name='list'/>
-        <b:include cond='data:this.display == &quot;cloud&quot;' name='list'/>
-      </div>
-    </b:includable>
-          <b:includable id='list'>
-      <ul>
-        <b:loop values='data:labels' var='label'>
-          <li>
-            <a class='label-name' expr:href='data:label.url'>
-              <data:label.name/>
-              <b:if cond='data:this.showFreqNumbers'>
-                <span class='label-count'><data:label.count/></span>
-              </b:if>
-            </a>
-          </li>
-        </b:loop>
-      </ul>
-    </b:includable>
-        </b:widget>
         <b:widget id='PopularPosts2' locked='false' title='Most Active Posts' type='PopularPosts' version='2' visible='true'>
           <b:widget-settings>
             <b:widget-setting name='numItemsToShow'>5</b:widget-setting>
@@ -3695,12 +3675,12 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
     </b:section>
     <div style='text-indent:-99999px;'>
 
-    <div class='copyright-area'>Created By <a href='https://varanasisoftwarejunction.blogspot.com/' id='mycontent' rel='dofollow' title='Blogspot Templates'>Varanasi Software Junction</a> | Distributed By <a href='https://gooyaabitemplates.com/' rel='dofollow' style='color:#ff00ba;' target='_blank'>GooyaabiTemplates</a>
+    <div class='copyright-area'>Created By <a href='https://varanasisoftwarejunction.blogspot.com/' id='mycontent' rel='dofollow' title='Blogspot Templates'>Champak`s World</a> | Distributed By <a href='https://gooyaabitemplates.com/' rel='dofollow' style='color:#ff00ba;' target='_blank'>GooyaabiTemplates</a>
     </div>
 
     </div>
 
-    <div class='copyright-area'> <a href='https://varanasisoftwarejunction.blogspot.com/' title='Varanasi Software Junction'><h3>Varanasi Software Junction</h3></a>
+    <div class='copyright-area'> <a href='https://varanasisoftwarejunction.blogspot.com/' title='Champak`s World'><h3>Champak`s Worl</h3></a>
     </div>
 
   </div>

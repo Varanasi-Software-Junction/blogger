@@ -1,46 +1,51 @@
 /* ============================
-   Existing CRX Styles v1
+   CRX Styles v1 — Blue / Saffron Theme
+   Cleaned: removed all `!important` rules
    ============================ */
 
-/* (your original styles remain unchanged above this line)
-   I kept all your base CRX widget, comments, visualizer,
-   avatar styling, speech bar, donate card etc.
-   --- START OF ORIGINAL CONTENT --- */
-
-/* (contents from crx_styles_v1.css were here) */
-
-/* --- END OF ORIGINAL CONTENT --- */
-
-
-/* ============================
-   CRX — Python Editor UI Styles
-   Namespaced with crx_ prefix
-   ============================ */
-
+/* ---------- THEME VARIABLES ---------- */
 :root{
   --crx-bg: #f7f9fc;
   --crx-card: #ffffff;
   --crx-border: #e6eef8;
   --crx-muted: #6b7280;
   --crx-primary: #0b5ed7;
-  --crx-shadow: 0 6px 18px rgba(8,20,40,0.06);
-  --crx-radius: 10px;
+  --crx-primary-dark: #084298;
+  --crx-accent: #ff9933;
+  --crx-accent-deep: #e68325;
+  --crx-shadow: 0 8px 22px rgba(8,20,40,0.08);
+  --crx-radius: 12px;
   --crx-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-  --crx-pad: 12px;
+  --crx-pad: 14px;
+  --crx-surface-weak: #f3f6fb;
+  --crx-code-bg: #0b122a;
+  --crx-code-text: #e6eef8;
+  --crx-elev: rgba(11,94,215,0.06);
+  --crx-success: #0b8a3f;
+  --crx-danger: #b91c1c;
+  --crx-focus: 0 0 0 4px rgba(11,94,215,0.12);
 }
 
+/* ---------- BASE ---------- */
+* { box-sizing: border-box; }
+html, body { height:100%; }
 body{
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   margin: 18px;
   background: var(--crx-bg);
   color: #071022;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.55;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* container */
 .crx_wrap { max-width: 1100px; margin: 0 auto; display: block; gap: 16px; }
 
-/* header */
-.crx_header h1 { margin: 0 0 .25rem 0; font-size: 20px; }
+/* headings */
+.crx_header h1 { margin: 0 0 .25rem 0; font-size: 22px; color: var(--crx-primary); }
+.crx_header h2 { color: var(--crx-primary-dark); margin: 0 0 .4rem 0; }
 .crx_small { font-size: 13px; color: var(--crx-muted); }
 
 /* generic card */
@@ -49,218 +54,389 @@ body{
   padding: var(--crx-pad);
   border-radius: var(--crx-radius);
   box-shadow: var(--crx-shadow);
-  margin-bottom: 12px;
-  border: 1px solid transparent;
+  margin-bottom: 14px;
+  border: 1px solid var(--crx-border);
 }
 
-/* specialized cards */
-.crx_editor-card { /* visual container for editor */ }
-.crx_output-card  { /* visual container for output */ }
+/* subtle surface */
+.crx_surface {
+  background: var(--crx-surface-weak);
+  border-radius: 10px;
+  padding: 10px;
+}
 
-/* editor meta row */
-.crx_editor-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:.6rem; }
+/* ---------- EDITOR & OUTPUT ---------- */
+.crx_editor-card { }
+.crx_output-card  { }
 
-/* editor area — ACE needs explicit height */
 .crx_editor {
   height: 420px;
   min-height: 180px;
   width: 100%;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid var(--crx-border);
   box-sizing: border-box;
   overflow: hidden;
+  background: linear-gradient(180deg, #ffffff, #fbfdff);
 }
 
 /* make Ace font-size consistent */
-.ace_editor { font-size: 14px !important; font-family: var(--crx-mono) !important; }
+.ace_editor { font-size: 14px; font-family: var(--crx-mono); }
 
 /* controls row */
-.crx_controls { display:flex; gap:.5rem; align-items:center; margin-top:.75rem; }
+.crx_controls { display:flex; gap:.6rem; align-items:center; margin-top:.75rem; flex-wrap:wrap; }
 
-/* CRX buttons */
+/* ---------- BUTTONS ---------- */
 .crx_btn {
   appearance: none;
   border: 1px solid rgba(11,18,32,0.06);
   background: linear-gradient(180deg,#fff,#f7fbff);
-  padding: .45rem .8rem;
-  border-radius: 8px;
+  padding: .5rem .9rem;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
-  box-shadow: 0 2px 6px rgba(8,20,40,0.04);
+  box-shadow: 0 6px 16px rgba(11,94,215,0.06);
+  color: var(--crx-primary-dark);
+  transition: transform .14s ease, box-shadow .14s ease, background .14s ease, color .12s ease;
 }
-.crx_btn.secondary { background: transparent; border: 1px solid #e6eef8; color: #0b1220; padding: .35rem .7rem; font-weight:600; }
-.crx_btn.small { font-size: 13px; padding: .32rem .6rem; border-radius:7px; }
+.crx_btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(11,94,215,0.08); }
+
+/* primary button (blue) */
+.crx_btn.crx_primary {
+  background: linear-gradient(180deg,var(--crx-primary),var(--crx-primary-dark));
+  color: #fff;
+  border: none;
+  box-shadow: 0 10px 30px rgba(11,94,215,0.14);
+}
+.crx_btn.crx_primary:hover { background: linear-gradient(180deg,var(--crx-primary-dark),#05336f); }
+
+/* accent (saffron) variant */
+.crx_btn.crx_accent {
+  background: linear-gradient(180deg,var(--crx-accent),var(--crx-accent-deep));
+  color: #fff;
+  border: none;
+}
+.crx_btn.crx_accent:hover { transform: translateY(-2px); }
+
+/* secondary / ghost */
+.crx_btn.secondary { background: transparent; border: 1px solid var(--crx-border); color: var(--crx-primary-dark); padding: .45rem .7rem; font-weight:700; }
+.crx_btn.small { font-size: 13px; padding: .36rem .64rem; border-radius:8px; }
 
 /* status */
-.crx_status { padding: .25rem .6rem; border-radius: 6px; font-weight: 600; font-size: 13px; background: transparent; color: var(--crx-muted); }
-.crx_status.ok { color: #0b8a3f; }
-.crx_status.err { color: #b91c1c; }
+.crx_status { padding: .25rem .6rem; border-radius: 8px; font-weight: 600; font-size: 13px; background: transparent; color: var(--crx-muted); }
+.crx_status.ok { color: var(--crx-success); }
+.crx_status.err { color: var(--crx-danger); }
 
-/* output pre */
+/* focus */
+.crx_btn:focus, .crx_input:focus, .crx_textarea:focus { outline: none; box-shadow: var(--crx-focus); border-color: var(--crx-primary); }
+
+/* ---------- OUTPUT / CODE BLOCKS ---------- */
 .crx_output {
   margin-top: .6rem;
-  padding: 12px;
-  background: #0b122012;
-  border-radius: 8px;
+  padding: 14px;
+  background: var(--crx-code-bg);
+  border-radius: 10px;
   white-space: pre-wrap;
   word-break: break-word;
-  max-height: 260px;
+  max-height: 320px;
   overflow: auto;
   font-family: var(--crx-mono);
   font-size: 13px;
+  color: var(--crx-code-text);
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: inset 0 -2px 0 rgba(255,255,255,0.02);
 }
 
-/* floating output window (namespaced) */
-.crx_float-output {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  width: 420px;
-  height: 300px;
-  z-index: 9999;
-  background: var(--crx-card);
-  border-radius: 8px;
-  box-shadow: 0 12px 30px rgba(8,20,40,0.15);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--crx-border);
-}
-
-.crx_float-header {
-  display:flex; justify-content:space-between; align-items:center; padding:8px 10px; cursor:move;
-  background: linear-gradient(180deg,#f7fbff,#f0f5fb);
-}
-.crx_float-title { font-weight:600; font-size:14px; }
-.crx_float-controls { display:flex; gap:6px; align-items:center; }
-.crx_float-btn { border: none; background: transparent; cursor: pointer; font-size: 14px; padding: 2px 6px; }
-
-/* floating body */
-.crx_float-body { padding: 10px; overflow:auto; white-space: pre-wrap; font-family: var(--crx-mono); flex:1; font-size:13px; }
-
-/* small responsive tweaks */
-@media (max-width:720px){
-  .crx_float-output { right: 8px; left: 8px; width: auto; bottom: 12px; }
-  .crx_editor { height: 300px; }
-}
-/* ===== CRX — High-contrast code / output block fixes (append to crx_styles_v1.css) =====
-   Fixes white-on-white code blocks, improves textarea/code contrast and adds simple
-   copy-button visuals. Safe, namespaced and scoped to crx classes.
-   ======================================================================= */
-
-/* Strong, readable background for CRX output & code areas */
-.crx_output,
-pre.crx_output,
-.crx_post-body pre,
-.crx_post-body code,
-.crx_post-body pre code,
-textarea.crx_output,
-.crx_post-body textarea#code {
-  background: #0b122a !important;        /* deep navy for contrast */
-  color: #e6eef8 !important;             /* pale text for readability */
-  border: 1px solid rgba(255,255,255,0.04) !important;
-  box-shadow: none !important;
-  padding: 12px !important;
-  border-radius: 8px !important;
-  font-family: var(--crx-mono) !important;
-  font-size: 13px !important;
-  line-height: 1.45 !important;
-  overflow: auto !important;
-  word-break: break-word !important;
-}
-
-/* Keep code elements transparent inside the crx_output container so they inherit color */
-.crx_output code,
-.crx_post-body pre code,
-.crx_post-body code {
-  background: transparent !important;
-  color: inherit !important;
-  font-family: var(--crx-mono) !important;
-  font-size: 13px !important;
-}
-
-/* Make textarea code area visually consistent and selectable */
-textarea.crx_output,
-.crx_post-body textarea#code {
-  resize: vertical;
-  min-height: 88px;
-  color: inherit;
-  background-clip: padding-box;
-}
-
-/* Improve contrast for <pre>:before label (if theme uses pre:before) */
-.crx_post-body pre::before,
-pre.crx_output::before {
+/* code label */
+pre.crx_output::before, .crx_post-body pre::before {
   display: block;
   content: "Code";
   font-size: 12px;
-  font-weight: 600;
-  color: #cbd5e1;            /* light but still visible */
+  font-weight: 700;
+  color: #cbd5e1;
   background: rgba(255,255,255,0.03);
   padding: 6px 10px;
-  margin: -12px -12px 8px -12px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  margin: -14px -14px 8px -14px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
-/* Make small copy buttons match CRX look (if you add copy buttons) */
+/* copy button styles */
 .crx_copybtn {
   display: inline-flex;
   align-items: center;
-  gap: .4rem;
-  padding: .25rem .5rem;
+  gap: .45rem;
+  padding: .32rem .6rem;
   font-size: 13px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.06);
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  color: #e6eef8;
+  color: var(--crx-code-text);
   cursor: pointer;
 }
 
-/* Accessibility: Prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .crx_output, pre.crx_output, textarea.crx_output { transition: none !important; }
-}
-
-/* Small responsive tweak: ensure blocks fit small screens */
+/* small responsive tweak for code */
 @media (max-width:520px) {
-  .crx_output, pre.crx_output, .crx_post-body pre, textarea.crx_output {
-    font-size: 12px !important;
-    padding: 10px !important;
-  }
-}
-/* MCQ styles (add to crx_styles_v1.css) */
-.crx_mcqs { display:flex; flex-direction:column; gap:14px; margin:8px 0 18px; }
-.crx_mcq { padding:10px; border-radius:8px; border:1px solid rgba(11,18,32,0.04); background:var(--crx-card); }
-.crx_mcq_q { font-weight:700; margin-bottom:8px; color: #07305a; }
-.crx_mcq_opts { margin:0 0 8px 1.1rem; padding-left:0.4rem; }
-.crx_mcq_opts li { margin:6px 0; }
-.crx_mcq_ans { background: rgba(11,18,32,0.04); padding:8px; border-radius:6px; }
-.crx_mcq .crx_btn { margin-top:6px; }
-@media (max-width:640px) { .crx_mcq_opts { margin-left: 0.6rem; } }
-/* ===== CRX — Post link color fixes ===== */
-.crx_post-body a {
-  color: var(--crx-primary) !important;        /* deep blue link */
-  text-decoration: underline;
+  .crx_output { font-size: 12px; padding: 10px; max-height: 260px; }
 }
 
+/* ---------- POST BODY LINK & LIST STYLES ---------- */
+.crx_post-body a {
+  color: var(--crx-accent);
+  text-decoration: none;
+  border-bottom: 2px solid rgba(255,153,51,0.06);
+  transition: color .12s ease, border-color .12s ease;
+}
 .crx_post-body a:hover,
 .crx_post-body a:focus {
-  color: #084298 !important;                   /* darker blue on hover/focus */
+  color: var(--crx-primary-dark);
+  border-bottom-color: var(--crx-accent);
   text-decoration: none;
 }
 
+/* lists */
+.crx_post-body ul { margin-left: 1.06rem; padding-left: 0; }
 .crx_post-body ul li {
-  margin: 6px 0; 
-  line-height: 1.5;
-  background-color: lightblue !important;
+  margin: 8px 0;
+  line-height: 1.55;
+  list-style: none;
+  position: relative;
+  padding-left: 1.3rem;
 }
-.crx_affiliate {border-radius: 10px;border-color: darkgreen; border-style: ridge; border-width:0.1px; margin : 12px;padding: 10px; font-size: 20px; color: var(--crx-muted); }
-/* End of CRX — Post link color fixes */
+.crx_post-body ul li::before {
+  content: "";
+  position: absolute;
+  left: 0.2rem;
+  top: .78rem;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  background: var(--crx-accent);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+}
+
+/* blockquote */
+.crx_post-body blockquote {
+  border-left: 4px solid var(--crx-accent);
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(250,250,250,0.6), rgba(255,250,240,0.02));
+  margin: 12px 0;
+  border-radius: 8px;
+  color: var(--crx-muted);
+}
+
+/* images */
+.crx_post-body img { border-radius: 8px; max-width: 100%; height: auto; display: block; }
+
+/* tables */
+.crx_post-body table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.crx_post-body th, .crx_post-body td { border: 1px solid rgba(11,18,32,0.06); padding: 8px 10px; text-align: left; }
+.crx_post-body thead th { background: rgba(11,94,215,0.06); }
+
+/* ---------- MCQs ---------- */
+.crx_mcqs { display:flex; flex-direction:column; gap:14px; margin:8px 0 18px; }
+.crx_mcq { padding:12px; border-radius:10px; border:1px solid rgba(11,18,32,0.04); background:var(--crx-card); box-shadow: 0 6px 16px rgba(11,94,215,0.04); }
+.crx_mcq_q { font-weight:800; margin-bottom:8px; color: var(--crx-primary-dark); }
+.crx_mcq_opts { margin:0 0 8px 0.6rem; padding-left:0.6rem; }
+.crx_mcq_opts li { margin:8px 0; list-style:none; padding:8px 10px; border-radius:8px; background: #fbfdff; border:1px solid rgba(11,18,32,0.03); cursor:pointer; transition: background .12s, transform .12s; }
+.crx_mcq_opts li:hover { background: linear-gradient(180deg, #fff, #fbfdff); transform: translateY(-2px); }
+.crx_mcq_ans { background: rgba(11,18,32,0.04); padding:10px; border-radius:8px; color: var(--crx-muted); }
+.crx_mcq .crx_btn { margin-top:6px; }
+
+/* ---------- AVATAR ---------- */
 .crx_avatar{
   border-radius: 50%;
-  height: 100px !important;
- 
+  height: 100px;
+  width:100px;
   object-fit: cover;
+  border: 3px solid rgba(11,94,215,0.08);
+  box-shadow: 0 8px 18px rgba(11,94,215,0.06);
+}
+
+/* ---------- AFFILIATE CARD ---------- */
+.crx_affiliate {
+  border-radius: 12px;
+  border: 1px solid rgba(11,94,215,0.06);
+  padding: 12px;
+  background: linear-gradient(180deg,#fff,#fbfdff);
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.crx_affiliate_img { width:120px; height:80px; object-fit:cover; border-radius:8px; }
+
+/* ---------- BIO WIDGET ---------- */
+.crx_bio {
+  display:flex;
+  gap:14px;
+  align-items:center;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(11,94,215,0.06);
+  background: linear-gradient(180deg, #fff, #fbfdff);
+  box-shadow: 0 8px 20px rgba(11,94,215,0.04);
+}
+.crx_bio .bio_name { font-weight:800; color: var(--crx-primary-dark); font-size:16px; }
+.crx_bio .bio_name::after { content: ""; display:block; width:36px; height:4px; background: var(--crx-accent); border-radius:4px; margin-top:6px; }
+.crx_bio .bio_tagline { color: var(--crx-muted); margin-top:6px; font-size:14px; }
+.crx_bio .bio_actions { margin-top:10px; }
+
+/* whatsapp button specifically saffron styled */
+.crx_bio .crx_btn.whatsapp {
+  background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep));
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+}
+
+/* ---------- DONATE WIDGET ---------- */
+.crx_donate_card {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  max-width:520px;
+  margin:12px 0;
+  padding:12px;
+  border-radius:12px;
+  box-shadow:0 10px 26px rgba(11,94,215,0.06);
+  background: linear-gradient(180deg,#ffffff,#fbfdff);
+  display:flex;
+  gap:12px;
+  align-items:center;
+  border: 1px solid rgba(11,94,215,0.06);
+}
+.crx_donate_qr {
+  width:110px;
+  height:110px;
+  border-radius:10px;
+  background: linear-gradient(180deg,#fff,#fbfdff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+  border: 1px solid rgba(11,18,32,0.03);
+}
+.crx_donate_qr img { width:100%; height:100%; object-fit:contain; display:block; }
+
+/* donate meta */
+.crx_donate_title { font-size:17px; font-weight:800; margin-bottom:6px; color: var(--crx-primary-dark); }
+.crx_donate_desc { font-size:14px; color:var(--crx-muted); line-height:1.35; margin-bottom:8px; }
+
+/* action row */
+.crx_action_row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.crx_preset { background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep)); border:none; padding:8px 10px; border-radius:8px; font-weight:800; cursor:pointer; color:#fff; box-shadow: 0 6px 18px rgba(230,140,60,0.10); }
+.crx_open_qr { text-decoration:none; border-radius:8px; padding:8px 10px; border:1px solid rgba(11,18,32,0.04); background:transparent; color:var(--crx-primary-dark); }
+
+.crx_small_hint { font-size:13px; color:var(--crx-muted); margin-top:8px; }
+.crx_donate_smallprint { font-size:12px; color:var(--crx-muted); margin-top:6px; }
+
+/* ---------- FLOATING DONATE BUTTON ---------- */
+#crx_floating_donate {
+  position: fixed;
+  z-index: 9998;
+  --size:64px;
+  width:var(--size);
+  height:var(--size);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 14px 34px rgba(3,10,30,0.18);
+  background: linear-gradient(180deg,var(--crx-accent),var(--crx-primary));
+  color:white;
+  font-weight:800;
+  cursor:pointer;
+  border: 2px solid rgba(255,255,255,0.06);
+  transition: transform 350ms ease, opacity 300ms ease, right 1s ease, left 1s ease, bottom 1s ease, top 1s ease;
+  opacity:0;
+  pointer-events:none;
+}
+#crx_floating_donate.visible { opacity:1; pointer-events:auto; transform: translateY(0); }
+#crx_floating_donate:focus { outline: none; box-shadow: var(--crx-focus); transform: scale(1.04); }
+#crx_floating_label {
+  position:fixed;
+  z-index:9997;
+  background:#fff;
+  color:#071022;
+  padding:8px 12px;
+  border-radius:10px;
+  box-shadow:0 10px 26px rgba(6,12,22,0.12);
+  font-weight:700;
+  font-size:13px;
+  transition:opacity 200ms, transform 200ms;
+  opacity:0;
+  pointer-events:none;
+  border:1px solid rgba(11,18,32,0.04);
+}
+#crx_floating_donate:hover + #crx_floating_label,
+#crx_floating_donate:focus + #crx_floating_label { opacity:1; transform:translateY(-6px); }
+
+#crx_floating_dismiss { position:absolute; right:-8px; top:-8px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,0.12); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center; border:0; }
+#crx_floating_donate:hover #crx_floating_dismiss { opacity:1; }
+
+/* ---------- VISUALIZER / OVERLAYS ---------- */
+.crx_visual_container { position: relative; background: #fafafa; border-radius:10px; border: 1px dashed rgba(11,18,32,0.04); padding:10px; overflow-x:auto; }
+.crx_box {
+  position:absolute;
+  width:56px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  font-weight:800;
+  color:white;
+  box-shadow: 0 8px 18px rgba(8,20,40,0.06);
+  transition: transform .28s cubic-bezier(.2,.9,.2,1), left .28s ease;
+}
+.crx_box .idx { position:absolute; font-size:10px; bottom:4px; right:6px; opacity:0.6; color:rgba(255,255,255,0.75); }
+
+/* highlight for compare */
+.crx_highlight { box-shadow: 0 10px 30px rgba(11,94,215,0.18), 0 2px 8px rgba(0,0,0,0.06); transform: translateY(-6px) scale(1.02); }
+
+/* overlays */
+.crx_overlay { position:absolute; top:0; bottom:0; border-radius:8px; pointer-events:none; opacity:0.9; }
+.crx_overlay_left { background: rgba(11,94,215,0.06); border: 1px solid rgba(11,94,215,0.06); }
+.crx_overlay_right { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.06); }
+.crx_overlay_unsorted { background: rgba(250,204,21,0.06); border: 1px dashed rgba(250,204,21,0.08); }
+
+/* ---------- POST FOOTER / TAGS ---------- */
+.crx_tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+.crx_tag { background: linear-gradient(180deg, rgba(255,153,51,0.12), rgba(255,153,51,0.08)); color: var(--crx-primary-dark); padding:6px 10px; border-radius:999px; font-weight:700; font-size:13px; border:1px solid rgba(11,18,32,0.03); }
+
+/* share buttons */
+.crx_share { display:flex; gap:8px; margin-top:10px; }
+.crx_share .btn { border-radius:8px; padding:8px; background:#fff; border:1px solid rgba(11,18,32,0.04); display:inline-flex; align-items:center; justify-content:center; min-width:44px; height:44px; cursor:pointer; }
+.crx_share .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(11,94,215,0.06); }
+
+/* ---------- FOOTER ---------- */
+.site_footer {
+  background: var(--crx-primary-dark);
+  color: #f4f7ff;
+  padding: 28px;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+  box-shadow: 0 8px 30px rgba(8,20,40,0.06);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:1100px) {
+  .crx_wrap { padding: 8px; margin: 8px auto; }
+  .crx_editor { height: 360px; }
+}
+@media (max-width:720px){
+  .crx_editor { height: 300px; }
+  .crx_bio { flex-direction: row; gap:10px; align-items:center; }
+  .crx_affiliate_img { width: 88px; height: 66px; }
+  .crx_donate_qr { width:96px; height:96px; }
+  #crx_floating_label { display:none; }
+}
+
+/* Accessibility: reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none; animation: none; }
+  #crx_floating_donate { transition: none; }
 }
