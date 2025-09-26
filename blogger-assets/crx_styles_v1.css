@@ -618,3 +618,107 @@ body#layout .crx_donate_card {
    1) Tell me the page URL and a screenshot or the exact element (e.g., ".post-body a") and
    2) I will generate a single extra selector (very targeted) to fix just that case.
 */
+
+
+/* ===== CRX — Comments contrast fixes (wheat-on-wheat) =====
+   Paste at end of crx_styles_v1.css
+*/
+
+/* Container background & padding for comments area */
+.comment-thread,
+.comments,
+#comments,
+.widget .comments,
+.widget[id*="comments"] {
+  background: #ffffff;               /* white card background */
+  border-radius: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(11,18,32,0.04);
+  box-shadow: 0 6px 18px rgba(8,20,40,0.04);
+}
+
+/* Comment item (author + body) — readable text */
+.comment,
+.comment-item,
+.comment-block,
+.comment-body,
+#comments .comment,
+.widget .comment {
+  color: #0b122a;                    /* dark navy text for high contrast */
+  background: transparent;
+  margin: 10px 0;
+  line-height: 1.55;
+  font-size: 14px;
+}
+
+/* Author name — use primary blue and slightly bolder */
+.comment-author,
+.commenter,
+.comment-meta .user,
+.widget .comment-author {
+  color: var(--crx-primary);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Timestamps / metadata — muted gray */
+.comment-meta,
+.comment-date,
+.comment-time {
+  color: var(--crx-muted);
+  font-size: 12px;
+}
+
+/* Comment links (reply, edit, view) — saffron accent on hover */
+.comment a,
+.comment-item a,
+.widget .comments a {
+  color: var(--crx-accent);
+  text-decoration: none;
+}
+.comment a:hover,
+.comment-item a:hover,
+.widget .comments a:hover {
+  color: var(--crx-primary-dark);
+  text-decoration: underline;
+}
+
+/* If comments use small 'wheat' background chips, force them to readable surface */
+.comment .comment-content,
+.comment .content,
+.comment-text,
+.widget .comment-body .comment-content {
+  background: transparent;
+  color: #0b122a;
+  padding: 6px 0;
+}
+
+/* Replies indentation */
+.comment-thread .children,
+.comment .children {
+  margin-left: 12px;
+  border-left: 2px solid rgba(11,94,215,0.04);
+  padding-left: 12px;
+}
+
+/* Ensure comment form fields are visible & readable */
+#comment-editor,
+textarea#comment,
+input#comment-name,
+input#comment-email,
+input#comment-url,
+.form-comment textarea,
+.form-comment input {
+  background: #fff;
+  color: #071022;
+  border: 1px solid rgba(11,18,32,0.06);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+/* Mobile tweaks */
+@media (max-width:720px) {
+  .comment, .comment-item { font-size: 15px; }
+  .comment-author { font-size: 15px; }
+}
+/* End of CRX comments contrast fixes */
