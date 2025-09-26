@@ -440,3 +440,181 @@ pre.crx_output::before, .crx_post-body pre::before {
   * { transition: none; animation: none; }
   #crx_floating_donate { transition: none; }
 }
+
+
+/* =========================
+   CRX — Patch overrides to neutralize theme !important rules
+   Paste this at the END of crx_styles_v1.css
+   (No !important used — relies on selector specificity and cascade)
+   ========================= */
+
+/* ---------- 1) Contact form layout fixes (replace earlier !important rules) ---------- */
+/* Scoped to make sure CRX styles win on contact form layout */
+html body #contact .contact-form-widget,
+body#layout #contact .contact-form-widget {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+html body #contact .contact-form-name,
+html body #contact .contact-form-email,
+html body #contact .contact-form-email-message,
+body#layout #contact .contact-form-name,
+body#layout #contact .contact-form-email,
+body#layout #contact .contact-form-email-message {
+  margin-bottom: 10px;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Normalize submit padding (overrides inline theme rules if any) */
+html body #contact .contact-form-button-submit,
+body#layout #contact .contact-form-button-submit {
+  padding: 10px 14px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ---------- 2) Mobile sidebar / toggle recovery (replace heavy !important mobile rules) ---------- */
+@media (max-width: 767px) {
+  /* prefer narrow-scope selectors to avoid global side effects */
+  body#layout #sidebar-toggle-widget,
+  html body#layout #sidebar-toggle-widget {
+    display: none;
+  }
+
+  body#layout #sidebar-right,
+  body#layout #sidebar-right.hidden,
+  html body#layout #sidebar-right,
+  html body#layout #sidebar-right.hidden {
+    transform: none;
+    opacity: 1;
+    width: auto;
+    pointer-events: auto;
+    overflow: visible;
+    transition: none;
+  }
+}
+
+/* ---------- 3) Neutralize animation overrides inserted with !important (prefers-reduced-motion) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  /* target common widgets that previously used !important to force animations off */
+  .share-widget,
+  .share-widget.revealed,
+  .crx_visualizer_wrapper,
+  #crx_floating_donate,
+  .crx_float-output {
+    animation: none;
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ---------- 4) Scoped CRX code block enforcement (replace previous !important code block rules) ---------- */
+/* Make sure CRX code blocks keep intended contrast without using !important */
+.crx_post-body .crx_output,
+.crx_post-body pre.crx_output,
+.crx_post-body pre,
+.crx_post-body pre code,
+.crx_post-body code,
+.crx_post-body textarea.crx_output,
+.post-body .crx_output {
+  background: var(--crx-code-bg);
+  color: var(--crx-code-text);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 12px;
+  border-radius: 8px;
+  font-family: var(--crx-mono);
+  font-size: 13px;
+  line-height: 1.45;
+  overflow: auto;
+  word-break: break-word;
+}
+
+/* Slightly higher specificity for pages where theme uses .post-body or .entry-content */
+.post-body .crx_output,
+.entry-content .crx_output,
+.article-body .crx_output {
+  background: var(--crx-code-bg);
+  color: var(--crx-code-text);
+}
+
+/* ---------- 5) Replace any heavy-handed list/table/blockquote overrides from theme ---------- */
+html body .crx_post-body ul li {
+  list-style: none;
+  position: relative;
+  padding-left: 1.3rem;
+  margin: 8px 0;
+  line-height: 1.55;
+}
+html body .crx_post-body ul li::before {
+  content: "";
+  position: absolute;
+  left: 0.2rem;
+  top: .78rem;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  background: var(--crx-accent);
+}
+
+/* ensure tables inside posts keep CRX-friendly look */
+html body .crx_post-body table,
+html body .crx_post-body th,
+html body .crx_post-body td {
+  border-color: rgba(11,18,32,0.06);
+}
+
+/* ---------- 6) Floating donate safe placement & dismiss behavior override ---------- */
+/* Give these selectors slightly higher specificity so theme rules won't hide or force different behaviour */
+html body #crx_floating_donate,
+body#layout #crx_floating_donate {
+  position: fixed;
+  z-index: 9998;
+  pointer-events: auto;
+}
+
+/* Keep floating label visible behavior consistent */
+html body #crx_floating_label,
+body#layout #crx_floating_label {
+  position: fixed;
+  z-index: 9997;
+}
+
+/* ---------- 7) Recover some layout blocks that theme forced to display:block via !important ---------- */
+/* Example: panels and options forced by theme */
+body#layout .theme-options,
+body#layout #main-menu .widget,
+html body#layout .theme-options,
+html body#layout #main-menu .widget {
+  display: block;
+}
+
+/* ---------- 8) Accessibility: ensure focus outlines remain visible (in case theme removed them) ---------- */
+html body a:focus,
+html body button:focus,
+html body input:focus,
+html body textarea:focus {
+  outline: none;
+  box-shadow: var(--crx-focus);
+}
+
+/* ---------- 9) Specificity booster for stubborn selectors (last resort — still no !important) ---------- */
+/* If the theme still overrides a small number of items, add a single group here to override them cleanly. */
+/* Example: force CRX widget borders/backgrounds in final cascade */
+html body .crx_bio,
+html body .crx_donate_card,
+html body .crx_card,
+body#layout .crx_bio,
+body#layout .crx_donate_card {
+  background: var(--crx-card);
+  border-color: rgba(11,94,215,0.06);
+}
+
+/* ---------- End of CRX patch overrides ----------
+   If you still see an element using old styles after pasting:
+   1) Tell me the page URL and a screenshot or the exact element (e.g., ".post-body a") and
+   2) I will generate a single extra selector (very targeted) to fix just that case.
+*/
