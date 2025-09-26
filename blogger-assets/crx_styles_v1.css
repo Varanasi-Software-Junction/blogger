@@ -722,3 +722,47 @@ input#comment-url,
   .comment-author { font-size: 15px; }
 }
 /* End of CRX comments contrast fixes */
+
+/* ===== CRX — Stylish Post a Comment button ===== */
+#comments a.comment-reply,
+#comments a.comment-link,
+#comments a[href*="comment"],
+.comments .comment-actions a,
+.post-comment-link,
+#comment-post-message a,
+#comments a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep));
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 16px rgba(230,140,60,0.25);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+/* Hover / focus effect */
+#comments a.comment-reply:hover,
+#comments a.comment-link:hover,
+#comments a[href*="comment"]:hover,
+.comments .comment-actions a:hover,
+.post-comment-link:hover,
+#comment-post-message a:hover,
+#comments a:hover {
+  background: linear-gradient(180deg, var(--crx-primary), var(--crx-primary-dark));
+  box-shadow: 0 10px 24px rgba(11,94,215,0.25);
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+/* Active click effect */
+#comments a:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(11,94,215,0.18);
+}
+/* End of Stylish Post a Comment button */
