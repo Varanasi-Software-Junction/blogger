@@ -768,4 +768,6 @@ input#comment-url,
 /* End of Stylish Post a Comment button */
 .crx_dartpadembed{
   overflow: scroll;
+  width:100%;
+  height:500px;
 }
