@@ -766,3 +766,6 @@ input#comment-url,
   box-shadow: 0 4px 12px rgba(11,94,215,0.18);
 }
 /* End of Stylish Post a Comment button */
+.crx_dartpadembed{
+  overflow: scroll;
+}
