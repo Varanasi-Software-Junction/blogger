@@ -5,29 +5,36 @@
       "title": "Laptops under ₹50,000",
       "img": "https://m.media-amazon.com/images/I/61TRKPzWmBL._AC_UY218_.jpg",
       "url": "https://amzn.to/4gywBZD",
-      "desc": "Laptops carefull curated for you and below ₹50,000"
+      "desc": "Laptops carefull curated for you and below ₹50,000",
+      "price": "49999",
+      "rating": 4.4
     },
     {
       "id": "2",
       "title": "Books on Recursion and OOPs",
       "img": "https://m.media-amazon.com/images/I/71IhjIt5BwL._AC_CR0%2C0%2C0%2C0_SX480_SY360_.jpg",
       "url": "https://amzn.to/46yAx8i",
-      "desc": "Comprehensive guide — great  for serious learners."
+      "desc": "Comprehensive guide — great  for serious learners.",
+      "price": "699",
+      "rating": 4.6
     },
     {
       "id": "3",
       "title": "Sorting and Searching-- Donald Knuth",
       "img": "https://m.media-amazon.com/images/I/61anV1kKPyL._SY385_.jpg",
       "url": "https://amzn.to/4n9URUq",
-      "desc": "Practical DSA in Python with clear explanations and examples."
+      "desc": "Practical DSA in Python with clear explanations and examples.",
+      "price": "2599",
+      "rating": 4.8
     },
     {
       "id": "4",
       "title": "Art of Computer Programming, The: Fundamental Algorithms",
       "img": "https://m.media-amazon.com/images/I/61fiSM2bf6L._SY385_.jpg",
       "url": "https://amzn.to/42Ea6fZ",
-      "desc": "  The  Fundamental Algorithms explained best by Donald Knuth"
+      "desc": "  The  Fundamental Algorithms explained best by Donald Knuth",
+      "price": "3999",
+      "rating": 4.9
     } 
- 
   ]
 }
