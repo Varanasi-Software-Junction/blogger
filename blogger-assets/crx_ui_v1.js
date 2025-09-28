@@ -173,7 +173,7 @@
         if (name === "affiliate") {
           const id = el.id || ("crx_aff_" + Math.random().toString(36).slice(2,9));
           el.id = id;
-          await window.crx_loadAffiliates(id, { showGlobalDisclaimer: true, max: 4 });
+          await window.crx_loadAffiliates(id, { showGlobalDisclaimer: true, max: 3 });
         } else if (name === "bio" || name === "donate") {
           await window.crx_loadWidget(name, el);
         } else if (name === "bubble-visualizer") {
