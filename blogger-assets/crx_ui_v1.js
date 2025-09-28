@@ -1,8 +1,8 @@
 /* crx_ui_v1.js
-   CRX UI loader & utilities v1 (final)
+   CRX UI loader & utilities v1
    - Loads widget fragments hosted in blogger-assets/
-   - Provides affiliate loader (visible disclaimer + 3D card), toggle/copy helpers
-   - Auto-initializes common placeholders
+   - Provides affiliate loader (stacked vertical + meta stacked)
+   - Toggle/copy helpers, auto-init
    Host/base:
      https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js
 */
@@ -11,22 +11,16 @@
   // BASE URL for hosted assets (remembered)
   const BASE = "https://varanasi-software-junction.github.io/blogger/blogger-assets";
 
-  /* ---------------------------
-     Small helpers
-     --------------------------- */
+  /* small helpers */
   function escapeHtml(s) {
     return String(s || "").replace(/[&<>"']/g, function (m) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m];
     });
   }
-
   function byId(id) { return document.getElementById(id); }
-  function q(sel, root) { return (root || document).querySelector(sel); }
   function qa(sel, root) { return Array.from((root || document).querySelectorAll(sel)); }
 
-  /* ---------------------------
-     Toggle answer visibility helper
-     --------------------------- */
+  /* toggle answer */
   window.crx_toggleAnswer = function (id) {
     try {
       const el = byId(id);
@@ -35,10 +29,7 @@
     } catch (e) { console.warn("crx_toggleAnswer:", e); }
   };
 
-  /* ---------------------------
-     Copy-to-clipboard helper
-     - btnId optional: swaps button text briefly when copy succeeds
-     --------------------------- */
+  /* copy to clipboard */
   window.crx_copyCode = async function (btnId, codeId) {
     try {
       const codeEl = byId(codeId);
@@ -49,11 +40,8 @@
         await navigator.clipboard.writeText(text);
       } else {
         const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
+        ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
       }
       if (btnId) {
         const btn = byId(btnId);
@@ -66,31 +54,18 @@
     } catch (e) { console.warn("crx_copyCode:", e); }
   };
 
-  /* ---------------------------
-     Load HTML widget fragment (crx_<name>.html) into target element
-     --------------------------- */
+  /* load widget fragment */
   window.crx_loadWidget = async function (name, targetEl) {
     if (!name || !targetEl) return;
-    const url = `${BASE}/crx_${name}.html`;
     try {
-      const res = await fetch(url, { cache: "no-cache" });
+      const res = await fetch(`${BASE}/crx_${name}.html`, { cache: "no-cache" });
       if (!res.ok) throw new Error("Widget fetch failed: " + res.status);
       const html = await res.text();
       targetEl.innerHTML = html;
-    } catch (e) {
-      console.error("crx_loadWidget:", e);
-    }
+    } catch (e) { console.error("crx_loadWidget:", e); }
   };
 
-  /* ---------------------------
-     Affiliate loader
-     - targetId: id of container element
-     - opts: { showGlobalDisclaimer: true|false, max: 2 }
-     Behavior:
-       - fetches crx_affiliates.json from BASE
-       - shows a prominent disclaimer banner (unless disabled)
-       - renders up to opts.max cards (default 2) with 3D edge, title, desc, price, rating, CTA
-     --------------------------- */
+  /* load affiliates (stacked layout; meta stacked vertically) */
   window.crx_loadAffiliates = async function (targetId, opts) {
     const tgt = byId(targetId);
     if (!tgt) return;
@@ -105,7 +80,7 @@
       const products = Array.isArray(data.products) ? data.products.slice() : [];
       if (!products.length) { tgt.innerHTML = ""; return; }
 
-      // shuffle
+      // shuffle & select
       for (let i = products.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [products[i], products[j]] = [products[j], products[i]];
@@ -115,7 +90,6 @@
       // build fragment
       const frag = document.createDocumentFragment();
 
-      // global disclaimer (prominent)
       if (showGlobalDisclaimer) {
         const disc = document.createElement("div");
         disc.className = "crx_affiliate_disclaimer";
@@ -135,10 +109,8 @@
         frag.appendChild(disc);
       }
 
-      // grid wrapper
       const wrap = document.createElement("div");
       wrap.className = "crx_affiliates_wrap";
-      frag.appendChild(wrap);
 
       chosen.forEach(p => {
         const title = escapeHtml(p.title || "Product");
@@ -160,15 +132,13 @@
             <div class="crx_affiliate_title" title="${title}">${title}</div>
             <div class="crx_affiliate_desc">${desc}</div>
             <div class="crx_affiliate_meta">
+              ${ rating ? `<div class="crx_affiliate_rating" aria-label="Rating: ${rating} out of 5">${_renderStars(rating)} <span style="font-weight:700;">${rating.toFixed(1)}</span></div>` : "" }
               ${ price ? `<div class="crx_affiliate_price">₹ ${price}</div>` : "" }
-              ${ rating ? `<div class="crx_affiliate_rating" aria-label="Rating: ${rating} out of 5">${_renderStars(rating)} <span style="margin-left:6px;font-weight:700;">${rating.toFixed(1)}</span></div>` : "" }
               <div class="crx_affiliate_cta">
-              <br><br>
-          
                 <a class="crx_btn crx_aff_buy" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="Buy ${title} on Amazon">Buy on Amazon</a>
               </div>
             </div>
-            <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+            <div style="margin-top:8px;">
               <span class="crx_aff_small_disclaimer">As an Amazon Associate I earn from qualifying purchases.</span>
             </div>
           </div>
@@ -177,79 +147,24 @@
         wrap.appendChild(card);
       });
 
-      // insert to target
+      frag.appendChild(wrap);
       tgt.innerHTML = "";
       tgt.appendChild(frag);
 
     } catch (e) {
       console.error("crx_loadAffiliates:", e);
-      // degrade gracefully: show a small note
       if (tgt) tgt.innerHTML = `<div style="padding:10px;color:#7a4100;font-weight:700;">Affiliate feed unavailable.</div>`;
     }
 
-    // helper: render 5 star svgs
     function _renderStars(r) {
       const filled = Math.round(Math.max(0, Math.min(5, r)));
-      let out = "";
-      for (let i = 0; i < 5; i++) {
-        out += `<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .6l3.7 7.4 8.1 1.8-5.6 5.5 1.3 8-7-4.1-7 4.1 1.3-8-5.6-5.5 8.1-1.8z" fill="${i < filled ? '#f6b900' : 'rgba(0,0,0,0.12)'}"/></svg>`;
-      }
-      return out;
+      return Array.from({ length: 5 }, (_, i) =>
+        `<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .6l3.7 7.4 8.1 1.8-5.6 5.5 1.3 8-7-4.1-7 4.1 1.3-8-5.6-5.5 8.1-1.8z" fill="${i < filled ? '#f6b900' : 'rgba(0,0,0,0.12)'}"/></svg>`
+      ).join("");
     }
   }; // end crx_loadAffiliates
 
-  /* ---------------------------
-     Simple slider initializer (lazy-load Swiper if needed)
-     --------------------------- */
-  window.crx_initSlider = async function (containerSelector, options) {
-    const container = (typeof containerSelector === "string") ? document.querySelector(containerSelector) : containerSelector;
-    if (!container) return;
-    if (window.Swiper) {
-      try { new Swiper(container, options || {}); } catch (e) { console.warn("crx_initSlider:", e); }
-      return;
-    }
-    const cssHref = "https://unpkg.com/swiper@8/swiper-bundle.min.css";
-    const jsSrc = "https://unpkg.com/swiper@8/swiper-bundle.min.js";
-    if (!document.querySelector(`link[href="${cssHref}"]`)) {
-      const l = document.createElement("link"); l.rel = "stylesheet"; l.href = cssHref; document.head.appendChild(l);
-    }
-    if (!document.querySelector(`script[src="${jsSrc}"]`)) {
-      await new Promise((resolve, reject) => {
-        const s = document.createElement("script"); s.src = jsSrc; s.defer = true; s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
-      }).catch(() => console.warn("crx_initSlider: failed loading swiper"));
-    }
-    if (window.Swiper) {
-      try { new Swiper(container, options || { slidesPerView: 1, spaceBetween: 12 }); } catch (e) { console.warn(e); }
-    }
-  };
-
-  /* ---------------------------
-     Bubble visualizer stub
-     (kept lightweight — original behaviour preserved elsewhere)
-     --------------------------- */
-  window.crx_createBubbleVisualizer = function (targetEl, opts) {
-    let root;
-    if (typeof targetEl === "string") root = document.querySelector(targetEl);
-    else root = targetEl instanceof Element ? targetEl : null;
-    if (!root) return null;
-
-    opts = opts || {};
-    const numbers = opts.numbers || root.getAttribute("data-crx-numbers") || "5,3,8,1,4";
-    const speak = typeof opts.speak === "boolean" ? opts.speak : (root.getAttribute("data-crx-speak") !== "false");
-
-    // Simple placeholder UI to avoid breaking pages that expect this widget.
-    root.innerHTML = `<div class="crx_visual_container" style="padding:12px;">
-      <div style="font-weight:800;color:var(--crx-primary-dark);">Visualizer</div>
-      <div style="margin-top:8px;color:var(--crx-muted);font-size:13px;">Numbers: ${escapeHtml(numbers)}</div>
-    </div>`;
-
-    return { root: root, numbers: numbers, speak: speak };
-  };
-
-  /* ---------------------------
-     Auto-initialize widgets on DOMContentLoaded
-     Recognized: data-crx-widget="affiliate" | "bio" | "donate" | "bubble-visualizer"
-     --------------------------- */
+  /* auto-init widgets */
   document.addEventListener("DOMContentLoaded", function () {
     try {
       qa("[data-crx-widget]").forEach(async el => {
@@ -258,22 +173,32 @@
         if (name === "affiliate") {
           const id = el.id || ("crx_aff_" + Math.random().toString(36).slice(2,9));
           el.id = id;
-          // default: show banner + 2 items
-          await window.crx_loadAffiliates(id, { showGlobalDisclaimer: true, max: 2 });
+          await window.crx_loadAffiliates(id, { showGlobalDisclaimer: true, max: 4 });
         } else if (name === "bio" || name === "donate") {
           await window.crx_loadWidget(name, el);
         } else if (name === "bubble-visualizer") {
+          // lightweight placeholder
           window.crx_createBubbleVisualizer(el);
         } else {
           await window.crx_loadWidget(name, el);
         }
       });
-    } catch (e) {
-      console.warn("crx widget init error:", e);
-    }
+    } catch (e) { console.warn("crx widget init error:", e); }
   });
 
-  /* Expose BASE for debugging if needed */
+  /* lightweight placeholder for visualizer (kept minimal) */
+  window.crx_createBubbleVisualizer = function (targetEl, opts) {
+    let root;
+    if (typeof targetEl === "string") root = document.querySelector(targetEl);
+    else root = targetEl instanceof Element ? targetEl : null;
+    if (!root) return null;
+    opts = opts || {};
+    const numbers = opts.numbers || root.getAttribute("data-crx-numbers") || "5,3,8,1,4";
+    root.innerHTML = `<div class="crx_visual_container" style="padding:12px;"><div style="font-weight:800;color:var(--crx-primary-dark);">Visualizer</div><div style="margin-top:8px;color:var(--crx-muted);font-size:13px;">Numbers: ${escapeHtml(numbers)}</div></div>`;
+    return { root, numbers };
+  };
+
+  /* expose BASE for debugging */
   window.__crx_BASE = BASE;
 
 })(); // end IIFE

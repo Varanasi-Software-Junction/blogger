@@ -1,7 +1,7 @@
 /* ============================
    CRX Styles v1 — Blue / Saffron Theme
    Cleaned: removed all `!important` rules
-   Updated: Visible Amazon disclaimer + 3D card border + title & desc visible
+   Updated: Visible Amazon disclaimer + 3D card border + stacked product layout
    ============================ */
 
 /* ---------- THEME VARIABLES ---------- */
@@ -301,34 +301,27 @@ pre.crx_output::before, .crx_post-body pre::before {
 }
 .crx_affiliate_disclaimer a { color: #b24b00; font-weight:800; text-decoration:underline; }
 
-/* grid container for affiliate cards */
+/* Make the wrapper a single-column stacked list (one product per row) */
 .crx_affiliates_wrap {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr; /* single column — vertical list */
   gap: 14px;
-  align-items: stretch;
   margin: 8px 0 18px 0;
 }
-@media (max-width:760px) {
-  .crx_affiliates_wrap { grid-template-columns: 1fr; }
-}
 
-/* 3D card: main card + pseudo 3D edge using ::before (skewed edge) */
+/* Card: slightly taller, content stacked horizontally on wide screens but meta stacked vertically */
 .crx_affiliate_card {
   position: relative;
   display: flex;
-  gap: 12px;
+  gap: 16px;
   padding: 14px;
   border-radius: 14px;
   background: linear-gradient(180deg,#fff,#fbfdff);
-  box-shadow:
-    0 20px 40px rgba(7,16,32,0.12),
-    0 6px 18px rgba(11,35,60,0.06);
+  box-shadow: 0 20px 40px rgba(7,16,32,0.12), 0 6px 18px rgba(11,35,60,0.06);
   border: 1px solid rgba(11,35,60,0.06);
-  transition: transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s ease;
-  align-items: center;
+  transition: transform .14s ease, box-shadow .14s ease;
+  align-items: flex-start;
   overflow: visible;
-  min-height: 110px;
 }
 
 /* 3D skewed edge pseudo-element (gives card a 'lifted' 3D frame) */
@@ -371,7 +364,7 @@ pre.crx_output::before, .crx_post-body pre::before {
 }
 .crx_affiliate_img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
 
-/* content column: allow wrap for title & desc (user asked to show them) */
+/* content column: allow wrap for title & desc */
 .crx_affiliate_content {
   flex: 1 1 auto;
   display:flex;
@@ -403,13 +396,14 @@ pre.crx_output::before, .crx_post-body pre::before {
   margin-bottom:4px;
 }
 
-/* meta row */
+/* META — stack rating, price and CTA vertically (each on its own line) */
 .crx_affiliate_meta {
   display:flex;
-  align-items:center;
-  gap:12px;
-  margin-top:4px;
-  align-items:center;
+  flex-direction: column; /* stack vertically */
+  align-items: flex-start;
+  gap:8px;
+  margin-top:6px;
+  width:100%;
 }
 
 /* price */
@@ -418,26 +412,27 @@ pre.crx_output::before, .crx_post-body pre::before {
   font-size:15px;
   color:#0b63d4;
   background: rgba(11,99,212,0.06);
-  padding:4px 8px;
+  padding:6px 10px;
   border-radius:8px;
 }
 
 /* rating */
-.crx_affiliate_rating { display:inline-flex; gap:6px; align-items:center; font-size:13px; color:#6b7280; }
+.crx_affiliate_rating { display:flex; gap:8px; align-items:center; font-size:13px; color:#6b7280; }
 
-/* CTA */
-.crx_affiliate_cta { margin-left:auto; flex:0 0 auto; }
+/* CTA: full-width style on its own line */
+.crx_affiliate_cta { width:100%; }
 .crx_btn.crx_aff_buy {
+  width:100%;
+  display:inline-flex;
+  justify-content:center;
   background: linear-gradient(180deg,#ff7a59,#ff6043);
   color:#fff;
-  padding:9px 14px;
+  padding:10px 12px;
   border-radius:10px;
   font-weight:800;
   border:0;
   box-shadow:0 10px 26px rgba(255,96,67,0.16);
   text-decoration:none;
-  display:inline-flex;
-  align-items:center;
   gap:8px;
   font-size:14px;
 }
@@ -461,13 +456,12 @@ pre.crx_output::before, .crx_post-body pre::before {
 /* accessibility: large focus ring for keyboard users */
 .crx_affiliate_card a:focus { box-shadow: var(--crx-focus); outline: none; border-radius:10px; }
 
-/* small-screen adjustments */
-@media (max-width:720px) {
-  .crx_affiliates_wrap { gap: 10px; margin: 6px 0 12px 0; }
-  .crx_affiliate_img_wrap { width:96px; height:66px; flex: 0 0 96px; }
-  .crx_affiliate_card::before { right: -8px; width:10px; }
-  .crx_affiliate_title { font-size:15px; }
-  .crx_aff_small_disclaimer { display:block; margin-top:8px; margin-left:0; }
+/* small-screen adjustments: stack image above content on very narrow screens */
+@media (max-width:520px) {
+  .crx_affiliate_card { flex-direction: column; align-items: stretch; }
+  .crx_affiliate_img_wrap { width:100%; height:160px; flex: 0 0 auto; }
+  .crx_affiliate_meta { gap:10px; }
+  .crx_affiliate_cta .crx_btn.crx_aff_buy { padding:12px; font-size:15px; }
 }
 
 /* reduced-motion preference: remove pulsing/animation */
