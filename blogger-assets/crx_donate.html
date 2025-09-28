@@ -1,117 +1,231 @@
-<!-- crx_donate-nolinks.html
-  - No UPI deep links
-  - Floating button opens modal with QR + editable note
-  - Copy UPI ID + Copy note + Download QR only
--->
+<!-- crx_donate-fixed-copy-share.html -->
 <div class="crx_donate_card" role="region" aria-label="Support this blog - donate" id="crx_donate_fragment">
   <style>
-    .crx_donate_card{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;max-width:520px;margin:12px 0;padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(11,12,16,0.06);background:linear-gradient(180deg,#fff,#fbfdff);display:flex;gap:12px;align-items:center;}
-    .crx_donate_qr{width:110px;height:110px;border-radius:8px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
-    .crx_donate_qr img{width:100%;height:100%;object-fit:contain;display:block;}
-    .crx_donate_meta{flex:1;min-width:0;}
-    .crx_action_row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-    .crx_btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:700;border:1px solid rgba(0,0,0,0.06);cursor:pointer;background:#fff;color:#071022;}
-    .crx_primary{background:#0b84ff;color:#fff;border:0;}
-    .crx_share{background:#eef6ff;border:0;color:#064e9c;}
-    .crx_upi_row{margin-top:8px;display:flex;gap:8px;align-items:center;font-weight:700;color:#0b84ff;word-break:break-all;}
-    .crx_upi_text{font-size:13px;color:#071022;background:#f8fafc;padding:6px 8px;border-radius:8px;border:1px solid rgba(6,12,22,0.04);display:flex;gap:8px;align-items:center;}
-    .crx_copy_icon{background:transparent;border:0;cursor:pointer;padding:6px;border-radius:6px;font-weight:700;color:#0b84ff;}
-    .crx_toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:10001;background:rgba(6,12,22,0.92);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700;font-size:13px;box-shadow:0 8px 24px rgba(6,12,22,0.24);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;}
-    .crx_toast.visible{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(-6px);}
-    .crx_modal_overlay{position:fixed;inset:0;background:rgba(7,10,20,0.48);display:none;align-items:center;justify-content:center;z-index:10020;padding:18px;}
-    .crx_modal_overlay.open{display:flex;}
-    .crx_modal{background:#fff;border-radius:12px;max-width:520px;width:100%;box-shadow:0 18px 48px rgba(4,10,30,0.3);padding:18px;display:grid;gap:12px;}
-    .crx_modal_header{display:flex;justify-content:space-between;align-items:center;gap:8px;}
-    .crx_modal_qr{width:140px;height:140px;border-radius:10px;background:#fafafa;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid rgba(6,12,22,0.04);}
-    .crx_modal_note{width:100%;min-height:44px;padding:8px;border-radius:8px;border:1px solid rgba(6,12,22,0.06);font-size:14px;}
-    .crx_modal_actions{display:flex;gap:8px;justify-content:flex-end;align-items:center;flex-wrap:wrap;}
-    .crx_small{font-size:13px;color:#6b7280;}
-    @media (max-width:520px){.crx_donate_card{max-width:96%;}.crx_donate_qr{width:96px;height:96px;}.crx_modal{padding:12px;}.crx_modal_qr{width:120px;height:120px;}}
+    /* Scoped styles */
+    .crx_donate_card { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; max-width:520px; margin:12px 0; padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(11,12,16,0.06); background:linear-gradient(180deg,#ffffff,#fbfdff); display:flex; gap:12px; align-items:center; }
+    .crx_donate_qr { width:110px; height:110px; border-radius:8px; background:#f3f4f6; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+    .crx_donate_qr img { width:100%; height:100%; object-fit:contain; display:block; }
+    .crx_donate_meta { flex:1; min-width:0; }
+    .crx_donate_title { font-size:17px; font-weight:800; margin-bottom:6px; color:#071022; }
+    .crx_donate_desc { font-size:14px; color:#6b7280; line-height:1.35; margin-bottom:8px; }
+    .crx_donate_benefits{ font-size:13px;color:#39404a;margin-bottom:10px; }
+    .crx_action_row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+
+    .crx_btn { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; text-decoration:none; font-weight:700; border:1px solid rgba(0,0,0,0.06); cursor:pointer; background:#fff; color:#071022; }
+    .crx_primary { background:#0b84ff; color:#fff; box-shadow:0 8px 20px rgba(11,132,255,0.12); border:0; }
+    .crx_share { background:#eef6ff; border:0; color:#064e9c; }
+    .crx_small_hint { font-size:12px; color:#6b7280; margin-top:8px; }
+    .crx_donate_smallprint{ font-size:12px; color:#6b7280; margin-top:8px; }
+
+    .crx_upi_row { margin-top:8px; display:flex; gap:8px; align-items:center; font-weight:700; color:#0b84ff; word-break:break-all; }
+    .crx_upi_text { font-size:13px; color:#071022; background:#f8fafc; padding:6px 8px; border-radius:8px; border:1px solid rgba(6,12,22,0.04); display:flex; gap:8px; align-items:center; }
+
+    /* small copy icon */
+    .crx_copy_icon { background:transparent; border:0; cursor:pointer; padding:6px; border-radius:6px; font-weight:700; color:#0b84ff; }
+    .crx_copy_icon:focus { outline:3px solid rgba(11,132,255,0.12); }
+
+    /* Toast */
+    .crx_toast { position:fixed; left:50%; transform:translateX(-50%); bottom:18px; z-index:10001; background:rgba(6,12,22,0.92); color:#fff; padding:10px 14px; border-radius:8px; font-weight:700; font-size:13px; box-shadow:0 8px 24px rgba(6,12,22,0.24); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; }
+    .crx_toast.visible { opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(-6px); }
+
+    @media (max-width:520px){ .crx_donate_card{ max-width:96%; } .crx_donate_qr{ width:96px; height:96px; } }
   </style>
 
-  <div class="crx_donate_qr">
-    <img src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" alt="QR code to donate" width="110" height="110" />
+  <div class="crx_donate_qr" aria-hidden="false">
+    <img src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" alt="QR code to donate" loading="lazy" decoding="async" width="110" height="110" />
   </div>
 
   <div class="crx_donate_meta">
-    <div class="crx_donate_title" style="font-weight:800;font-size:17px;color:#071022;margin-bottom:6px;">Support Learning Sutras — small donations, big impact</div>
-    <div class="crx_donate_desc" style="font-size:14px;color:#6b7280;line-height:1.35;margin-bottom:8px;">If this post helped you, please consider supporting my writing. Copy the UPI ID or open the QR — thank you ❤️</div>
+    <div class="crx_donate_title">Support Learning Sutras — small donations, big impact</div>
+    <div class="crx_donate_desc">If this post helped you, please consider supporting my writing. Copy the UPI ID or open the QR — thank you ❤️</div>
 
-    <div class="crx_action_row">
-      <button class="crx_btn crx_primary" id="crx_pay_now" type="button">Copy UPI ID</button>
-      <button class="crx_btn crx_share" id="crx_share" type="button">Share</button>
-      <a class="crx_btn" id="crx_open_qr" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank">Open QR — Save/Scan</a>
+    <div class="crx_donate_benefits">Quick donations keep tools free, reduce ads, and fund new tutorials.</div>
+
+    <div class="crx_action_row" role="group" aria-label="Donation actions">
+      <!-- Primary: always copies the UPI ID -->
+      <button class="crx_btn crx_primary" id="crx_pay_now" aria-label="Copy UPI ID">Copy UPI ID</button>
+
+      <!-- Share button -->
+      <button class="crx_btn crx_share" id="crx_share" aria-label="Share donation details">Share</button>
+
+      <!-- Open QR as fallback / for saving -->
+      <a class="crx_btn" id="crx_open_qr" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open QR code in new tab">Open QR — Save/Scan</a>
     </div>
 
-    <div class="crx_upi_row">
+    <!-- visible UPI ID row -->
+    <div class="crx_upi_row" aria-hidden="false">
       <div style="font-size:13px;color:#6b7280">UPI ID:</div>
-      <div id="crx_upi_text" class="crx_upi_text">
-        <span id="crx_upi_value">champaksworld-1@hdfcbank</span>
-        <button id="crx_copy_icon" class="crx_copy_icon" type="button">Copy</button>
+      <div id="crx_upi_text" class="crx_upi_text" role="text" aria-live="polite">
+        <span id="crx_upi_value" style="user-select:text">champaksworld-1@hdfcbank</span>
+        <button id="crx_copy_icon" class="crx_copy_icon" title="Copy UPI ID" aria-label="Copy UPI ID">Copy</button>
       </div>
     </div>
 
-    <div class="crx_small">Thanks — Champak Roy</div>
+    <div class="crx_small_hint">Tip: on mobile, Share will open your share sheet. On desktop it copies a ready message to clipboard.</div>
+    <div class="crx_donate_smallprint">You’ll stay anonymous unless you choose to share details. Thanks — Champak Roy</div>
   </div>
 </div>
 
-<!-- Floating donate -->
-<div id="crx_floating_container" style="position:fixed;right:16px;bottom:16px;z-index:9998;display:flex;gap:8px;align-items:center;pointer-events:none;">
-  <button id="crx_floating_donate" style="--size:64px;width:var(--size);height:var(--size);border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#0b84ff,#0466d7);color:white;font-weight:700;border:0;box-shadow:0 10px 30px rgba(3,10,30,0.18);opacity:0;pointer-events:none;" type="button">Donate</button>
-  <button id="crx_floating_dismiss" type="button" style="width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.12);color:#fff;font-size:12px;border:0;cursor:pointer;pointer-events:auto;">✕</button>
-</div>
-
-<!-- Modal -->
-<div id="crx_modal_overlay" class="crx_modal_overlay">
-  <div class="crx_modal">
-    <div class="crx_modal_header">
-      <div style="font-weight:800;font-size:16px;color:#071022">Donate</div>
-      <button id="crx_modal_close" type="button" style="background:transparent;border:0;font-size:18px;cursor:pointer;">✕</button>
-    </div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <div class="crx_modal_qr">
-        <img src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" alt="QR code" width="140" height="140" />
-      </div>
-      <div style="flex:1;min-width:160px;display:flex;flex-direction:column;gap:8px;">
-        <label for="crx_modal_note" class="crx_small">Note (optional)</label>
-        <textarea id="crx_modal_note" class="crx_modal_note" placeholder="Eg. For Learning Sutras — tutorial support"></textarea>
-        <div class="crx_modal_actions">
-          <button id="crx_modal_copy_note" class="crx_btn" type="button">Copy note</button>
-          <button id="crx_modal_download_qr" class="crx_btn" type="button">Download QR</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="crx_toast" class="crx_toast"></div>
+<!-- toast -->
+<div id="crx_toast" class="crx_toast" role="status" aria-live="polite"></div>
 
 <script>
-(function(){
+(function () {
   'use strict';
-  const UPI_ID = 'champaksworld-1@hdfcbank';
-  const QR_URL = 'https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg';
-  const toastEl = document.getElementById('crx_toast');
-  function showToast(msg, ms=1800){toastEl.textContent=msg;toastEl.classList.add('visible');setTimeout(()=>toastEl.classList.remove('visible'),ms);}
-  async function copyText(txt){try{await navigator.clipboard.writeText(txt);return true;}catch{try{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);return true;}catch{return false;}}}
 
-  // Copy UPI ID
-  document.getElementById('crx_pay_now').onclick=()=>{copyText(UPI_ID).then(ok=>showToast(ok?'UPI ID copied':'Copy failed'));};
-  document.getElementById('crx_copy_icon').onclick=()=>{copyText(UPI_ID).then(ok=>showToast(ok?'UPI ID copied':'Copy failed'));};
+  // Run after DOM ready to avoid element lookup races
+  document.addEventListener('DOMContentLoaded', function () {
 
-  // Share fallback: copy prepared message
-  document.getElementById('crx_share').onclick=()=>{const msg=`Support Learning Sutras\nUPI: ${UPI_ID}`; if(navigator.share){navigator.share({title:'Support',text:msg}).catch(()=>copyText(msg));} else copyText(msg).then(()=>showToast('Share text copied'));};
+    // === CONFIG ===
+    const UPI_ID = 'champaksworld-1@hdfcbank';
+    const UPI_NAME = 'Champak Roy';
 
-  // Floating modal open/close
-  const modal=document.getElementById('crx_modal_overlay');
-  document.getElementById('crx_floating_donate').onclick=()=>{modal.classList.add('open');};
-  document.getElementById('crx_modal_close').onclick=()=>{modal.classList.remove('open');};
-  document.getElementById('crx_floating_dismiss').onclick=()=>{document.getElementById('crx_floating_container').style.display='none';};
+    // === DOM refs ===
+    const payNowBtn = document.getElementById('crx_pay_now');
+    const shareBtn = document.getElementById('crx_share');
+    const openQr = document.getElementById('crx_open_qr');
+    const upiValueEl = document.getElementById('crx_upi_value');
+    const copyIconBtn = document.getElementById('crx_copy_icon');
+    const toast = document.getElementById('crx_toast');
 
-  // Modal note actions
-  document.getElementById('crx_modal_copy_note').onclick=()=>{const txt=document.getElementById('crx_modal_note').value;copyText(txt).then(ok=>showToast(ok?'Note copied':'Copy failed'));};
-  document.getElementById('crx_modal_download_qr').onclick=()=>{const a=document.createElement('a');a.href=QR_URL;a.download='qr.jpg';a.click();};
+    // keep visible UPI text in sync
+    if (upiValueEl) upiValueEl.textContent = UPI_ID;
 
+    // === robust copy function ===
+    async function copyText(text) {
+      // Try Clipboard API first (secure contexts)
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch (err) {
+          // fallback below
+          console.warn('navigator.clipboard.writeText failed:', err);
+        }
+      }
+
+      // Fallback: create a temporary textarea, select, execCommand('copy')
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        // avoid page scroll jump
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.style.top = '0';
+        ta.setAttribute('readonly', '');
+        document.body.appendChild(ta);
+        ta.select();
+        // For iOS: selectionRange
+        ta.setSelectionRange(0, ta.value.length);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return !!ok;
+      } catch (err) {
+        console.error('Fallback copy failed', err);
+        return false;
+      }
+    }
+
+    // === toast / feedback ===
+    let toastTimer = null;
+    function showToast(msg, ms = 1800) {
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('visible');
+      }, ms);
+    }
+
+    // === share message builder ===
+    function buildShareMessage(amount) {
+      const siteUrl = (typeof location !== 'undefined' && location.href) ? location.href : '';
+      const amountText = amount ? ` (${amount})` : '';
+      let msg = `Support ${UPI_NAME}${amountText}\nUPI ID: ${UPI_ID}`;
+      if (siteUrl) msg += `\nPost: ${siteUrl}`;
+      return msg;
+    }
+
+    // === handlers ===
+
+    // Primary: always copy the UPI ID (does not open anything)
+    if (payNowBtn) {
+      payNowBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        const ok = await copyText(UPI_ID);
+        if (ok) {
+          showToast('UPI ID copied to clipboard');
+        } else {
+          // If copy fails, select the visible UPI so user can manual copy
+          showToast('Could not copy automatically — select and copy the UPI ID');
+          // visually focus/select the UPI text for manual copy
+          try {
+            const range = document.createRange();
+            range.selectNodeContents(upiValueEl);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          } catch (ex) { /* ignore */ }
+        }
+      });
+    }
+
+    // Copy icon next to UPI ID (extra convenience)
+    if (copyIconBtn) {
+      copyIconBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        const ok = await copyText(UPI_ID);
+        if (ok) showToast('UPI ID copied');
+        else showToast('Copy failed — please select and copy manually');
+      });
+    }
+
+    // Share button: use Web Share API when available, else fallback to copying share text
+    if (shareBtn) {
+      shareBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        const shareText = buildShareMessage();
+        if (navigator.share) {
+          try {
+            // Some browsers require a user gesture (we are in click handler) and will open system share sheet
+            await navigator.share({
+              title: `Support ${UPI_NAME}`,
+              text: shareText,
+              url: (typeof location !== 'undefined' && location.href) ? location.href : undefined
+            });
+            // no extra toast needed (system provides UI), but we can confirm
+            showToast('Share sheet opened');
+            return;
+          } catch (err) {
+            // User may cancel share or an error occurred — fallback to copy
+            console.warn('navigator.share error or cancelled:', err);
+          }
+        }
+        // fallback: copy share message
+        const ok = await copyText(shareText);
+        if (ok) showToast('Share text copied — paste to share');
+        else showToast('Unable to share automatically — copy this UPI ID and share manually');
+      });
+    }
+
+    // Optional: clicking QR link is an anchor so no JS needed (kept for convenience)
+    if (openQr) {
+      openQr.addEventListener('click', function () {
+        // nothing extra - anchor opens QR image in new tab
+      });
+    }
+
+    // Accessibility: keyboard copy via Enter/Space handled by native buttons
+
+    // Debugging aid: log when buttons not found
+    if (!payNowBtn) console.warn('crx: payNowBtn not found');
+    if (!shareBtn) console.warn('crx: shareBtn not found');
+    if (!upiValueEl) console.warn('crx: upiValueEl not found');
+
+    // Note: Clipboard API requires HTTPS / secure context to use navigator.clipboard.
+    // If copy still fails on your site, ensure the page is served over HTTPS.
+  }); // DOMContentLoaded
 })();
 </script>
-<!-- End of crx_donate-nolinks.html -->
+<!-- end crx_donate-fixed-copy-share.html -->
