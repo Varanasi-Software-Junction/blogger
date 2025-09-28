@@ -1,6 +1,7 @@
 /* ============================
    CRX Styles v1 — Blue / Saffron Theme
    Cleaned: removed all `!important` rules
+   Updated: Visible Amazon disclaimer + 3D card border + title & desc visible
    ============================ */
 
 /* ---------- THEME VARIABLES ---------- */
@@ -24,6 +25,11 @@
   --crx-success: #0b8a3f;
   --crx-danger: #b91c1c;
   --crx-focus: 0 0 0 4px rgba(11,94,215,0.12);
+
+  /* extras for affiliate visuals */
+  --crx-disclaimer-bg: linear-gradient(90deg,#fff6e9,#fff0dc);
+  --crx-disclaimer-border: linear-gradient(180deg,#ffd58a,#ffb452);
+  --crx-3d-edge: linear-gradient(135deg, rgba(11,94,215,0.18), rgba(255,96,67,0.08));
 }
 
 /* ---------- BASE ---------- */
@@ -253,17 +259,223 @@ pre.crx_output::before, .crx_post-body pre::before {
   box-shadow: 0 8px 18px rgba(11,94,215,0.06);
 }
 
-/* ---------- AFFILIATE CARD ---------- */
-.crx_affiliate {
+/* ---------- AFFILIATE CARD (REPLACED / ENHANCED) ---------- */
+
+/* Visible, impossible-to-miss disclaimer banner above affiliate cards */
+.crx_affiliate_disclaimer {
+  display: flex;
+  gap:12px;
+  align-items:center;
+  padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(11,94,215,0.06);
-  padding: 12px;
-  background: linear-gradient(180deg,#fff,#fbfdff);
+  background: var(--crx-disclaimer-bg);
+  border: 2px solid transparent;
+  box-shadow: 0 8px 26px rgba(11,94,215,0.06), inset 0 -2px 0 rgba(255,255,255,0.6);
+  position: relative;
+  margin-bottom: 14px;
+  font-weight:800;
+  color: #7a4f09;
+  line-height:1.15;
+  font-size:14px;
+}
+
+/* decorative left accent */
+.crx_affiliate_disclaimer::before {
+  content: "";
+  width:6px;
+  height:56%;
+  position:absolute;
+  left:8px;
+  top:22%;
+  border-radius:4px;
+  background: var(--crx-disclaimer-border);
+  box-shadow: 0 6px 18px rgba(230,120,30,0.14);
+}
+
+/* optional small link on the right */
+.crx_affiliate_disclaimer .crx_disclaimer_actions {
+  margin-left: auto;
   display:flex;
-  gap:10px;
+  gap:8px;
   align-items:center;
 }
-.crx_affiliate_img { width:120px; height:80px; object-fit:cover; border-radius:8px; }
+.crx_affiliate_disclaimer a { color: #b24b00; font-weight:800; text-decoration:underline; }
+
+/* grid container for affiliate cards */
+.crx_affiliates_wrap {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  align-items: stretch;
+  margin: 8px 0 18px 0;
+}
+@media (max-width:760px) {
+  .crx_affiliates_wrap { grid-template-columns: 1fr; }
+}
+
+/* 3D card: main card + pseudo 3D edge using ::before (skewed edge) */
+.crx_affiliate_card {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: linear-gradient(180deg,#fff,#fbfdff);
+  box-shadow:
+    0 20px 40px rgba(7,16,32,0.12),
+    0 6px 18px rgba(11,35,60,0.06);
+  border: 1px solid rgba(11,35,60,0.06);
+  transition: transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s ease;
+  align-items: center;
+  overflow: visible;
+  min-height: 110px;
+}
+
+/* 3D skewed edge pseudo-element (gives card a 'lifted' 3D frame) */
+.crx_affiliate_card::before {
+  content: "";
+  position: absolute;
+  right: -12px;
+  top: 8px;
+  width: 12px;
+  height: calc(100% - 16px);
+  border-radius: 6px;
+  transform: skewY(-12deg);
+  background: var(--crx-3d-edge);
+  box-shadow: 6px 10px 18px rgba(8,20,40,0.08);
+  z-index: -1;
+  filter: brightness(.98);
+}
+
+/* hover makes the card 'pop' */
+.crx_affiliate_card:hover,
+.crx_affiliate_card:focus-within {
+  transform: translateY(-8px) rotateX(1deg);
+  box-shadow:
+    0 30px 60px rgba(7,16,32,0.16),
+    0 12px 28px rgba(11,35,60,0.08);
+}
+
+/* image column */
+.crx_affiliate_img_wrap {
+  flex: 0 0 120px;
+  width: 120px;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(11,99,212,0.03), rgba(34,197,94,0.02));
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(11,35,60,0.03);
+}
+.crx_affiliate_img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
+
+/* content column: allow wrap for title & desc (user asked to show them) */
+.crx_affiliate_content {
+  flex: 1 1 auto;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-width:0;
+}
+
+/* Title: multi-line, prominent */
+.crx_affiliate_title {
+  font-weight:800;
+  font-size:16px;
+  color:#06243a;
+  line-height:1.18;
+  display:block;
+  word-break:break-word;
+  overflow: visible;
+}
+
+/* Description: show up to 3 lines, readable */
+.crx_affiliate_desc {
+  font-size:14px;
+  color:#334b57;
+  line-height:1.25;
+  display: -webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow: hidden;
+  margin-bottom:4px;
+}
+
+/* meta row */
+.crx_affiliate_meta {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:4px;
+  align-items:center;
+}
+
+/* price */
+.crx_affiliate_price {
+  font-weight:900;
+  font-size:15px;
+  color:#0b63d4;
+  background: rgba(11,99,212,0.06);
+  padding:4px 8px;
+  border-radius:8px;
+}
+
+/* rating */
+.crx_affiliate_rating { display:inline-flex; gap:6px; align-items:center; font-size:13px; color:#6b7280; }
+
+/* CTA */
+.crx_affiliate_cta { margin-left:auto; flex:0 0 auto; }
+.crx_btn.crx_aff_buy {
+  background: linear-gradient(180deg,#ff7a59,#ff6043);
+  color:#fff;
+  padding:9px 14px;
+  border-radius:10px;
+  font-weight:800;
+  border:0;
+  box-shadow:0 10px 26px rgba(255,96,67,0.16);
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+}
+
+/* small inside-card disclaimer (keeps legal text with each card) */
+.crx_aff_small_disclaimer {
+  display:inline-block;
+  margin-left:8px;
+  font-size:12px;
+  color:#8a5b1a;
+  background: rgba(255,235,205,0.45);
+  padding:6px 8px;
+  border-radius:8px;
+  font-weight:700;
+  border:1px solid rgba(255,200,140,0.25);
+}
+
+/* ensure links inherit readable color */
+.crx_affiliate_card a { text-decoration: none; color: inherit; }
+
+/* accessibility: large focus ring for keyboard users */
+.crx_affiliate_card a:focus { box-shadow: var(--crx-focus); outline: none; border-radius:10px; }
+
+/* small-screen adjustments */
+@media (max-width:720px) {
+  .crx_affiliates_wrap { gap: 10px; margin: 6px 0 12px 0; }
+  .crx_affiliate_img_wrap { width:96px; height:66px; flex: 0 0 96px; }
+  .crx_affiliate_card::before { right: -8px; width:10px; }
+  .crx_affiliate_title { font-size:15px; }
+  .crx_aff_small_disclaimer { display:block; margin-top:8px; margin-left:0; }
+}
+
+/* reduced-motion preference: remove pulsing/animation */
+@media (prefers-reduced-motion: reduce) {
+  .crx_affiliate_card,
+  .crx_affiliate_card::before,
+  .crx_affiliate_disclaimer { transition: none; transform: none; }
+}
 
 /* ---------- BIO WIDGET ---------- */
 .crx_bio {
@@ -320,11 +532,9 @@ pre.crx_output::before, .crx_post-body pre::before {
 }
 .crx_donate_qr img { width:100%; height:100%; object-fit:contain; display:block; }
 
-/* donate meta */
 .crx_donate_title { font-size:17px; font-weight:800; margin-bottom:6px; color: var(--crx-primary-dark); }
 .crx_donate_desc { font-size:14px; color:var(--crx-muted); line-height:1.35; margin-bottom:8px; }
 
-/* action row */
 .crx_action_row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 .crx_preset { background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep)); border:none; padding:8px 10px; border-radius:8px; font-weight:800; cursor:pointer; color:#fff; box-shadow: 0 6px 18px rgba(230,140,60,0.10); }
 .crx_open_qr { text-decoration:none; border-radius:8px; padding:8px 10px; border:1px solid rgba(11,18,32,0.04); background:transparent; color:var(--crx-primary-dark); }
@@ -568,7 +778,6 @@ html body .crx_post-body td {
 }
 
 /* ---------- 6) Floating donate safe placement & dismiss behavior override ---------- */
-/* Give these selectors slightly higher specificity so theme rules won't hide or force different behaviour */
 html body #crx_floating_donate,
 body#layout #crx_floating_donate {
   position: fixed;
@@ -584,7 +793,6 @@ body#layout #crx_floating_label {
 }
 
 /* ---------- 7) Recover some layout blocks that theme forced to display:block via !important ---------- */
-/* Example: panels and options forced by theme */
 body#layout .theme-options,
 body#layout #main-menu .widget,
 html body#layout .theme-options,
@@ -602,8 +810,6 @@ html body textarea:focus {
 }
 
 /* ---------- 9) Specificity booster for stubborn selectors (last resort — still no !important) ---------- */
-/* If the theme still overrides a small number of items, add a single group here to override them cleanly. */
-/* Example: force CRX widget borders/backgrounds in final cascade */
 html body .crx_bio,
 html body .crx_donate_card,
 html body .crx_card,
@@ -618,7 +824,6 @@ body#layout .crx_donate_card {
    1) Tell me the page URL and a screenshot or the exact element (e.g., ".post-body a") and
    2) I will generate a single extra selector (very targeted) to fix just that case.
 */
-
 
 /* ===== CRX — Comments contrast fixes (wheat-on-wheat) =====
    Paste at end of crx_styles_v1.css
