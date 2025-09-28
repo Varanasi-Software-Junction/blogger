@@ -1,204 +1,242 @@
 /* crx_ui_v1.js
    CRX UI loader & utilities v1
    - Loads widget fragments hosted in blogger-assets/
-   - Provides affiliate loader (stacked vertical + meta stacked)
-   - Toggle/copy helpers, auto-init
-   Host/base:
-     https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js
+   - Provides affiliate loader, toggle/copy helpers
+   - Provides crx_createBubbleVisualizer(targetEl, opts)
+   Host: https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js
 */
 
 (function () {
-  // BASE URL for hosted assets (remembered)
   const BASE = "https://varanasi-software-junction.github.io/blogger/blogger-assets";
 
-  /* small helpers */
+  /* ---------------------------
+     Small helpers
+     --------------------------- */
   function escapeHtml(s) {
     return String(s || "").replace(/[&<>"']/g, function (m) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m];
     });
   }
-  function byId(id) { return document.getElementById(id); }
-  function qa(sel, root) { return Array.from((root || document).querySelectorAll(sel)); }
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-  /* toggle answer */
+  /* ---------------------------
+     Simple UI helpers
+     --------------------------- */
   window.crx_toggleAnswer = function (id) {
     try {
-      const el = byId(id);
+      const el = document.getElementById(id);
       if (!el) return;
-      el.style.display = (getComputedStyle(el).display === "none" || el.style.display === "none") ? "block" : "none";
+      el.style.display = (el.style.display === "block") ? "none" : "block";
     } catch (e) { console.warn("crx_toggleAnswer:", e); }
   };
 
-  /* copy to clipboard */
-  window.crx_copyCode = async function (btnId, codeId) {
+  window.crx_copyCode = function (btnId, codeId) {
     try {
-      const codeEl = byId(codeId);
+      const codeEl = document.getElementById(codeId);
       if (!codeEl) return;
       const text = codeEl.innerText || codeEl.textContent || "";
-      if (!text) return;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(text);
-      } else {
+      if (!navigator.clipboard) {
         const ta = document.createElement("textarea");
-        ta.value = text; document.body.appendChild(ta);
-        ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      } else {
+        navigator.clipboard.writeText(text);
       }
-      if (btnId) {
-        const btn = byId(btnId);
-        if (btn) {
-          const orig = btn.innerText;
-          btn.innerText = "✅ Copied";
-          setTimeout(() => { btn.innerText = orig; }, 1200);
-        }
+      const btn = document.getElementById(btnId);
+      if (btn) {
+        const orig = btn.innerText;
+        btn.innerText = "✅ Copied";
+        setTimeout(() => btn.innerText = orig, 1200);
       }
     } catch (e) { console.warn("crx_copyCode:", e); }
   };
 
-  /* load widget fragment */
+  /* ---------------------------
+     Fetch & insert widget fragment (crx_<name>.html)
+     --------------------------- */
   window.crx_loadWidget = async function (name, targetEl) {
     if (!name || !targetEl) return;
+    const url = `${BASE}/crx_${name}.html`;
     try {
-      const res = await fetch(`${BASE}/crx_${name}.html`, { cache: "no-cache" });
+      const res = await fetch(url, { cache: "no-cache" });
       if (!res.ok) throw new Error("Widget fetch failed: " + res.status);
       const html = await res.text();
       targetEl.innerHTML = html;
-    } catch (e) { console.error("crx_loadWidget:", e); }
+    } catch (e) {
+      console.error("crx_loadWidget:", e);
+      // Fallback: minimal donate widget if crx_donate.html fails
+      if (name === "donate") {
+        const fallback = `
+          <div class="crx_donate_card" style="display:flex;gap:12px;align-items:center;padding:12px;border:1px solid rgba(11,94,215,0.06);border-radius:12px;background:#fff;box-shadow:0 6px 16px rgba(11,94,215,0.06);">
+            <div class="crx_donate_qr" style="width:100px;height:100px;border:1px solid rgba(11,94,215,0.06);border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <span style="font-size:40px;">🙏</span>
+            </div>
+            <div style="flex:1;">
+              <div class="crx_donate_title" style="font-weight:800;color:#084298;font-size:16px;">Support Learning Sutras</div>
+              <div class="crx_donate_desc" style="color:#6b7280;margin-top:6px;font-size:14px;">If my tutorials helped you, a small donation keeps them coming.</div>
+              <div class="crx_action_row" style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+                <button class="crx_preset">₹50</button>
+                <button class="crx_preset">₹100</button>
+                <a class="crx_open_qr" href="${BASE}/crx_donate.html" target="_blank" rel="noopener">Open QR</a>
+              </div>
+              <div class="crx_donate_smallprint" style="font-size:12px;color:#6b7280;margin-top:6px;">Thanks — Champak Roy</div>
+            </div>
+          </div>
+        `;
+        targetEl.innerHTML = fallback;
+      }
+    }
   };
 
-  /* load affiliates (stacked layout; meta stacked vertically) */
-  window.crx_loadAffiliates = async function (targetId, opts) {
-    const tgt = byId(targetId);
+  /* ---------------------------
+     Affiliate loader: improved cards
+     --------------------------- */
+  window.crx_loadAffiliates = async function (targetId) {
+    const tgt = document.getElementById(targetId);
     if (!tgt) return;
-    opts = opts || {};
-    const showGlobalDisclaimer = opts.showGlobalDisclaimer === undefined ? true : !!opts.showGlobalDisclaimer;
-    const maxItems = Number(opts.max || 2);
-
+    const url = `${BASE}/crx_affiliates.json`;
     try {
-      const res = await fetch(`${BASE}/crx_affiliates.json`, { cache: "no-cache" });
+      const res = await fetch(url, { cache: "no-cache" });
       if (!res.ok) throw new Error("Affiliate JSON fetch failed: " + res.status);
       const data = await res.json();
       const products = Array.isArray(data.products) ? data.products.slice() : [];
-      if (!products.length) { tgt.innerHTML = ""; return; }
-
-      // shuffle & select
+      if (products.length === 0) { tgt.innerHTML = ""; return; }
+      // shuffle
       for (let i = products.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [products[i], products[j]] = [products[j], products[i]];
       }
-      const chosen = products.slice(0, Math.min(maxItems, products.length));
-
-      // build fragment
-      const frag = document.createDocumentFragment();
-
-      if (showGlobalDisclaimer) {
-        const disc = document.createElement("div");
-        disc.className = "crx_affiliate_disclaimer";
-        disc.setAttribute("role", "status");
-        disc.setAttribute("aria-live", "polite");
-        disc.innerHTML = `
-          <div style="display:flex;flex-direction:column;gap:4px;">
-            <div style="font-size:15px;color:#7a4100;font-weight:900;">Important disclosure — Amazon Affiliate</div>
-            <div style="font-size:13px;color:#6a4b1a;max-width:900px;">
-              As an Amazon Associate I earn from qualifying purchases. The product listings below may contain affiliate links.
-            </div>
-          </div>
-          <div class="crx_disclaimer_actions">
-            <a href="https://affiliate-program.amazon.in/help/operating/policies" target="_blank" rel="noopener noreferrer">Affiliate policy</a>
-          </div>
-        `;
-        frag.appendChild(disc);
-      }
-
-      const wrap = document.createElement("div");
-      wrap.className = "crx_affiliates_wrap";
+      const chosen = products.slice(0, Math.min(2, products.length));
+      tgt.innerHTML = "";
 
       chosen.forEach(p => {
-        const title = escapeHtml(p.title || "Product");
-        const desc = escapeHtml(p.desc || "");
-        const img = escapeHtml(p.img || "");
-        const price = (p.price !== undefined && p.price !== null) ? escapeHtml(String(p.price)) : "";
-        const rating = (p.rating !== undefined && p.rating !== null) ? Number(p.rating) : null;
-        const url = p.url || "#";
+        const card = document.createElement("div");
+        card.className = "crx_affiliate";
 
-        const card = document.createElement("article");
-        card.className = "crx_affiliate_card";
-        card.setAttribute("role", "article");
+        const priceHtml = p.price ? `<div class="crx_affiliate_price">₹${escapeHtml(String(p.price))}</div>` : '';
+        const ratingHtml = (p.rating && !isNaN(Number(p.rating))) ? `<div class="crx_affiliate_rating">★ ${escapeHtml(String(p.rating))}</div>` : '';
+        const sponsored = p.sponsored ? escapeHtml(p.sponsored) : 'Sponsored';
 
         card.innerHTML = `
-          <div class="crx_affiliate_img_wrap" aria-hidden="${img ? "false" : "true"}">
-            <img class="crx_affiliate_img" src="${img}" alt="${title}" loading="lazy" />
+          <div class="crx_affiliate_badge">${sponsored}</div>
+          <div style="display:flex;align-items:center;justify-content:center;">
+            <img class="crx_affiliate_img" src="${escapeHtml(p.img)}" alt="${escapeHtml(p.title)}" loading="lazy" />
           </div>
           <div class="crx_affiliate_content">
-            <div class="crx_affiliate_title" title="${title}">${title}</div>
-            <div class="crx_affiliate_desc">${desc}</div>
+            <div class="crx_affiliate_title">${escapeHtml(p.title)}</div>
+            <div class="crx_affiliate_desc">${escapeHtml(p.desc || '')}</div>
             <div class="crx_affiliate_meta">
-              ${ rating ? `<div class="crx_affiliate_rating" aria-label="Rating: ${rating} out of 5">${_renderStars(rating)} <span style="font-weight:700;">${rating.toFixed(1)}</span></div>` : "" }
-              ${ price ? `<div class="crx_affiliate_price">₹ ${price}</div>` : "" }
-              <div class="crx_affiliate_cta">
-                <a class="crx_btn crx_aff_buy" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="Buy ${title} on Amazon">Buy on Amazon</a>
-              </div>
+              ${priceHtml}
+              ${ratingHtml}
             </div>
-            <div style="margin-top:8px;">
-              <span class="crx_aff_small_disclaimer">As an Amazon Associate I earn from qualifying purchases.</span>
-            </div>
+            <div class="crx_affiliate_footer">*As an Amazon Associate I earn from qualifying purchases.</div>
+          </div>
+          <div class="crx_affiliate_cta">
+            <a class="crx_btn buy" href="${escapeHtml(p.url)}" target="_blank" rel="sponsored noopener noreferrer">Buy on Amazon</a>
+            <a class="crx_btn price-link" href="${escapeHtml(p.url)}" target="_blank" rel="noopener noreferrer">View</a>
           </div>
         `;
-
-        wrap.appendChild(card);
+        tgt.appendChild(card);
       });
-
-      frag.appendChild(wrap);
-      tgt.innerHTML = "";
-      tgt.appendChild(frag);
-
     } catch (e) {
       console.error("crx_loadAffiliates:", e);
-      if (tgt) tgt.innerHTML = `<div style="padding:10px;color:#7a4100;font-weight:700;">Affiliate feed unavailable.</div>`;
     }
+  };
 
-    function _renderStars(r) {
-      const filled = Math.round(Math.max(0, Math.min(5, r)));
-      return Array.from({ length: 5 }, (_, i) =>
-        `<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .6l3.7 7.4 8.1 1.8-5.6 5.5 1.3 8-7-4.1-7 4.1 1.3-8-5.6-5.5 8.1-1.8z" fill="${i < filled ? '#f6b900' : 'rgba(0,0,0,0.12)'}"/></svg>`
-      ).join("");
+  /* ---------------------------
+     Enhance "Post a Comment" links
+     --------------------------- */
+  function crx_enhanceCommentButtons() {
+    try {
+      const selectors = [
+        '#comments a.comment-reply',
+        '#comments a.comment-link',
+        '#comments a[href*="comment"]',
+        '.comments .comment-actions a',
+        '.post-comment-link',
+        '#comment-post-message a',
+        '#comments a'
+      ];
+      const anchors = Array.from(new Set(selectors.flatMap(s => Array.from(document.querySelectorAll(s)))));
+      anchors.forEach(a => {
+        if (!a || a.closest('.crx-comment-enhanced')) return;
+        const text = (a.textContent || a.innerText || '').trim();
+        if (!text) return;
+        a.classList.add('crx_btn','crx_accent','crx_comment_btn');
+        if (!a.getAttribute('role')) a.setAttribute('role','button');
+        if (!a.getAttribute('aria-label')) a.setAttribute('aria-label', text);
+        const hasIcon = Array.from(a.childNodes).some(n =>
+          (n.nodeType === Node.TEXT_NODE && (n.textContent || '').includes('✍')) ||
+          (n.nodeType === Node.ELEMENT_NODE && n.classList && n.classList.contains('crx-comment-icon'))
+        );
+        if (!hasIcon) {
+          const icon = document.createElement('span');
+          icon.className = 'crx-comment-icon';
+          icon.textContent = '✍️';
+          icon.style.marginRight = '8px';
+          icon.style.display = 'inline-block';
+          a.insertBefore(icon, a.firstChild);
+        }
+        const commentsBlock = a.closest('.comment-thread, .comments, #comments, .widget[id*="comments"]');
+        if (commentsBlock) {
+          let wrapper = commentsBlock.querySelector('.crx-comment-cta-wrap');
+          if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'crx-comment-cta-wrap';
+            wrapper.style.display = 'flex';
+            wrapper.style.justifyContent = 'center';
+            wrapper.style.margin = '8px 0';
+            const heading = commentsBlock.querySelector('h2,h3,.comments-title,.comment-count,.comments-header');
+            if (heading && heading.parentNode === commentsBlock) {
+              heading.insertAdjacentElement('afterend', wrapper);
+            } else {
+              commentsBlock.insertBefore(wrapper, commentsBlock.firstChild);
+            }
+          }
+          if (!wrapper.contains(a)) wrapper.appendChild(a);
+          a.classList.add('crx-comment-enhanced');
+        }
+      });
+    } catch(e){ console.warn('crx_enhanceCommentButtons error:',e); }
+  }
+
+  /* ---------------------------
+     Auto-initialize on DOM ready
+     --------------------------- */
+  document.addEventListener('DOMContentLoaded', function () {
+    try { crx_enhanceCommentButtons(); } catch (e) {}
+    if (window.MutationObserver) {
+      const obs = new MutationObserver(() => {
+        if (crx_enhanceCommentButtons._timer) clearTimeout(crx_enhanceCommentButtons._timer);
+        crx_enhanceCommentButtons._timer = setTimeout(() => crx_enhanceCommentButtons(), 140);
+      });
+      obs.observe(document.body, { childList:true, subtree:true });
     }
-  }; // end crx_loadAffiliates
+  });
 
-  /* auto-init widgets */
   document.addEventListener("DOMContentLoaded", function () {
     try {
-      qa("[data-crx-widget]").forEach(async el => {
+      const widgets = document.querySelectorAll("[data-crx-widget]");
+      widgets.forEach(async el => {
         const name = el.getAttribute("data-crx-widget");
         if (!name) return;
         if (name === "affiliate") {
           const id = el.id || ("crx_aff_" + Math.random().toString(36).slice(2,9));
           el.id = id;
-          await window.crx_loadAffiliates(id, { showGlobalDisclaimer: true, max: 3 });
+          await window.crx_loadAffiliates(id);
         } else if (name === "bio" || name === "donate") {
           await window.crx_loadWidget(name, el);
-        } else if (name === "bubble-visualizer") {
-          // lightweight placeholder
-          window.crx_createBubbleVisualizer(el);
         } else {
           await window.crx_loadWidget(name, el);
         }
       });
-    } catch (e) { console.warn("crx widget init error:", e); }
+    } catch (e) {
+      console.warn("crx widget init error:", e);
+    }
   });
 
-  /* lightweight placeholder for visualizer (kept minimal) */
-  window.crx_createBubbleVisualizer = function (targetEl, opts) {
-    let root;
-    if (typeof targetEl === "string") root = document.querySelector(targetEl);
-    else root = targetEl instanceof Element ? targetEl : null;
-    if (!root) return null;
-    opts = opts || {};
-    const numbers = opts.numbers || root.getAttribute("data-crx-numbers") || "5,3,8,1,4";
-    root.innerHTML = `<div class="crx_visual_container" style="padding:12px;"><div style="font-weight:800;color:var(--crx-primary-dark);">Visualizer</div><div style="margin-top:8px;color:var(--crx-muted);font-size:13px;">Numbers: ${escapeHtml(numbers)}</div></div>`;
-    return { root, numbers };
-  };
-
-  /* expose BASE for debugging */
-  window.__crx_BASE = BASE;
-
 })(); // end IIFE
+// End of crx_ui_v1.js
