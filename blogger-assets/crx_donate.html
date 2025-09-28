@@ -2,38 +2,174 @@
 <div class="crx_donate_card" role="region" aria-label="Support this blog - donate" id="crx_donate_fragment">
   <style>
     /* Scoped styles */
-    .crx_donate_card { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; max-width:520px; margin:12px 0; padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(11,12,16,0.06); background:linear-gradient(180deg,#ffffff,#fbfdff); display:flex; gap:12px; align-items:center; }
-    .crx_donate_qr { width:110px; height:110px; border-radius:8px; background:#f3f4f6; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
-    .crx_donate_qr img { width:100%; height:100%; object-fit:contain; display:block; }
-    .crx_donate_meta { flex:1; min-width:0; }
-    .crx_donate_title { font-size:17px; font-weight:800; margin-bottom:6px; color:#071022; }
-    .crx_donate_desc { font-size:14px; color:#6b7280; line-height:1.35; margin-bottom:8px; }
-    .crx_donate_benefits{ font-size:13px;color:#39404a;margin-bottom:10px; }
-    .crx_action_row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .crx_donate_card {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      max-width: 520px;
+      margin: 12px 0;
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(11, 12, 16, 0.06);
+      background: linear-gradient(180deg, #ffffff, #fbfdff);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
 
-    .crx_btn { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; text-decoration:none; font-weight:700; border:1px solid rgba(0,0,0,0.06); cursor:pointer; background:#fff; color:#071022; }
-    .crx_primary { background:#0b84ff; color:#fff; box-shadow:0 8px 20px rgba(11,132,255,0.12); border:0; }
-    .crx_share { background:#eef6ff; border:0; color:#064e9c; }
-    .crx_small_hint { font-size:12px; color:#6b7280; margin-top:8px; }
-    .crx_donate_smallprint{ font-size:12px; color:#6b7280; margin-top:8px; }
+    .crx_donate_qr {
+      width: 110px;
+      height: 110px;
+      border-radius: 8px;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
 
-    .crx_upi_row { margin-top:8px; display:flex; gap:8px; align-items:center; font-weight:700; color:#0b84ff; word-break:break-all; }
-    .crx_upi_text { font-size:13px; color:#071022; background:#f8fafc; padding:6px 8px; border-radius:8px; border:1px solid rgba(6,12,22,0.04); }
+    .crx_donate_qr img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .crx_donate_meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .crx_donate_title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #071022;
+    }
+
+    .crx_donate_desc {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .crx_donate_benefits {
+      font-size: 13px;
+      color: #39404a;
+      margin-bottom: 10px;
+    }
+
+    .crx_action_row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .crx_btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      cursor: pointer;
+      background: #fff;
+      color: #071022;
+    }
+
+    .crx_primary {
+      background: #0b84ff;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(11, 132, 255, 0.12);
+      border: 0;
+    }
+
+    .crx_share {
+      background: #eef6ff;
+      border: 0;
+      color: #064e9c;
+    }
+
+    .crx_small_hint {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+
+    .crx_donate_smallprint {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+
+    .crx_upi_row {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-weight: 700;
+      color: #0b84ff;
+      word-break: break-all;
+    }
+
+    .crx_upi_text {
+      font-size: 13px;
+      color: #071022;
+      background: #f8fafc;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(6, 12, 22, 0.04);
+    }
 
     /* Toast */
-    .crx_toast { position:fixed; left:50%; transform:translateX(-50%); bottom:18px; z-index:10001; background:rgba(6,12,22,0.92); color:#fff; padding:10px 14px; border-radius:8px; font-weight:700; font-size:13px; box-shadow:0 8px 24px rgba(6,12,22,0.24); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; }
-    .crx_toast.visible { opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(-6px); }
+    .crx_toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      z-index: 10001;
+      background: rgba(6, 12, 22, 0.92);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 8px 24px rgba(6, 12, 22, 0.24);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
 
-    @media (max-width:520px){ .crx_donate_card{ max-width:96%; } .crx_donate_qr{ width:96px; height:96px; } }
+    .crx_toast.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(-6px);
+    }
+
+    @media (max-width:520px) {
+      .crx_donate_card {
+        max-width: 96%;
+      }
+
+      .crx_donate_qr {
+        width: 96px;
+        height: 96px;
+      }
+    }
   </style>
 
   <div class="crx_donate_qr" aria-hidden="false">
-    <img src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" alt="QR code to donate" loading="lazy" decoding="async" width="110" height="110" />
+    <img src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" alt="QR code to donate"
+      loading="lazy" decoding="async" width="110" height="110" />
   </div>
 
   <div class="crx_donate_meta">
     <div class="crx_donate_title">Support Learning Sutras — small donations, big impact</div>
-    <div class="crx_donate_desc">If this post helped you, please consider supporting my writing. Copy the UPI ID or open the QR — thank you ❤️</div>
+    <div class="crx_donate_desc">If this post helped you, please consider supporting my writing. Copy the UPI ID or open
+      the QR — thank you ❤️</div>
 
     <div class="crx_donate_benefits">Quick donations keep tools free, reduce ads, and fund new tutorials.</div>
 
@@ -45,7 +181,9 @@
       <button class="crx_btn crx_share" id="crx_share" aria-label="Share donation details">Share</button>
 
       <!-- Open QR as fallback / for saving -->
-      <a class="crx_btn" id="crx_open_qr" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open QR code in new tab">Open QR — Save/Scan</a>
+      <a class="crx_btn" id="crx_open_qr"
+        href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg" target="_blank"
+        rel="noopener noreferrer" aria-label="Open QR code in new tab">Open QR — Save/Scan</a>
     </div>
 
     <!-- visible UPI ID row so users can always see and select it -->
@@ -54,25 +192,103 @@
       <div id="crx_upi_text" class="crx_upi_text" role="text">champaksworld-1@hdfcbank</div>
     </div>
 
-    <div class="crx_small_hint">Tip: on mobile, Share will open your share sheet. On desktop it copies a ready message to clipboard.</div>
-    <div class="crx_donate_smallprint">You’ll stay anonymous unless you choose to share details. Thanks — Champak Roy</div>
+    <div class="crx_small_hint">Tip: on mobile, Share will open your share sheet. On desktop it copies a ready message
+      to clipboard.</div>
+    <div class="crx_donate_smallprint">You’ll stay anonymous unless you choose to share details. Thanks — Champak Roy
+    </div>
   </div>
 </div>
 
 <!-- Floating donate (keeps polite behavior) -->
 <style>
-#crx_floating_container { position:fixed; right:16px; bottom:16px; z-index:9998; display:flex; gap:8px; align-items:center; pointer-events:none; }
-#crx_floating_donate { --size:64px; width:var(--size); height:var(--size); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(3,10,30,0.18); background:linear-gradient(180deg,#0b84ff,#0466d7); color:white; font-weight:700; cursor:pointer; border:0; transition:transform 350ms ease, opacity 300ms ease; opacity:0; pointer-events:none; }
-#crx_floating_donate.visible { opacity:1; pointer-events:auto; }
-#crx_floating_donate:focus { outline:3px solid rgba(255,255,255,0.18); transform:scale(1.04); }
-#crx_floating_label { background:#fff; color:#071022; padding:8px 10px; border-radius:8px; box-shadow:0 8px 20px rgba(6,12,22,0.12); font-weight:700; font-size:13px; opacity:0; pointer-events:none; transform-origin:right; transition:opacity 200ms, transform 200ms; }
-#crx_floating_label.visible { opacity:1; transform:translateY(-6px); pointer-events:auto; }
-#crx_floating_dismiss { width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,0.12); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center; border:0; cursor:pointer; pointer-events:auto; opacity:0.95; }
-@media (prefers-reduced-motion: reduce) { #crx_floating_donate, #crx_floating_label { transition: none !important; } }
+  #crx_floating_container {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 9998;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  #crx_floating_donate {
+    --size: 64px;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(3, 10, 30, 0.18);
+    background: linear-gradient(180deg, #0b84ff, #0466d7);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    border: 0;
+    transition: transform 350ms ease, opacity 300ms ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #crx_floating_donate.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #crx_floating_donate:focus {
+    outline: 3px solid rgba(255, 255, 255, 0.18);
+    transform: scale(1.04);
+  }
+
+  #crx_floating_label {
+    background: #fff;
+    color: #071022;
+    padding: 8px 10px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(6, 12, 22, 0.12);
+    font-weight: 700;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transform-origin: right;
+    transition: opacity 200ms, transform 200ms;
+  }
+
+  #crx_floating_label.visible {
+    opacity: 1;
+    transform: translateY(-6px);
+    pointer-events: auto;
+  }
+
+  #crx_floating_dismiss {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.12);
+    color: #fff;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 0.95;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #crx_floating_donate,
+    #crx_floating_label {
+      transition: none !important;
+    }
+  }
 </style>
 
 <div id="crx_floating_container" aria-hidden="false">
-  <button id="crx_floating_donate" aria-label="Donate — open QR or UPI" title="Donate — open QR or UPI" aria-haspopup="dialog">Donate</button>
+  <button id="crx_floating_donate" aria-label="Donate — open QR or UPI" title="Donate — open QR or UPI"
+    aria-haspopup="dialog">Donate</button>
   <button id="crx_floating_dismiss" aria-label="Close donate button" title="Close">✕</button>
   <div id="crx_floating_label" role="status" aria-live="polite">Donate via UPI</div>
 </div>
@@ -81,212 +297,212 @@
 <div id="crx_toast" class="crx_toast" role="status" aria-live="polite">Copied</div>
 
 <script>
-(function(){
-  // ========== CONFIG ==========
-  const UPI_ID = 'champaksworld-1@hdfcbank';
-  const UPI_NAME = 'Champak Roy';
-  const QR_FALLBACK = 'https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg';
-  const config = {
-    bigTimeSeconds: 120,
-    initialDelay: 30,
-    showOnScrollPercent: 60,
-    maxShowsPerSession: 3,
-    coolDownBetweenShows: 60,
-    dismissDays: 7,
-    sessionKey: 'crx_donate_session',
-    donatedKey: 'crx_donate_done'
-  };
+  (function () {
+    // ========== CONFIG ==========
+    const UPI_ID = 'champaksworld-1@hdfcbank';
+    const UPI_NAME = 'Champak Roy';
+    const QR_FALLBACK = 'https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg';
+    const config = {
+      bigTimeSeconds: 120,
+      initialDelay: 30,
+      showOnScrollPercent: 60,
+      maxShowsPerSession: 3,
+      coolDownBetweenShows: 60,
+      dismissDays: 7,
+      sessionKey: 'crx_donate_session',
+      donatedKey: 'crx_donate_done'
+    };
 
-  // ========== DOM refs ==========
-  const payNowBtn = document.getElementById('crx_pay_now');
-  const shareBtn = document.getElementById('crx_share');
-  const openQr = document.getElementById('crx_open_qr');
-  const upiTextEl = document.getElementById('crx_upi_text');
-  const floatingBtn = document.getElementById('crx_floating_donate');
-  const floatingLabel = document.getElementById('crx_floating_label');
-  const dismissBtn = document.getElementById('crx_floating_dismiss');
-  const toast = document.getElementById('crx_toast');
+    // ========== DOM refs ==========
+    const payNowBtn = document.getElementById('crx_pay_now');
+    const shareBtn = document.getElementById('crx_share');
+    const openQr = document.getElementById('crx_open_qr');
+    const upiTextEl = document.getElementById('crx_upi_text');
+    const floatingBtn = document.getElementById('crx_floating_donate');
+    const floatingLabel = document.getElementById('crx_floating_label');
+    const dismissBtn = document.getElementById('crx_floating_dismiss');
+    const toast = document.getElementById('crx_toast');
 
-  // ========== storage helpers ==========
-  const now = ()=>Date.now();
-  const secondsSince = ts => Math.floor((now()-ts)/1000);
-  const readJSON = (k, useSession=false) => { try{ const s=(useSession?sessionStorage:localStorage).getItem(k); return s?JSON.parse(s):null; }catch(e){return null;} };
-  const writeJSON = (k,v,useSession=false)=>{ try{ (useSession?sessionStorage:localStorage).setItem(k, JSON.stringify(v)); }catch(e){} };
+    // ========== storage helpers ==========
+    const now = () => Date.now();
+    const secondsSince = ts => Math.floor((now() - ts) / 1000);
+    const readJSON = (k, useSession = false) => { try { const s = (useSession ? sessionStorage : localStorage).getItem(k); return s ? JSON.parse(s) : null; } catch (e) { return null; } };
+    const writeJSON = (k, v, useSession = false) => { try { (useSession ? sessionStorage : localStorage).setItem(k, JSON.stringify(v)); } catch (e) { } };
 
-  // session/dismiss/donated checks
-  let session = readJSON(config.sessionKey, true) || { showCount:0, lastShown:0, firstSeen: now() };
-  const hasDonated = !!localStorage.getItem(config.donatedKey);
-  const dismissed = (()=>{ const d=readJSON('crx_donate_dismiss'); return d && now()<d.expiry; })();
-  if(hasDonated || dismissed){
-    const container = document.getElementById('crx_floating_container');
-    if(container) container.style.display = 'none';
-  }
-
-  // show the upi id in UI (keeps it in sync)
-  if(upiTextEl) upiTextEl.textContent = UPI_ID;
-
-  // ========== utilities ==========
-  async function copyToClipboard(text){
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position='fixed'; ta.style.left='-9999px';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-      }
-      showToast('Copied to clipboard');
-      return true;
-    } catch (e) {
-      console.warn('copy failed', e);
-      showToast('Could not copy — please select and copy manually');
-      return false;
-    }
-  }
-
-  let toastTimer = null;
-  function showToast(txt, duration=2000){
-    if(!toast) return;
-    toast.textContent = txt;
-    toast.classList.add('visible');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(()=> { toast.classList.remove('visible'); }, duration);
-  }
-
-  // build a short message to share
-  function buildShareMessage(amount){
-    const amtText = amount ? `₹${amount}` : '';
-    const siteUrl = (typeof location !== 'undefined' && location.href) ? location.href : '';
-    let msg = `Support ${UPI_NAME}${ amtText ? ' with ' + amtText : '' }.\nUPI ID: ${UPI_ID}`;
-    if(siteUrl) msg += `\nPost: ${siteUrl}`;
-    return msg;
-  }
-
-  // ========== attach events ==========
-  // Primary button now only copies the UPI ID (per your request)
-  payNowBtn.addEventListener('click', async function(){
-    await copyToClipboard(UPI_ID);
-  });
-
-  // Share button: use Web Share API if available; otherwise copy fallback message
-  shareBtn.addEventListener('click', async function(){
-    const shareText = buildShareMessage();
-    if(navigator.share){
-      try {
-        await navigator.share({
-          title: `Support ${UPI_NAME}`,
-          text: shareText,
-          url: (typeof location !== 'undefined' && location.href) ? location.href : undefined
-        });
-        // navigator.share returns when user completes or cancels
-      } catch (err){
-        // if share fails (user cancels or other), fall back to copy
-        await copyToClipboard(shareText);
-      }
-    } else {
-      // fallback: copy prepared message to clipboard
-      await copyToClipboard(shareText);
-      showToast('Share message copied — paste where you like');
-    }
-  });
-
-  // Floating donate opens QR on desktop and attempts deep-link on mobile (unchanged polite behavior)
-  function buildUpiLink(amount){
-    const pa = encodeURIComponent(UPI_ID);
-    const pn = encodeURIComponent(UPI_NAME);
-    const am = (amount && amount !== '0') ? `&am=${encodeURIComponent(amount)}` : '';
-    return `upi://pay?pa=${pa}&pn=${pn}${am}&cu=INR`;
-  }
-  function openPayment(amount){
-    const upi = buildUpiLink(amount);
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if(isMobile){
-      window.location.href = upi;
-    } else {
-      window.open(QR_FALLBACK, '_blank', 'noopener');
-    }
-    try { if(window.gtag) gtag('event','donation_initiated',{value: amount || 0, method:'upi'}); } catch(e){}
-  }
-  floatingBtn.addEventListener('click', function(){ openPayment('50'); });
-
-  // Dismiss floating for dismissDays
-  dismissBtn.addEventListener('click', function(e){
-    e.stopPropagation();
-    const expiry = now() + config.dismissDays * 24 * 60 * 60 * 1000;
-    writeJSON('crx_donate_dismiss', { expiry }, false);
-    const container = document.getElementById('crx_floating_container');
-    if(container) container.style.display = 'none';
-  });
-
-  // clicking inline donate actions hides floating for session
-  document.addEventListener('click', function(e){
-    const target = e.target.closest && e.target.closest('.crx_btn, #crx_open_qr');
-    if(target){
+    // session/dismiss/donated checks
+    let session = readJSON(config.sessionKey, true) || { showCount: 0, lastShown: 0, firstSeen: now() };
+    const hasDonated = !!localStorage.getItem(config.donatedKey);
+    const dismissed = (() => { const d = readJSON('crx_donate_dismiss'); return d && now() < d.expiry; })();
+    if (hasDonated || dismissed) {
       const container = document.getElementById('crx_floating_container');
-      if(container) container.style.opacity = '0.0';
+      if (container) container.style.display = 'none';
     }
-  });
 
-  // ========== floating show logic ==========
-  function showFloating(){
-    if(hasDonated || dismissed) return;
-    const sinceLast = secondsSince(session.lastShown || 0);
-    if(session.showCount >= config.maxShowsPerSession) return;
-    if(session.lastShown && sinceLast < config.coolDownBetweenShows) return;
-    session.showCount = (session.showCount||0) + 1;
-    session.lastShown = now();
-    writeJSON(config.sessionKey, session, true);
-    floatingBtn.classList.add('visible');
-    floatingLabel.classList.add('visible');
-    const container = document.getElementById('crx_floating_container');
-    if(container) container.style.pointerEvents = 'auto';
-  }
-  function hideFloating(){
-    floatingBtn.classList.remove('visible');
-    floatingLabel.classList.remove('visible');
-    const container = document.getElementById('crx_floating_container');
-    if(container) container.style.pointerEvents = 'none';
-  }
+    // show the upi id in UI (keeps it in sync)
+    if (upiTextEl) upiTextEl.textContent = UPI_ID;
 
-  let timerStart = now();
-  setInterval(()=> {
-    const timeOnPage = Math.floor((now() - timerStart) / 1000);
-    const d=document.documentElement;
-    const scrollTop=(window.pageYOffset||d.scrollTop)-(d.clientTop||0);
-    const height=Math.max(d.scrollHeight-d.clientHeight,1);
-    const scrolledPercent = Math.min(100, Math.round(100*scrollTop/height));
-    if(!floatingBtn.classList.contains('visible')){
-      if(timeOnPage >= config.bigTimeSeconds && timeOnPage >= config.initialDelay) showFloating();
-      else if(timeOnPage >= config.initialDelay && scrolledPercent >= config.showOnScrollPercent) showFloating();
-    }
-  }, 1000);
-
-  // avoid obstructing footer
-  function avoidObstructing(){
-    const footer = document.querySelector('footer, .cookie-banner, .site-footer');
-    if(footer && footer.getBoundingClientRect){
-      const rect = footer.getBoundingClientRect();
-      if(rect.top < (window.innerHeight - 80)){
-        floatingLabel.style.bottom = (rect.height + 32) + 'px';
-      } else {
-        floatingLabel.style.bottom = '16px';
+    // ========== utilities ==========
+    async function copyToClipboard(text) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+          document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        }
+        showToast('Copied to clipboard');
+        return true;
+      } catch (e) {
+        console.warn('copy failed', e);
+        showToast('Could not copy — please select and copy manually');
+        return false;
       }
     }
-  }
-  window.addEventListener('resize', avoidObstructing);
-  setTimeout(avoidObstructing, 800);
 
-  // expose mark-donated
-  window.crxMarkDonated = function(){
-    localStorage.setItem(config.donatedKey, '1');
-    const frag = document.getElementById('crx_donate_fragment');
-    if(frag) frag.style.display = 'none';
-    const container = document.getElementById('crx_floating_container');
-    if(container) container.style.display = 'none';
-  };
+    let toastTimer = null;
+    function showToast(txt, duration = 2000) {
+      if (!toast) return;
+      toast.textContent = txt;
+      toast.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toast.classList.remove('visible'); }, duration);
+    }
 
-  // cleanup on unload
-  window.addEventListener('beforeunload', function(){ try{ sessionStorage.setItem(config.sessionKey, JSON.stringify(session)); }catch(e){} });
+    // build a short message to share
+    function buildShareMessage(amount) {
+      const amtText = amount ? `₹${amount}` : '';
+      const siteUrl = (typeof location !== 'undefined' && location.href) ? location.href : '';
+      let msg = `Support ${UPI_NAME}${amtText ? ' with ' + amtText : ''}.\nUPI ID: ${UPI_ID}`;
+      if (siteUrl) msg += `\nPost: ${siteUrl}`;
+      return msg;
+    }
 
-})();
+    // ========== attach events ==========
+    // Primary button now only copies the UPI ID (per your request)
+    payNowBtn.addEventListener('click', async function () {
+      await copyToClipboard(UPI_ID);
+    });
+
+    // Share button: use Web Share API if available; otherwise copy fallback message
+    shareBtn.addEventListener('click', async function () {
+      const shareText = buildShareMessage();
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `Support ${UPI_NAME}`,
+            text: shareText,
+            url: (typeof location !== 'undefined' && location.href) ? location.href : undefined
+          });
+          // navigator.share returns when user completes or cancels
+        } catch (err) {
+          // if share fails (user cancels or other), fall back to copy
+          await copyToClipboard(shareText);
+        }
+      } else {
+        // fallback: copy prepared message to clipboard
+        await copyToClipboard(shareText);
+        showToast('Share message copied — paste where you like');
+      }
+    });
+
+    // Floating donate opens QR on desktop and attempts deep-link on mobile (unchanged polite behavior)
+    function buildUpiLink(amount) {
+      const pa = encodeURIComponent(UPI_ID);
+      const pn = encodeURIComponent(UPI_NAME);
+      const am = (amount && amount !== '0') ? `&am=${encodeURIComponent(amount)}` : '';
+      return `upi://pay?pa=${pa}&pn=${pn}${am}&cu=INR`;
+    }
+    function openPayment(amount) {
+      const upi = buildUpiLink(amount);
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = upi;
+      } else {
+        window.open(QR_FALLBACK, '_blank', 'noopener');
+      }
+      try { if (window.gtag) gtag('event', 'donation_initiated', { value: amount || 0, method: 'upi' }); } catch (e) { }
+    }
+    floatingBtn.addEventListener('click', function () { openPayment('50'); });
+
+    // Dismiss floating for dismissDays
+    dismissBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const expiry = now() + config.dismissDays * 24 * 60 * 60 * 1000;
+      writeJSON('crx_donate_dismiss', { expiry }, false);
+      const container = document.getElementById('crx_floating_container');
+      if (container) container.style.display = 'none';
+    });
+
+    // clicking inline donate actions hides floating for session
+    document.addEventListener('click', function (e) {
+      const target = e.target.closest && e.target.closest('.crx_btn, #crx_open_qr');
+      if (target) {
+        const container = document.getElementById('crx_floating_container');
+        if (container) container.style.opacity = '0.0';
+      }
+    });
+
+    // ========== floating show logic ==========
+    function showFloating() {
+      if (hasDonated || dismissed) return;
+      const sinceLast = secondsSince(session.lastShown || 0);
+      if (session.showCount >= config.maxShowsPerSession) return;
+      if (session.lastShown && sinceLast < config.coolDownBetweenShows) return;
+      session.showCount = (session.showCount || 0) + 1;
+      session.lastShown = now();
+      writeJSON(config.sessionKey, session, true);
+      floatingBtn.classList.add('visible');
+      floatingLabel.classList.add('visible');
+      const container = document.getElementById('crx_floating_container');
+      if (container) container.style.pointerEvents = 'auto';
+    }
+    function hideFloating() {
+      floatingBtn.classList.remove('visible');
+      floatingLabel.classList.remove('visible');
+      const container = document.getElementById('crx_floating_container');
+      if (container) container.style.pointerEvents = 'none';
+    }
+
+    let timerStart = now();
+    setInterval(() => {
+      const timeOnPage = Math.floor((now() - timerStart) / 1000);
+      const d = document.documentElement;
+      const scrollTop = (window.pageYOffset || d.scrollTop) - (d.clientTop || 0);
+      const height = Math.max(d.scrollHeight - d.clientHeight, 1);
+      const scrolledPercent = Math.min(100, Math.round(100 * scrollTop / height));
+      if (!floatingBtn.classList.contains('visible')) {
+        if (timeOnPage >= config.bigTimeSeconds && timeOnPage >= config.initialDelay) showFloating();
+        else if (timeOnPage >= config.initialDelay && scrolledPercent >= config.showOnScrollPercent) showFloating();
+      }
+    }, 1000);
+
+    // avoid obstructing footer
+    function avoidObstructing() {
+      const footer = document.querySelector('footer, .cookie-banner, .site-footer');
+      if (footer && footer.getBoundingClientRect) {
+        const rect = footer.getBoundingClientRect();
+        if (rect.top < (window.innerHeight - 80)) {
+          floatingLabel.style.bottom = (rect.height + 32) + 'px';
+        } else {
+          floatingLabel.style.bottom = '16px';
+        }
+      }
+    }
+    window.addEventListener('resize', avoidObstructing);
+    setTimeout(avoidObstructing, 800);
+
+    // expose mark-donated
+    window.crxMarkDonated = function () {
+      localStorage.setItem(config.donatedKey, '1');
+      const frag = document.getElementById('crx_donate_fragment');
+      if (frag) frag.style.display = 'none';
+      const container = document.getElementById('crx_floating_container');
+      if (container) container.style.display = 'none';
+    };
+
+    // cleanup on unload
+    window.addEventListener('beforeunload', function () { try { sessionStorage.setItem(config.sessionKey, JSON.stringify(session)); } catch (e) { } });
+
+  })();
 </script>
