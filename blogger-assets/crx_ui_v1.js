@@ -163,6 +163,8 @@
               ${ price ? `<div class="crx_affiliate_price">₹ ${price}</div>` : "" }
               ${ rating ? `<div class="crx_affiliate_rating" aria-label="Rating: ${rating} out of 5">${_renderStars(rating)} <span style="margin-left:6px;font-weight:700;">${rating.toFixed(1)}</span></div>` : "" }
               <div class="crx_affiliate_cta">
+              <br><br>
+          
                 <a class="crx_btn crx_aff_buy" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="Buy ${title} on Amazon">Buy on Amazon</a>
               </div>
             </div>
