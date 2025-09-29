@@ -105,7 +105,11 @@
       const products = Array.isArray(data.products) ? data.products.slice() : [];
       if (products.length === 0) { tgt.innerHTML = ""; return; }
       // shuffle
-      for (let i = products.length - 1; i > 0; i--) {
+      const NOFPRODUCTSINDISPLAY = 3;
+      if (products.length < NOFPRODUCTSINDISPLAY) {
+        NOFPRODUCTSINDISPLAY = products.length;
+      }
+      for (let i = 0; i <= NOFPRODUCTSINDISPLAY - 1; i++) {
         const j = Math.floor(Math.random() * (i + 1));
         [products[i], products[j]] = [products[j], products[i]];
       }
@@ -165,8 +169,8 @@
         if (!a || a.closest('.crx-comment-enhanced')) return;
         const text = (a.textContent || a.innerText || '').trim();
         if (!text) return;
-        a.classList.add('crx_btn','crx_accent','crx_comment_btn');
-        if (!a.getAttribute('role')) a.setAttribute('role','button');
+        a.classList.add('crx_btn', 'crx_accent', 'crx_comment_btn');
+        if (!a.getAttribute('role')) a.setAttribute('role', 'button');
         if (!a.getAttribute('aria-label')) a.setAttribute('aria-label', text);
         const hasIcon = Array.from(a.childNodes).some(n =>
           (n.nodeType === Node.TEXT_NODE && (n.textContent || '').includes('✍')) ||
@@ -200,20 +204,20 @@
           a.classList.add('crx-comment-enhanced');
         }
       });
-    } catch(e){ console.warn('crx_enhanceCommentButtons error:',e); }
+    } catch (e) { console.warn('crx_enhanceCommentButtons error:', e); }
   }
 
   /* ---------------------------
      Auto-initialize on DOM ready
      --------------------------- */
   document.addEventListener('DOMContentLoaded', function () {
-    try { crx_enhanceCommentButtons(); } catch (e) {}
+    try { crx_enhanceCommentButtons(); } catch (e) { }
     if (window.MutationObserver) {
       const obs = new MutationObserver(() => {
         if (crx_enhanceCommentButtons._timer) clearTimeout(crx_enhanceCommentButtons._timer);
         crx_enhanceCommentButtons._timer = setTimeout(() => crx_enhanceCommentButtons(), 140);
       });
-      obs.observe(document.body, { childList:true, subtree:true });
+      obs.observe(document.body, { childList: true, subtree: true });
     }
   });
 
@@ -224,7 +228,7 @@
         const name = el.getAttribute("data-crx-widget");
         if (!name) return;
         if (name === "affiliate") {
-          const id = el.id || ("crx_aff_" + Math.random().toString(36).slice(2,9));
+          const id = el.id || ("crx_aff_" + Math.random().toString(36).slice(2, 9));
           el.id = id;
           await window.crx_loadAffiliates(id);
         } else if (name === "bio" || name === "donate") {
