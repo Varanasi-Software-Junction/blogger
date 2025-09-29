@@ -571,8 +571,7 @@
  /* COMPONENT: Floating Donate - BEGIN */
  /* Use aria-hidden to control accessibility & pointer events reliably */
  #crx_floating_donate {
-   position: fixed;
-   z-index: 9998;
+  
    --size:64px;
    width:var(--size);
    height:var(--size);
@@ -597,8 +596,7 @@
 
  #crx_floating_donate:focus { outline: none; box-shadow: var(--crx-focus); transform: scale(1.04); }
  #crx_floating_label {
-   position:fixed;
-   z-index:9997;
+    
    background:#fff;
    color:#071022;
    padding:8px 12px;
@@ -820,16 +818,14 @@
  /* keep position fixed & pointer events controlled via aria-hidden */
  html body #crx_floating_donate,
  body#layout #crx_floating_donate {
-   position: fixed;
-   z-index: 9998;
+   
    pointer-events: auto;
  }
 
  /* Keep floating label visible behavior consistent */
  html body #crx_floating_label,
  body#layout #crx_floating_label {
-   position: fixed;
-   z-index: 9997;
+   
  }
 
  /* ---------- 7) Recover some layout blocks that theme forced to display:block via !important ---------- */
