@@ -1,7 +1,9 @@
-/* ============================
+ /* ============================
    CRX Styles v1 — Blue / Saffron Theme
    Cleaned: removed all `!important` rules
    Updated: Visible Amazon disclaimer + 3D card border + stacked product layout
+   Converted container prefix to .crx-container
+   All major sections wrapped with COMPONENT markers
    ============================ */
 
 /* ---------- THEME VARIABLES ---------- */
@@ -46,8 +48,9 @@ body{
   -webkit-tap-highlight-color: transparent;
 }
 
-/* container */
-.crx_wrap { max-width: 1100px; margin: 0 auto; display: block; gap: 16px; }
+/* COMPONENT: Container - BEGIN */
+.crx-container { max-width: 1100px; margin: 0 auto; display: block; gap: 16px; padding: 0 12px; }
+/* COMPONENT: Container - END */
 
 /* headings */
 .crx_header h1 { margin: 0 0 .25rem 0; font-size: 22px; color: var(--crx-primary); }
@@ -55,6 +58,7 @@ body{
 .crx_small { font-size: 13px; color: var(--crx-muted); }
 
 /* generic card */
+/* COMPONENT: Card - BEGIN */
 .crx_card {
   background: var(--crx-card);
   padding: var(--crx-pad);
@@ -63,6 +67,7 @@ body{
   margin-bottom: 14px;
   border: 1px solid var(--crx-border);
 }
+/* COMPONENT: Card - END */
 
 /* subtle surface */
 .crx_surface {
@@ -72,6 +77,7 @@ body{
 }
 
 /* ---------- EDITOR & OUTPUT ---------- */
+/* COMPONENT: Editor / Output - BEGIN */
 .crx_editor-card { }
 .crx_output-card  { }
 
@@ -91,8 +97,10 @@ body{
 
 /* controls row */
 .crx_controls { display:flex; gap:.6rem; align-items:center; margin-top:.75rem; flex-wrap:wrap; }
+/* COMPONENT: Editor / Output - END */
 
 /* ---------- BUTTONS ---------- */
+/* COMPONENT: Buttons - BEGIN */
 .crx_btn {
   appearance: none;
   border: 1px solid rgba(11,18,32,0.06);
@@ -136,8 +144,10 @@ body{
 
 /* focus */
 .crx_btn:focus, .crx_input:focus, .crx_textarea:focus { outline: none; box-shadow: var(--crx-focus); border-color: var(--crx-primary); }
+/* COMPONENT: Buttons - END */
 
 /* ---------- OUTPUT / CODE BLOCKS ---------- */
+/* COMPONENT: Code Blocks - BEGIN */
 .crx_output {
   margin-top: .6rem;
   padding: 14px;
@@ -181,13 +191,14 @@ pre.crx_output::before, .crx_post-body pre::before {
   color: var(--crx-code-text);
   cursor: pointer;
 }
-
 /* small responsive tweak for code */
 @media (max-width:520px) {
   .crx_output { font-size: 12px; padding: 10px; max-height: 260px; }
 }
+/* COMPONENT: Code Blocks - END */
 
 /* ---------- POST BODY LINK & LIST STYLES ---------- */
+/* COMPONENT: Post Body - BEGIN */
 .crx_post-body a {
   color: var(--crx-accent);
   text-decoration: none;
@@ -238,8 +249,10 @@ pre.crx_output::before, .crx_post-body pre::before {
 .crx_post-body table { width: 100%; border-collapse: collapse; margin: 10px 0; }
 .crx_post-body th, .crx_post-body td { border: 1px solid rgba(11,18,32,0.06); padding: 8px 10px; text-align: left; }
 .crx_post-body thead th { background: rgba(11,94,215,0.06); }
+/* COMPONENT: Post Body - END */
 
 /* ---------- MCQs ---------- */
+/* COMPONENT: MCQs - BEGIN */
 .crx_mcqs { display:flex; flex-direction:column; gap:14px; margin:8px 0 18px; }
 .crx_mcq { padding:12px; border-radius:10px; border:1px solid rgba(11,18,32,0.04); background:var(--crx-card); box-shadow: 0 6px 16px rgba(11,94,215,0.04); }
 .crx_mcq_q { font-weight:800; margin-bottom:8px; color: var(--crx-primary-dark); }
@@ -248,8 +261,10 @@ pre.crx_output::before, .crx_post-body pre::before {
 .crx_mcq_opts li:hover { background: linear-gradient(180deg, #fff, #fbfdff); transform: translateY(-2px); }
 .crx_mcq_ans { background: rgba(11,18,32,0.04); padding:10px; border-radius:8px; color: var(--crx-muted); }
 .crx_mcq .crx_btn { margin-top:6px; }
+/* COMPONENT: MCQs - END */
 
 /* ---------- AVATAR ---------- */
+/* COMPONENT: Avatar - BEGIN */
 .crx_avatar{
   border-radius: 50%;
   height: 100px;
@@ -258,9 +273,10 @@ pre.crx_output::before, .crx_post-body pre::before {
   border: 3px solid rgba(11,94,215,0.08);
   box-shadow: 0 8px 18px rgba(11,94,215,0.06);
 }
+/* COMPONENT: Avatar - END */
 
 /* ---------- AFFILIATE CARD (REPLACED / ENHANCED) ---------- */
-
+/* COMPONENT: Affiliate - BEGIN */
 /* Visible, impossible-to-miss disclaimer banner above affiliate cards */
 .crx_affiliate_disclaimer {
   display: flex;
@@ -463,15 +479,10 @@ pre.crx_output::before, .crx_post-body pre::before {
   .crx_affiliate_meta { gap:10px; }
   .crx_affiliate_cta .crx_btn.crx_aff_buy { padding:12px; font-size:15px; }
 }
-
-/* reduced-motion preference: remove pulsing/animation */
-@media (prefers-reduced-motion: reduce) {
-  .crx_affiliate_card,
-  .crx_affiliate_card::before,
-  .crx_affiliate_disclaimer { transition: none; transform: none; }
-}
+/* COMPONENT: Affiliate - END */
 
 /* ---------- BIO WIDGET ---------- */
+/* COMPONENT: Bio - BEGIN */
 .crx_bio {
   display:flex;
   gap:14px;
@@ -497,8 +508,10 @@ pre.crx_output::before, .crx_post-body pre::before {
   gap:8px;
   align-items:center;
 }
+/* COMPONENT: Bio - END */
 
 /* ---------- DONATE WIDGET ---------- */
+/* COMPONENT: Donate - BEGIN */
 .crx_donate_card {
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
   max-width:520px;
@@ -535,8 +548,10 @@ pre.crx_output::before, .crx_post-body pre::before {
 
 .crx_small_hint { font-size:13px; color:var(--crx-muted); margin-top:8px; }
 .crx_donate_smallprint { font-size:12px; color:var(--crx-muted); margin-top:6px; }
+/* COMPONENT: Donate - END */
 
 /* ---------- FLOATING DONATE BUTTON ---------- */
+/* COMPONENT: Floating Donate - BEGIN */
 #crx_floating_donate {
   position: fixed;
   z-index: 9998;
@@ -579,8 +594,10 @@ pre.crx_output::before, .crx_post-body pre::before {
 
 #crx_floating_dismiss { position:absolute; right:-8px; top:-8px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,0.12); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center; border:0; }
 #crx_floating_donate:hover #crx_floating_dismiss { opacity:1; }
+/* COMPONENT: Floating Donate - END */
 
 /* ---------- VISUALIZER / OVERLAYS ---------- */
+/* COMPONENT: Visualizer - BEGIN */
 .crx_visual_container { position: relative; background: #fafafa; border-radius:10px; border: 1px dashed rgba(11,18,32,0.04); padding:10px; overflow-x:auto; }
 .crx_box {
   position:absolute;
@@ -605,8 +622,10 @@ pre.crx_output::before, .crx_post-body pre::before {
 .crx_overlay_left { background: rgba(11,94,215,0.06); border: 1px solid rgba(11,94,215,0.06); }
 .crx_overlay_right { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.06); }
 .crx_overlay_unsorted { background: rgba(250,204,21,0.06); border: 1px dashed rgba(250,204,21,0.08); }
+/* COMPONENT: Visualizer - END */
 
 /* ---------- POST FOOTER / TAGS ---------- */
+/* COMPONENT: Tags / Share - BEGIN */
 .crx_tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
 .crx_tag { background: linear-gradient(180deg, rgba(255,153,51,0.12), rgba(255,153,51,0.08)); color: var(--crx-primary-dark); padding:6px 10px; border-radius:999px; font-weight:700; font-size:13px; border:1px solid rgba(11,18,32,0.03); }
 
@@ -614,8 +633,10 @@ pre.crx_output::before, .crx_post-body pre::before {
 .crx_share { display:flex; gap:8px; margin-top:10px; }
 .crx_share .btn { border-radius:8px; padding:8px; background:#fff; border:1px solid rgba(11,18,32,0.04); display:inline-flex; align-items:center; justify-content:center; min-width:44px; height:44px; cursor:pointer; }
 .crx_share .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(11,94,215,0.06); }
+/* COMPONENT: Tags / Share - END */
 
 /* ---------- FOOTER ---------- */
+/* COMPONENT: Site Footer - BEGIN */
 .site_footer {
   background: var(--crx-primary-dark);
   color: #f4f7ff;
@@ -625,10 +646,12 @@ pre.crx_output::before, .crx_post-body pre::before {
   font-size: 14px;
   box-shadow: 0 8px 30px rgba(8,20,40,0.06);
 }
+/* COMPONENT: Site Footer - END */
 
 /* ---------- RESPONSIVE ---------- */
+/* COMPONENT: Responsive - BEGIN */
 @media (max-width:1100px) {
-  .crx_wrap { padding: 8px; margin: 8px auto; }
+  .crx-container { padding: 8px; margin: 8px auto; }
   .crx_editor { height: 360px; }
 }
 @media (max-width:720px){
@@ -644,7 +667,7 @@ pre.crx_output::before, .crx_post-body pre::before {
   * { transition: none; animation: none; }
   #crx_floating_donate { transition: none; }
 }
-
+/* COMPONENT: Responsive - END */
 
 /* =========================
    CRX — Patch overrides to neutralize theme !important rules
@@ -652,8 +675,8 @@ pre.crx_output::before, .crx_post-body pre::before {
    (No !important used — relies on selector specificity and cascade)
    ========================= */
 
+/* COMPONENT: Patch Overrides - BEGIN */
 /* ---------- 1) Contact form layout fixes (replace earlier !important rules) ---------- */
-/* Scoped to make sure CRX styles win on contact form layout */
 html body #contact .contact-form-widget,
 body#layout #contact .contact-form-widget {
   max-width: 100%;
@@ -718,7 +741,6 @@ body#layout #contact .contact-form-button-submit {
 }
 
 /* ---------- 4) Scoped CRX code block enforcement (replace previous !important code block rules) ---------- */
-/* Make sure CRX code blocks keep intended contrast without using !important */
 .crx_post-body .crx_output,
 .crx_post-body pre.crx_output,
 .crx_post-body pre,
@@ -812,24 +834,17 @@ body#layout .crx_donate_card {
   background: var(--crx-card);
   border-color: rgba(11,94,215,0.06);
 }
+/* COMPONENT: Patch Overrides - END */
 
-/* ---------- End of CRX patch overrides ----------
-   If you still see an element using old styles after pasting:
-   1) Tell me the page URL and a screenshot or the exact element (e.g., ".post-body a") and
-   2) I will generate a single extra selector (very targeted) to fix just that case.
-*/
-
-/* ===== CRX — Comments contrast fixes (wheat-on-wheat) =====
-   Paste at end of crx_styles_v1.css
-*/
-
+/* ===== CRX — Comments contrast fixes (wheat-on-wheat) ===== */
+/* COMPONENT: Comments - BEGIN */
 /* Container background & padding for comments area */
 .comment-thread,
 .comments,
 #comments,
 .widget .comments,
 .widget[id*="comments"] {
-  background: #ffffff;               /* white card background */
+  background: #ffffff;
   border-radius: 10px;
   padding: 12px 14px;
   border: 1px solid rgba(11,18,32,0.04);
@@ -843,7 +858,7 @@ body#layout .crx_donate_card {
 .comment-body,
 #comments .comment,
 .widget .comment {
-  color: #0b122a;                    /* dark navy text for high contrast */
+  color: #0b122a;
   background: transparent;
   margin: 10px 0;
   line-height: 1.55;
@@ -920,9 +935,10 @@ input#comment-url,
   .comment, .comment-item { font-size: 15px; }
   .comment-author { font-size: 15px; }
 }
-/* End of CRX comments contrast fixes */
+/* COMPONENT: Comments - END */
 
 /* ===== CRX — Stylish Post a Comment button ===== */
+/* COMPONENT: Comment Button - BEGIN */
 #comments a.comment-reply,
 #comments a.comment-link,
 #comments a[href*="comment"],
@@ -964,9 +980,13 @@ input#comment-url,
   transform: translateY(0);
   box-shadow: 0 4px 12px rgba(11,94,215,0.18);
 }
-/* End of Stylish Post a Comment button */
+/* COMPONENT: Comment Button - END */
+
+/* small embed helper */
 .crx_dartpadembed{
-  overflow: scroll;
+  overflow: auto;
   width:100%;
   height:500px;
 }
+
+/* End of file */
