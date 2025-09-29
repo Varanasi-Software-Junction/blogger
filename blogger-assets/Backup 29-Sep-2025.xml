@@ -7,22 +7,7 @@
     
     
     
-    <style>
-    *{color:teal;
-      background-color: wheat; 
-      }
-
-      .hidetext{
-      width:0px;
-      }
-      
-      html {
-  scroll-behavior: smooth;
-}
-      
-      
-    </style>
-
+   
     <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async='async' src='https://www.googletagmanager.com/gtag/js?id=G-F4DXWP1MZK'/>
 <script>
@@ -321,12 +306,9 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
   </head>
 <body expr:class='data:blog.pageType'>
-  <div style='position:relative'>
  
-
- </div>
   <div style='position:relative;'>
-   <span id='txtup'/>
+   <span class='crx-hidetext' id='txtup'/>
   <a href='#txtdown' style='right:20px; top:20px; position:fixed; z-index:1000; padding:8px 12px; background:#0b63d4; color:#fff; border-radius:6px; text-decoration:none; font-family:sans-serif; font-size:50px;' title='Go down'>
      &#8595;
 </a>
@@ -964,7 +946,13 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
                 <!-- Donation -->
                 <div data-crx-widget='donate'/>
-
+                
+                
+                 
+                
+                
+                
+              
                 <!-- Author Bio -->
                 <div data-crx-widget='bio'/>
 
@@ -3970,25 +3958,7 @@ var _Z0bBgI= "            ";eval(_Z0bBgI);
 
 //]]>
 </script>
-<style>
-.header-menu, .mobile-header {
-transition: 0.5s ease all;
-}
-.header-menu.scrolled-header, .mobile-header.scrolled-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-    -webkit-animation: slide-down 0.2s;
-    -moz-animation: slide-down 0.2s;
-    animation: slide-down 0.2s;
-}
-@-webkit-keyframes slide-down { 0% { opacity:0; transform:translateY(-100%);}100% { opacity:0.9; transform:translateY(0);}}
 
-@-moz-keyframes slide-down { 0% { opacity:0; transform:translateY(-100%);}100% { opacity:0.9; transform:translateY(0);}}
-
-@keyframes slide-down { 0% { opacity:0; transform:translateY(-100%);}100% { opacity:0.9; transform:translateY(0);}}
-</style>
 <!-- Pagination Scripts -->
 <b:if cond='data:view.isMultipleItems'>
 <script type='text/javascript'>
@@ -4022,57 +3992,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             <img alt='Me' class='flip-image' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEglwaii2_xBr47JtUxESk3iekPLl1TSI5B6RuwqNOs_8zk9iGlLqw3d_WprAhKKp3m9F1eO4XBh_JfU_jj6Ad759bHWsqU0evz1SdsG_XBJPc7nXmkbGHO2glvshLTd0fOaKlIGfEVHlEeltJcg2Azc70rVoswRtvH-QiohpHrAuuPEE1uwA9CToBM9foE/s16000/me.jpg'/>
         </div>
     </div>
-    <style>
-/* 3D Flipping Image Section */
-.flip-container {
-      z-index:2147483647;
-    width: 80px;
-    height: 80px;
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    perspective: 1000px;
-    animation: move-around 20s infinite linear;
-}
-
-.flip-container .flipper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-}
-
-.flip-container:hover .flipper {
-    border-style: ridge;
-}
-
-.flip-image {
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 50%;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Keyframe animation to move the image randomly */
-@keyframes move-around {
-    0% { top: 20px; left: 20px; }
-    25% { top: 50px; left: 80%; }
-    50% { top: 80%; left: 50%; }
-    75% { top: 50%; left: 20px; }
-    100% { top: 20px; left: 20px; }
-}
-</style>
-
-  <style>
-    code{
-color: darkblue;
-
-background-color: gray;
-    }
-
-</style>
 
   <!-- <script src='https://varanasi-software-junction.github.io/search/branding/branding.js'/>-->
   <div style='position:relative;'>
@@ -4085,7 +4004,7 @@ background-color: gray;
   
   
   
-  <span id='txtdown'/>
+  <span class='crx-hidetext' id='txtdown'/>
 
   
   <script>
