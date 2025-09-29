@@ -950,6 +950,7 @@ input#comment-url,
   align-items: center;
   justify-content: center;
   padding: 10px 18px;
+  display: inline-block;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 700;
