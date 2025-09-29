@@ -169,8 +169,7 @@
         const ta = document.createElement('textarea');
         ta.value = text;
         ta.setAttribute('readonly','');
-        ta.style.position='fixed';
-        ta.style.left='-9999px';
+         
         document.body.appendChild(ta);
         ta.select();
         ta.setSelectionRange(0, ta.value.length);
