@@ -63,8 +63,7 @@
         const ta = document.createElement("textarea");
         ta.value = text;
         ta.setAttribute("aria-hidden", "true");
-        ta.style.position = "fixed";
-        ta.style.left = "-9999px";
+         
         document.body.appendChild(ta);
         ta.select();
         document.execCommand("copy");
@@ -131,7 +130,7 @@
             container.style.position = 'relative';
           }
           // style for top-right placement (keeps look consistent even if CSS misses absolute rules)
-          btn.style.position = 'absolute';
+          // btn.style.position = 'absolute';
           btn.style.top = '8px';
           btn.style.right = '8px';
           btn.style.zIndex = '2';
@@ -178,12 +177,7 @@
             </div>
             <div style="flex:1;">
               <div class="crx_donate_title" style="font-weight:800;color:#084298;font-size:16px;">Support Learning Sutras</div>
-              <div class="crx_donate_desc" style="color:#6b7280;margin-top:6px;font-size:14px;">If my tutorials helped you, a small donation keeps them coming.</div>
-              <div class="crx_action_row" style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
-                <button class="crx_preset">₹50</button>
-                <button class="crx_preset">₹100</button>
-                <a class="crx_open_qr" href="${BASE}/crx_donate.html" target="_blank" rel="noopener">Open QR</a>
-              </div>
+                
               <div class="crx_donate_smallprint" style="font-size:12px;color:#6b7280;margin-top:6px;">Thanks — Champak Roy</div>
             </div>
           </div>

@@ -947,6 +947,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                 <!-- START: CRX placeholders (added) -->
                 <!-- Affiliate products -->
                 <div data-crx-widget='affiliate' id='crx_affiliate_block'/>
+                
 
                 <!-- Donation -->
                 
