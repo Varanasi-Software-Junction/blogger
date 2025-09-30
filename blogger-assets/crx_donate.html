@@ -1,1 +1,184 @@
-<h1>Donate Button</h1>
+<!-- crx_donate.html
+     Self-contained fragment for CRX donate widget.
+     Host at: https://.../crx_donate.html
+-->
+<div class="crx_donate_card" id="crx-donate-gadget"
+     data-crx-config='{"upi":"champaksworld-1@hdfcbank","name":"Champak Roy","qr":"https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg","title":"Support Learning Sutras — small donations, big impact","desc":"If this post helped you, please consider supporting my writing. Copy the UPI ID or open the QR — thank you ❤️"}'
+     role="region" aria-label="Donate widget — Support this blog">
+
+  <div class="crx_donate_qr" aria-hidden="false" id="crx-donate-qr" style="flex-shrink:0">
+    <img src="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
+         alt="Donate QR code" id="crx-donate-qr-img" style="width:100%;height:100%;object-fit:cover;border-radius:8px" />
+  </div>
+
+  <div style="flex:1;min-width:0;">
+    <div class="crx_donate_title" id="crx-donate-title">Support Learning Sutras — small donations, big impact</div>
+    <div class="crx_donate_desc" id="crx-donate-desc" style="margin-top:6px">
+      If this post helped you, please consider supporting my writing. Copy the UPI ID or open the QR — thank you ❤️
+    </div>
+
+    <div class="crx_action_row" style="margin-top:10px; align-items:center; gap:8px; flex-wrap:wrap;">
+      <button class="crx_btn small crx_accent" id="crx-copy-upi" type="button" aria-label="Copy UPI ID">Copy UPI</button>
+      <a class="crx_btn small crx_accent crx_open_qr" id="crx-open-qr"
+         href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
+         target="_blank" rel="noopener noreferrer nofollow" aria-label="Open QR in new tab">Show QR</a>
+      <button class="crx_btn small crx_accent" id="crx-share" type="button" aria-label="Share donation details">Share</button>
+    </div>
+
+    <div class="crx_small_hint" style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <div style="font-weight:700;color:#0b63d4">UPI ID</div>
+      <div id="crx-upi" style="background:#fff;padding:6px 8px;border-radius:8px;border:1px solid rgba(11,18,32,0.06);font-weight:700;overflow:auto;min-width:0">champaksworld-1@hdfcbank</div>
+    </div>
+
+    <div class="crx_donate_smallprint" style="margin-top:6px;color:#6b7280;font-size:12px;">Thanks — Champak Roy</div>
+  </div>
+</div>
+
+<!-- toast (kept here so fragment is fully functional wherever it's inserted) -->
+<div id="crx-donate-toast" style="position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:100001;display:none;background:rgba(6,12,22,0.92);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700;font-size:13px;box-shadow:0 8px 24px rgba(6,12,22,0.24);"></div>
+
+<script>
+/* Inline donate widget script — safe, idempotent, no external deps.
+   If your global crx_ui_v1.js already handles donate widgets, you can remove this script.
+*/
+(function(){
+  try {
+    const root = document.getElementById('crx-donate-gadget');
+    if(!root) return;
+    // parse config (safe JSON parse)
+    let config = {};
+    try {
+      const raw = root.getAttribute('data-crx-config');
+      if(raw) config = JSON.parse(raw);
+    } catch(e){ console.warn('crx donate: invalid data-crx-config', e); }
+
+    // cached DOM refs
+    const qrImg = document.getElementById('crx-donate-qr-img');
+    const titleEl = document.getElementById('crx-donate-title');
+    const descEl = document.getElementById('crx-donate-desc');
+    const upiEl = document.getElementById('crx-upi');
+    const openQr = document.getElementById('crx-open-qr');
+    const copyBtn = document.getElementById('crx-copy-upi');
+    const shareBtn = document.getElementById('crx-share');
+    const toast = document.getElementById('crx-donate-toast');
+
+    // apply config values if present
+    if(config.qr) {
+      if(qrImg) qrImg.src = config.qr;
+      if(openQr) openQr.href = config.qr;
+    }
+    if(config.title && titleEl) titleEl.textContent = config.title;
+    if(config.desc && descEl) descEl.textContent = config.desc;
+    if(config.upi && upiEl) upiEl.textContent = config.upi;
+
+    // toast helper
+    function showToast(msg, ms = 1600){
+      try {
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        toast.style.opacity = '1';
+        clearTimeout(toast._t);
+        toast._t = setTimeout(()=> {
+          toast.style.opacity = '0';
+          toast.style.display = 'none';
+        }, ms);
+      } catch(e){ console.warn(e); }
+    }
+
+    // robust copy helper
+    async function copyText(text){
+      if(!text) return false;
+      // prefer navigator.clipboard
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        try { await navigator.clipboard.writeText(text); return true; } catch(e){ /* fallback below */ }
+      }
+      // legacy execCommand fallback
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly','');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.style.top = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, ta.value.length);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return !!ok;
+      } catch(e){ return false; }
+    }
+
+    // Copy button behaviour
+    if(copyBtn){
+      copyBtn.addEventListener('click', async function(){
+        const text = (upiEl && upiEl.textContent) ? upiEl.textContent.trim() : (config.upi || '');
+        const ok = await copyText(text);
+        if(ok) showToast('UPI copied to clipboard');
+        else {
+          showToast('Copy failed — select & copy');
+          // attempt to help the user select the UPI
+          try {
+            const r = document.createRange();
+            r.selectNodeContents(upiEl);
+            const s = window.getSelection();
+            s.removeAllRanges();
+            s.addRange(r);
+          } catch(e){}
+        }
+      });
+    }
+
+    // Open QR: anchor already opens image in new tab; add micro-toast
+    if(openQr){
+      openQr.addEventListener('click', function(){
+        showToast('Opening QR — scan or save');
+      });
+    }
+
+    // Share button: use Web Share API when available, else copy fallback
+    if(shareBtn){
+      shareBtn.addEventListener('click', async function(){
+        const pageUrl = (typeof location !== 'undefined' && location.href) ? location.href : '';
+        const qrUrl = (config.qr) ? config.qr : (qrImg && qrImg.src ? qrImg.src : '');
+        const upiText = (upiEl && upiEl.textContent) ? upiEl.textContent.trim() : (config.upi || '');
+        const title = config.title || 'Support';
+        const shareText = `${title}\nSupport ${config.name || ''}\nUPI: ${upiText}\nQR: ${qrUrl}${pageUrl ? `\nPost: ${pageUrl}` : ''}`;
+
+        if(navigator.share){
+          try {
+            // include url for preview where supported
+            await navigator.share({ title: title, text: shareText, url: qrUrl || pageUrl || undefined });
+            showToast('Share sheet opened');
+            return;
+          } catch(e){
+            console.warn('navigator.share failed', e);
+            // fall through to copy fallback
+          }
+        }
+        const ok = await copyText(shareText);
+        if(ok) showToast('Share text copied — paste to share');
+        else {
+          showToast('Share failed — copy manually');
+          try {
+            const r = document.createRange();
+            r.selectNodeContents(upiEl);
+            const s = window.getSelection();
+            s.removeAllRanges();
+            s.addRange(r);
+          } catch(e){}
+        }
+      });
+    }
+
+    // Accessibility: make widget keyboard-focusable
+    try { root.setAttribute('tabindex','0'); } catch(e){}
+
+    // expose instance for debugging
+    root.crxDonateInstance = { config: config || {} };
+
+  } catch (err) {
+    console.warn('crx_donate fragment error:', err);
+  }
+})();
+</script>
