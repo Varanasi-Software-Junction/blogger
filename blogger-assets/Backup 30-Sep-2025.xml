@@ -303,8 +303,12 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
 
   <link href='https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css' rel='stylesheet'/>
-
+ 
   </head>
+  
+ 
+  
+  
 <body expr:class='data:blog.pageType'>
  
   <div style='position:relative;'>
@@ -945,10 +949,10 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                 <div data-crx-widget='affiliate' id='crx_affiliate_block'/>
 
                 <!-- Donation -->
-                <div data-crx-widget='donate'/>
                 
-                
-                 
+                <!-- Donation -->
+
+
                 
                 
                 
@@ -1988,93 +1992,7 @@ Usage: Add this as a gadget in your Blogger Layout -> Add a Gadget -> HTML/JavaS
        ➕
     </a>
   </div>
-</div>
-
-<style>
-/* Container */
-#floating-buttons {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 9999;
-  font-family: Arial, sans-serif;
-}
-
-/* Full-width button (Desktop) */
-.floating-btn {
-  display: inline-block;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 700;
-  text-decoration: none;
-  color: #fff;
-  box-shadow: 6px 6px 12px rgba(0,0,0,0.24);
-  transition: transform 0.18s ease, background-color 0.18s ease;
-  cursor: pointer;
-}
-
-/* Follow button color */
-.follow-btn { background-color: #00796b; }
-.follow-btn:hover { background-color: #00695c; transform: scale(1.06); }
-
-/* Round Icon (Mobile) */
-.floating-icon {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  font-size: 20px;
-  font-weight: 700;
-  text-decoration: none;
-  color: white;
-  background-color: #00796b;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.18);
-  transition: transform 0.18s ease, background-color 0.18s ease;
-}
-
-.floating-icon:hover { transform: scale(1.08); }
-
-/* Pulse animation */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
-}
-.floating-btn, .floating-icon {
-  animation: pulse 2.5s infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .floating-btn, .floating-icon { animation: none; transition: none; }
-}
-
-/* 📱 Mobile Responsive */
-@media (max-width: 600px) {
-  .desktop-btn { display: none !important; }
-  .mobile-btn { display: flex; }
-  .mobile-icons {
-    flex-direction: row;
-    gap: 12px;
-  }
-  #floating-buttons {
-    bottom: 15px;
-    right: 15px;
-    gap: 0;
-    align-items: flex-end;
-  }
-}
-
-/* 💻 Desktop */
-@media (min-width: 601px) {
-  .desktop-btn { display: inline-block; }
-  .mobile-btn { display: none; }
-}
-</style>]]></b:widget-setting>
+</div>]]></b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
   <b:include name='widget-title'/>
@@ -3926,12 +3844,7 @@ Paste in Layout → Add a Gadget → HTML/JavaScript
 </b:includable>
       </b:widget>
     </b:section>
-    <div style='text-indent:-99999px;'>
-
-    <div class='copyright-area'>Created By <a href='https://varanasisoftwarejunction.blogspot.com/' id='mycontent' rel='dofollow' title='Blogspot Templates'>Champak`s World</a>
-    </div>
-
-    </div>
+     
 
     <div class='copyright-area'> <a href='https://varanasisoftwarejunction.blogspot.com/' title='Champak`s World'><h3>Champak`s World</h3></a>
     </div>
@@ -3987,11 +3900,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   <div class='overlay'/>
   <div class='back-top' title='Back to Top'/>
 
-   <div class='flip-container'>
-        <div class='flipper'>
-            <img alt='Me' class='flip-image' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEglwaii2_xBr47JtUxESk3iekPLl1TSI5B6RuwqNOs_8zk9iGlLqw3d_WprAhKKp3m9F1eO4XBh_JfU_jj6Ad759bHWsqU0evz1SdsG_XBJPc7nXmkbGHO2glvshLTd0fOaKlIGfEVHlEeltJcg2Azc70rVoswRtvH-QiohpHrAuuPEE1uwA9CToBM9foE/s16000/me.jpg'/>
-        </div>
-    </div>
+    
 
   <!-- <script src='https://varanasi-software-junction.github.io/search/branding/branding.js'/>-->
   <div style='position:relative;'>
