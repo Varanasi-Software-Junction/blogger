@@ -1,3 +1,27 @@
+<script>
+   function showToast(msg, ms = 1600){
+      try {
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        toast.style.opacity = '1';
+        clearTimeout(toast._t);
+        toast._t = setTimeout(()=> {
+          toast.style.opacity = '0';
+          toast.style.display = 'none';
+        }, ms);
+      } catch(e){ console.warn(e); }
+    }
+
+  function doCopy()
+  {
+    alert("Copy");
+  }
+
+  function doShare()
+  {
+    alert("Share");
+  }
+  </script>
 <!-- crx_donate.html
      Self-contained fragment for CRX donate widget.
      Host at: https://.../crx_donate.html
@@ -18,11 +42,11 @@
     </div>
 
     <div class="crx_action_row" style="margin-top:10px; align-items:center; gap:8px; flex-wrap:wrap;">
-      <button  class="crx_btn small crx_accent" id="crx-copy-upi" type="button" aria-label="Copy UPI ID">Copy UPI</button>
+      <button onclick="doCopy()" class="crx_btn small crx_accent" id="crx-copy-upi" type="button" aria-label="Copy UPI ID">Copy UPI</button>
       <a class="crx_btn small crx_accent crx_open_qr" id="crx-open-qr"
          href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
          target="_blank" rel="noopener noreferrer nofollow" aria-label="Open QR in new tab">Show QR</a>
-      <button class="crx_btn small crx_accent" id="crx-share" type="button" aria-label="Share donation details">Share</button>
+      <button onclick="doShare()" class="crx_btn small crx_accent" id="crx-share" type="button" aria-label="Share donation details">Share</button>
     </div>
 
     <div class="crx_small_hint" style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -72,19 +96,7 @@
     if(config.upi && upiEl) upiEl.textContent = config.upi;
 
     // toast helper
-    function showToast(msg, ms = 1600){
-      try {
-        toast.textContent = msg;
-        toast.style.display = 'block';
-        toast.style.opacity = '1';
-        clearTimeout(toast._t);
-        toast._t = setTimeout(()=> {
-          toast.style.opacity = '0';
-          toast.style.display = 'none';
-        }, ms);
-      } catch(e){ console.warn(e); }
-    }
-
+   
     // robust copy helper
     async function copyText(text){
       if(!text) return false;
