@@ -18,7 +18,7 @@
     </div>
 
     <div class="crx_action_row" style="margin-top:10px; align-items:center; gap:8px; flex-wrap:wrap;">
-      <button onclick="alert()" class="crx_btn small crx_accent" id="crx-copy-upi" type="button" aria-label="Copy UPI ID">Copy UPI</button>
+      <button  class="crx_btn small crx_accent" id="crx-copy-upi" type="button" aria-label="Copy UPI ID">Copy UPI</button>
       <a class="crx_btn small crx_accent crx_open_qr" id="crx-open-qr"
          href="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg"
          target="_blank" rel="noopener noreferrer nofollow" aria-label="Open QR in new tab">Show QR</a>
@@ -111,6 +111,7 @@
 
     // Copy button behaviour
     if(copyBtn){
+      alert('Copy');
       copyBtn.addEventListener('click', async function(){
         const text = (upiEl && upiEl.textContent) ? upiEl.textContent.trim() : (config.upi || '');
         const ok = await copyText(text);
@@ -139,6 +140,7 @@
     // Share button: use Web Share API when available, else copy fallback
     if(shareBtn){
       shareBtn.addEventListener('click', async function(){
+        alert("Share");
         const pageUrl = (typeof location !== 'undefined' && location.href) ? location.href : '';
         const qrUrl = (config.qr) ? config.qr : (qrImg && qrImg.src ? qrImg.src : '');
         const upiText = (upiEl && upiEl.textContent) ? upiEl.textContent.trim() : (config.upi || '');
