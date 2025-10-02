@@ -449,3 +449,12 @@
 
 })(); // end IIFE
 // End of crx_ui_v1.js
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".crx_btn_toggle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      let box = btn.nextElementSibling;
+      box.classList.toggle("crx_show");
+    });
+  });
+});
