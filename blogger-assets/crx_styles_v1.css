@@ -156,61 +156,200 @@
   .crx_floating_right { display: none; }
 }
 
-/* ======================
-   Comment Enhancements
-   ====================== */
+ /* ===== CRX — Comments contrast fixes (wheat-on-wheat) ===== */
+ /* COMPONENT: Comments - BEGIN */
+ /* Container background & padding for comments area */
+ .comment-thread,
+ .comments,
+ #comments,
+ .widget .comments,
+ .widget[id*="comments"] {
+   background: #ffffff;
+   border-radius: 10px;
+   padding: 12px 14px;
+   border: 1px solid rgba(11,18,32,0.04);
+   box-shadow: 0 6px 18px rgba(8,20,40,0.04);
+ }
 
-.comment.crx_card {
-  margin: 14px 0;
-  padding: 14px;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+ /* Comment item (author + body) — readable text */
+ .comment,
+ .comment-item,
+ .comment-block,
+ .comment-body,
+ #comments .comment,
+ .widget .comment {
+   color: #0b122a;
+   background: transparent;
+   margin: 10px 0;
+   line-height: 1.55;
+   font-size: 14px;
+ }
+
+ /* Author name — use primary blue and slightly bolder */
+ .comment-author,
+ .commenter,
+ .comment-meta .user,
+ .widget .comment-author {
+   color: var(--crx-primary);
+   font-weight: 700;
+   font-size: 14px;
+ }
+
+ /* Timestamps / metadata — muted gray */
+ .comment-meta,
+ .comment-date,
+ .comment-time {
+   color: var(--crx-muted);
+   font-size: 12px;
+ }
+
+ /* Comment links (reply, edit, view) — saffron accent on hover */
+ .comment a,
+ .comment-item a,
+ .widget .comments a {
+   color: var(--crx-accent);
+   text-decoration: none;
+ }
+ .comment a:hover,
+ .comment-item a:hover,
+ .widget .comments a:hover {
+   color: var(--crx-primary-dark);
+   text-decoration: underline;
+ }
+
+ /* If comments use small 'wheat' background chips, force them to readable surface */
+ .comment .comment-content,
+ .comment .content,
+ .comment-text,
+ .widget .comment-body .comment-content {
+   background: transparent;
+   color: #0b122a;
+   padding: 6px 0;
+ }
+
+ /* Replies indentation */
+ .comment-thread .children,
+ .comment .children {
+   margin-left: 12px;
+   border-left: 2px solid rgba(11,94,215,0.04);
+   padding-left: 12px;
+ }
+
+ /* Ensure comment form fields are visible & readable */
+ #comment-editor,
+ textarea#comment,
+ input#comment-name,
+ input#comment-email,
+ input#comment-url,
+ .form-comment textarea,
+ .form-comment input {
+   background: #fff;
+   color: #071022;
+   border: 1px solid rgba(11,18,32,0.06);
+   border-radius: 8px;
+   padding: 8px;
+ }
+
+ /* Mobile tweaks */
+ @media (max-width:720px) {
+   .comment, .comment-item { font-size: 15px; }
+   .comment-author { font-size: 15px; }
+ }
+ /* COMPONENT: Comments - END */
+
+ /* ===== CRX — Stylish Post a Comment button ===== */
+ /* COMPONENT: Comment Button - BEGIN */
+ #comments a.comment-reply,
+ #comments a.comment-link,
+ #comments a[href*="comment"],
+ .comments .comment-actions a,
+ .post-comment-link,
+ #comment-post-message a,
+ #comments a {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   padding: 10px 18px;
+   margin: 10px;
+   /* display: block; */
+   flex-wrap: wrap;
+   border-radius: 10px;
+   font-size: 14px;
+   font-weight: 700;
+   text-decoration: none;
+   background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep));
+   color: #fff;
+   border: none;
+   box-shadow: 0 6px 16px rgba(230,140,60,0.25);
+   transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+ }
+
+ /* Hover / focus effect */
+ #comments a.comment-reply:hover,
+ #comments a.comment-link:hover,
+ #comments a[href*="comment"]:hover,
+ .comments .comment-actions a:hover,
+ .post-comment-link:hover,
+ #comment-post-message a:hover {
+   background: linear-gradient(180deg, var(--crx-primary), var(--crx-primary-dark));
+   box-shadow: 0 10px 24px rgba(11,94,215,0.25);
+   transform: translateY(-2px);
+   color: #fff;
+ }
+
+ /* Active click effect */
+ #comments a:active {
+   transform: translateY(0);
+   box-shadow: 0 4px 12px rgba(11,94,215,0.18);
+ }
+ /* COMPONENT: Comment Button - END */
+
+ /* small embed helper */
+ .crx_dartpadembed{
+   overflow: auto;
+   width:100%;
+   height:500px;
+ }
+
+ /* End of file */
+---
+
+### CSS (in your `crx_styles_v1.css`)
+```css
+.crx_section_title {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #0056b3;
+  border-left: 4px solid #007BFF;
+  padding-left: 8px;
+  margin: 20px 0 10px 0;
 }
 
-.comment-footer {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-.crx_btn_author {
-  font-size: 0.9rem;
-  background: yellowgreen;
-  color: #0f172a;
-  border: 1px solid rgba(14,165,233,0.2);
-  border-radius: 8px;
+.crx_btn_toggle {
+  display: inline-block;
+  background: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
   padding: 6px 12px;
+  margin-top: 6px;
   cursor: pointer;
   transition: 0.3s ease;
 }
-.crx_btn_author:hover {
-  background: yellowgreen;
-  border-color: #93c5fd;
-  color: #0b74de;
+
+.crx_btn_toggle:hover {
+  background: #0056b3;
 }
 
-.crx_comment_meta {
-  color: #6b7280;
-  font-size: 0.85rem;
+.crx_answer_box {
+  display: none;
+  margin: 5px 0;
+  padding: 8px;
+  background: #f9f9f9;
+  border-left: 3px solid #007BFF;
+  border-radius: 4px;
 }
 
-.crx_author_toast {
-  font-size: 0.95rem;
-  background: #0b74de;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1200;
-  box-shadow: 0 6px 18px rgba(2,6,23,0.15);
-  animation: fadeInOut 2s forwards;
-}
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translateY(10px); }
-  10% { opacity: 1; transform: translateY(0); }
-  90% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-10px); }
+.crx_answer_box.crx_show {
+  display: block;
 }
