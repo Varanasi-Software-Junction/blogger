@@ -380,9 +380,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
             <b:if cond='data:link.name == &quot;commentsSystem&quot;'>
               var commentsSystem = &quot;<data:link.target/>&quot;;
             </b:if>
-            <b:if cond='data:link.name == &quot;disqusShortname&quot;'>
-              var disqusShortname = &quot;<data:link.target/>&quot;;
-            </b:if>
+             
           </b:loop>
           //]]&gt;
           &lt;/script&gt;
@@ -932,11 +930,19 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
               </b:if>
             </b:includable>
             <b:includable id='postAuthor' var='post'>
-              <!-- Post Author -->
-              <b:if cond='data:allBylineItems.author'>
-                <span class='post-author'><a expr:href='data:post.author.profileUrl' expr:title='data:post.author.name' target='_blank'><data:post.author.name/></a></span>
-              </b:if>
-            </b:includable>
+  <span class='byline post-author vcard'>
+    <span class='post-author-label'><data:byline.label/></span>
+    <span class='fn'>
+      <b:if cond='data:post.author.profileUrl'>
+        <a class='g-profile' expr:href='data:post.author.profileUrl' rel='author' title='author profile'>
+          <span><data:post.author.name/></span>
+        </a>
+      <b:else/>
+        <span><data:post.author.name/></span>
+      </b:if>
+    </span>
+  </span>
+</b:includable>
             <b:includable id='postBody' var='post'>
               <!-- Post Body Entry Content-->
               <div class='post-body post-content'>
@@ -1024,7 +1030,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
               <!-- Comments -->
               <b:if cond='data:view.isSingleItem'>
                 <div class='blog-post-comments'>
-                  <b:include data='post' name='threadedCommentsDisqus'/>
+                   
                   <b:include data='post' name='commentPicker'/>
                 </div>
               </b:if>
@@ -1354,16 +1360,6 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                 </b:if>
               </section>
             </b:includable>
-            <b:includable id='threadedCommentsDisqus' var='post'>
-              <script type='text/javascript'>
-                var disqus_blogger_current_url = &quot;<data:blog.canonicalUrl/>&quot;;
-                if (!disqus_blogger_current_url.length) {
-                  disqus_blogger_current_url = &quot;<data:blog.url/>&quot;;
-                }
-                var disqus_blogger_homepage_url = &quot;<data:blog.homepageUrl/>&quot;;
-                var disqus_blogger_canonical_homepage_url = &quot;<data:blog.canonicalHomepageUrl/>&quot;;
-              </script>
-            </b:includable>
             <b:includable id='tooltipCss'>
   <!-- LINT.IfChange -->
   <style>
@@ -1414,298 +1410,6 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       <!-- Sidebar Wrapper -->
       <div id='sidebar-wrapper'>
         <b:section class='sidebar common-widget' id='sidebar1' name='Sidebar Right (A)' showaddelement='yes'>
-          <b:widget id='HTML5' locked='false' title='' type='HTML' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- Chatbot Gadget with Embedded Programming Dictionary -->
-<div id="crx-chatbot">
-  <div id="crx-chat-header">
-    🤖 Chatbot — Programming Dictionary
-  </div>
-  <div id="crx-chat-body" aria-live="polite"></div>
-  <div id="crx-chat-footer">
-    <input type="text" id="crx-chat-input" placeholder="Try: /define recursion or list categories" />
-    <button id="crx-chat-send">Send</button>
-  </div>
-</div>
-
-<style>
-  /* Responsive Chatbot Gadget — crx prefix */
-  #crx-chatbot {
-    width: 320px;
-    max-width: 100%;
-    height: 420px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,.25);
-    background: #fff;
-    font-family: system-ui,Segoe UI,Roboto,Arial;
-    overflow: hidden;
-    margin: 10px auto; /* centers in page/post */
-  }
-  #crx-chat-header {
-    background: linear-gradient(90deg,#0d6efd,#0069d9);
-    color: #fff;
-    padding: 10px;
-    font-weight: 600;
-    text-align: left;
-  }
-  #crx-chat-body {
-    flex: 1;
-    padding: 12px;
-    overflow: auto;
-    font-size: 14px;
-    background: linear-gradient(#ffffff,#fafcff);
-  }
-  #crx-chat-footer {
-    display: flex;
-    border-top: 1px solid #eee;
-    padding: 8px;
-  }
-  #crx-chat-input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    outline: none;
-  }
-  #crx-chat-send {
-    margin-left: 8px;
-    padding: 8px 12px;
-    background: #0d6efd;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  #crx-chat-send:hover { background:#0b5ed7; }
-  .crx-user-msg { margin: 8px 0; text-align: right; }
-  .crx-user-msg .bubble { display:inline-block; padding:8px 10px; background:#e9f5ff; border-radius:10px; max-width:80%; }
-  .crx-bot-msg { margin: 8px 0; text-align: left; }
-  .crx-bot-msg .bubble { display:inline-block; padding:8px 10px; background:#f1f3f5; border-radius:10px; max-width:100%; }
-  .crx-term { font-weight:700; color:#0645ad; }
-  .crx-cat { font-size:12px; color:#666; margin-top:4px; }
-  .crx-suggestion { display:inline-block; margin:6px 6px 0 0; padding:6px 8px; border-radius:6px; background:#eef6ff; cursor:pointer; font-size:13px; }
-  .crx-small { font-size:12px; color:#666; }
-
-  /* Mobile view: full width */
-  @media (max-width: 600px) {
-    #crx-chatbot {
-      width: 100%;
-      height: 400px;
-      border-radius: 0;
-    }
-  }
-</style>
-
-<script>
-(function(){
-  const body = document.getElementById("crx-chat-body");
-  const input = document.getElementById("crx-chat-input");
-  const send = document.getElementById("crx-chat-send");
-
-  // Embedded programming dictionary
-  const dictionary = {
-    "Basic Units": {
-      "Token": "Smallest unit of code.",
-      "Lexeme": "Characters forming a token.",
-      "Identifier": "Name for variables/functions.",
-      "Keyword": "Reserved word in the language.",
-      "Literal": "Fixed constant value.",
-      "Operator": "Symbol performing an operation."
-    },
-    "Compiler Phases": {
-      "Lexical Analysis": "Breaks code into tokens.",
-      "Parsing": "Checks grammar structure of tokens.",
-      "Syntax": "Language grammar rules.",
-      "Semantic Analysis": "Ensures meaning is correct."
-    },
-    "Code Constructs": {
-      "Expression": "Produces a value from literals/operators.",
-      "Statement": "A complete instruction in code."
-    },
-    "Data Structures in Compilers": {
-      "Symbol Table": "Stores identifiers with details.",
-      "Abstract Syntax Tree": "Tree form of code structure."
-    },
-    "Operator Categories": {
-      "Arithmetic Operators": "Math (+, -, *, /, %).",
-      "Relational Operators": "Comparisons (==, !=, >, <).",
-      "Logical Operators": "Boolean logic (&&, ||, !).",
-      "Assignment Operators": "Assign/update values (=, +=, -=).",
-      "Bitwise Operators": "Bit-level ops (&, |, ^, <<, >>).",
-      "Increment/Decrement Operators": "++ and --.",
-      "Ternary Operator": "Shorthand conditional (?:)."
-    },
-    "Execution Related": {
-      "Compiler": "Translates code to machine instructions.",
-      "Interpreter": "Runs code line by line.",
-      "Runtime": "Environment where program executes.",
-      "Virtual Machine": "Software-based execution machine.",
-      "Bytecode": "Intermediate code (e.g., Java bytecode).",
-      "Machine Code": "Binary instructions for CPU.",
-      "Linker": "Joins object files into executable.",
-      "Loader": "Loads program into memory."
-    },
-    "Memory & Errors": {
-      "Stack": "Stores function calls & locals.",
-      "Heap": "Stores dynamically allocated data.",
-      "Scope": "Region where variable is valid.",
-      "Syntax Error": "Grammar mistake in code.",
-      "Semantic Error": "Logical meaning mistake.",
-      "Runtime Error": "Error during execution."
-    },
-    "OOP (Object-Oriented Programming)": {
-      "Class": "Blueprint for creating objects.",
-      "Object": "Instance of a class.",
-      "Attribute": "Data/variable inside a class.",
-      "Method": "Function inside a class.",
-      "Constructor": "Special method to initialize objects.",
-      "Destructor": "Special method to clean up resources.",
-      "Inheritance": "Reusing properties/methods from another class.",
-      "Encapsulation": "Hiding data and providing controlled access.",
-      "Abstraction": "Showing essential features, hiding details.",
-      "Polymorphism": "Ability of methods/objects to take many forms.",
-      "Overloading": "Same method name with different parameters.",
-      "Overriding": "Subclass provides its own method implementation.",
-      "Interface": "Contract defining methods a class must implement.",
-      "Abstract Class": "Class that cannot be instantiated, only inherited."
-    },
-    "Data Structures & Algorithms (DSA)": {
-      "Array": "Collection of elements stored at contiguous memory locations.",
-      "Linked List": "Sequence of nodes where each node points to the next.",
-      "Stack": "LIFO (Last In, First Out) structure, uses push/pop.",
-      "Queue": "FIFO (First In, First Out) structure, uses enqueue/dequeue.",
-      "Deque": "Double-ended queue, insert/remove at both ends.",
-      "Tree": "Hierarchical structure with root and child nodes.",
-      "Binary Tree": "Tree where each node has max two children.",
-      "Binary Search Tree": "Binary tree with ordered nodes.",
-      "Heap": "Complete binary tree used for priority operations.",
-      "Graph": "Collection of nodes (vertices) connected by edges.",
-      "Hash Table": "Key-value storage using hash functions.",
-      "Recursion": "Function calling itself to solve subproblems.",
-      "Iteration": "Repetition using loops.",
-      "Sorting": "Arranging data (Bubble, Selection, Insertion, Quick, Merge, Heap sort).",
-      "Searching": "Finding elements (Linear Search, Binary Search).",
-      "Dynamic Programming": "Breaking problems into overlapping subproblems.",
-      "Greedy Algorithm": "Builds solution step by step, choosing locally optimal options.",
-      "Divide and Conquer": "Splits problem into smaller parts and solves recursively.",
-      "Big O Notation": "Describes algorithm’s time/space complexity."
-    }
-  };
-
-  // Helpers
-  function addMessage(text, from='bot', html=false){
-    const wrap = document.createElement('div');
-    wrap.className = from==='user' ? 'crx-user-msg' : 'crx-bot-msg';
-    const b = document.createElement('div');
-    b.className = 'bubble';
-    if(html) b.innerHTML = text; else b.textContent = text;
-    wrap.appendChild(b); body.appendChild(wrap);
-    body.scrollTop = body.scrollHeight;
-  }
-  function addBotHtml(html){ addMessage(html,'bot',true); }
-  function normalize(s){ return s.trim().toLowerCase(); }
-
-  // Search dictionary
-  function findTerm(term){
-    const t = normalize(term), results=[];
-    for(const cat in dictionary){
-      for(const key in dictionary[cat]){
-        if(key.toLowerCase()===t) results.push({cat,term:key,def:dictionary[cat][key]});
-      }
-    }
-    if(results.length===0){
-      for(const cat in dictionary){
-        for(const key in dictionary[cat]){
-          if(key.toLowerCase().includes(t)) results.push({cat,term:key,def:dictionary[cat][key]});
-        }
-      }
-    }
-    return results;
-  }
-  function listCategories(){ return Object.keys(dictionary); }
-  function listTerms(catName){
-    const c = Object.keys(dictionary).find(x=>x.toLowerCase()===catName.toLowerCase());
-    return c ? Object.keys(dictionary[c]).map(k=>({term:k,def:dictionary[c][k]})) : null;
-  }
-  function randomTerm(){
-    const cats=Object.keys(dictionary);
-    const c=cats[Math.floor(Math.random()*cats.length)];
-    const terms=Object.keys(dictionary[c]);
-    const t=terms[Math.floor(Math.random()*terms.length)];
-    return {cat:c,term:t,def:dictionary[c][t]};
-  }
-
-  // Handle user input
-  function handleUserText(text){
-    const raw=text.trim(), low=raw.toLowerCase();
-
-    if(low==='help'||low==='/help'){
-      addBotHtml("<div class='crx-small'>Commands:<br>• /define term<br>• list categories<br>• list category<br>• /random</div>");
-      return;
-    }
-    if(low==='/random'||low==='random'){
-      const r=randomTerm();
-      addBotHtml(`<div><span class='crx-term'>${r.term}</span><div class='crx-cat'>${r.cat}</div><div>${r.def}</div></div>`);
-      return;
-    }
-    if(low==='list categories'){
-      const cats=listCategories();
-      addBotHtml(`<div class='crx-small'>${cats.join('<br>')}</div>`);
-      return;
-    }
-    if(low.startsWith('list ')){
-      const cat=raw.slice(5);
-      const terms=listTerms(cat);
-      if(!terms){ addMessage("Category not found"); return; }
-      addBotHtml(`<div><strong>${cat}</strong><br>${terms.map(t=>t.term).join(', ')}</div>`);
-      return;
-    }
-    if(low.startsWith('/define ')||low.startsWith('define ')||low.startsWith('what is ')){
-      const term=raw.replace(/^(\/define|define|what is)\s+/i,'');
-      const res=findTerm(term);
-      if(res.length===0){ addMessage("Not found. Try list categories."); return; }
-      addBotHtml(res.map(r=>`<div><span class='crx-term'>${r.term}</span><div class='crx-cat'>${r.cat}</div><div>${r.def}</div></div>`).join(''));
-      return;
-    }
-    if(low.includes('hello')||low.includes('hi')){
-      addMessage("Hello! Try /define recursion or list categories");
-      return;
-    }
-    const fb=findTerm(raw);
-    if(fb.length>0){
-      addBotHtml(fb.map(r=>`<div><span class='crx-term'>${r.term}</span><div class='crx-cat'>${r.cat}</div><div>${r.def}</div></div>`).join(''));
-      return;
-    }
-    addMessage("Sorry, I couldn’t understand. Type help for commands.");
-  }
-
-  // Events
-  send.addEventListener('click',()=>{
-    const text=input.value.trim();
-    if(!text) return;
-    addMessage(text,'user');
-    input.value='';
-    handleUserText(text);
-  });
-  input.addEventListener('keypress',e=>{
-    if(e.key==='Enter') send.click();
-  });
-
-  // Greeting
-  addBotHtml("Hello! Ask me about programming terms. Try <code>/define recursion</code> or type <code>list categories</code>.");
-})();
-</script>]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
           <b:widget id='HTML4' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='content'><![CDATA[<!-- Saffron Themed Splash — shows only once per day -->
@@ -2199,200 +1903,6 @@ Usage: Add this as a gadget in your Blogger Layout -> Add a Gadget -> HTML/JavaS
   });
 })();
 </script>]]></b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-  <b:include name='widget-title'/>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-</b:includable>
-          </b:widget>
-          <b:widget id='HTML10' locked='false' title='' type='HTML' visible='true'>
-            <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- Python Editor Modal Widget -->
-<div style="text-align:center; margin:10px 8px; font-family:Arial, sans-serif;">
-  <style>
-    .editor-widget-wrap { text-align:center; margin:10px 8px; font-family:Arial, sans-serif; }
-    .editor-widget-btn {
-      display:inline-block; padding:10px 16px;
-      background:linear-gradient(135deg,#0b63d4,#1e90ff);
-      color:#fff; font-size:15px; font-weight:600;
-      border-radius:10px; text-decoration:none;
-      box-shadow:0 6px 14px rgba(11,99,212,0.18);
-      transition:transform .15s ease, box-shadow .15s ease;
-      cursor:pointer;
-    }
-    .editor-widget-btn:hover {
-      transform:translateY(-3px);
-      box-shadow:0 10px 22px rgba(11,99,212,0.22);
-    }
-    .editor-modal-overlay {
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.6);
-      display:none; align-items:center; justify-content:center;
-      z-index:99999; padding:20px;
-    }
-    .editor-modal {
-      width:100%; max-width:1100px;
-      height:80vh; max-height:900px;
-      background:#fff; border-radius:10px; overflow:hidden;
-      box-shadow:0 20px 60px rgba(0,0,0,0.4);
-      display:flex; flex-direction:column; position:relative;
-    }
-    .editor-modal-header {
-      display:flex; align-items:center; justify-content:space-between; gap:8px;
-      padding:10px 12px;
-      background:linear-gradient(90deg,#eef6ff,#f7fbff);
-      border-bottom:1px solid rgba(0,0,0,0.06);
-    }
-    .editor-modal-title { font-weight:700; font-size:15px; color:#0b63d4; }
-    .editor-modal-actions { display:flex; gap:8px; align-items:center; }
-    .modal-action-btn {
-      border:0; padding:6px 10px; border-radius:8px; font-weight:600;
-      background:#f1f5ff; cursor:pointer;
-    }
-    .modal-action-btn:hover { transform:translateY(-2px); }
-    .editor-modal-close {
-      background:#ff5e6c; color:#fff;
-      border:0; padding:8px 10px; border-radius:8px; cursor:pointer;
-    }
-    .editor-modal-body { flex:1; position:relative; background:#fff; min-height:200px; }
-    .editor-loader {
-      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      font-size:14px; color:#666; display:flex; align-items:center; gap:10px;
-      background:rgba(255,255,255,0.95); padding:10px 14px; border-radius:8px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.08);
-    }
-    .editor-spinner {
-      width:18px; height:18px; border-radius:50%;
-      border:3px solid rgba(11,99,212,0.18); border-top-color:#0b63d4;
-      animation:spin 0.9s linear infinite;
-    }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    .editor-modal iframe { width:100%; height:100%; border:0; display:block; }
-    @media (max-width:640px){
-      .editor-modal { height:92vh; max-width:98%; border-radius:8px; }
-      .editor-modal-header { padding:8px; }
-      .editor-widget-btn { padding:10px 12px; font-size:14px; }
-    }
-  </style>
-
-  <div class="editor-widget-wrap">
-    <a class="editor-widget-btn" id="openEditorBtn" role="button" aria-haspopup="dialog" aria-controls="editorModal">🚀 Open Python Editor</a>
-  </div>
-
-  <div class="editor-modal-overlay" id="editorModalOverlay" aria-hidden="true">
-    <div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editorModalLabel">
-      <div class="editor-modal-header">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="editor-modal-title" id="editorModalLabel">Python Editor</div>
-          <div style="font-size:12px;color:#666">Run Python in your browser (Pyodide)</div>
-        </div>
-        <div class="editor-modal-actions">
-          <button class="modal-action-btn" id="openInNewTabBtn" title="Open in new tab">↗ New tab</button>
-          <button class="modal-action-btn" id="toggleFullscreenBtn" title="Toggle fullscreen">⤢ Fullscreen</button>
-          <button class="editor-modal-close" id="closeEditorBtn" aria-label="Close editor">✕</button>
-        </div>
-      </div>
-      <div class="editor-modal-body" id="editorModalBody">
-        <div class="editor-loader" id="editorLoader" style="display:none;">
-          <div class="editor-spinner" aria-hidden="true"></div>
-          <div>Loading editor...</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-  (function(){
-    const editorUrl = "https://varanasisoftwarejunction.blogspot.com/2025/09/python-editor.html";
-    const openBtn = document.getElementById('openEditorBtn');
-    const overlay = document.getElementById('editorModalOverlay');
-    const closeBtn = document.getElementById('closeEditorBtn');
-    const bodyArea = document.getElementById('editorModalBody');
-    const loader = document.getElementById('editorLoader');
-    const newTabBtn = document.getElementById('openInNewTabBtn');
-    const fsBtn = document.getElementById('toggleFullscreenBtn');
-
-    let iframeEl = null, isOpen = false, isFullscreen = false;
-
-    function trapFocus(element) {
-      const focusable = element.querySelectorAll('a[href], button, textarea, input, iframe, [tabindex]:not([tabindex="-1"])');
-      if (!focusable.length) return;
-      const first = focusable[0], last = focusable[focusable.length - 1];
-      element.addEventListener('keydown', function (e) {
-        if (e.key === 'Tab') {
-          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-        }
-      });
-      setTimeout(()=> first.focus(), 50);
-    }
-
-    function openModal(){
-      if (isOpen) return;
-      isOpen = true;
-      overlay.style.display = "flex";
-      overlay.setAttribute('aria-hidden','false');
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-      if (!iframeEl) {
-        loader.style.display = 'flex';
-        iframeEl = document.createElement('iframe');
-        iframeEl.src = editorUrl + (editorUrl.indexOf('?') === -1 ? '?embed=1' : '&embed=1');
-        iframeEl.setAttribute('title','Python Editor');
-        iframeEl.onload = function(){ loader.style.display = 'none'; };
-        iframeEl.onerror = function(){
-          loader.style.display = 'none';
-          const err = document.createElement('div');
-          err.style.padding = '18px'; err.style.color = '#b00020';
-          err.innerText = 'Failed to load editor — opening in a new tab instead.';
-          bodyArea.appendChild(err);
-          window.open(editorUrl, '_blank');
-        };
-        bodyArea.appendChild(iframeEl);
-      }
-      trapFocus(overlay);
-    }
-
-    function closeModal(){
-      if (!isOpen) return;
-      isOpen = false;
-      overlay.style.display = "none";
-      overlay.setAttribute('aria-hidden','true');
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      if (isFullscreen) toggleFullscreen();
-      openBtn.focus();
-    }
-
-    function toggleFullscreen(){
-      const modal = overlay.querySelector('.editor-modal');
-      if (!modal) return;
-      if (!isFullscreen){
-        modal.style.width = '100%'; modal.style.height = '100vh';
-        modal.style.maxWidth = '100%'; modal.style.maxHeight = '100%';
-        modal.style.borderRadius = '0'; isFullscreen = true;
-        fsBtn.innerText = '⤡ Exit';
-      } else {
-        modal.style.width = ''; modal.style.height = '';
-        modal.style.maxWidth = ''; modal.style.maxHeight = '';
-        modal.style.borderRadius = ''; isFullscreen = false;
-        fsBtn.innerText = '⤢ Fullscreen';
-      }
-    }
-
-    openBtn.addEventListener('click', openModal);
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', e=>{ if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', e=>{ if (e.key === 'Escape') closeModal(); });
-    newTabBtn.addEventListener('click', ()=> window.open(editorUrl, '_blank'));
-    fsBtn.addEventListener('click', toggleFullscreen);
-    openBtn.title = "Open Python Editor (click or press)";
-    openBtn.addEventListener('keydown', e=>{ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); } });
-  })();
-  </script>
-</div>]]></b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
   <b:include name='widget-title'/>
