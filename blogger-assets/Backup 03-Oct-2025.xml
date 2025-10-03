@@ -312,10 +312,8 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 <body expr:class='data:blog.pageType'>
  
   <div style='position:relative;'>
-   <span class='crx-hidetext' id='txtup'/>
-  <a href='#txtdown' style='right:20px; top:20px; position:fixed; z-index:1000; padding:8px 12px; background:#0b63d4; color:#fff; border-radius:6px; text-decoration:none; font-family:sans-serif; font-size:50px;' title='Go down'>
-     &#8595;
-</a>
+    
+ 
   </div>
   <b:class cond='data:view.isHomepage' name='home'/>
   <b:class cond='data:view.isPage' name='item'/>
@@ -950,7 +948,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                 
 
                 <!-- Donation -->
-                
+                <div data-crx-widget='donate'/>
                 <!-- Donation -->
 
 
@@ -3906,15 +3904,13 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   <!-- <script src='https://varanasi-software-junction.github.io/search/branding/branding.js'/>-->
   <div style='position:relative;'>
    
-  <a href='#txtup' style='right:20px; bottom:20px; position:fixed; z-index:1000;            padding:8px 12px; background:#0b63d4; color:#fff;            border-radius:6px; text-decoration:none; font-family:sans-serif; font-size:50px;' title='Go up'>
-    &#8593;
-</a>
+   
 
   </div>
   
   
   
-  <span class='crx-hidetext' id='txtdown'/>
+  
 
   
   <script>
