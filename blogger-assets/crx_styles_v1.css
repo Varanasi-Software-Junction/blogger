@@ -1,4 +1,4 @@
-
+ 
 
 /* ===================================
    CRX Styles v1 – Full File
@@ -178,7 +178,7 @@
 
 .crx_btn_author {
   font-size: 0.9rem;
-  background: #f1f5f9;
+  background: yellowgreen;
   color: #0f172a;
   border: 1px solid rgba(14,165,233,0.2);
   border-radius: 8px;
@@ -187,7 +187,7 @@
   transition: 0.3s ease;
 }
 .crx_btn_author:hover {
-  background: #e6eefc;
+  background: yellowgreen;
   border-color: #93c5fd;
   color: #0b74de;
 }
