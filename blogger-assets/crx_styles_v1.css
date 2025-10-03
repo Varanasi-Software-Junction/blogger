@@ -190,7 +190,7 @@
  .commenter,
  .comment-meta .user,
  .widget .comment-author {
-   color: var(--crx-primary);
+   color:teal;/* var(--crx-primary);*/
    font-weight: 700;
    font-size: 14px;
  }
