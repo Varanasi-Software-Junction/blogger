@@ -1,3 +1,216 @@
-/* Minimal CSS example */
-.crx-post-wrap{background:#fff;padding:20px;border-radius:12px;}
-.crx-btn{padding:6px 12px;border:1px solid #ccc;border-radius:6px;text-decoration:none;color:#333;}
+
+
+/* ===================================
+   CRX Styles v1 – Full File
+   =================================== */
+
+/* Container */
+.crx-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+  line-height: 1.6;
+  color: #0f172a;
+}
+
+/* Section Title */
+.crx_section_title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #0056b3;
+  border-left: 4px solid #007BFF;
+  padding-left: 8px;
+  margin: 20px 0 10px;
+}
+
+/* Card */
+.crx_card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+  padding: 18px;
+  margin: 14px 0;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.crx_card_small { padding: 12px; margin: 10px 0; }
+.crx_card_post { padding: 22px; }
+
+/* Layout helpers */
+.crx_row { display: flex; gap: 14px; flex-wrap: wrap; }
+.crx_col { flex: 1 1 280px; min-width: 220px; }
+
+/* Code blocks */
+.crx_code_block {
+  background: #0f1724;
+  color: #e6eef6;
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.crx_pre {
+  background: #f7f9fb;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+/* Buttons */
+.crx_btn_primary {
+  background: #007BFF;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.crx_btn_primary:hover { background: #0056b3; }
+
+.crx_btn_secondary {
+  background: #f1f5f9;
+  color: #0f1724;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.crx_btn_secondary:hover { background: #e2e8f0; }
+
+.crx_btn_donate {
+  background: #ff7a59;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.crx_btn_donate:hover { background: #e65c3f; }
+
+.crx_btn_toggle {
+  background: #fff;
+  border: 1px solid #007BFF;
+  color: #007BFF;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.crx_btn_toggle:hover { background: #f1f5f9; }
+
+.crx_answer_box {
+  display: none;
+  margin-top: 10px;
+  padding: 10px;
+  background: #fbfcff;
+  border-left: 3px solid #007BFF;
+  border-radius: 6px;
+}
+.crx_answer_box.crx_show { display: block; }
+
+.crx_btn_copy {
+  margin-top: 8px;
+  background: #eef2ff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Footer */
+.crx_footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  font-size: 0.9rem;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Floating controls */
+.crx_floating { position: fixed; z-index: 999; display: flex; flex-direction: column; gap: 10px; }
+.crx_floating_left { left: 12px; top: 40%; transform: translateY(-50%); }
+.crx_floating_right { right: 12px; top: 50%; transform: translateY(-50%); }
+
+.crx_fab {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 14px rgba(2,6,23,0.12);
+  border: none;
+  cursor: pointer;
+}
+.crx_fab_facebook { background: #3b5998; color: #fff; }
+.crx_fab_twitter { background: #1da1f2; color: #fff; }
+.crx_fab_whatsapp { background: #25D366; color: #fff; }
+.crx_fab_up, .crx_fab_down { background: #0b74de; color: #fff; }
+
+/* Responsive adjustments */
+@media (max-width: 780px) {
+  .crx_fab { width: 40px; height: 40px; font-size: 14px; }
+  .crx_floating_left { display: none; }
+  .crx_card { padding: 14px; }
+}
+@media (max-width: 420px) {
+  .crx_floating_right { display: none; }
+}
+
+/* ======================
+   Comment Enhancements
+   ====================== */
+
+.comment.crx_card {
+  margin: 14px 0;
+  padding: 14px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.comment-footer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.crx_btn_author {
+  font-size: 0.9rem;
+  background: yellowgreen;
+  color: #0f172a;
+  border: 1px solid rgba(14,165,233,0.2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.crx_btn_author:hover {
+  background: yellowgreen;
+  border-color: #93c5fd;
+  color: #0b74de;
+}
+
+.crx_comment_meta {
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.crx_author_toast {
+  font-size: 0.95rem;
+  background: #0b74de;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1200;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.15);
+  animation: fadeInOut 2s forwards;
+}
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(10px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
