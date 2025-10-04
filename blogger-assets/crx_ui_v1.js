@@ -19,8 +19,8 @@
     });
   }
   function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-  function q(sel, ctx = document) { try { return (ctx || document).querySelector(sel); } catch (e) { return null; } }
-  function qAll(sel, ctx = document) { try { return Array.from((ctx || document).querySelectorAll(sel)); } catch (e) { return []; } }
+  function q(sel, ctx = document) { return (ctx || document).querySelector(sel); }
+  function qAll(sel, ctx = document) { return Array.from((ctx || document).querySelectorAll(sel)); }
 
   /* ---------------------------
      Toggle answer (used in MCQ Q/A show-hide)
@@ -36,34 +36,22 @@
   /* ---------------------------
      Copy code helper (button calls this)
      btnId: id of button (optional) - used to provide feedback
-     codeId: id of target code element (pre, code or .crx_output) or selector or element
+     codeId: id of target code element (pre, code or .crx_output)
      --------------------------- */
-  window.crx_copyCode = async function (btnId, codeIdOrEl) {
+  window.crx_copyCode = async function (btnId, codeId) {
     try {
-      // Accept element, id string, or selector
-      let el = null;
-      if (!codeIdOrEl) return;
-      if (typeof codeIdOrEl === "string") {
-        // try id first
-        el = document.getElementById(codeIdOrEl) || document.querySelector(codeIdOrEl) || null;
-      } else if (codeIdOrEl instanceof Element) {
-        el = codeIdOrEl;
-      }
-      // last resort: attempt to find any nearby .crx_output
-      if (!el) el = q('.crx_output') || q('pre.crx_output') || q('pre > code');
-
+      const codeEl = document.getElementById(codeId) || document.querySelector(`#${codeId}, .${codeId}`);
+      // fallback: if codeId is not an id, try to accept element directly
+      const target = (typeof codeEl === "string") ? document.getElementById(codeEl) : codeEl;
+      const el = target || document.getElementById(codeId) || q(`#${codeId}`) || q(`.${codeId}`);
       if (!el) return;
-
-      // prefer code/textContent for exactness
-      const text = (el.tagName && /^(PRE|CODE|TEXTAREA)$/i.test(el.tagName)) ? (el.textContent || el.innerText || "") : (el.innerText || el.textContent || "");
-      if (!text) return;
-
+      // get text - prefer code/textContent for exactness
+      const text = (el.tagName && /^(PRE|CODE|TEXTAREA)$/i.test(el.tagName)) ? (el.textContent || el.innerText) : (el.innerText || el.textContent || "");
       if (!navigator.clipboard) {
         // legacy fallback
         const ta = document.createElement("textarea");
         ta.value = text;
         ta.setAttribute("aria-hidden", "true");
-         
         document.body.appendChild(ta);
         ta.select();
         document.execCommand("copy");
@@ -71,21 +59,14 @@
       } else {
         await navigator.clipboard.writeText(text);
       }
-
-      // feedback on button (and announce to AT)
+      // feedback on button
       if (btnId) {
         const btn = document.getElementById(btnId);
         if (btn) {
           const orig = btn.innerText;
-          try {
-            btn.setAttribute("aria-live", "polite");
-            btn.innerText = "✅ Copied";
-            setTimeout(() => { btn.innerText = orig; btn.removeAttribute("aria-live"); }, 1200);
-          } catch (_) {
-            // best-effort only
-            btn.innerText = orig;
-            btn.removeAttribute("aria-live");
-          }
+          btn.innerText = "✅ Copied";
+          btn.setAttribute("aria-live", "polite");
+          setTimeout(() => { btn.innerText = orig; btn.removeAttribute("aria-live"); }, 1200);
         }
       }
     } catch (e) {
@@ -95,58 +76,39 @@
 
   /* ---------------------------
      Auto-add Copy buttons to code blocks (.crx_output or pre.crx_output)
-     - places a small button with a unique id (absolutely positioned top-right)
-     - button calls window.crx_copyCode(btnId, targetEl)
+     - places a small button with a unique id
+     - button calls window.crx_copyCode(btnId, targetId)
      --------------------------- */
   window.crx_initCopyButtons = function (root = document) {
     try {
-      const blocks = Array.from((root || document).querySelectorAll('.crx_output, pre.crx_output, .crx_post-body pre, .crx_post-body pre code, pre > code'));
-      blocks.forEach((blk) => {
-        try {
-          // canonicalize to outer container (if code inside pre, use pre)
-          let container = blk;
-          if (blk.tagName === 'CODE' && blk.parentElement && blk.parentElement.tagName === 'PRE') container = blk.parentElement;
-
-          // avoid duplication
-          if (container.querySelector('.crx_copybtn')) return;
-
-          // create unique ids
-          const targetId = container.id || ('crx_code_' + Math.random().toString(36).slice(2, 9));
-          container.id = targetId;
-          const btnId = 'crx_copybtn_' + Math.random().toString(36).slice(2, 9);
-
-          // create button
-          const btn = document.createElement('button');
-          btn.className = 'crx_copybtn';
-          btn.type = 'button';
-          btn.id = btnId;
-          btn.setAttribute('aria-label', 'Copy code to clipboard');
-          btn.innerText = 'Copy';
-
-          // add absolute placement so it doesn't shift layout (visuals driven by CSS)
-          // only apply if computed position is static; otherwise leave existing positioning
-          const cs = getComputedStyle(container);
-          if (cs.position === 'static' || !cs.position) {
-            container.style.position = 'relative';
-          }
-          // style for top-right placement (keeps look consistent even if CSS misses absolute rules)
-          // btn.style.position = 'absolute';
-          btn.style.top = '8px';
-          btn.style.right = '8px';
-          btn.style.zIndex = '2';
-
-          // attach click handler
-          btn.addEventListener('click', function (ev) {
-            ev.preventDefault();
-            try { window.crx_copyCode(btnId, container); } catch (e) { console.warn(e); }
-          });
-
-          // insert into container (append so markup order remains readable)
-          container.appendChild(btn);
-        } catch (innerErr) {
-          // continue with other blocks even if one fails
-          console.warn('crx_initCopyButtons block error:', innerErr);
-        }
+      // Select code blocks: prefer elements with class .crx_output or pre.crx_output or pre > code
+      const blocks = Array.from((root || document).querySelectorAll('.crx_output, pre.crx_output, .crx_post-body pre, .crx_post-body pre code'));
+      blocks.forEach((blk, idx) => {
+        // canonicalize to outer container (if code inside pre, use pre)
+        let container = blk;
+        if (blk.tagName === 'CODE' && blk.parentElement && blk.parentElement.tagName === 'PRE') container = blk.parentElement;
+        // avoid duplication
+        if (container.querySelector('.crx_copybtn')) return;
+        // create unique ids
+        const targetId = container.id || ('crx_code_' + Math.random().toString(36).slice(2, 9));
+        container.id = targetId;
+        const btnId = 'crx_copybtn_' + Math.random().toString(36).slice(2, 9);
+        // create button
+        const btn = document.createElement('button');
+        btn.className = 'crx_copybtn';
+        btn.type = 'button';
+        btn.id = btnId;
+        btn.setAttribute('aria-label', 'Copy code to clipboard');
+        btn.innerText = 'Copy';
+        // attach click handler
+        btn.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          try { window.crx_copyCode(btnId, targetId); } catch (e) { console.warn(e); }
+        });
+        // insert into container (top-right absolute styling assumed in CSS)
+        // prefer appending so layout doesn't shift; many designs show the button inside the pre
+        container.style.position = container.style.position || 'relative';
+        container.appendChild(btn);
       });
     } catch (e) {
       console.warn('crx_initCopyButtons error:', e);
@@ -171,8 +133,21 @@
       // Fallback: minimal donate widget if crx_donate.html fails
       if (name === "donate") {
         const fallback = `
-            
-           Fallback Donate Widget:
+          <div class="crx_donate_card" style="display:flex;gap:12px;align-items:center;padding:12px;border:1px solid rgba(11,94,215,0.06);border-radius:12px;background:#fff;box-shadow:0 6px 16px rgba(11,94,215,0.06);">
+            <div class="crx_donate_qr" style="width:100px;height:100px;border:1px solid rgba(11,94,215,0.06);border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <span style="font-size:40px;">🙏</span>
+            </div>
+            <div style="flex:1;">
+              <div class="crx_donate_title" style="font-weight:800;color:#084298;font-size:16px;">Support Learning Sutras</div>
+              <div class="crx_donate_desc" style="color:#6b7280;margin-top:6px;font-size:14px;">If my tutorials helped you, a small donation keeps them coming.</div>
+              <div class="crx_action_row" style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+                <button class="crx_preset">₹50</button>
+                <button class="crx_preset">₹100</button>
+                <a class="crx_open_qr" href="${BASE}/crx_donate.html" target="_blank" rel="noopener">Open QR</a>
+              </div>
+              <div class="crx_donate_smallprint" style="font-size:12px;color:#6b7280;margin-top:6px;">Thanks — Champak Roy</div>
+            </div>
+          </div>
         `;
         targetEl.innerHTML = fallback;
       }
@@ -220,54 +195,48 @@
       tgt.appendChild(wrap);
 
       chosen.forEach(p => {
-        try {
-          // normalize fields
-          const img = p.img ? escapeHtml(p.img) : (BASE + '/placeholder-120x80.png');
-          const title = p.title ? escapeHtml(p.title) : 'Product';
-          const desc = p.desc ? escapeHtml(p.desc) : '';
-          const urlEsc = p.url ? escapeHtml(p.url) : '#';
-          const rawPrice = (p.price !== undefined && p.price !== null) ? String(p.price).trim() : '';
-          // only prefix ₹ if price string doesn't already contain a currency symbol (rough check)
-          const priceStr = rawPrice && !/[^0-9.,\s]/.test(rawPrice) ? escapeHtml(rawPrice) : escapeHtml(rawPrice);
-          const ratingStr = (p.rating !== undefined && p.rating !== null) ? escapeHtml(String(p.rating)) : '';
-          const sponsored = p.sponsored ? escapeHtml(p.sponsored) : 'Sponsored';
+        // normalize fields
+        const img = p.img ? escapeHtml(p.img) : (BASE + '/placeholder-120x80.png');
+        const title = p.title ? escapeHtml(p.title) : 'Product';
+        const desc = p.desc ? escapeHtml(p.desc) : '';
+        const urlEsc = p.url ? escapeHtml(p.url) : '#';
+        const priceStr = (p.price !== undefined && p.price !== null) ? escapeHtml(String(p.price)) : '';
+        const ratingStr = (p.rating !== undefined && p.rating !== null) ? escapeHtml(String(p.rating)) : '';
+        const sponsored = p.sponsored ? escapeHtml(p.sponsored) : 'Sponsored';
 
-          // build card element matching CSS
-          const card = document.createElement('article');
-          card.className = 'crx_affiliate_card';
-          card.setAttribute('role', 'region');
-          card.setAttribute('aria-label', title);
+        // build card element matching CSS
+        const card = document.createElement('article');
+        card.className = 'crx_affiliate_card';
+        card.setAttribute('role', 'region');
+        card.setAttribute('aria-label', title);
 
-          // inner HTML structured to match CSS selectors
-          card.innerHTML = `
-            <div class="crx_affiliate_img_wrap" aria-hidden="true">
-              <img class="crx_affiliate_img" src="${img}" alt="${title}" loading="lazy" />
+        // inner HTML structured to match CSS selectors
+        card.innerHTML = `
+          <div class="crx_affiliate_img_wrap" aria-hidden="true">
+            <img class="crx_affiliate_img" src="${img}" alt="${title}" loading="lazy" />
+          </div>
+
+          <div class="crx_affiliate_content">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="crx_affiliate_title">${title}</div>
+              <div class="crx_aff_small_disclaimer" style="margin-left:auto;font-weight:700">${sponsored}</div>
+            </div>
+            <div class="crx_affiliate_desc">${desc}</div>
+
+            <div class="crx_affiliate_meta" aria-hidden="true">
+              ${ priceStr ? `<div class="crx_affiliate_price">₹${priceStr}</div>` : '' }
+              ${ ratingStr ? `<div class="crx_affiliate_rating">★ ${ratingStr}</div>` : '' }
             </div>
 
-            <div class="crx_affiliate_content">
-              <div style="display:flex;gap:8px;align-items:center;">
-                <div class="crx_affiliate_title">${title}</div>
-                <div class="crx_aff_small_disclaimer" style="margin-left:auto;font-weight:700">${sponsored}</div>
-              </div>
-              <div class="crx_affiliate_desc">${desc}</div>
+            <div class="crx_affiliate_footer" style="font-size:12px;color:#7a4f09;margin-top:8px;">*As an Amazon Associate I earn from qualifying purchases.</div>
+          </div>
 
-              <div class="crx_affiliate_meta" aria-hidden="true">
-                ${ priceStr ? `<div class="crx_affiliate_price">${/[^0-9]/.test(priceStr) ? priceStr : `₹${priceStr}`}</div>` : '' }
-                ${ ratingStr ? `<div class="crx_affiliate_rating">★ ${ratingStr}</div>` : '' }
-              </div>
-
-              <div class="crx_affiliate_footer" style="font-size:12px;color:#7a4f09;margin-top:8px;">*As an Amazon Associate I earn from qualifying purchases.</div>
-            </div>
-
-            <div class="crx_affiliate_cta" style="display:flex;flex-direction:column;gap:8px;min-width:160px;">
-              <a class="crx_btn crx_aff_buy" href="${urlEsc}" target="_blank" rel="sponsored noopener noreferrer" aria-label="Buy ${title} on Amazon">Buy on Amazon</a>
-              <a class="crx_btn price-link" href="${urlEsc}" target="_blank" rel="noopener noreferrer" aria-label="View ${title} details">View</a>
-            </div>
-          `;
-          wrap.appendChild(card);
-        } catch (cardErr) {
-          console.warn('crx_loadAffiliates card build error:', cardErr);
-        }
+          <div class="crx_affiliate_cta" style="display:flex;flex-direction:column;gap:8px;min-width:160px;">
+            <a class="crx_btn crx_aff_buy" href="${urlEsc}" target="_blank" rel="sponsored noopener noreferrer" aria-label="Buy ${title} on Amazon">Buy on Amazon</a>
+            <a class="crx_btn price-link" href="${urlEsc}" target="_blank" rel="noopener noreferrer" aria-label="View ${title} details">View</a>
+          </div>
+        `;
+        wrap.appendChild(card);
       });
 
       // After insertion, attach any copy buttons inside widgets (if present)
