@@ -1,0 +1,1 @@
+This is the CRX Blogger theme package. Upload files to your hosting and link accordingly.

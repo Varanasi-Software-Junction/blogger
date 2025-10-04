@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Linear Search — Teacher & Student Demo (With Voices)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      margin: 0;
+      padding: 24px;
+      background: #f7fbff;
+      color: #0f172a
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1fr 420px;
+      align-items: start
+    }
+
+    .stage {
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      min-height: 540px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px
+    }
+
+    .title {
+      font-size: 1.3rem;
+      font-weight: 700
+    }
+
+    .sub {
+      color: #6b7280;
+      font-size: 0.9rem
+    }
+
+    .actors {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start
+    }
+
+    .actor {
+      width: 50%;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start
+    }
+
+    .avatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 6px solid #fff;
+      box-shadow: 0 8px 18px rgba(2, 6, 23, 0.12)
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .actor .name {
+      font-weight: 700;
+      margin-bottom: 6px
+    }
+
+    .speech {
+      background: #fff;
+      padding: 10px 12px;
+      border-radius: 10px;
+      box-shadow: 0 6px 14px rgba(2, 6, 23, 0.05);
+      max-width: 100%
+    }
+
+    .visual {
+      margin-top: 8px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start
+    }
+
+    .array-wrap {
+      flex: 1
+    }
+
+    .array {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px;
+      min-height: 84px;
+      align-items: center
+    }
+
+    .box {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: transform .18s, background .18s, border-color .18s
+    }
+
+    .box.highlight {
+      background: #fbbf24;
+      border-color: #e6a313;
+      transform: translateY(-6px) scale(1.03)
+    }
+
+    .box.found {
+      background: #bbf7d0;
+      border-color: #16a34a;
+      transform: translateY(-6px) scale(1.04)
+    }
+
+    .status {
+      margin-top: 8px;
+      color: #6b7280
+    }
+
+    .panel {
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04)
+    }
+
+    pre.code {
+      background: #0b1220;
+      color: #e6eef8;
+      padding: 12px;
+      border-radius: 8px;
+      overflow: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+      font-size: 0.88rem;
+      max-height: 220px
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap
+    }
+
+    button.ctrl {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 0;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(2, 6, 23, 0.06)
+    }
+
+    .play {
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+      color: white
+    }
+
+    .step {
+      background: white;
+      border: 1px solid #e6eef8;
+      color: #0f172a
+    }
+
+    .reset {
+      background: #f1f5f9;
+      border: 1px solid #e6eef8
+    }
+
+    .small {
+      font-size: 0.88rem;
+      color: #6b7280
+    }
+
+    @media (max-width:980px) {
+      .page {
+        grid-template-columns: 1fr
+      }
+
+      .actor .avatar {
+        width: 64px;
+        height: 64px;
+        font-size: 0.85rem
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div style="max-width:1100px;margin:18px auto">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>Linear Search — Teacher & Student Demo</h2>
+      <div>
+        <label><input type="checkbox" id="enableVoice" checked> Enable speech</label>
+      </div>
+    </div>
+    <div class="page">
+      <section class="stage">
+        <div class="header">
+          <div>
+            <div class="title">Linear Search — Lesson (Teacher & Student)</div>
+            <div class="sub">Step-by-step demo with dialogue, animation and synthetic voices</div>
+          </div>
+          <div class="small">Duration: <strong id="duration">--</strong></div>
+        </div>
+
+        <div class="actors" aria-live="polite">
+          <div class="actor teacher" id="teacherPane">
+            <div class="avatar"><img id="teacherImg" src="assets/teacher.png" alt="Teacher photo"></div>
+            <div>
+              <div class="name">Anita (Teacher)</div>
+              <div id="teacherSpeech" class="speech">Hello everyone! Today we will learn Linear Search.</div>
+            </div>
+          </div>
+
+          <div class="actor student" id="studentPane">
+            <div class="avatar"><img id="studentImg" src="assets/student.png" alt="Student photo"></div>
+            <div>
+              <div class="name">Champak (Student)</div>
+              <div id="studentSpeech" class="speech">Sir, what exactly is linear search?</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="visual">
+          <div class="array-wrap">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <strong>Array Visualization</strong>
+              <div class="small">Array: <span id="arraySample">[12, 34, 7, 9, 21]</span></div>
+            </div>
+
+            <div id="array" class="array" role="list" aria-label="Array elements"></div>
+            <div class="status small" id="visualStatus">Ready</div>
+
+            <div class="controls">
+              <button id="playBtn" class="ctrl play">Play ▶</button>
+              <button id="pauseBtn" class="ctrl step" style="display:none">Pause ⏸</button>
+              <button id="stepBtn" class="ctrl step">Step →</button>
+              <button id="prevBtn" class="ctrl step">← Prev</button>
+              <button id="resetBtn" class="ctrl reset">Reset ⟲</button>
+              <label style="margin-left:8px" class="small">Speed:
+                <select id="speed" style="margin-left:6px;padding:6px;border-radius:6px;">
+                  <option value="900">Slow</option>
+                  <option value="600" selected>Normal</option>
+                  <option value="300">Fast</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <aside style="width:420px;display:flex;flex-direction:column;gap:12px;">
+            <div class="panel">
+              <strong>Pseudocode</strong>
+              <pre class="code" id="pseudocode">linearSearch(arr, key):
+    for i from 0 to length(arr) - 1:
+        if arr[i] == key:
+            return i
+    return -1
+              </pre>
+              <div class="small">Pseudocode will highlight while we step through the array.</div>
+            </div>
+
+            <div class="panel">
+              <strong>Code (Python)</strong>
+              <pre class="code" id="pycode">def linear_search(arr, key):
+    for i in range(len(arr)):
+        if arr[i] == key:
+            return i
+    return -1
+              </pre>
+              <div class="small">You can replace this with C / Java snippets as needed.</div>
+            </div>
+
+            <div class="panel">
+              <strong>Complexity</strong>
+              <div style="margin-top:8px">
+                <div><strong>Best case:</strong> O(1)</div>
+                <div><strong>Average case:</strong> O(n)</div>
+                <div><strong>Worst case:</strong> O(n)</div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section>
+        <div class="panel">
+          <strong>Lesson Script</strong>
+          <ol id="scriptList" style="margin-top:8px;padding-left:18px;color:var(--muted)"></ol>
+          <div style="margin-top:10px;display:flex;gap:8px;align-items:center;">
+            <label class="small">Auto-play steps:</label>
+            <input id="autoLoop" type="checkbox" checked style="transform:scale(1.1);margin-left:6px">
+            <div style="flex:1"></div>
+            <div class="small">Step <span id="stepNum">0</span> / <span id="stepTotal">0</span></div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:12px;">
+          <strong>Stage directions (camera & overlays)</strong>
+          <ul style="color:#6b7280; margin-top:8px">
+            <li>0:00 – Wide shot of both teacher and student. Title overlay: "Linear Search".</li>
+            <li>0:05 – Zoom slightly to teacher during definition. Overlay: "Definition".</li>
+            <li>0:20 – Cut to screen animation for array visualization; highlight elements as narrated.</li>
+            <li>0:48 – Close-up on student when they ask questions.</li>
+            <li>1:10 – Show code block; zoom to code. Overlay: "Implementation (Python)".</li>
+            <li>1:35 – Show complexity panel and summary overlay.</li>
+            <li>1:50 – Outro: Subscribe/Like/Share overlay; end wide shot.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Dialogue & steps
+    let arr = [12, 34, 7, 9, 21];
+    const steps = [
+      { type: 'speech', who: 'teacher', text: 'Hello everyone! Today we will learn Linear Search.' },
+      { type: 'speech', who: 'student', text: 'Sir, what exactly is linear search?' },
+      { type: 'speech', who: 'teacher', text: 'Linear search is also called sequential search. We check array elements one by one until we find the target.' },
+      { type: 'speech', who: 'teacher', text: 'Let us take an example. Array: [12, 34, 7, 9, 21]. We will search for 9.' },
+      { type: 'highlight', index: 0, note: 'Compare 12 with 9 — not equal.' },
+      { type: 'speech', who: 'student', text: 'First step: 12 is compared with 9 — not a match.' },
+      { type: 'highlight', index: 1, note: 'Compare 34 with 9 — not equal.' },
+      { type: 'speech', who: 'teacher', text: 'Next: 34 is compared — still not a match.' },
+      { type: 'highlight', index: 2, note: 'Compare 7 with 9 — not equal.' },
+      { type: 'speech', who: 'student', text: 'Then 7 is compared — not a match.' },
+      { type: 'highlight', index: 3, note: 'Compare 9 with 9 — match.' },
+      { type: 'found', index: 3, note: 'Found at index 3.' },
+      { type: 'speech', who: 'teacher', text: 'We found 9 at index 3. The search returns index 3.' },
+      { type: 'showCode', text: 'def linear_search(arr, key):\n    for i in range(len(arr)):\n        if arr[i] == key:\n            return i\n    return -1' },
+      { type: 'showComplexity', text: 'Best: O(1) if the item is first. Average: O(n). Worst: O(n).' },
+      { type: 'summary', text: 'Linear search works on both sorted and unsorted arrays. It is simple but not efficient for large datasets.' },
+      { type: 'speech', who: 'student', text: 'Will we learn Binary Search next?' },
+      { type: 'speech', who: 'teacher', text: 'Yes. In the next lesson we will learn Binary Search, which is faster for sorted arrays.' },
+      { type: 'speech', who: 'teacher', text: 'If you liked this lesson please like, share and subscribe.' }
+    ];
+
+    const teacherSpeech = document.getElementById('teacherSpeech');
+    const studentSpeech = document.getElementById('studentSpeech');
+    const arrayDiv = document.getElementById('array');
+    const arraySample = document.getElementById('arraySample');
+    const visualStatus = document.getElementById('visualStatus');
+    const playBtn = document.getElementById('playBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const stepBtn = document.getElementById('stepBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const speedSel = document.getElementById('speed');
+    const scriptList = document.getElementById('scriptList');
+    const stepNum = document.getElementById('stepNum');
+    const stepTotal = document.getElementById('stepTotal');
+    const enableVoice = document.getElementById('enableVoice');
+
+    let current = -1, playing = false, timer = null;
+
+    function renderArray(highlightIndex = null, foundIndex = null) {
+      arrayDiv.innerHTML = '';
+      arr.forEach((val, i) => {
+        const d = document.createElement('div');
+        d.className = 'box';
+        d.textContent = val;
+        if (i === highlightIndex) d.classList.add('highlight');
+        if (i === foundIndex) d.classList.add('found');
+        arrayDiv.appendChild(d);
+      });
+      arraySample.textContent = '[' + arr.join(', ') + ']';
+    }
+
+    function buildScriptList() {
+      scriptList.innerHTML = '';
+      steps.forEach((s, idx) => {
+        const li = document.createElement('li');
+        li.style.marginBottom = '6px';
+        li.style.color = '#6b7280';
+        const t = (s.type === 'speech') ? (s.who.toUpperCase() + ': ' + s.text) :
+          (s.type === 'highlight') ? 'Check index ' + s.index + ': ' + (s.note || '') :
+            (s.type === 'found') ? 'Found at index ' + s.index :
+              (s.type === 'showCode') ? 'Show code' : s.type;
+        li.textContent = t;
+        scriptList.appendChild(li);
+      });
+      stepTotal.textContent = steps.length;
+    }
+
+    function renderStep(i) {
+      if (i < 0) i = -1;
+      if (i >= steps.length) i = steps.length - 1;
+      current = i;
+      renderArray();
+      teacherSpeech.textContent = ' ';
+      studentSpeech.textContent = ' ';
+      Array.from(scriptList.children).forEach((li, idx) => {
+        li.style.fontWeight = (idx === i) ? '700' : '400';
+        li.style.color = (idx === i) ? '#0f172a' : '#6b7280';
+      });
+      stepNum.textContent = Math.max(0, i + 1);
+      if (i < 0) { visualStatus.textContent = 'Ready'; return; }
+      const s = steps[i];
+      switch (s.type) {
+        case 'speech':
+          if (s.who === 'teacher') teacherSpeech.textContent = s.text;
+          else studentSpeech.textContent = s.text;
+          visualStatus.textContent = s.who + ': ' + s.text;
+          if (enableVoice.checked) speak(s.text, s.who);
+          break;
+        case 'highlight':
+          renderArray(s.index, null);
+          visualStatus.textContent = s.note || ('Checking index ' + s.index);
+          break;
+        case 'found':
+          renderArray(s.index, s.index);
+          visualStatus.textContent = s.note || ('Found at index ' + s.index);
+          break;
+        case 'showCode':
+          document.getElementById('pycode').textContent = s.text.replace(/\n/g, '\n');
+          visualStatus.textContent = 'Code shown';
+          break;
+        case 'showComplexity':
+          visualStatus.textContent = s.text;
+          break;
+        case 'summary':
+          visualStatus.textContent = s.text;
+          break;
+      }
+    }
+
+    // Play controls
+    function play() {
+      if (playing) return;
+      playing = true; playBtn.style.display = 'none'; pauseBtn.style.display = 'inline-block';
+      scheduleNext();
+    }
+    function pause() { playing = false; playBtn.style.display = 'inline-block'; pauseBtn.style.display = 'none'; clearTimeout(timer); }
+    function scheduleNext() { clearTimeout(timer); if (!playing) return; let wait = parseInt(speedSel.value, 10); let next = current + 1; if (next >= steps.length) { pause(); return; } timer = setTimeout(() => { stepForward(); scheduleNext(); }, wait); }
+    function stepForward() { if (current < steps.length - 1) renderStep(current + 1); else pause(); }
+    function stepBackward() { if (current > -1) renderStep(current - 1); else renderStep(-1); }
+
+    playBtn.addEventListener('click', () => play());
+    pauseBtn.addEventListener('click', () => pause());
+    stepBtn.addEventListener('click', () => { pause(); stepForward(); });
+    prevBtn.addEventListener('click', () => { pause(); stepBackward(); });
+    resetBtn.addEventListener('click', () => { pause(); renderStep(-1); });
+    window.addEventListener('keydown', (e) => { if (e.key === ' ') { e.preventDefault(); if (playing) pause(); else play(); } if (e.key === 'ArrowRight') { pause(); stepForward(); } if (e.key === 'ArrowLeft') { pause(); stepBackward(); } });
+
+    buildScriptList();
+    renderArray();
+    renderStep(-1);
+
+    // Speech synthesis helpers: select voices aiming for female for Anita and male for Champak.
+    // Note: exact voice names vary by browser/OS. We pick best-effort by checking voice.lang and voice.name.
+    let voices = [];
+    function loadVoices() { voices = speechSynthesis.getVoices(); }
+    if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+
+    function chooseVoice(genderPreference) {
+      // genderPreference: 'female' or 'male'
+      const pref = genderPreference === 'female' ? ['female', 'F', 'Woman', 'Samantha', 'Google UK English Female', 'Google US English'] :
+        ['male', 'M', 'Man', 'Alex', 'Google UK English Male', 'Google US English'];
+      // try to find by name hints
+      for (const v of voices) {
+        const name = (v.name || '').toLowerCase();
+        const lang = (v.lang || '').toLowerCase();
+        for (const p of pref) {
+          if (name.includes(p.toLowerCase())) return v;
+        }
+      }
+      // fallback: prefer English voices if available
+      for (const v of voices) {
+        if (v.lang && v.lang.startsWith('en')) return v;
+      }
+      return voices[0] || null;
+    }
+
+    function speak(text, who) {
+      if (!('speechSynthesis' in window)) return;
+      const ut = new SpeechSynthesisUtterance(text);
+      // pick voice
+      const genderPref = (who === 'teacher') ? 'female' : 'male';
+      const v = chooseVoice(genderPref);
+      if (v) ut.voice = v;
+      ut.rate = 1;
+      ut.pitch = (genderPref === 'female') ? 1.05 : 0.95;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(ut);
+    }
+
+    // Accessibility: allow clicking a script item to jump
+    document.getElementById('scriptList').addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      const idx = Array.from(document.getElementById('scriptList').children).indexOf(li);
+      if (idx >= 0) { pause(); renderStep(idx); }
+    });
+  </script>
+</body>
+
+</html>
