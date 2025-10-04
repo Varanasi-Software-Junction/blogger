@@ -1,4 +1,4 @@
-/* crx_ui_v1.js
+/*     crx_ui_v1.js
    CRX UI loader & utilities v1 (UPDATED)
    - Syncs class names with crx_styles_v1.css (affiliate card markup, container prefix)
    - Adds auto copy-button injection for code blocks (.crx_output / pre.crx_output)
