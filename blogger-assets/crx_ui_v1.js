@@ -1,18 +1,18 @@
-/*     crx_ui_v1.js
-   CRX UI loader & utilities v1 (UPDATED)
-   - Syncs class names with crx_styles_v1.css (affiliate card markup, container prefix)
-   - Adds auto copy-button injection for code blocks (.crx_output / pre.crx_output)
-   - Improves affiliate card structure to match CSS (.crx_affiliate_card, .crx_affiliate_img_wrap, etc.)
-   - Safer DOM access, accessible attributes, and mutation-observer-backed re-initializers
-   Host: https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js
+/* crx_ui_v1.js (v1.js)
+   CRX UI loader & utilities v1 (site-wide)
+   - widget loader (crx_loadWidget)
+   - auto copy-button injection for code blocks (crx_initCopyButtons)
+   - affiliate loader (crx_loadAffiliates)
+   - mutation-observer-backed re-initializers
+   - other small UI helpers
+   NOTE: This file intentionally does NOT attach donate-specific copy/share handlers.
+   Host site-specific fragments / assets may be loaded by this script.
 */
 
 (function () {
   const BASE = "https://varanasi-software-junction.github.io/blogger/blogger-assets";
 
-  /* ---------------------------
-     Small helpers
-     --------------------------- */
+  /* --------------------------- helpers --------------------------- */
   function escapeHtml(s) {
     return String(s || "").replace(/[&<>"']/g, function (m) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m];
@@ -22,9 +22,7 @@
   function q(sel, ctx = document) { return (ctx || document).querySelector(sel); }
   function qAll(sel, ctx = document) { return Array.from((ctx || document).querySelectorAll(sel)); }
 
-  /* ---------------------------
-     Toggle answer (used in MCQ Q/A show-hide)
-     --------------------------- */
+  /* --------------------------- Toggle answer --------------------------- */
   window.crx_toggleAnswer = function (id) {
     try {
       const el = document.getElementById(id);
@@ -33,22 +31,15 @@
     } catch (e) { console.warn("crx_toggleAnswer:", e); }
   };
 
-  /* ---------------------------
-     Copy code helper (button calls this)
-     btnId: id of button (optional) - used to provide feedback
-     codeId: id of target code element (pre, code or .crx_output)
-     --------------------------- */
+  /* --------------------------- Copy code helper --------------------------- */
   window.crx_copyCode = async function (btnId, codeId) {
     try {
       const codeEl = document.getElementById(codeId) || document.querySelector(`#${codeId}, .${codeId}`);
-      // fallback: if codeId is not an id, try to accept element directly
       const target = (typeof codeEl === "string") ? document.getElementById(codeEl) : codeEl;
       const el = target || document.getElementById(codeId) || q(`#${codeId}`) || q(`.${codeId}`);
       if (!el) return;
-      // get text - prefer code/textContent for exactness
       const text = (el.tagName && /^(PRE|CODE|TEXTAREA)$/i.test(el.tagName)) ? (el.textContent || el.innerText) : (el.innerText || el.textContent || "");
       if (!navigator.clipboard) {
-        // legacy fallback
         const ta = document.createElement("textarea");
         ta.value = text;
         ta.setAttribute("aria-hidden", "true");
@@ -59,7 +50,6 @@
       } else {
         await navigator.clipboard.writeText(text);
       }
-      // feedback on button
       if (btnId) {
         const btn = document.getElementById(btnId);
         if (btn) {
@@ -74,39 +64,27 @@
     }
   };
 
-  /* ---------------------------
-     Auto-add Copy buttons to code blocks (.crx_output or pre.crx_output)
-     - places a small button with a unique id
-     - button calls window.crx_copyCode(btnId, targetId)
-     --------------------------- */
+  /* --------------------------- Auto-add Copy buttons to code blocks --------------------------- */
   window.crx_initCopyButtons = function (root = document) {
     try {
-      // Select code blocks: prefer elements with class .crx_output or pre.crx_output or pre > code
       const blocks = Array.from((root || document).querySelectorAll('.crx_output, pre.crx_output, .crx_post-body pre, .crx_post-body pre code'));
-      blocks.forEach((blk, idx) => {
-        // canonicalize to outer container (if code inside pre, use pre)
+      blocks.forEach((blk) => {
         let container = blk;
         if (blk.tagName === 'CODE' && blk.parentElement && blk.parentElement.tagName === 'PRE') container = blk.parentElement;
-        // avoid duplication
         if (container.querySelector('.crx_copybtn')) return;
-        // create unique ids
         const targetId = container.id || ('crx_code_' + Math.random().toString(36).slice(2, 9));
         container.id = targetId;
         const btnId = 'crx_copybtn_' + Math.random().toString(36).slice(2, 9);
-        // create button
         const btn = document.createElement('button');
         btn.className = 'crx_copybtn';
         btn.type = 'button';
         btn.id = btnId;
         btn.setAttribute('aria-label', 'Copy code to clipboard');
         btn.innerText = 'Copy';
-        // attach click handler
         btn.addEventListener('click', function (ev) {
           ev.preventDefault();
           try { window.crx_copyCode(btnId, targetId); } catch (e) { console.warn(e); }
         });
-        // insert into container (top-right absolute styling assumed in CSS)
-        // prefer appending so layout doesn't shift; many designs show the button inside the pre
         container.style.position = container.style.position || 'relative';
         container.appendChild(btn);
       });
@@ -115,9 +93,7 @@
     }
   };
 
-  /* ---------------------------
-     Fetch & insert widget fragment (crx_<name>.html)
-     --------------------------- */
+  /* --------------------------- Fetch & insert widget fragment --------------------------- */
   window.crx_loadWidget = async function (name, targetEl) {
     if (!name || !targetEl) return;
     const url = `${BASE}/crx_${name}.html`;
@@ -126,12 +102,11 @@
       if (!res.ok) throw new Error("Widget fetch failed: " + res.status);
       const html = await res.text();
       targetEl.innerHTML = html;
-      // initialize any copy buttons / dynamic bits inside loaded widget
       window.crx_initCopyButtons(targetEl);
     } catch (e) {
       console.error("crx_loadWidget:", e);
       // Fallback: minimal donate widget if crx_donate.html fails
-      if (name === "donate") {   
+      if (name === "donate") {
         const fallback = `
           <div class="crx_donate_card" style="display:flex;gap:12px;align-items:center;padding:12px;border:1px solid rgba(11,94,215,0.06);border-radius:12px;background:#fff;box-shadow:0 6px 16px rgba(11,94,215,0.06);">
             <div class="crx_donate_qr" style="width:100px;height:100px;border:1px solid rgba(11,94,215,0.06);border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
@@ -150,14 +125,14 @@
           </div>
         `;
         targetEl.innerHTML = fallback;
+      } else {
+        // Generic widget error placeholder (keeps page from looking broken)
+        targetEl.innerHTML = `<div class="crx_widget_error" style="padding:12px;border-radius:8px;background:#fff;border:1px solid #eee;color:#444;">Widget unavailable</div>`;
       }
     }
   };
 
-  /* ---------------------------
-     Affiliate loader: improved cards that match CSS classes
-     - targetId: id of container element where cards will be appended
-     --------------------------- */
+  /* --------------------------- Affiliate loader --------------------------- */
   window.crx_loadAffiliates = async function (targetId, opts = {}) {
     const tgt = document.getElementById(targetId);
     if (!tgt) return;
@@ -169,19 +144,14 @@
       const products = Array.isArray(data.products) ? data.products.slice() : [];
       if (products.length === 0) { tgt.innerHTML = ""; return; }
 
-      // shuffle products for variety
       for (let i = products.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [products[i], products[j]] = [products[j], products[i]];
       }
 
-      // select number to show (default 2)
       const count = Math.max(1, Math.min(opts.count || 2, products.length));
       const chosen = products.slice(0, count);
-
-      // clear target and append disclaimer + list wrapper
       tgt.innerHTML = '';
-      // disclaimer (visible)
       const disc = document.createElement('div');
       disc.className = 'crx_affiliate_disclaimer';
       disc.innerHTML = `
@@ -195,7 +165,6 @@
       tgt.appendChild(wrap);
 
       chosen.forEach(p => {
-        // normalize fields
         const img = p.img ? escapeHtml(p.img) : (BASE + '/placeholder-120x80.png');
         const title = p.title ? escapeHtml(p.title) : 'Product';
         const desc = p.desc ? escapeHtml(p.desc) : '';
@@ -204,13 +173,11 @@
         const ratingStr = (p.rating !== undefined && p.rating !== null) ? escapeHtml(String(p.rating)) : '';
         const sponsored = p.sponsored ? escapeHtml(p.sponsored) : 'Sponsored';
 
-        // build card element matching CSS
         const card = document.createElement('article');
         card.className = 'crx_affiliate_card';
         card.setAttribute('role', 'region');
         card.setAttribute('aria-label', title);
 
-        // inner HTML structured to match CSS selectors
         card.innerHTML = `
           <div class="crx_affiliate_img_wrap" aria-hidden="true">
             <img class="crx_affiliate_img" src="${img}" alt="${title}" loading="lazy" />
@@ -239,19 +206,15 @@
         wrap.appendChild(card);
       });
 
-      // After insertion, attach any copy buttons inside widgets (if present)
       window.crx_initCopyButtons(wrap);
 
     } catch (e) {
       console.error("crx_loadAffiliates:", e);
-      // error: leave target empty or show minimal note
       tgt.innerHTML = `<div class="crx_card">Affiliates currently unavailable.</div>`;
     }
   };
 
-  /* ---------------------------
-     Enhance "Post a Comment" links
-     --------------------------- */
+  /* --------------------------- Enhance comment links --------------------------- */
   function crx_enhanceCommentButtons() {
     try {
       const selectors = [
@@ -306,21 +269,16 @@
     } catch (e) { console.warn('crx_enhanceCommentButtons error:', e); }
   }
 
-  /* ---------------------------
-     Mutation observer: watch for dynamically injected widgets & re-init helpers
-     --------------------------- */
+  /* --------------------------- Mutation observer --------------------------- */
   (function setupObservers() {
     try {
       if (!window.MutationObserver) return;
       const mo = new MutationObserver((mutations) => {
-        // debounce
         if (setupObservers._timer) clearTimeout(setupObservers._timer);
         setupObservers._timer = setTimeout(() => {
           try {
             crx_enhanceCommentButtons();
-            // auto-add copy buttons for newly inserted code blocks
             window.crx_initCopyButtons(document);
-            // find any [data-crx-widget] that hasn't been handled yet and initialize
             Array.from(document.querySelectorAll('[data-crx-widget]')).forEach(async el => {
               if (el.dataset.crxInitted) return;
               const name = el.getAttribute('data-crx-widget');
@@ -343,21 +301,13 @@
     }
   })();
 
-  /* ---------------------------
-     Auto-initialize on DOM ready
-     --------------------------- */
+  /* --------------------------- Auto-initialize on DOM ready --------------------------- */
   document.addEventListener('DOMContentLoaded', function () {
     try {
-      // Enhance comment buttons immediately
       crx_enhanceCommentButtons();
-
-      // Auto-init copy buttons for existing code blocks
       window.crx_initCopyButtons(document);
-
-      // Initialize widgets declared with data-crx-widget
       const widgets = document.querySelectorAll("[data-crx-widget]");
       widgets.forEach(async el => {
-        // skip if already initialized (mutation observer will handle new ones)
         if (el.dataset.crxInitted) return;
         const name = el.getAttribute("data-crx-widget");
         if (!name) return;
@@ -366,22 +316,16 @@
           const id = el.id || ("crx_aff_" + Math.random().toString(36).slice(2, 9));
           el.id = id;
           await window.crx_loadAffiliates(id);
-        } else if (name === "bio" || name === "donate") {
-          await window.crx_loadWidget(name, el);
         } else {
           await window.crx_loadWidget(name, el);
         }
       });
-
     } catch (e) {
       console.warn("crx widget init error:", e);
     }
   });
 
-  /* ---------------------------
-     Public helper: create bubble visualizer (lightweight)
-     Returns a cleanup function that stops the interval if needed.
-     --------------------------- */
+  /* --------------------------- Public helper: bubble visualizer --------------------------- */
   window.crx_createBubbleVisualizer = function (targetSelector, opts = {}) {
     try {
       const mount = document.querySelector(targetSelector);
@@ -396,7 +340,7 @@
       wrapper.style.height = (opts.height || 120) + 'px';
       for (let i = 0; i < bars; i++) {
         const b = document.createElement('div');
-        b.className = 'crx_box'; // reuse generic box style from CSS for visualizer blocks
+        b.className = 'crx_box';
         b.style.width = (opts.barWidth || 10) + 'px';
         b.style.height = (10 + Math.random() * (opts.maxHeight || 100)) + 'px';
         b.style.borderRadius = '8px';
@@ -408,7 +352,6 @@
       const interval = setInterval(() => {
         Array.from(wrapper.children).forEach(ch => ch.style.height = (10 + Math.random() * (opts.maxHeight || 120)) + 'px');
       }, opts.interval || (350 + Math.random() * 400));
-      // return cleanup
       return () => clearInterval(interval);
     } catch (e) {
       console.warn('crx_createBubbleVisualizer error:', e);

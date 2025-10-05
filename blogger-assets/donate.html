@@ -1,1 +1,74 @@
-<div class='crx-fragment'>Donate box here</div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Donate — Learning Sutras</title>
+
+  <style>
+    .donate-card {
+      max-width:560px;
+      margin:24px auto;
+      background: #fff;
+      padding:18px;
+      border-radius:12px;
+      box-shadow: 0 8px 24px rgba(10,20,50,0.06);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    .donate-row { display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap; }
+    .donate-label { font-weight:700; margin-right:8px; }
+    .upi-box { padding:10px 12px; border-radius:8px; border:1px dashed #d0d7e6; background:#fbfcff; min-width:180px; word-break:break-all; }
+    button.crx-btn { padding:8px 12px; border-radius:8px; border:1px solid #cdd6ea; background:#0366d6; color:#fff; cursor:pointer; }
+    button.crx-btn.secondary { background:#eef3ff; color:#024fa8; border:1px solid #d6e1ff; }
+    .actions { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
+    .small { font-size:0.9rem; color:#555; margin-top:8px; }
+
+    /* toast */
+    #crx-toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: rgba(0,0,0,0.85);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: block;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      transition: opacity 220ms ease;
+    }
+    #crx-toast.show { opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body>
+
+  <div class="donate-card" role="region" aria-labelledby="donateHeading">
+    <div class="crx-fragment">Donate box here</div>
+
+    <h3 id="donateHeading" style="margin-top:12px;">Support Learning Sutras</h3>
+    <p class="small">If Learning Sutras helped you, consider sending a small UPI donation. Thank you 🙏</p>
+
+    <div class="donate-row" aria-live="polite">
+      <div class="donate-label">UPI ID</div>
+      <div id="upiId" class="upi-box" aria-label="UPI ID" tabindex="0">champaksworld-1.,hdfc</div>
+    </div>
+
+    <div class="actions">
+      <button id="copyUpi" class="crx-btn" type="button" title="Copy UPI ID">Copy UPI</button>
+      <button id="shareBtn" class="crx-btn secondary" type="button" title="Share donation details">Share</button>
+    </div>
+
+    <p class="small">Tip: On mobile, use the Share button to send the UPI ID via messaging apps.</p>
+  </div>
+
+  <div id="crx-toast" role="status" aria-live="polite">Copied</div>
+
+  <!-- site-wide UI utilities -->
+  <script src="v1.js" defer></script>
+  <!-- page-specific donate behaviour -->
+  <script src="donate.js" defer></script>
+</body>
+</html>
