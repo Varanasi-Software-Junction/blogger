@@ -2,7 +2,7 @@
    Page-specific donate behaviour:
    - Copies UPI ID shown in #upiId
    - Shares donation text using Web Share API or clipboard fallback
-   - Shows accessible toast notifications
+   - Shows accessible toast + alerts for instant feedback
    - Keyboard accessible (Enter/Space activates buttons)
 */
 
@@ -61,25 +61,30 @@
     const title = CFG.shareTitle;
     const text = CFG.shareTextTemplate(upiId);
 
+    // Try Web Share API
     if (navigator.share) {
       try {
         await navigator.share({ title, text });
         showToast('Share dialog opened');
+        alert('Share dialog opened! You can now share the UPI ID directly.');
         return;
       } catch (err) {
         console.warn('Web Share failed or cancelled:', err);
       }
     }
 
+    // Fallback: Copy share text to clipboard
     const ok = await copyToClipboard(text);
     if (ok) {
       showToast('Donation details copied — paste into your app to share');
+      alert('Donation details copied to clipboard!\nPaste it into WhatsApp or your payment app.');
     } else {
       try {
         const mailto = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text)}`;
         window.location.href = mailto;
       } catch (e) {
         showToast('Unable to share automatically — please copy the UPI ID manually.');
+        alert('Unable to share automatically — please copy the UPI ID manually.');
       }
     }
   }
@@ -99,8 +104,13 @@
     if (copyBtn) {
       copyBtn.addEventListener('click', async () => {
         const ok = await copyToClipboard(upiId);
-        if (ok) showToast('UPI ID copied');
-        else showToast('Copy failed — please select and copy manually');
+        if (ok) {
+          showToast('UPI ID copied');
+          alert(`UPI ID copied to clipboard!\n\n${upiId}`);
+        } else {
+          showToast('Copy failed — please select and copy manually');
+          alert('Copy failed — please select and copy manually.');
+        }
       });
     }
 
