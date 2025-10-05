@@ -200,7 +200,7 @@ pre.crx_output::before, .crx_post-body pre::before {
 /* ---------- POST BODY LINK & LIST STYLES ---------- */
 /* COMPONENT: Post Body - BEGIN */
 .crx_post-body a {
-  color: var(--crx-accent);
+  color: teal;
   text-decoration: none;
   border-bottom: 2px solid rgba(255,153,51,0.06);
   transition: color .12s ease, border-color .12s ease;
@@ -887,7 +887,7 @@ body#layout .crx_donate_card {
 .comment a,
 .comment-item a,
 .widget .comments a {
-  color: var(--crx-accent);
+  color: teal;
   text-decoration: none;
 }
 .comment a:hover,
@@ -958,7 +958,7 @@ input#comment-url,
   font-weight: 700;
   text-decoration: none;
   background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep));
-  color: #fff;
+  color: teal;
   border: none;
   box-shadow: 0 6px 16px rgba(230,140,60,0.25);
   transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
