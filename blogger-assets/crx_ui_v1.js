@@ -131,7 +131,7 @@
     } catch (e) {
       console.error("crx_loadWidget:", e);
       // Fallback: minimal donate widget if crx_donate.html fails
-      if (name === "donate") {
+      if (name === "donate") {   
         const fallback = `
           <div class="crx_donate_card" style="display:flex;gap:12px;align-items:center;padding:12px;border:1px solid rgba(11,94,215,0.06);border-radius:12px;background:#fff;box-shadow:0 6px 16px rgba(11,94,215,0.06);">
             <div class="crx_donate_qr" style="width:100px;height:100px;border:1px solid rgba(11,94,215,0.06);border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
