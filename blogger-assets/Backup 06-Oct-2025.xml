@@ -521,7 +521,7 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
               <b:widget-setting name='showDateHeader'>false</b:widget-setting>
               <b:widget-setting name='commentLabel'>Comments</b:widget-setting>
               <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
-              <b:widget-setting name='showShareButtons'>true</b:widget-setting>
+              <b:widget-setting name='showShareButtons'>false</b:widget-setting>
               <b:widget-setting name='authorLabel'>Posted by:</b:widget-setting>
               <b:widget-setting name='showCommentLink'>true</b:widget-setting>
               <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
@@ -953,11 +953,171 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
                 <div data-crx-widget='affiliate' id='crx_affiliate_block'/>
                 
 
+              
+                
                 <!-- Donation -->
-                <div data-crx-widget='donate'/>
-                <!-- Donation -->
+<div aria-labelledby='donateHeading' class='donate-card' role='region'>
+  <div class='crx-fragment'>Donate box here</div>
 
+  <h3 id='donateHeading' style='margin-top:12px;'>Support Learning Sutras</h3>
+  <p class='small'>
+    If Learning Sutras helped you, consider sending a small UPI donation. Thank you 🙏
+  </p>
 
+  <div aria-live='polite' class='donate-row'>
+    <div class='donate-label'>UPI ID</div>
+    <div aria-label='UPI ID' class='upi-box' id='upiId' tabindex='0'>
+      champaksworld-1@hdfcbank
+    </div>
+  </div>
+
+  <style>
+    .donate-card {
+      background: #fefefe;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 20px auto;
+      max-width: 400px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .donate-label {
+      font-weight: bold;
+      color: #444;
+      margin-bottom: 4px;
+    }
+
+    .upi-box {
+      background: #f9f9f9;
+      border: 1px dashed #ccc;
+      padding: 10px;
+      border-radius: 6px;
+      display: inline-block;
+      cursor: pointer;
+      font-family: monospace;
+    }
+
+    .upi-box:hover {
+      background: #eef;
+    }
+
+    .actions {
+      margin-top: 10px;
+    }
+
+    .bttnshare,
+    .crx-btn.secondary {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .bttnshare {
+      background-color: #e63946;
+      color: white;
+    }
+
+    .bttnshare:hover {
+      background-color: #c62828;
+    }
+
+    .crx-btn.secondary {
+      background-color: #457b9d;
+      color: white;
+    }
+
+    .crx-btn.secondary:hover {
+      background-color: #1d3557;
+    }
+
+    #crx-toast {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.5s, bottom 0.5s;
+    }
+
+    #crx-toast.show {
+      display: block;
+      opacity: 1;
+      bottom: 36px;
+    }
+  </style>
+
+  <div class='actions'>
+    <button class='bttnshare' id='copyUpi' title='Copy UPI ID' type='button'>
+      Copy UPI
+    </button>
+    <button class='crx-btn secondary' id='shareBtn' title='Share donation details' type='button'>
+      Share
+    </button>
+  </div>
+
+  <p class='small'>
+    Tip: On mobile, use the Share button to send the UPI ID via messaging apps.
+  </p>
+</div>
+
+<!-- Toast element -->
+<div aria-live='polite' id='crx-toast' role='status'>Copied</div>
+
+<!-- Donation JS -->
+<script>
+  document.addEventListener(&quot;DOMContentLoaded&quot;, function () {
+    const upiId = document.getElementById(&quot;upiId&quot;).innerText.trim();
+    const copyBtn = document.getElementById(&quot;copyUpi&quot;);
+    const shareBtn = document.getElementById(&quot;shareBtn&quot;);
+    const toast = document.getElementById(&quot;crx-toast&quot;);
+
+    function showToast(message) {
+      toast.innerText = message;
+      toast.classList.add(&quot;show&quot;);
+      setTimeout(() =&gt; toast.classList.remove(&quot;show&quot;), 2000);
+    }
+
+    copyBtn.addEventListener(&quot;click&quot;, async () =&gt; {
+      try {
+        await navigator.clipboard.writeText(upiId);
+        showToast(&quot;UPI ID Copied!&quot;);
+      } catch {
+        showToast(&quot;Copy failed&quot;);
+      }
+    });
+
+    shareBtn.addEventListener(&quot;click&quot;, async () =&gt; {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: &quot;Support Learning Sutras 💖&quot;,
+            text: `Here&#8217;s the UPI ID for donations: ${upiId}`,
+          });
+        } catch {
+          showToast(&quot;Share cancelled&quot;);
+        }
+      } else {
+        showToast(&quot;Sharing not supported&quot;);
+      }
+    });
+  });
+</script>
+<!-- /Donation -->
+
+                
+                
                 
                 
                 
@@ -2106,9 +2266,20 @@ Usage: Add this as a gadget in your Blogger Layout -> Add a Gadget -> HTML/JavaS
           </b:widget>
           <b:widget id='HTML24' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
-              <b:widget-setting name='content'><![CDATA[<!-- Paste this into a Blogger "HTML/JavaScript" gadget -->
+              <b:widget-setting name='content'><![CDATA[<!-- Paste this into a Blogger "HTML/JavaScript" gadget" -->
 <div id="blogger-clock-wrapper">
-  <div id="blogger-clock" aria-live="polite"></div>
+  <div id="blogger-clock" aria-live="polite">
+    <span class="weekday"></span>,
+    <span class="date"></span>.
+    <span class="time">
+      <span class="segment hours"></span>
+      <span class="blink">:</span>
+      <span class="segment minutes"></span>
+      <span class="blink">:</span>
+      <span class="segment seconds"></span>
+      <span class="ampm"></span>
+    </span>
+  </div>
   <div id="blogger-clock-note">(Local time)</div>
   <button id="toggle-format">Switch to 24h</button>
 </div>
@@ -2128,14 +2299,45 @@ Usage: Add this as a gadget in your Blogger Layout -> Add a Gadget -> HTML/JavaS
   #blogger-clock {
     font-size: 18px;
     font-weight: 600;
-    color: #0b63d4;
   }
 
-  #blogger-clock .ampm {
+  /* Different colors for different sections */
+  .weekday { color: #ff5722; }   /* Orange */
+  .date    { color: #009688; }   /* Teal */
+  .time    { color: #0b63d4; }   /* Blue */
+  .ampm {
     font-size: 0.7em;
     vertical-align: super;
-    color: #777;
+    color: #9c27b0;              /* Purple */
     margin-left: 4px;
+  }
+
+  /* Smooth fade every tick */
+  .tick {
+    animation: clock-fade 260ms ease;
+  }
+  @keyframes clock-fade {
+    from { opacity: 0.35; filter: blur(0.5px); }
+    to   { opacity: 1;    filter: blur(0); }
+  }
+
+  /* Blinking colons like a digital clock */
+  .blink {
+    display: inline-block;
+    animation: blink 1s steps(1, start) infinite;
+  }
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  /* Subtle pop on number change */
+  .segment.pop {
+    animation: pop 160ms ease;
+  }
+  @keyframes pop {
+    from { transform: scale(0.98); }
+    to   { transform: scale(1); }
   }
 
   #blogger-clock-note {
@@ -2155,52 +2357,91 @@ Usage: Add this as a gadget in your Blogger Layout -> Add a Gadget -> HTML/JavaS
     cursor: pointer;
     transition: background 0.3s;
   }
+  #toggle-format:hover { background: #084c9e; }
 
-  #toggle-format:hover {
-    background: #084c9e;
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .tick, .blink, .segment.pop { animation: none !important; }
+  }
+
+  /* Mobile font sizing */
+  @media (max-width: 420px) {
+    #blogger-clock { font-size: 16px; }
   }
 </style>
 
 <script>
 (function(){
-  const el = document.getElementById('blogger-clock');
+  const wrap = document.getElementById('blogger-clock');
   const toggleBtn = document.getElementById('toggle-format');
+
+  const elWeekday = wrap.querySelector('.weekday');
+  const elDate    = wrap.querySelector('.date');
+  const elHours   = wrap.querySelector('.hours');
+  const elMinutes = wrap.querySelector('.minutes');
+  const elSeconds = wrap.querySelector('.seconds');
+  const elAmPm    = wrap.querySelector('.ampm');
+
   const pad = (n) => String(n).padStart(2, '0');
 
   // Load saved format from localStorage (default = 12h)
   let use24h = localStorage.getItem("bloggerClock24h") === "true";
-
-  // Set initial button text
   toggleBtn.textContent = use24h ? "Switch to 12h" : "Switch to 24h";
 
   function updateClock(){
     const now = new Date();
 
+    // Weekday & Date
     const weekday = new Intl.DateTimeFormat(undefined, { weekday: 'long' }).format(now);
-    const day = pad(now.getDate());
-    const month = new Intl.DateTimeFormat(undefined, { month: 'short' }).format(now);
-    const year = now.getFullYear();
+    const day     = pad(now.getDate());
+    const month   = new Intl.DateTimeFormat(undefined, { month: 'short' }).format(now);
+    const year    = now.getFullYear();
 
+    // Time parts
     let hours = now.getHours();
     let ampm = "";
-
     if(!use24h){
       ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12; // Handle midnight
+      hours = hours % 12 || 12; // 0 -> 12
     }
 
-    hours = pad(hours);
-    const minutes = pad(now.getMinutes());
-    const seconds = pad(now.getSeconds());
+    const hh = pad(hours);
+    const mm = pad(now.getMinutes());
+    const ss = pad(now.getSeconds());
 
-    el.innerHTML = `${weekday}, ${day}-${month}-${year}. ${hours}:${minutes}:${seconds}`
-      + (use24h ? "" : ` <span class="ampm">${ampm}</span>`);
+    // Update only if changed; add tiny pop animation per segment
+    setText(elWeekday, weekday);
+    setText(elDate, `${day}-${month}-${year}`);
+
+    setNumber(elHours, hh);
+    setNumber(elMinutes, mm);
+    setNumber(elSeconds, ss);
+
+    elAmPm.textContent = use24h ? "" : ampm;
+
+    // Smooth overall fade each tick
+    wrap.classList.remove('tick');
+    // force reflow to restart the animation
+    void wrap.offsetWidth;
+    wrap.classList.add('tick');
+  }
+
+  function setText(node, next){
+    if(node.textContent !== next) node.textContent = next;
+  }
+
+  function setNumber(node, next){
+    if(node.textContent !== next){
+      node.textContent = next;
+      node.classList.remove('pop');
+      void node.offsetWidth; // restart animation
+      node.classList.add('pop');
+    }
   }
 
   toggleBtn.addEventListener('click', () => {
     use24h = !use24h;
-    localStorage.setItem("bloggerClock24h", use24h); // Save preference
+    localStorage.setItem("bloggerClock24h", use24h);
     toggleBtn.textContent = use24h ? "Switch to 12h" : "Switch to 24h";
     updateClock();
   });
@@ -3430,9 +3671,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   
   
   <script defer='defer' src='https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js'/>
-
-  
-  
 
 </body>
 </html>
