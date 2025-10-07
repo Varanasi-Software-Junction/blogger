@@ -1,306 +1,55 @@
-<!-- ===========================
-     Bubble Sort — Blog Post (HTML for Blogger)
-     NOTE: Uses your existing CRX CSS (no new classes added).
-     Each section is explicitly marked with BEGIN / END comments.
-     Paste into Blogger HTML editor or gadget.
-     =========================== -->
 
-<!-- POST: START -->
-<div style="font-family:Inter, system-ui, Arial, sans-serif; max-width:960px; margin:20px auto; line-height:1.6; color:#0f1724;">
+   
 
-  <!-- SECTION: Title BEGIN -->
-  <header>
-    <h1 style="color:#0b63d4; text-align:center; margin-bottom:10px;">🟦 Bubble Sort: A Classic Sorting Algorithm</h1>
-    <p style="text-align:center; color:#475569; margin-top:0;">A clear, practical write-up for learners and interview preparation — pseudo code, examples, MCQs, assignments (C / Java / Python), and further reading.</p>
-  </header>
-  <!-- SECTION: Title END -->
-
-  <!-- SECTION: Introduction BEGIN -->
-  <section id="introduction" aria-label="Introduction">
-    <h2 style="color:#0b63d4; margin-top:22px;">🔹 Introduction</h2>
-    <p>Sorting is one of the most fundamental problems in computer science. It appears frequently in interviews, coding tests, and day-to-day software tasks. <strong>Bubble Sort</strong>, while not the most efficient for large datasets, is an excellent pedagogical tool: it helps beginners understand comparisons, swaps, loops, and basic complexity analysis.</p>
-
-    <ul>
-      <li>Builds a strong <strong>foundation in algorithm analysis</strong>.</li>
-      <li>Common in teaching <strong>Data Structures &amp; Algorithms (DSA)</strong>.</li>
-      <li>Useful for interview questions that test understanding of loops, in-place operations, and optimization flags.</li>
-    </ul>
-  </section>
-  <!-- SECTION: Introduction END -->
-
-  <!-- SECTION: What is Bubble Sort BEGIN -->
-  <section id="what-is" aria-label="What is Bubble Sort">
-    <h2 style="color:#0b63d4; margin-top:18px;">🔹 What is Bubble Sort?</h2>
-    <p>Bubble Sort is a <em>comparison-based</em> algorithm that repeatedly steps through a list, compares adjacent elements, and swaps them if they are in the wrong order. The largest elements gradually "bubble" to the end of the list after every pass.</p>
-
-    <!-- Subsection: Pseudo Code BEGIN -->
-    <h3 style="margin-top:12px;">✨ Pseudo Code</h3>
-    <pre>
-procedure bubbleSort(A)
-    n = length(A)
-    repeat
-        swapped = false
-        for i = 1 to n-1
-            if A[i] > A[i+1] then
-                swap(A[i], A[i+1])
-                swapped = true
-        end for
-    until not swapped
-end procedure
-    </pre>
-    <!-- Subsection: Pseudo Code END -->
-
-    <!-- Subsection: Illustration BEGIN -->
-    <h3 style="margin-top:12px;">🔹 Illustration (sample run)</h3>
-    <p><strong>Input:</strong> [5, 3, 8, 4, 2]</p>
-    <ol>
-      <li>After Pass 1: [3, 5, 4, 2, 8]</li>
-      <li>After Pass 2: [3, 4, 2, 5, 8]</li>
-      <li>After Pass 3: [3, 2, 4, 5, 8]</li>
-      <li>After Pass 4: [2, 3, 4, 5, 8] — Sorted</li>
-    </ol>
-    <!-- Subsection: Illustration END -->
-  </section>
-  <!-- SECTION: What is Bubble Sort END -->
-
-  <!-- SECTION: Implementations BEGIN -->
-  <section id="implementations" aria-label="Implementations and Complexity">
-    <h2 style="color:#0b63d4; margin-top:18px;">🔹 Different Implementations</h2>
-
-    <!-- Implementation: Standard BEGIN -->
-    <article>
-      <h3 style="margin-top:12px;">1) Standard Bubble Sort</h3>
-      <pre>
-for i = 0 to n-1
-    for j = 0 to n-i-1
-        if A[j] > A[j+1]
-            swap(A[j], A[j+1])
-      </pre>
-      <p><strong>Time Complexity</strong>: Best O(n)*, Average O(n²), Worst O(n²). <br>
-      <strong>Space Complexity</strong>: O(1) (in-place)</p>
-      <p><small>*Best-case O(n) when you use the 'swapped' optimization and the array is already sorted.</small></p>
-    </article>
-    <!-- Implementation: Standard END -->
-
-    <!-- Implementation: Optimized BEGIN -->
-    <article>
-      <h3 style="margin-top:12px;">2) Optimized Bubble Sort (early stop)</h3>
-      <pre>
-for i = 0 to n-1
-    swapped = false
-    for j = 0 to n-i-1
-        if A[j] > A[j+1]
-            swap(A[j], A[j+1])
-            swapped = true
-    if not swapped
-        break
-      </pre>
-      <p>The optimization stops early if no swaps happen during a full pass (array already sorted), reducing passes and giving a best-case of O(n).</p>
-    </article>
-    <!-- Implementation: Optimized END -->
-
-    <!-- Implementation: Recursive BEGIN -->
-    <article>
-      <h3 style="margin-top:12px;">3) Recursive Bubble Sort (conceptual)</h3>
-      <pre>
-procedure recursiveBubble(A, n)
-    if n == 1 then return
-    for i = 0 to n-2
-        if A[i] > A[i+1] then swap(A[i], A[i+1])
-    recursiveBubble(A, n-1)
-      </pre>
-      <p>Equivalent O(n²) time complexity; offered for academic completeness, but iterative versions are preferred in practice.</p>
-    </article>
-    <!-- Implementation: Recursive END -->
-  </section>
-  <!-- SECTION: Implementations END -->
-
-  <!-- SECTION: Spin-offs BEGIN -->
-  <section id="spin-offs" aria-label="Spin-offs and utility">
-    <h2 style="color:#0b63d4; margin-top:18px;">🔹 Spin-offs &amp; Useful Tricks</h2>
-    <p>Because Bubble Sort naturally places the largest element at the end after the first pass, it becomes convenient for related tasks:</p>
-    <ul>
-      <li><strong>Find largest:</strong> After one pass, the last element is the largest.</li>
-      <li><strong>Find 2nd largest:</strong> After two passes, the second-last element is the second largest.</li>
-      <li><strong>Find nth largest/smallest:</strong> Run Bubble Sort for n passes and read the required position.</li>
-    </ul>
-    <p>These tricks are useful for small datasets or as educational exercises, but for production use on large data prefer selection/heap algorithms or partial selection algorithms (like Quickselect).</p>
-  </section>
-  <!-- SECTION: Spin-offs END -->
-
-  <!-- SECTION: History BEGIN -->
-  <section id="history" aria-label="History">
-    <h2 style="color:#0b63d4; margin-top:18px;">🔹 History of Bubble Sort</h2>
-    <p>Bubble Sort is one of the earliest sorting algorithms taught in computer science. Its simple compare-and-swap approach made it an ideal first example in textbooks and classrooms. Though not widely used in high-performance systems, its role in teaching fundamentals of sorting and algorithmic complexity is timeless.</p>
-  </section>
-  <!-- SECTION: History END -->
-
-  <!-- SECTION: MCQs BEGIN -->
-  <section id="mcqs" aria-label="Multiple choice questions">
-    <h2 style="color:#0b63d4; margin-top:18px;">🔹 10 MCQs (options shown — click to reveal answer)</h2>
-
-    <!-- Q1 -->
-    <div style="margin-top:10px;">
-      <p style="margin:2px 0;"><strong>1. Bubble Sort is an example of?</strong></p>
-      <ul>
-        <li>A) Divide and Conquer</li>
-        <li>B) Comparison-based Sorting</li>
-        <li>C) Hashing</li>
-        <li>D) Dynamic Programming</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Comparison-based Sorting</div>
-      </details>
-    </div>
-
-    <!-- Q2 -->
-    <div style="margin-top:12px;">
-      <p style="margin:2px 0;"><strong>2. Worst-case time complexity of Bubble Sort?</strong></p>
-      <ul>
-        <li>A) O(n)</li>
-        <li>B) O(log n)</li>
-        <li>C) O(n²)</li>
-        <li>D) O(n log n)</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">C) O(n²)</div>
-      </details>
-    </div>
-
-    <!-- Q3 -->
-    <div style="margin-top:12px;">
-      <p style="margin:2px 0;"><strong>3. Best-case complexity of Bubble Sort?</strong></p>
-      <ul>
-        <li>A) O(n)</li>
-        <li>B) O(n²)</li>
-        <li>C) O(log n)</li>
-        <li>D) O(n log n)</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">A) O(n) — with early-stop optimization</div>
-      </details>
-    </div>
-
-    <!-- Q4 -->
-    <div style="margin-top:12px;">
-      <p style="margin:2px 0;"><strong>4. Is Bubble Sort stable?</strong></p>
-      <ul>
-        <li>A) No</li>
-        <li>B) Yes</li>
-        <li>C) Depends on implementation</li>
-        <li>D) None of the above</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Yes — Bubble Sort is stable (preserves relative order of equal elements)</div>
-      </details>
-    </div>
-
-    <!-- Q5 -->
-    <div style="margin-top:12px;">
-      <p style="margin:2px 0;"><strong>5. Bubble Sort is an ____ algorithm?</strong></p>
-      <ul>
-        <li>A) In-place</li>
-        <li>B) Out-of-place</li>
-        <li>C) Recursive only</li>
-        <li>D) None of the above</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">A) In-place</div>
-      </details>
-    </div>
-
-    <!-- Q6 -->
-    <div style="margin-top:12px;">
-      <p style="margin:2px 0;"><strong>6. Bubble Sort is suitable for?</strong></p>
-      <ul>
-        <li>A) Large datasets</li>
-        <li>B) Small datasets</li>
-        <li>C) Any size dataset</li>
-        <li>D) Streaming data</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Small datasets</div>
-      </details>
-    </div>
-
-    <!-- Q7 -->
-    <div style="margin-top:12px;">
-      <p style="margin:2px 0;"><strong>7. Bubble Sort is also known as?</strong></p>
-      <ul>
-        <li>A) Quick Sort</li>
-        <li>B) Sinking Sort</li>
-        <li>C) Selection Sort</li>
-        <li>D) Merge Sort</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Sinking Sort</div>
-      </details>
-    </div>
-
-    <!-- Q8 -->
-    <div style="margin-top:12px;">
-      <p style="margin:2px 0;"><strong>8. Which method shares adjacent swap logic?</strong></p>
-      <ul>
-        <li>A) Insertion Sort</li>
-        <li>B) Merge Sort</li>
-        <li>C) Quick Sort</li>
-        <li>D) Heap Sort</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">A) Insertion Sort (when expressed as adjacent swaps / shifts)</div>
-      </details>
-    </div>
-
-    <!-- Q9 -->
-    <div style="margin-top:12px;">
-      <p style="margin:2px 0;"><strong>9. Can Bubble Sort detect already sorted arrays early?</strong></p>
-      <ul>
-        <li>A) No</li>
-        <li>B) Yes, with optimization</li>
-        <li>C) Sometimes</li>
-        <li>D) None of the above</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">B) Yes, with early-stop optimization (swapped flag)</div>
-      </details>
-    </div>
-
-    <!-- Q10 -->
-    <div style="margin-top:12px; margin-bottom:10px;">
-      <p style="margin:2px 0;"><strong>10. Space complexity of Bubble Sort?</strong></p>
-      <ul>
-        <li>A) O(n)</li>
-        <li>B) O(log n)</li>
-        <li>C) O(1)</li>
-        <li>D) O(n log n)</li>
-      </ul>
-      <details><summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Answer</summary>
-        <div style="padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef; background:#fbfcff;">C) O(1)</div>
-      </details>
-    </div>
-
-  </section>
-  <!-- SECTION: MCQs END -->
-
+<img  class="crx_avatar" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEglwaii2_xBr47JtUxESk3iekPLl1TSI5B6RuwqNOs_8zk9iGlLqw3d_WprAhKKp3m9F1eO4XBh_JfU_jj6Ad759bHWsqU0evz1SdsG_XBJPc7nXmkbGHO2glvshLTd0fOaKlIGfEVHlEeltJcg2Azc70rVoswRtvH-QiohpHrAuuPEE1uwA9CToBM9foE/s16000/me.jpg" alt="Champak's implementation of Bubble Sort"/>
   
-  <!-- Gadget Begins-->
-<div id="champak_bubble_gadget" style="font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial; color:#222; line-height:1.55;">
- 
+  <br><br>
 
-  <div id="crx_controls_wrap" style="margin-top:8px; display:flex; gap:12px; flex-direction:column;">
-    <div id="crx_controls" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+<!-- Bubble Sort Visualizer — finalized border color/thickness + event log -->
+<style>
+  /* basic styles (kept minimal so you can drop into Blogger) */
+  #crx_container { position:relative; width:100%; height:220px; border:2px solid #333; margin-top:10px; overflow-x:auto; padding:10px; box-sizing:border-box; background:#fafafa; }
+  .crx_box { position:absolute; width:56px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-weight:700; user-select:none; box-shadow:0 6px 14px rgba(0,0,0,0.08); transition: transform 0.35s ease, box-shadow 0.35s ease, left 0.25s ease; }
+  .crx_box .idx { position:absolute; right:-10px; top:-10px; font-size:10px; background:rgba(255,255,255,0.85); padding:2px 4px; border-radius:6px; border:1px solid rgba(0,0,0,0.06); font-weight:600; }
+
+  /* highlight used during compare */
+  .crx_highlight { transform: scale(1.08); box-shadow: 0 10px 26px rgba(11,99,212,0.24) !important; }
+
+  /* Finalized box: deeper green and thicker */
+  .crx_final {
+    border: 4px solid #0b6623 !important; /* deeper green, thicker */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+  }
+
+  /* Speech bar (keeps visual from original) */
+  #crx_speechBar { margin-top:16px; padding:10px; background:#0b63d4; color:#fff; border-radius:6px; min-height:46px; display:flex; flex-direction:column; gap:6px; }
+  #crx_speechCurrent { font-size:18px; font-weight:700; text-align:center; letter-spacing:0.4px; }
+  #crx_speechQueue { font-size:13px; opacity:0.95; text-align:center; }
+
+  /* Event log */
+  #crx_eventLog { min-width:320px; max-width:720px; box-sizing:border-box; padding:8px; border-radius:6px; border:1px solid #ccc; background:#fff; font-family:monospace; }
+  #crx_controls_wrap { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+  .crx_log_controls { display:flex; gap:8px; align-items:center; }
+  .crx_legend { background:#f3f7f5; border:1px solid rgba(11,102,35,0.08); padding:8px 10px; border-radius:6px; color:#083d26; font-size:13px; max-width:720px; }
+</style>
+
+<div style="font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial; color:#222; line-height:1.55;">
+  <h2 style="color:#0a66c2; margin-bottom:6px;">Bubble Sort Visualizer — three modes + early exit</h2>
+
+  <div id="crx_controls_wrap">
+    <div id="crx_controls" style="margin-bottom:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
       <label style="font-weight:700;">Numbers:</label>
-      <input id="crx_numbers" type="text" value="1,6,0,1,1,9,7,0" style="min-width:320px; padding:8px; border-radius:6px; border:1px solid #ccc;" />
+      <input id="crx_numbers" type="text" value="1,6,0,1,1,9,7,0" style="min-width:320px; padding:8px; border-radius:6px; border:1px solid #ccc;"></input>
 
       <button id="crx_createBtn" style="padding:8px 12px; border-radius:6px; border:1px solid #0b63d4; background:#0b63d4; color:#fff; cursor:pointer;">Create Boxes</button>
       <button id="crx_sortBtn" style="padding:8px 12px; border-radius:6px; border:1px solid #0b63d4; background:#0b63d4; color:#fff; cursor:pointer;">Run Bubble Sort</button>
 
-      <label style="display:flex; gap:6px; align-items:center;">
-        <input id="crx_speechToggle" type="checkbox" checked="checked" />
+      <label style="margin-left:8px; display:flex; gap:6px; align-items:center;">
+        <input id="crx_speechToggle" type="checkbox" checked="checked"></input>
         <span style="font-weight:600;">Speak (comparisons & swaps)</span>
       </label>
 
-      <label style="display:flex; gap:6px; align-items:center;">
+      <label style="margin-left:8px; display:flex; gap:6px; align-items:center;">
         <span style="font-weight:600;">Mode:</span>
         <select id="crx_mode" style="padding:6px 8px; border-radius:6px; border:1px solid #ccc;">
           <option value="ltr">Left → Right</option>
@@ -310,52 +59,43 @@ procedure recursiveBubble(A, n)
       </label>
     </div>
 
-    <div class="crx_legend" style="background:#f3f7f5; border:1px solid rgba(11,102,35,0.08); padding:8px 10px; border-radius:6px; color:#083d26; font-size:13px; max-width:720px;">
+    <!-- Legend explaining the finalized border meaning -->
+    <div class="crx_legend" title="Finalized element meaning">
       <strong>What the dark-green border means:</strong>
       <div style="margin-top:6px; font-size:13px;">
-        A box with a <span style="border-bottom:2px solid #0b6623; padding-bottom:1px;">dark-green border</span> is <em>finalized</em> — it has reached its correct, sorted position and will not move again.
+        A box with a <span style="border-bottom:2px solid #0b6623; padding-bottom:1px;">dark-green border</span> is <em>finalized</em> — it has reached its correct, sorted position and will not move again. Boxes get finalized one-by-one as the algorithm finishes each pass.
       </div>
     </div>
   </div>
 
-  <div id="crx_container" style="position:relative; width:100%; height:220px; border:2px solid #333; margin-top:10px; overflow-x:auto; padding:10px; box-sizing:border-box; background:#fafafa;">
+  <div id="crx_container">
     <div class="crx_spacer" style="height:160px;"></div>
   </div>
 
   <div style="display:flex; gap:12px; margin-top:12px; align-items:flex-start; flex-wrap:wrap;">
     <div style="flex:1; min-width:320px;">
-      <div id="crx_speechBar" aria-live="polite" style="margin-top:16px; padding:10px; background:#0b63d4; color:#fff; border-radius:6px; min-height:46px; display:flex; flex-direction:column; gap:6px;">
-        <div id="crx_speechCurrent" style="font-size:18px; font-weight:700; text-align:center; letter-spacing:0.4px;">Ready...</div>
-        <div id="crx_speechQueue" style="font-size:13px; opacity:0.95; text-align:center;"></div>
+      <div id="crx_speechBar" aria-live="polite">
+        <div id="crx_speechCurrent">Ready...</div>
+        <div id="crx_speechQueue"></div>
       </div>
     </div>
 
     <div style="min-width:320px; max-width:720px;">
       <label style="display:block; font-weight:700; margin-bottom:6px;">Event Log (comparisons, swaps, finalizations):</label>
       <div style="display:flex; gap:8px; align-items:center;">
-        <select id="crx_eventLog" multiple size="8" style="min-width:320px; max-width:720px; box-sizing:border-box; padding:8px; border-radius:6px; border:1px solid #ccc; background:#fff; font-family:monospace;"></select>
-        <div class="crx_log_controls" style="display:flex; gap:8px; align-items:center;">
+        <select id="crx_eventLog" multiple size="8"></select>
+        <div class="crx_log_controls">
           <button id="crx_clearLog" style="padding:8px 10px; border-radius:6px; border:1px solid #999; background:#fff; cursor:pointer;">Clear Log</button>
         </div>
       </div>
       <div style="font-size:12px; color:#666; margin-top:6px;">The top (selected) entry is the newest event; the log records every compare and swap as the visual run proceeds.</div>
     </div>
   </div>
-
 </div>
 
-<style>
-  /* gadget scoped CSS */
-  #champak_bubble_gadget .crx_box { position:absolute; width:56px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-weight:700; user-select:none; box-shadow:0 6px 14px rgba(0,0,0,0.08); transition: transform 0.35s ease, box-shadow 0.35s ease, left 0.25s ease; }
-  #champak_bubble_gadget .crx_box .idx { position:absolute; right:-10px; top:-10px; font-size:10px; background:rgba(255,255,255,0.85); padding:2px 4px; border-radius:6px; border:1px solid rgba(0,0,0,0.06); font-weight:600; }
-  #champak_bubble_gadget .crx_highlight { transform: scale(1.08); box-shadow: 0 10px 26px rgba(11,99,212,0.24) !important; }
-  #champak_bubble_gadget .crx_final { border: 4px solid #0b6623 !important; box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important; }
-</style>
-
-<script type="text/javascript">
+<script>
 (function(){
   // DOM refs
-  const base = document.getElementById('champak_bubble_gadget');
   const container = document.getElementById('crx_container');
   const createBtn = document.getElementById('crx_createBtn');
   const sortBtn = document.getElementById('crx_sortBtn');
@@ -420,19 +160,28 @@ procedure recursiveBubble(A, n)
       speechQueueDiv.innerHTML = '';
     }
   }
-  function escapeHtml(s) { return String(s).replace(/[&<>\"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   function enqueuePhrase(phrase){ phraseQueue.push(phrase); updateSpeechBarUI(); }
   function dequeuePhrase(){ phraseQueue.shift(); updateSpeechBarUI(); }
 
   // event log functions
   function logEvent(text) {
+    // newest at bottom; we'll keep scroll to bottom by selecting last index
     const opt = document.createElement('option');
     opt.innerHTML = text;
-    eventLog.add(opt, 0);
-    while (eventLog.options.length > LOG_CAP) { eventLog.remove(eventLog.options.length - 1); }
-    if (eventLog.options.length) { eventLog.selectedIndex = 0; }
+    eventLog.add(opt, 0); // add at top so newest appear at top
+    // Ensure cap
+    while (eventLog.options.length > LOG_CAP) {
+      eventLog.remove(eventLog.options.length - 1);
+    }
+    // select first (newest) so it shows
+    if (eventLog.options.length) {
+      eventLog.selectedIndex = 0;
+    }
   }
-  function clearLog() { eventLog.innerHTML = ''; }
+  function clearLog() {
+    eventLog.innerHTML = '';
+  }
 
   // speak with duration target
   function speakPhraseForDuration(phrase, targetMs){
@@ -516,7 +265,7 @@ procedure recursiveBubble(A, n)
     container.style.minWidth = (parsed.length * spacing + 20) + 'px';
     phraseQueue = [];
     updateSpeechBarUI();
-    clearLog();
+    clearLog(); // clear previous events when creating new boxes
     logEvent(`Created ${parsed.length} boxes: [${parsed.join(', ')}]`);
     recenterBoxes();
   }
@@ -542,6 +291,7 @@ procedure recursiveBubble(A, n)
     if (i<0||j<0||i>=boxes.length||j>=boxes.length) return;
     const a = boxes[i], b = boxes[j];
     const phrase = `Comparing ${values[i]} and ${values[j]}`;
+    // Log the comparison (newest on top)
     logEvent(`Compare: indices ${i} vs ${j} — values ${values[i]} vs ${values[j]}`);
     addHighlight(a); addHighlight(b);
     const sp = speakPhraseForDuration(phrase, compareMs);
@@ -559,6 +309,7 @@ procedure recursiveBubble(A, n)
     const dAB = leftB - leftA, dBA = leftA - leftB;
     const phrase = `Swapping ${valA} and ${valB}`;
 
+    // Log the swap
     logEvent(`Swap: indices ${i} <-> ${j} — values ${valA} <-> ${valB}`);
 
     const speechPromise = speakPhraseForDuration(phrase, swapTotalMs);
@@ -605,7 +356,7 @@ procedure recursiveBubble(A, n)
     boxes.forEach(box=>{ box.style.transition = 'transform 0.35s ease, box-shadow 0.35s ease, left 0.25s ease'; });
   }
 
-  // bubble sort driver
+  // bubble sort driver with three modes and early exit when no swaps in a full pass
   async function bubbleSort(){
     if (busy) return;
     if (values.length < 2) return;
@@ -619,6 +370,7 @@ procedure recursiveBubble(A, n)
 
     while (pass < n - 1 && swappedThisPass) {
       swappedThisPass = false;
+      // determine direction for this pass
       const mode = modeSelect.value; // 'ltr', 'rtl', 'alt'
       let dir = 'ltr';
       if (mode === 'ltr') dir = 'ltr';
@@ -628,6 +380,7 @@ procedure recursiveBubble(A, n)
       logEvent(`Pass ${pass + 1} — direction: ${dir.toUpperCase()}`);
 
       if (dir === 'ltr') {
+        // i = 0 .. n-2-pass
         for (let i = 0; i < n - 1 - pass; i++) {
           await highlightAndSpeakCompare(i, i+1);
           if (values[i] > values[i+1]) {
@@ -635,20 +388,25 @@ procedure recursiveBubble(A, n)
             swappedThisPass = true;
           }
         }
+        // mark the element at position (n-1-pass) as finalized
         const finalizedIdx = n - 1 - pass;
         if (boxes[finalizedIdx]) {
-          removeHighlight(boxes[finalizedIdx]);
+          removeHighlight(boxes[finalizedIdx]); // remove any blue highlight
           boxes[finalizedIdx].classList.add('crx_final');
           logEvent(`Finalized: index ${finalizedIdx} — value ${values[finalizedIdx]}`);
         }
       } else {
+        // dir === 'rtl'
+        // i = n-1 .. 1+pass
         for (let i = n - 1; i > pass; i--) {
           await highlightAndSpeakCompare(i, i-1);
           if (values[i-1] > values[i]) {
+            // swap positions i-1 and i (which are adjacent)
             await swapAnimationSpeak(i-1, i);
             swappedThisPass = true;
           }
         }
+        // mark the element at position (pass) as finalized
         const finalizedIdx = pass;
         if (boxes[finalizedIdx]) {
           removeHighlight(boxes[finalizedIdx]);
@@ -658,13 +416,25 @@ procedure recursiveBubble(A, n)
       }
 
       pass++;
-      if (!swappedThisPass) { logEvent(`No swaps in pass ${pass}; early exit`); break; }
+      // If no swap happened in this whole pass, early exit
+      if (!swappedThisPass) {
+        logEvent(`No swaps in pass ${pass}; early exit`);
+        break;
+      }
     }
 
-    boxes.forEach((b, idx) => { removeHighlight(b); if (!b.classList.contains('crx_final')) { b.classList.add('crx_final'); logEvent(`Finalized (end): index ${idx} — value ${values[idx]}`); } });
+    // After loop finishes, mark any remaining items as finalized (in case early exit left some)
+    boxes.forEach((b, idx) => {
+      removeHighlight(b);
+      if (!b.classList.contains('crx_final')) {
+        b.classList.add('crx_final');
+        logEvent(`Finalized (end): index ${idx} — value ${values[idx]}`);
+      }
+    });
 
     busy = false; createBtn.disabled = false; sortBtn.disabled = false;
 
+    // small sorted highlight flash (kept for familiarity)
     boxes.forEach(b => { b.classList.add('crx_highlight'); });
     setTimeout(()=> boxes.forEach(b => b.classList.remove('crx_highlight')), 600);
 
@@ -675,8 +445,11 @@ procedure recursiveBubble(A, n)
   }
 
   // events
-  createBtn.addEventListener('click', createBoxes);
+  createBtn.addEventListener('click', () => {
+    createBoxes();
+  });
   sortBtn.addEventListener('click', bubbleSort);
+
   clearLogBtn.addEventListener('click', ()=>{ clearLog(); logEvent('Log cleared'); });
 
   // recenter on resize
@@ -688,223 +461,3 @@ procedure recursiveBubble(A, n)
 
 })();
 </script>
-<!-- End of gadget code -->
-  
-  
-  <!-- SECTION: Assignments BEGIN -->
-  <section id="assignments" aria-label="Assignments and Solutions">
-    <h2 style="color:#0b63d4; margin-top:18px;">🔹 10 Assignments (solutions hidden — click to view)</h2>
-
-    <!-- Assignment 1 BEGIN -->
-    <article style="margin-top:12px;">
-      <h3>Assignment 1 — Implement Bubble Sort in C</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution (C)</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-<pre>
-#include &lt;stdio.h&gt;
-
-void bubbleSort(int arr[], int n) {
-    for (int i=0; i&lt;n-1; i++) {
-        for (int j=0; j&lt;n-i-1; j++) {
-            if (arr[j] &gt; arr[j+1]) {
-                int temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
-            }
-        }
-    }
-}
-
-int main() {
-    int arr[] = {5, 3, 8, 4, 2};
-    int n = sizeof(arr)/sizeof(arr[0]);
-    bubbleSort(arr, n);
-    for (int i=0; i&lt;n; i++) printf("%d ", arr[i]);
-    return 0;
-}
-</pre>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 1 END -->
-
-    <!-- Assignment 2 BEGIN -->
-    <article style="margin-top:12px;">
-      <h3>Assignment 2 — Implement Bubble Sort in Java</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution (Java)</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-<pre>
-public class BubbleSort {
-    public static void bubbleSort(int[] arr) {
-        int n = arr.length;
-        for (int i=0; i&lt;n-1; i++) {
-            for (int j=0; j&lt;n-i-1; j++) {
-                if (arr[j] &gt; arr[j+1]) {
-                    int tmp = arr[j];
-                    arr[j] = arr[j+1];
-                    arr[j+1] = tmp;
-                }
-            }
-        }
-    }
-    public static void main(String[] args) {
-        int[] arr = {5,3,8,4,2};
-        bubbleSort(arr);
-        for (int v : arr) System.out.print(v + " ");
-    }
-}
-</pre>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 2 END -->
-
-    <!-- Assignment 3 BEGIN -->
-    <article style="margin-top:12px;">
-      <h3>Assignment 3 — Implement Bubble Sort in Python</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution (Python)</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-<pre>
-def bubble_sort(arr):
-    n = len(arr)
-    for i in range(n):
-        for j in range(0, n-i-1):
-            if arr[j] &gt; arr[j+1]:
-                arr[j], arr[j+1] = arr[j+1], arr[j]
-
-if __name__ == "__main__":
-    arr = [5,3,8,4,2]
-    bubble_sort(arr)
-    print(arr)
-</pre>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 3 END -->
-
-    <!-- Assignment 4 BEGIN -->
-    <article style="margin-top:12px;">
-      <h3>Assignment 4 — Modify Bubble Sort to sort in descending order</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Hint / Solution</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-          <p>Change the comparison from <code>&gt;</code> to <code>&lt;</code>. For example, in Python: <code>if arr[j] &lt; arr[j+1]: swap(...)</code></p>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 4 END -->
-
-    <!-- Assignment 5 BEGIN -->
-    <article style="margin-top:12px;">
-      <h3>Assignment 5 — Find the second largest element using Bubble Sort idea</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Hint / Solution</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-          <p>Run Bubble Sort for two passes; after the second pass the second-last element is the 2nd largest. Or maintain the largest and second-largest while scanning in O(n).</p>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 5 END -->
-
-    <!-- Assignment 6 BEGIN -->
-    <article style="margin-top:12px;">
-      <h3>Assignment 6 — Count the number of swaps performed</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-<pre>
-# Python example
-def bubble_swap_count(arr):
-    n = len(arr)
-    swaps = 0
-    for i in range(n):
-        for j in range(0, n-i-1):
-            if arr[j] &gt; arr[j+1]:
-                arr[j], arr[j+1] = arr[j+1], arr[j]
-                swaps += 1
-    return swaps
-</pre>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 6 END -->
-
-    <!-- Assignment 7 BEGIN -->
-    <article style="margin-top:12px;">
-      <h3>Assignment 7 — Detect a sorted array early (use swapped flag)</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Solution</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-          <p>Use a boolean <code>swapped</code> flag inside the outer loop. If after a full inner loop no swaps occurred, break early.</p>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 7 END -->
-
-    <!-- Assignment 8 BEGIN -->
-    <article style="margin-top:12px;">
-      <h3>Assignment 8 — Implement Bubble Sort on a linked list</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Hint</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-          <p>Swap node data or adjust node links while iterating until no swaps remain. Complexity is O(n²) still.</p>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 8 END -->
-
-    <!-- Assignment 9 BEGIN -->
-    <article style="margin-top:12px;">
-      <h3>Assignment 9 — Implement recursive Bubble Sort</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Hint</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-          <p>Bubble the largest to end, then call recursion on n-1 elements. Base case n==1.</p>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 9 END -->
-
-    <!-- Assignment 10 BEGIN -->
-    <article style="margin-top:12px; margin-bottom:14px;">
-      <h3>Assignment 10 — Compare Bubble Sort with Selection Sort</h3>
-      <details>
-        <summary class="crx_btn" style="display:inline-block; margin-top:6px;">Show Notes</summary>
-        <div style="padding:10px; margin-top:8px; border-radius:8px; background:#fbfcff; border:1px solid #e6e9ef;">
-          <p>Both have O(n²) time. Selection Sort typically performs fewer swaps (O(n) swaps) while Bubble Sort may do many swaps. Selection Sort is not stable by default; Bubble Sort is stable.</p>
-        </div>
-      </details>
-    </article>
-    <!-- Assignment 10 END -->
-
-  </section>
-  <!-- SECTION: Assignments END -->
-<!-- Further Reading SECTION: BEGIN -->
-<section id="further-reading" class="crx_section" aria-label="Further reading and links">
-  <h2 class="crx_section__title">🔹 Further Reading</h2>
-
-  <ul class="crx_links_list">
-    
-
-    <li class="crx_link_item">
-      <a class="crx_link_anchor" href="https://en.wikipedia.org/wiki/Bubble_sort" target="_blank" rel="noopener">
-        Wikipedia — Bubble Sort
-      </a>
-    </li>
-
-   
-  </ul>
-</section>
-<!-- Further Reading SECTION: END -->
-
-  <!-- SECTION: Footer BEGIN -->
-  <footer style="margin-top:22px; padding-top:12px; border-top:1px solid #e6e9ef;">
-    <p style="color:#475569; font-size:14px;">
-  </footer>
-  <!-- SECTION: Footer END -->
-
-</div>
-<!-- POST: END -->

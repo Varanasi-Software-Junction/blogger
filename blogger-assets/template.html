@@ -1,0 +1,347 @@
+ <!-- Blogger-ready post for learnwithchampak.live
+     Author: Champak Roy — Learning Sutras (learnwithchampak.live)
+     Uses hosted assets (crx_styles_v1.css, crx_ui_v1.js)
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Understanding the Internet — From Telephone Lines to the Web</title>
+  <meta name="description" content="Learn how the Internet evolved: telephone networks, circuit switching, packet switching, IP addresses, protocols, HTTP, Telnet and client-server model." />
+  <meta name="author" content="Champak Roy — Learning Sutras" />
+  <!-- Hosted project styles / UI (kept as requested) -->
+  <link rel="stylesheet" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css">
+  <script src="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js" defer></script>
+
+  <!-- Post-scoped styles for the animations & code prettiness -->
+  <style>
+    /* Post container */
+    .lw-post {
+      max-width: 920px;
+      margin: 1.6rem auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(31, 41, 55, 0.06);
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: #0b2545;
+      line-height: 1.6;
+    }
+
+    .lw-header {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .lw-logo {
+      width:64px; height:64px; border-radius:12px; background: linear-gradient(135deg,#0b5ed7,#198754);
+      display:flex; align-items:center; justify-content:center; font-weight:700; color:white;
+      box-shadow: 0 6px 18px rgba(11,94,215,0.18);
+      font-family: monospace;
+    }
+
+    h1 { font-size: 1.9rem; margin:0.1rem 0 0.6rem 0; }
+    .meta { color:#4b5563; font-size:0.92rem; margin-bottom:1rem; }
+
+    /* Two-column layout for illustrations and text on wide screens */
+    .grid-2 { display:grid; grid-template-columns: 1fr; gap:18px; }
+    @media(min-width:900px){ .grid-2 { grid-template-columns: 420px 1fr; } }
+
+    /* Illustration card */
+    .illustration {
+      background: linear-gradient(180deg, #f8fbff, #ffffff);
+      border: 1px solid rgba(11,37,77,0.04);
+      padding: 14px;
+      border-radius: 10px;
+      box-shadow: 0 6px 16px rgba(11,37,77,0.04);
+    }
+
+    .caption { font-size:0.9rem; color:#475569; margin-top:8px; }
+
+    /* Packet travel animation */
+    .network-canvas {
+      width:100%; height:220px; display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden;
+    }
+    .node {
+      width:120px; height:72px; background:#0b5ed7; color:white; border-radius:8px;
+      display:flex; align-items:center; justify-content:center; font-weight:600;
+      box-shadow: 0 6px 18px rgba(11,94,215,0.12);
+    }
+    .node.server { background: linear-gradient(180deg,#0b5ed7,#0b6fe0); }
+    .node.client { background: linear-gradient(180deg,#06b6d4,#0891b2); }
+
+    .link {
+      position:absolute; height:2px; background:linear-gradient(90deg,#94a3b8,#c7d2fe); opacity:0.85;
+      top:48%;
+      left:20%;
+      right:20%;
+      border-radius:4px;
+      transform-origin:center;
+    }
+
+    /* packet */
+    .packet {
+      position:absolute; width:18px; height:14px; border-radius:4px;
+      background: #f59e0b; box-shadow: 0 4px 10px rgba(245,158,11,0.32);
+      top:calc(48% - 8px);
+      left:22%;
+      animation: movePacket 2.6s linear infinite;
+    }
+
+    @keyframes movePacket {
+      0%   { left:22%; opacity:1; transform:translateX(0) scale(1); }
+      45%  { left:78%; opacity:1; transform:translateX(0) scale(1); }
+      50%  { left:78%; opacity:0.3; transform:scale(0.85); }
+      60%  { left:38%; opacity:0.8; transform:scale(0.95); }
+      100% { left:22%; opacity:1; transform:translateX(0) scale(1); }
+    }
+
+    /* Client-server animation */
+    .cs-canvas { padding:12px 6px; display:flex; gap:12px; align-items:center; justify-content:space-between; }
+    .cs-box {
+      width:45%; min-height:110px; background:#f1f5f9; border-radius:10px; padding:12px;
+      display:flex; flex-direction:column; gap:8px; align-items:flex-start;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.02);
+    }
+    .cs-box strong { color:#0b2545; }
+    .arrow {
+      width:8%; text-align:center;
+    }
+    .req, .res {
+      width:70px; height:28px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center;
+      font-size:0.86rem; color:white; font-weight:700;
+    }
+    .req { background:#2563eb; animation: flashReq 2.2s linear infinite; }
+    .res { background:#16a34a; animation: flashRes 2.2s linear infinite; }
+
+    @keyframes flashReq {
+      0% { transform: translateY(0); opacity:1; }
+      50% { transform: translateY(-8px); opacity:0.7; }
+      100% { transform: translateY(0); opacity:1; }
+    }
+    @keyframes flashRes {
+      0% { transform: translateY(0); opacity:0.8; }
+      50% { transform: translateY(8px); opacity:1; }
+      100% { transform: translateY(0); opacity:0.8; }
+    }
+
+    /* Code block */
+    pre.code-sample {
+      background: #0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+      font-size:0.92rem;
+    }
+
+    /* Action row fallback (if crx classes missing) */
+    .crx_action_row { display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
+    .crx_btn { display:inline-block; padding:10px 14px; border-radius:8px; text-decoration:none; font-weight:700; color:#fff; box-shadow:0 6px 18px rgba(2,6,23,0.06); }
+  </style>
+</head>
+<body>
+  <article class="lw-post">
+    <header class="lw-header">
+      <div class="lw-logo">CW</div>
+      <div>
+        <h1>Understanding the Internet — From Telephone Lines to the Web</h1>
+        <div class="meta">By Champak Roy — <a href="https://learnwithchampak.live" target="_blank" rel="noopener">learnwithchampak.live</a> · Beginner guide · Illustrated</div>
+      </div>
+    </header>
+
+    <section>
+      <p>Before computers were networked, telephones gave people a way to communicate across distances. That old system helps us understand how the Internet evolved. This post starts with telephone networks and builds step-by-step to IP addresses, protocols, HTTP, Telnet and the client–server model — with simple animated illustrations to make the ideas stick.</p>
+    </section>
+
+    <hr />
+
+    <section class="grid-2">
+      <!-- Illustration column -->
+      <div class="illustration">
+        <h3 style="margin-top:0;">Packet travel — visual demo</h3>
+        <div class="network-canvas" aria-hidden="true">
+          <!-- Left: Client node -->
+          <div class="node client" style="position:absolute; left:6%; top:35%;">Client</div>
+          <!-- Right: Server node -->
+          <div class="node server" style="position:absolute; right:6%; top:35%;">Server</div>
+
+          <!-- Link line -->
+          <div class="link" aria-hidden="true"></div>
+
+          <!-- Packet (animated) -->
+          <div class="packet" aria-hidden="true" title="Packet moving"></div>
+
+          <!-- Router/ISP small box in middle -->
+          <div style="position:absolute; left:calc(50% - 42px); top:32%;">
+            <div style="width:84px; height:44px; border-radius:8px; background:#0f1724; color:#e6eef8; display:flex; align-items:center; justify-content:center; font-weight:700; box-shadow: 0 8px 20px rgba(2,6,23,0.08);">Router</div>
+          </div>
+        </div>
+        <div class="caption">Packets are small pieces of data that travel independently — the packet above loops between client & server to show many packets in-flight.</div>
+      </div>
+
+      <!-- Explanatory text -->
+      <div>
+        <h2>1. From telephones to packet switching</h2>
+        <p><strong>Telephone networks</strong> originally used <strong>circuit switching</strong>: a dedicated line is opened between caller and receiver for the whole call. That wastes resources if nobody speaks. The Internet uses <strong>packet switching</strong> — messages are split into packets, each routed independently and reassembled at the destination.</p>
+
+        <h3>Why packet switching?</h3>
+        <ul>
+          <li>Efficient — multiple conversations share the same link.</li>
+          <li>Resilient — packets can take alternate routes if a link fails.</li>
+          <li>Scalable — easier to add more devices.</li>
+        </ul>
+      </div>
+    </section>
+
+    <hr />
+
+    <section class="grid-2" style="margin-top:18px;">
+      <!-- illustration -->
+      <div class="illustration">
+        <h3 style="margin-top:0;">Client ↔ Server exchange (request/response)</h3>
+        <div class="cs-canvas" role="img" aria-label="Animated client server request and response">
+          <div class="cs-box">
+            <div style="display:flex; width:100%; justify-content:space-between; align-items:center;">
+              <div><strong>Client</strong></div>
+              <div style="font-size:0.85rem; color:#475569;">(browser)</div>
+            </div>
+            <div style="margin-top:auto;">
+              <div class="req">Request →</div>
+            </div>
+          </div>
+
+          <div class="arrow">
+            <div style="font-size:1.6rem; color:#94a3b8;">⇄</div>
+          </div>
+
+          <div class="cs-box">
+            <div style="display:flex; width:100%; justify-content:space-between; align-items:center;">
+              <div><strong>Server</strong></div>
+              <div style="font-size:0.85rem; color:#475569;">(web server)</div>
+            </div>
+            <div style="margin-top:auto;">
+              <div class="res">← Response</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="caption">A client (your browser) sends a request; a server responds. This simple pattern underlies most Internet interactions.</div>
+      </div>
+
+      <!-- text -->
+      <div>
+        <h2>2. IP addresses — the Internet's postal address</h2>
+        <p>Every device on the network needs an address. The Internet Protocol (IP) gives each device a unique identifier so packets know where to go.</p>
+
+        <h4>IPv4 example</h4>
+        <pre class="code-sample"><code>192.168.1.10</code></pre>
+
+        <p>IPv4 uses four numbers (0–255) separated by dots. There are only ~4.3 billion addresses in IPv4, which is why <strong>IPv6</strong> was introduced:</p>
+
+        <h4>IPv6 example</h4>
+        <pre class="code-sample"><code>2400:cb00:2048:1::c629:d7a2</code></pre>
+      </div>
+    </section>
+
+    <hr />
+
+    <section>
+      <h2>3. What is a protocol?</h2>
+      <p>A <strong>protocol</strong> is a set of rules that both ends follow to exchange data. If two devices speak the same protocol, they understand each other.</p>
+
+      <h4>Common protocols</h4>
+      <ul>
+        <li><strong>HTTP / HTTPS</strong> — the web's protocol for transferring pages and resources.</li>
+        <li><strong>DNS</strong> — translates domain names (like <em>learnwithchampak.live</em>) into IP addresses.</li>
+        <li><strong>FTP</strong> — file transfer.</li>
+        <li><strong>SMTP / IMAP / POP</strong> — email delivery & retrieval.</li>
+        <li><strong>Telnet / SSH</strong> — remote shell access (Telnet is unencrypted; SSH is secure).</li>
+      </ul>
+
+      <h3>HTTP — simple request / response</h3>
+      <p>When you open a web page, your browser sends an HTTP request and the server returns an HTTP response.</p>
+
+      <pre class="code-sample"><code>GET /index.html HTTP/1.1
+Host: learnwithchampak.live
+
+-- server responds --
+
+HTTP/1.1 200 OK
+Content-Type: text/html
+&lt;html&gt;...page...&lt;/html&gt;
+</code></pre>
+
+      <p>HTTPS adds encryption (TLS) so the content and credentials are protected in transit.</p>
+    </section>
+
+    <hr />
+
+    <section>
+      <h2>4. Telnet — early remote access (text only)</h2>
+      <p><strong>Telnet</strong> was an early tool to log into remote machines and type commands. It sends text across the network unencrypted, so modern usage is discouraged in favor of <strong>SSH</strong> (Secure Shell).</p>
+
+      <p>Telnet example (historical / educational):</p>
+      <pre class="code-sample"><code>telnet towel.blinkenlights.nl
+-- plays Star Wars in ASCII --</code></pre>
+
+      <p>Use <code>ssh user@server</code> for secure remote login instead of telnet.</p>
+    </section>
+
+    <hr />
+
+    <section>
+      <h2>5. Client–Server model: the Internet’s main pattern</h2>
+      <p>Most internet interactions use the <strong>client-server model</strong>: clients (browsers, apps) request resources; servers (web servers, databases) respond. The server can be a physical machine or a cloud-hosted service.</p>
+
+      <h4>Example flow when you visit a website</h4>
+      <ol>
+        <li>You type <strong>learnwithchampak.live</strong>.</li>
+        <li>Your browser asks DNS for the site's IP address.</li>
+        <li>Your browser opens a TCP connection to that IP (port 80 for HTTP, 443 for HTTPS).</li>
+        <li>The browser sends an HTTP request and the server sends back HTML/CSS/JS and media.</li>
+        <li>Your browser renders the page.</li>
+      </ol>
+    </section>
+
+    <hr />
+
+    <section>
+      <h2>6. Putting it all together — short glossary</h2>
+      <dl>
+        <dt><strong>Packet</strong></dt>
+        <dd>Small chunk of data with header (address info) and payload (actual data).</dd>
+
+        <dt><strong>IP Address</strong></dt>
+        <dd>Numeric address assigned to a device (IPv4 or IPv6).</dd>
+
+        <dt><strong>Protocol</strong></dt>
+        <dd>Rules for communication (HTTP, DNS, TCP, UDP, SSH).</dd>
+
+        <dt><strong>Router</strong></dt>
+        <dd>Network device that forwards packets between networks.</dd>
+      </dl>
+    </section>
+
+    <hr />
+
+    <section>
+      <h2>7. Next steps & further reading</h2>
+      <ul>
+        <li>Read more about <strong>DNS</strong> and how domain names map to IP addresses.</li>
+        <li>Try capturing packets with <em>Wireshark</em> (educational—practice on your own network).</li>
+        <li>Learn basics of <strong>TCP vs UDP</strong> for transport layer differences.</li>
+      </ul>
+
+      <div class="crx_action_row" aria-hidden="false">
+        <a class="crx_btn" href="https://wa.me/919335874326" target="_blank" rel="noopener">📱 Contact on WhatsApp</a>
+        <a class="crx_btn" href="https://github.com/Varanasi-Software-Junction" target="_blank" rel="noopener">💻 Learning Sutras on GitHub</a>
+        <a class="crx_btn" href="https://learnwithchampak.live" target="_blank" rel="noopener">🏠 learnwithchampak.live</a>
+      </div>
+    </section>
+
+    <footer style="margin-top:18px; color:#475569; font-size:0.95rem;">
+      <p><strong>Author:</strong> Champak Roy — Learning Sutras · <a href="https://learnwithchampak.live" target="_blank" rel="noopener">learnwithchampak.live</a></p>
+      <p style="margin-top:0.2rem;">Want this as a downloadable cheat-sheet or an SVG poster for classrooms? Reply and I’ll add a printable poster (A4) and a compact cheat-sheet you can attach to your post.</p>
+    </footer>
+  </article>
+</body>
+</html>
