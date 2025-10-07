@@ -2,7 +2,7 @@
  gadsget-donate.js — embeddable donate gadget
  - Self-contained: injects CSS + HTML and wires Copy / Share behavior
  - Usage:
-   1) Add <div data-gadsget="donate" data-upi="champaksworld-1.,hdfc" data-alerts="true"></div>
+   1) Add <div data-gadsget="donate" data-upi="champaksworld-1@hdfcbank" data-alerts="true"></div>
       and include this script (defer) OR
    2) Include this script alone (no container) — will append the widget to document.body
  - Exposes window.gadsgetDonate API
@@ -11,7 +11,7 @@
 (function () {
   'use strict';
 
-  const DEFAULT_UPI = 'champaksworld-1.,hdfc';
+  const DEFAULT_UPI = 'champaksworld-1@hdfcbank';
   const DEFAULT_TITLE = 'Support Learning Sutras';
   const DEFAULT_ALERTS = true;
 
