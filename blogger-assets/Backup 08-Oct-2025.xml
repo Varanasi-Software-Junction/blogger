@@ -955,165 +955,181 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
 
               
                 
-                <!-- Donation -->
-<div aria-labelledby='donateHeading' class='donate-card' role='region'>
-  <div class='crx-fragment'>Donate box here</div>
+                
+                
+                <script type='text/javascript'>
+(function(){
+  function whenReady(fn) {
+    if (document.readyState === &quot;loading&quot;) document.addEventListener(&quot;DOMContentLoaded&quot;, fn);
+    else fn();
+  }
 
-  <h3 id='donateHeading' style='margin-top:12px;'>Support Learning Sutras</h3>
-  <p class='small'>
-    If Learning Sutras helped you, consider sending a small UPI donation. Thank you 🙏
-  </p>
+  whenReady(function(){
+    var upiEl = document.getElementById(&quot;upiId&quot;);
+    if (!upiEl) return;
+    var upiId = upiEl.textContent.trim();
 
-  <div aria-live='polite' class='donate-row'>
-    <div class='donate-label'>UPI ID</div>
-    <div aria-label='UPI ID' class='upi-box' id='upiId' tabindex='0'>
-      champaksworld-1@hdfcbank
-    </div>
-  </div>
+    var copyBtn = document.getElementById(&quot;copyUpi&quot;);
+    var shareBtn = document.getElementById(&quot;shareBtn&quot;);
+    var qrBtn = document.getElementById(&quot;qrBtn&quot;);
+    var toast = document.getElementById(&quot;crx-toast&quot;);
+    var qrModal = document.getElementById(&quot;crx-qr-modal&quot;);
+    var qrImage = document.getElementById(&quot;crx-qr-image&quot;);
+    var qrUpiText = document.getElementById(&quot;crx-qr-upi&quot;);
+    var qrClose = document.getElementById(&quot;qrClose&quot;);
+    var downloadQr = document.getElementById(&quot;downloadQr&quot;);
+    var openPay = document.getElementById(&quot;openPay&quot;);
 
-  <style>
-    .donate-card {
-      background: #fefefe;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 16px;
-      margin: 20px auto;
-      max-width: 400px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    .donate-label {
-      font-weight: bold;
-      color: #444;
-      margin-bottom: 4px;
-    }
-
-    .upi-box {
-      background: #f9f9f9;
-      border: 1px dashed #ccc;
-      padding: 10px;
-      border-radius: 6px;
-      display: inline-block;
-      cursor: pointer;
-      font-family: monospace;
-    }
-
-    .upi-box:hover {
-      background: #eef;
-    }
-
-    .actions {
-      margin-top: 10px;
-    }
-
-    .bttnshare,
-    .crx-btn.secondary {
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-
-    .bttnshare {
-      background-color: #e63946;
-      color: white;
-    }
-
-    .bttnshare:hover {
-      background-color: #c62828;
-    }
-
-    .crx-btn.secondary {
-      background-color: #457b9d;
-      color: white;
-    }
-
-    .crx-btn.secondary:hover {
-      background-color: #1d3557;
-    }
-
-    #crx-toast {
-      display: none;
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #333;
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-size: 14px;
-      z-index: 10000;
-      opacity: 0;
-      transition: opacity 0.5s, bottom 0.5s;
-    }
-
-    #crx-toast.show {
-      display: block;
-      opacity: 1;
-      bottom: 36px;
-    }
-  </style>
-
-  <div class='actions'>
-    <button class='bttnshare' id='copyUpi' title='Copy UPI ID' type='button'>
-      Copy UPI
-    </button>
-    <button class='crx-btn secondary' id='shareBtn' title='Share donation details' type='button'>
-      Share
-    </button>
-  </div>
-
-  <p class='small'>
-    Tip: On mobile, use the Share button to send the UPI ID via messaging apps.
-  </p>
-</div>
-
-<!-- Toast element -->
-<div aria-live='polite' id='crx-toast' role='status'>Copied</div>
-
-<!-- Donation JS -->
-<script>
-  document.addEventListener(&quot;DOMContentLoaded&quot;, function () {
-    const upiId = document.getElementById(&quot;upiId&quot;).innerText.trim();
-    const copyBtn = document.getElementById(&quot;copyUpi&quot;);
-    const shareBtn = document.getElementById(&quot;shareBtn&quot;);
-    const toast = document.getElementById(&quot;crx-toast&quot;);
-
-    function showToast(message) {
-      toast.innerText = message;
+    function showToast(msg) {
+      if (!toast) return;
+      toast.innerText = msg;
       toast.classList.add(&quot;show&quot;);
-      setTimeout(() =&gt; toast.classList.remove(&quot;show&quot;), 2000);
+      toast.style.display = &quot;block&quot;;
+      // remove after timeout
+      setTimeout(function(){ toast.classList.remove(&quot;show&quot;); }, 2000);
     }
 
-    copyBtn.addEventListener(&quot;click&quot;, async () =&gt; {
+    // Robust copy: try navigator.clipboard, fallback to textarea + execCommand
+    function copyToClipboard(text) {
+      return new Promise(function(resolve, reject){
+        // Try modern API first
+        if (navigator.clipboard &amp;&amp; navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function(){
+            resolve(true);
+          }).catch(function(err){
+            // fallback if it fails
+            try {
+              fallbackCopy(text) ? resolve(true) : reject(new Error(&quot;Fallback copy failed&quot;));
+            } catch(e) { reject(e); }
+          });
+        } else {
+          // no clipboard API available -&gt; fallback
+          try {
+            fallbackCopy(text) ? resolve(true) : reject(new Error(&quot;Fallback copy failed&quot;));
+          } catch(e) { reject(e); }
+        }
+      });
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement(&quot;textarea&quot;);
+      // place off-screen
+      ta.style.position = &quot;fixed&quot;;
+      ta.style.left = &quot;-9999px&quot;;
+      ta.style.top = &quot;0&quot;;
+      ta.setAttribute(&quot;readonly&quot;, &quot;&quot;);
+      ta.value = text;
+      document.body.appendChild(ta);
+
+      // Select the text
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+
+      var ok = false;
       try {
-        await navigator.clipboard.writeText(upiId);
-        showToast(&quot;UPI ID Copied!&quot;);
-      } catch {
-        showToast(&quot;Copy failed&quot;);
+        ok = document.execCommand(&#39;copy&#39;);
+      } catch (e) {
+        ok = false;
+      }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    // Attach handlers
+    if (copyBtn) {
+      copyBtn.addEventListener(&quot;click&quot;, function(){
+        copyToClipboard(upiId).then(function(){
+          showToast(&quot;UPI ID copied to clipboard&quot;);
+        }).catch(function(err){
+          // If both methods fail, suggest manual copy
+          showToast(&quot;Unable to copy automatically. Please select and copy manually.&quot;);
+          // Optionally select the upiEl text for the user
+          try {
+            // create temporary selection range on upiEl
+            var range = document.createRange();
+            range.selectNodeContents(upiEl);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          } catch(e) { /* ignore */ }
+        });
+      });
+    }
+
+    // Make clicking the UPI box copy as well
+    upiEl.addEventListener(&quot;click&quot;, function(){
+      copyToClipboard(upiId).then(function(){ showToast(&quot;UPI ID copied to clipboard&quot;); }).catch(function(){ showToast(&quot;Tap Copy button or select the text to copy&quot;); });
+    });
+
+    // Keyboard accessibility: Enter/Space should copy
+    upiEl.addEventListener(&quot;keydown&quot;, function(e){
+      if (e.key === &quot;Enter&quot; || e.key === &quot; &quot;) {
+        e.preventDefault();
+        copyToClipboard(upiId).then(function(){ showToast(&quot;UPI ID copied to clipboard&quot;); }).catch(function(){ showToast(&quot;Tap Copy button or select the text to copy&quot;); });
       }
     });
 
-    shareBtn.addEventListener(&quot;click&quot;, async () =&gt; {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: &quot;Support Learning Sutras 💖&quot;,
-            text: `Here&#8217;s the UPI ID for donations: ${upiId}`,
-          });
-        } catch {
-          showToast(&quot;Share cancelled&quot;);
+    // Existing share / QR handlers kept (unchanged)
+    if (shareBtn) {
+      shareBtn.addEventListener(&quot;click&quot;, function(){
+        var text = &quot;Support Learning Sutras &#8212; UPI ID: &quot; + upiId;
+        if (navigator.share) {
+          navigator.share({ title: &quot;Support Learning Sutras&quot;, text: text }).catch(function(){ showToast(&quot;Share cancelled&quot;); });
+        } else {
+          // fallback: copy to clipboard and notify
+          copyToClipboard(text).then(function(){ showToast(&quot;Donation details copied&quot;); }).catch(function(){ showToast(&quot;Share not supported&quot;); });
         }
-      } else {
-        showToast(&quot;Sharing not supported&quot;);
-      }
-    });
+      });
+    }
+
+    function qrImageUrlFor(text, size) {
+      size = size || 220;
+      return &quot;https://chart.googleapis.com/chart?cht=qr&amp;chs=&quot; + encodeURIComponent(size + &quot;x&quot; + size) + &quot;&amp;chl=&quot; + encodeURIComponent(text) + &quot;&amp;chld=L|1&quot;;
+    }
+
+    if (qrBtn) {
+      qrBtn.addEventListener(&quot;click&quot;, function(){
+        var upiPayload = &quot;upi://pay?pa=&quot; + encodeURIComponent(upiId) + &quot;&amp;pn=&quot; + encodeURIComponent(&quot;Learning Sutras&quot;) + &quot;&amp;cu=INR&quot;;
+        var url = qrImageUrlFor(upiPayload, 300);
+        if (qrImage) qrImage.setAttribute(&quot;src&quot;, url);
+        if (qrUpiText) qrUpiText.textContent = upiId;
+        if (qrModal) { qrModal.style.display = &quot;flex&quot;; qrModal.setAttribute(&quot;aria-hidden&quot;,&quot;false&quot;); }
+      });
+    }
+
+    function closeModal() {
+      if (qrModal) { qrModal.style.display = &quot;none&quot;; qrModal.setAttribute(&quot;aria-hidden&quot;,&quot;true&quot;); }
+    }
+    if (qrClose) qrClose.addEventListener(&quot;click&quot;, closeModal);
+    if (qrModal) qrModal.addEventListener(&quot;click&quot;, function(e){ if (e.target === qrModal) closeModal(); });
+    document.addEventListener(&quot;keydown&quot;, function(e){ if (e.key === &quot;Escape&quot;) closeModal(); });
+
+    if (downloadQr) {
+      downloadQr.addEventListener(&quot;click&quot;, function(){
+        var upiPayload = &quot;upi://pay?pa=&quot; + encodeURIComponent(upiId) + &quot;&amp;pn=&quot; + encodeURIComponent(&quot;Learning Sutras&quot;) + &quot;&amp;cu=INR&quot;;
+        var url = qrImageUrlFor(upiPayload, 600);
+        var a = document.createElement(&quot;a&quot;);
+        a.href = url;
+        a.download = &quot;learning-sutras-upi-qr.png&quot;;
+        try { document.body.appendChild(a); a.click(); document.body.removeChild(a); }
+        catch (err) { window.open(url, &quot;_blank&quot;); }
+      });
+    }
+
+    if (openPay) {
+      openPay.addEventListener(&quot;click&quot;, function(){
+        var upiUri = &quot;upi://pay?pa=&quot; + encodeURIComponent(upiId) + &quot;&amp;pn=&quot; + encodeURIComponent(&quot;Learning Sutras&quot;) + &quot;&amp;cu=INR&quot;;
+        window.location.href = upiUri;
+      });
+    }
   });
+})();
 </script>
+
+                
+                
+                
+                
 <!-- /Donation -->
 
                 
@@ -1570,6 +1586,26 @@ var monthFormat = ["January", "February", "March", "April", "May", "June", "July
       <!-- Sidebar Wrapper -->
       <div id='sidebar-wrapper'>
         <b:section class='sidebar common-widget' id='sidebar1' name='Sidebar Right (A)' showaddelement='yes'>
+          <b:widget id='HTML5' locked='false' title='Donate' type='HTML' visible='true'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- Learning Sutras Donate Gadget -->
+<div data-gadsget="donate"
+     data-upi="champaksworld-1@hdfcbank.com"
+     data-title="Support Learning Sutras"
+     data-alerts="true"
+     data-open="https://varanasi-software-junction.github.io/blogger/blogger-assets/qr.jpg">
+</div>
+
+<!-- Load the donate gadget script -->
+<script src="https://varanasi-software-junction.github.io/blogger/blogger-assets/gadsget-donate.js" defer="defer"></script>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:include name='widget-title'/>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+</b:includable>
+          </b:widget>
           <b:widget id='HTML4' locked='false' title='' type='HTML' visible='true'>
             <b:widget-settings>
               <b:widget-setting name='content'><![CDATA[<!-- Saffron Themed Splash — shows only once per day -->
@@ -3653,11 +3689,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     
 
   <!-- <script src='https://varanasi-software-junction.github.io/search/branding/branding.js'/>-->
-  <div style='position:relative;'>
-   
-   
-
-  </div>
+  
   
   
   
