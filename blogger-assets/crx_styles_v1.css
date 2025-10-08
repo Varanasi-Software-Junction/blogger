@@ -879,7 +879,8 @@ body#layout .crx_donate_card {
 .comment-meta,
 .comment-date,
 .comment-time {
-  color: var(--crx-muted);
+  background-color: wheat;
+  color: teal;
   font-size: 12px;
 }
 
