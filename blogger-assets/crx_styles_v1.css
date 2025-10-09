@@ -958,7 +958,7 @@ input#comment-url,
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
-  background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep));
+  background-color: gray;
   color: teal;
   border: none;
   box-shadow: 0 6px 16px rgba(230,140,60,0.25);
