@@ -836,14 +836,14 @@ body#layout .crx_donate_card {
 }
 /* COMPONENT: Patch Overrides - END */
 
-/* ===== CRX — Comments contrast fixes (wheat-on-wheat) ===== */
-/* COMPONENT: Comments - BEGIN */
-/* Container background & padding for comments area */
-.comment-thread,
-.comments,
-#comments,
-.widget .comments,
-.widget[id*="comments"] {
+/* ===== CRX — commentwas contrast fixes (wheat-on-wheat) ===== */
+/* COMPONENT: commentwas - BEGIN */
+/* Container background & padding for commentwas area */
+.commentwa-thread,
+.commentwas,
+#commentwas,
+.widget .commentwas,
+.widget[id*="commentwas"] {
   background: #ffffff;
   border-radius: 10px;
   padding: 12px 14px;
@@ -851,13 +851,13 @@ body#layout .crx_donate_card {
   box-shadow: 0 6px 18px rgba(8,20,40,0.04);
 }
 
-/* Comment item (author + body) — readable text */
-.comment,
-.comment-item,
-.comment-block,
-.comment-body,
-#comments .comment,
-.widget .comment {
+/* commentwa item (author + body) — readable text */
+.commentwa,
+.commentwa-item,
+.commentwa-block,
+.commentwa-body,
+#commentwas .commentwa,
+.widget .commentwa {
   color: #0b122a;
   background: transparent;
   margin: 10px 0;
@@ -866,64 +866,64 @@ body#layout .crx_donate_card {
 }
 
 /* Author name — use primary blue and slightly bolder */
-.comment-author,
-.commenter,
-.comment-meta .user,
-.widget .comment-author {
+.commentwa-author,
+.commentwaer,
+.commentwa-meta .user,
+.widget .commentwa-author {
   color: var(--crx-primary);
   font-weight: 700;
   font-size: 14px;
 }
 
 /* Timestamps / metadata — muted gray */
-.comment-meta,
-.comment-date,
-.comment-time {
+.commentwa-meta,
+.commentwa-date,
+.commentwa-time {
   background-color: wheat;
   color: teal;
   font-size: 12px;
 }
 
-/* Comment links (reply, edit, view) — saffron accent on hover */
-.comment a,
-.comment-item a,
-.widget .comments a {
+/* commentwa links (reply, edit, view) — saffron accent on hover */
+.commentwa a,
+.commentwa-item a,
+.widget .commentwas a {
   color: teal;
   text-decoration: none;
 }
-.comment a:hover,
-.comment-item a:hover,
-.widget .comments a:hover {
+.commentwa a:hover,
+.commentwa-item a:hover,
+.widget .commentwas a:hover {
   color: var(--crx-primary-dark);
   text-decoration: underline;
 }
 
-/* If comments use small 'wheat' background chips, force them to readable surface */
-.comment .comment-content,
-.comment .content,
-.comment-text,
-.widget .comment-body .comment-content {
+/* If commentwas use small 'wheat' background chips, force them to readable surface */
+.commentwa .commentwa-content,
+.commentwa .content,
+.commentwa-text,
+.widget .commentwa-body .commentwa-content {
   background: transparent;
   color: #0b122a;
   padding: 6px 0;
 }
 
 /* Replies indentation */
-.comment-thread .children,
-.comment .children {
+.commentwa-thread .children,
+.commentwa .children {
   margin-left: 12px;
   border-left: 2px solid rgba(11,94,215,0.04);
   padding-left: 12px;
 }
 
-/* Ensure comment form fields are visible & readable */
-#comment-editor,
-textarea#comment,
-input#comment-name,
-input#comment-email,
-input#comment-url,
-.form-comment textarea,
-.form-comment input {
+/* Ensure commentwa form fields are visible & readable */
+#commentwa-editor,
+textarea#commentwa,
+input#commentwa-name,
+input#commentwa-email,
+input#commentwa-url,
+.form-commentwa textarea,
+.form-commentwa input {
   background: #fff;
   color: #071022;
   border: 1px solid rgba(11,18,32,0.06);
@@ -933,20 +933,20 @@ input#comment-url,
 
 /* Mobile tweaks */
 @media (max-width:720px) {
-  .comment, .comment-item { font-size: 15px; }
-  .comment-author { font-size: 15px; }
+  .commentwa, .commentwa-item { font-size: 15px; }
+  .commentwa-author { font-size: 15px; }
 }
-/* COMPONENT: Comments - END */
+/* COMPONENT: commentwas - END */
 
-/* ===== CRX — Stylish Post a Comment button ===== */
-/* COMPONENT: Comment Button - BEGIN */
-#comments a.comment-reply,
-#comments a.comment-link,
-#comments a[href*="comment"],
-.comments .comment-actions a,
-.post-comment-link,
-#comment-post-message a,
-#comments a {
+/* ===== CRX — Stylish Post a commentwa button ===== */
+/* COMPONENT: commentwa Button - BEGIN */
+#commentwas a.commentwa-reply,
+#commentwas a.commentwa-link,
+#commentwas a[href*="commentwa"],
+.commentwas .commentwa-actions a,
+.post-commentwa-link,
+#commentwa-post-message a,
+#commentwas a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -966,13 +966,13 @@ input#comment-url,
 }
 
 /* Hover / focus effect */
-#comments a.comment-reply:hover,
-#comments a.comment-link:hover,
-#comments a[href*="comment"]:hover,
-.comments .comment-actions a:hover,
-.post-comment-link:hover,
-#comment-post-message a:hover,
-#comments a:hover {
+#commentwas a.commentwa-reply:hover,
+#commentwas a.commentwa-link:hover,
+#commentwas a[href*="commentwa"]:hover,
+.commentwas .commentwa-actions a:hover,
+.post-commentwa-link:hover,
+#commentwa-post-message a:hover,
+#commentwas a:hover {
   background: linear-gradient(180deg, var(--crx-primary), var(--crx-primary-dark));
   box-shadow: 0 10px 24px rgba(11,94,215,0.25);
   transform: translateY(-2px);
@@ -980,11 +980,11 @@ input#comment-url,
 }
 
 /* Active click effect */
-#comments a:active {
+#commentwas a:active {
   transform: translateY(0);
   box-shadow: 0 4px 12px rgba(11,94,215,0.18);
 }
-/* COMPONENT: Comment Button - END */
+/* COMPONENT: commentwa Button - END */
 
 /* small embed helper */
 .crx_dartpadembed{
