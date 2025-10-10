@@ -1,0 +1,88 @@
+{
+  "Basic Units": {
+    "Token": "Smallest unit of code.",
+    "Lexeme": "Characters forming a token.",
+    "Identifier": "Name for variables/functions.",
+    "Keyword": "Reserved word in the language.",
+    "Literal": "Fixed constant value.",
+    "Operator": "Symbol performing an operation."
+  },
+  "Compiler Phases": {
+    "Lexical Analysis": "Breaks code into tokens.",
+    "Parsing": "Checks grammar structure of tokens.",
+    "Syntax": "Language grammar rules.",
+    "Semantic Analysis": "Ensures meaning is correct."
+  },
+  "Code Constructs": {
+    "Expression": "Produces a value from literals/operators.",
+    "Statement": "A complete instruction in code."
+  },
+  "Data Structures in Compilers": {
+    "Symbol Table": "Stores identifiers with details.",
+    "Abstract Syntax Tree": "Tree form of code structure."
+  },
+  "Operator Categories": {
+    "Arithmetic Operators": "Math (+, -, *, /, %).",
+    "Relational Operators": "Comparisons (==, !=, >, <).",
+    "Logical Operators": "Boolean logic (&&, ||, !).",
+    "Assignment Operators": "Assign/update values (=, +=, -=).",
+    "Bitwise Operators": "Bit-level ops (&, |, ^, <<, >>).",
+    "Increment/Decrement Operators": "++ and --.",
+    "Ternary Operator": "Shorthand conditional (?:)."
+  },
+  "Execution Related": {
+    "Compiler": "Translates code to machine instructions.",
+    "Interpreter": "Runs code line by line.",
+    "Runtime": "Environment where program executes.",
+    "Virtual Machine": "Software-based execution machine.",
+    "Bytecode": "Intermediate code (e.g., Java bytecode).",
+    "Machine Code": "Binary instructions for CPU.",
+    "Linker": "Joins object files into executable.",
+    "Loader": "Loads program into memory."
+  },
+  "Memory & Errors": {
+    "Stack": "Stores function calls & locals.",
+    "Heap": "Stores dynamically allocated data.",
+    "Scope": "Region where variable is valid.",
+    "Syntax Error": "Grammar mistake in code.",
+    "Semantic Error": "Logical meaning mistake.",
+    "Runtime Error": "Error during execution."
+  },
+  "OOP (Object-Oriented Programming)": {
+    "Class": "Blueprint for creating objects.",
+    "Object": "Instance of a class.",
+    "Attribute": "Data/variable inside a class.",
+    "Method": "Function inside a class.",
+    "Constructor": "Special method to initialize objects.",
+    "Destructor": "Special method to clean up resources.",
+    "Inheritance": "Reusing properties/methods from another class.",
+    "Encapsulation": "Hiding data and providing controlled access.",
+    "Abstraction": "Showing essential features, hiding details.",
+    "Polymorphism": "Ability of methods/objects to take many forms.",
+    "Overloading": "Same method name with different parameters.",
+    "Overriding": "Subclass provides its own method implementation.",
+    "Interface": "Contract defining methods a class must implement.",
+    "Abstract Class": "Class that cannot be instantiated, only inherited."
+  },
+  "Data Structures & Algorithms (DSA)": {
+    "Array": "Collection of elements stored at contiguous memory locations.",
+    "Linked List": "Sequence of nodes where each node points to the next.",
+    "Stack": "LIFO (Last In, First Out) structure, uses push/pop.",
+    "Queue": "FIFO (First In, First Out) structure, uses enqueue/dequeue.",
+    "Deque": "Double-ended queue, insert/remove at both ends.",
+    "Tree": "Hierarchical structure with root and child nodes.",
+    "Binary Tree": "Tree where each node has max two children.",
+    "Binary Search Tree": "Binary tree with ordered nodes.",
+    "Heap": "Complete binary tree used for priority operations.",
+    "Graph": "Collection of nodes (vertices) connected by edges.",
+    "Hash Table": "Key-value storage using hash functions.",
+    "Recursion": "Function calling itself to solve subproblems.",
+    "Iteration": "Repetition using loops.",
+    "Sorting": "Arranging data (Bubble, Selection, Insertion, Quick, Merge, Heap sort).",
+    "Searching": "Finding elements (Linear Search, Binary Search).",
+    "Dynamic Programming": "Breaking problems into overlapping subproblems.",
+    "Greedy Algorithm": "Builds solution step by step, choosing locally optimal options.",
+    "Divide and Conquer": "Splits problem into smaller parts and solves recursively.",
+    "Big O Notation": "Describes algorithm’s time/space complexity."
+  }
+}
