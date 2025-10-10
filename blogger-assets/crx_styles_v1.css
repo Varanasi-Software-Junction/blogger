@@ -748,8 +748,8 @@ body#layout #contact .contact-form-button-submit {
 .crx_post-body code,
 .crx_post-body textarea.crx_output,
 .post-body .crx_output {
-  background: var(--crx-code-bg);
-  color: var(--crx-code-text);
+  background-color:lightgray;
+  color: teal;
   border: 1px solid rgba(255,255,255,0.04);
   padding: 12px;
   border-radius: 8px;
