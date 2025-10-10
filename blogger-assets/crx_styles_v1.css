@@ -22,7 +22,7 @@
   --crx-pad: 14px;
   --crx-surface-weak: #f3f6fb;
   --crx-code-bg: #0b122a;
-  --crx-code-text: #e6eef8;
+  --crx-code-text: teal;
   --crx-elev: rgba(11,94,215,0.06);
   --crx-success: #0b8a3f;
   --crx-danger: #b91c1c;
@@ -151,7 +151,7 @@ body{
 .crx_output {
   margin-top: .6rem;
   padding: 14px;
-  background: var(--crx-code-bg);
+  background-color: lightgray;
   border-radius: 10px;
   white-space: pre-wrap;
   word-break: break-word;

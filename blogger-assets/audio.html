@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Sounds</title>
+    <style>
+.inactive {
+  background-color: white;     
+}
+.active {
+  background-color: lightblue;  
+  font-size: 20px;   
+}
+    </style>
+    <script>
+        const basepath = "sounds/";
+      
+
+        function play(file) {
+            const audio = document.getElementById('s0');
+            audio.src = basepath + file;
+            audio.play();
+            highlightdiv.innerHTML=file.replace('.mp3','');;
+        }
+        const audioPlayer = document.getElementById('myAudio');
+
+function playAudio() {
+   const words=document.getElementById("txtNumbers").value.trim().split(" ");
+  console.log(words);
+  const n=words.length;
+  highlightdiv.innerHTML="";   
+   
+    let delay = 0;
+    words.forEach((word, index) => {
+         setTimeout(() => {
+              play(word + '.mp3');
+         }, delay);
+         delay += 2000; // Adjust delay as needed
+    });
+}
+
+    </script>
+</head>
+
+<body>
+    <div style="width: fit-content;" class="active" id="divNumbers"></div>
+    <textarea id="txtNumbers">maggi khilayega piyush</textarea>
+    <button onclick="playAudio()">Play Audio</button>
+
+    <audio id="s0">
+        <source src="sounds/0.mp3" type="audio/ogg">
+
+        Your browser does not support the audio element.
+    </audio>
+<script>
+    const highlightdiv = document.getElementById("divNumbers");    
+     </script>
+
+</body>
+
+</html>
