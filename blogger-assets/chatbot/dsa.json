@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "category": "Data Structures",
+    "version": "2025-10-10"
+  },
+  "terms": {
+    "Array": "Collection of elements stored at contiguous memory locations.",
+    "Linked List": "Sequence of nodes where each node points to the next.",
+    "Stack": "LIFO (Last In, First Out) structure, uses push/pop.",
+    "Queue": "FIFO (First In, First Out) structure, uses enqueue/dequeue.",
+    "Heap": "Complete binary tree used for priority operations.",
+    "Graph": "Collection of nodes (vertices) connected by edges.",
+    "Recursion": "Function calling itself to solve subproblems.",
+    "Binary Search Tree": "Binary tree with ordered nodes enabling efficient search."
+  }
+}

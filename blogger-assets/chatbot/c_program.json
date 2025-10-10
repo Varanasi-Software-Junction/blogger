@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "category": "C Program",
+    "version": "2025-10-10"
+  },
+  "terms": {
+    "printf": "Standard library function to print formatted output to stdout. Format placeholders like %d, %s are used.",
+    "scanf": "Reads formatted input from stdin. Be careful with buffer overflows; prefer width specifiers.",
+    "main": "Program entry point. Typical signatures: int main(void) or int main(int argc, char **argv).",
+    "pointer": "Variable that stores memory addresses. Use & to get address and * to dereference.",
+    "malloc": "Allocates memory from the heap and returns a pointer to the allocated memory. Remember to free it with free().",
+    "free": "Releases memory previously allocated by malloc/calloc/realloc.",
+    "struct": "Composite data type grouping variables under one name.",
+    "typedef": "Creates an alias name for a type.",
+    "header file": "File with declarations (functions, macros, types) typically included via #include.",
+    "preprocessor": "Stage that processes directives like #include and #define before compilation."
+  }
+}

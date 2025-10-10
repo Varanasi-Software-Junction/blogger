@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "category": "General",
+    "version": "2025-10-10"
+  },
+  "terms": {
+    "Token": "Smallest unit of code.",
+    "Identifier": "Name for variables/functions.",
+    "Keyword": "Reserved word in the language.",
+    "Literal": "Fixed constant value.",
+    "Operator": "Symbol performing an operation.",
+    "Expression": "Produces a value from literals/operators.",
+    "Statement": "A complete instruction in code."
+  }
+}

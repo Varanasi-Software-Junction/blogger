@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "category": "Compiler Concepts",
+    "version": "2025-10-10"
+  },
+  "terms": {
+    "Lexical Analysis": "Breaks code into tokens.",
+    "Parsing": "Checks grammar structure of tokens and builds an Abstract Syntax Tree (AST).",
+    "Semantic Analysis": "Ensures semantic meaning is correct (types, scopes).",
+    "Code Generation": "Transforms intermediate representation into target machine code or bytecode.",
+    "Optimization": "Transforms code to improve performance or size.",
+    "Symbol Table": "Stores identifiers with details (type, scope, memory).",
+    "Abstract Syntax Tree": "Tree representation of the grammatical structure of source code.",
+    "Linker": "Joins object files into a single executable or library."
+  }
+}

@@ -1,0 +1,480 @@
+<!-- Multilevel Chatbot Gadget with Lunr.js + improved suggestions — Ready to paste -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+
+<div id="crx-chatbot" aria-label="Programming dictionary chat widget">
+  <div id="crx-chat-header" role="banner">
+    <button id="crx-toggle-compact" aria-label="Toggle compact view" title="Toggle compact">◀</button>
+    <span id="crx-title">🤖 Chatbot — Programming Dictionary</span>
+    <button id="crx-clear" title="Clear conversation" aria-label="Clear conversation">🗑️</button>
+  </div>
+
+  <div id="crx-chat-body" aria-live="polite" role="log"></div>
+
+  <div id="crx-chat-footer" role="group" aria-label="Chat input">
+    <textarea id="crx-chat-input" rows="1" placeholder="Try: /define recursion or list categories" aria-label="Chat input"></textarea>
+    <button id="crx-chat-send" aria-label="Send message">Send</button>
+  </div>
+</div>
+
+<style>
+  :root{
+    --crx-width: 320px;
+    --crx-bg: #fff;
+    --crx-accent-1: #0d6efd;
+    --crx-accent-2: #0069d9;
+    --crx-border: #eee;
+    --crx-text: #111827;
+  }
+
+  #crx-chatbot { width: var(--crx-width); max-width:100%; height:420px; display:flex; flex-direction:column; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,.14); background:var(--crx-bg); font-family: system-ui,Segoe UI,Roboto,Arial; overflow:hidden; margin:10px auto; color:var(--crx-text); }
+  #crx-chat-header { background: linear-gradient(90deg,var(--crx-accent-1),var(--crx-accent-2)); color:#fff; padding:8px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  #crx-chat-header #crx-title { flex:1; font-size:14px; text-align:left; }
+  #crx-chat-header button { background:transparent; border:none; color:inherit; cursor:pointer; padding:6px; border-radius:6px; }
+  #crx-chat-header button:hover { background: rgba(255,255,255,0.08); }
+
+  #crx-chat-body { flex:1; padding:12px; overflow:auto; font-size:14px; background:linear-gradient(#ffffff,#fafcff); }
+  #crx-chat-footer { display:flex; gap:8px; border-top:1px solid var(--crx-border); padding:8px; align-items:center; }
+  #crx-chat-input { flex:1; padding:8px; border:1px solid #ddd; border-radius:6px; font-size:14px; outline:none; resize:none; min-height:36px; max-height:120px; }
+  #crx-chat-send { padding:8px 12px; background:var(--crx-accent-1); color:#fff; border:none; border-radius:6px; cursor:pointer; }
+
+  .crx-user-msg { margin:8px 0; text-align:right; display:flex; justify-content:flex-end; }
+  .crx-user-msg .bubble { display:inline-block; padding:8px 10px; background:#e9f5ff; border-radius:10px; max-width:80%; word-break:break-word; }
+
+  .crx-bot-msg { margin:8px 0; text-align:left; display:flex; gap:8px; align-items:flex-start; }
+  .crx-bot-msg .bubble { display:inline-block; padding:8px 10px; background:#f1f3f5; border-radius:10px; max-width:100%; word-break:break-word; position:relative; }
+
+  .crx-term { font-weight:700; color:#0645ad; }
+  .crx-cat { font-size:12px; color:#666; margin-top:4px; }
+  .crx-suggestion { display:inline-block; margin:6px 6px 0 0; padding:6px 8px; border-radius:6px; background:#eef6ff; cursor:pointer; font-size:13px; }
+  .crx-small { font-size:12px; color:#666; }
+  .crx-copy-btn { position:absolute; right:6px; top:6px; background:transparent; border:none; cursor:pointer; font-size:12px; opacity:0.7; }
+  .crx-copy-btn:hover { opacity:1; }
+
+  #crx-chatbot.compact { width:240px; height:260px; }
+  #crx-chatbot.compact #crx-chat-body { font-size:13px; padding:8px; }
+  @media (max-width:600px) { #crx-chatbot { width:100%; height:400px; border-radius:0; } }
+</style>
+
+<script>
+(function(){
+  // ---------- Config ----------
+  const MASTER_URL = 'https://varanasi-software-junction.github.io/blogger/blogger-assets/chatbot/master.json';
+  const STORAGE_KEY = 'crx_chat_history_v1';
+  const CACHE_KEY = 'crx_dict_cache_v1';
+
+  // ---------- DOM ----------
+  const body = document.getElementById("crx-chat-body");
+  const input = document.getElementById("crx-chat-input");
+  const send = document.getElementById("crx-chat-send");
+  const clearBtn = document.getElementById("crx-clear");
+  const toggleCompact = document.getElementById("crx-toggle-compact");
+
+  // ---------- State ----------
+  let dictionary = {};     // categories -> { term: def }
+  let categoryMap = {};    // categoryName -> { url, loaded, data, meta }
+  let masterMeta = null;
+
+  // Lunr
+  let lunrIndex = null;
+  let lunrDocs = {};
+
+  // ---------- Utilities ----------
+  function escapeHtml(str){ if(!str) return ''; return String(str).replace(/[&<>"'`]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'})[m]); }
+
+  function renderUserMessage(text){
+    const wrap = document.createElement('div'); wrap.className='crx-user-msg';
+    const bubble = document.createElement('div'); bubble.className='bubble'; bubble.innerHTML = text;
+    wrap.appendChild(bubble); body.appendChild(wrap); body.scrollTop = body.scrollHeight;
+  }
+
+  function renderBotRich(elements){
+    const wrap = document.createElement('div'); wrap.className='crx-bot-msg';
+    const bubble = document.createElement('div'); bubble.className='bubble';
+    elements.forEach(el => bubble.appendChild(el));
+    const copyBtn = document.createElement('button');
+    copyBtn.className='crx-copy-btn'; copyBtn.title='Copy text'; copyBtn.ariaLabel='Copy text'; copyBtn.innerHTML='📋';
+    copyBtn.addEventListener('click', ()=> {
+      navigator.clipboard?.writeText(bubble.innerText || '').then(()=> { copyBtn.innerHTML='✔'; setTimeout(()=>copyBtn.innerHTML='📋',900); });
+    });
+    bubble.appendChild(copyBtn);
+    wrap.appendChild(bubble); body.appendChild(wrap); body.scrollTop = body.scrollHeight;
+  }
+
+  function termBlock(term, cat, def){
+    const container = document.createElement('div');
+    const termEl = document.createElement('div'); termEl.className='crx-term'; termEl.innerHTML = term;
+    const catEl = document.createElement('div'); catEl.className='crx-cat'; catEl.innerHTML = cat;
+    const defEl = document.createElement('div');
+    const parts = String(def).split(/(`[^`]+`)/g);
+    parts.forEach(p => {
+      if(p.startsWith('`') && p.endsWith('`')) { const code = document.createElement('code'); code.innerHTML = p.slice(1,-1); defEl.appendChild(code); }
+      else defEl.appendChild(document.createTextNode(p));
+    });
+    container.appendChild(termEl); container.appendChild(catEl); container.appendChild(defEl);
+    return container;
+  }
+
+  // ---------- localStorage history ----------
+  function saveHistory(){
+    try{
+      const items = Array.from(body.querySelectorAll('.crx-user-msg, .crx-bot-msg')).map(node => ({ html: node.querySelector('.bubble')?.innerHTML || '', isUser: node.classList.contains('crx-user-msg') }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch(e){}
+  }
+
+  function loadHistory(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY); if(!raw) return false;
+      const items = JSON.parse(raw); body.innerHTML='';
+      items.forEach(it => {
+        if(it.isUser){
+          const temp = document.createElement('div'); temp.innerHTML = it.html;
+          const text = temp.innerHTML || temp.innerText || '';
+          renderUserMessage(text);
+        } else {
+          const temp = document.createElement('div'); temp.innerHTML = it.html;
+          const el = document.createElement('div'); el.innerHTML = temp.innerHTML || temp.innerText || '';
+          const node = document.createElement('div'); node.className='crx-bot-msg';
+          const bubble = document.createElement('div'); bubble.className='bubble'; bubble.appendChild(el);
+          node.appendChild(bubble); body.appendChild(node);
+        }
+      });
+      body.scrollTop = body.scrollHeight; return true;
+    } catch(e){ return false; }
+  }
+
+  // ---------- cache helpers ----------
+  function loadCache(){ try { const raw = localStorage.getItem(CACHE_KEY); return raw ? JSON.parse(raw) : null; } catch(e){ return null; } }
+  function saveCache(obj){ try { const existing = loadCache() || { masterRaw:null, categories:{} }; const merged = Object.assign(existing, obj); localStorage.setItem(CACHE_KEY, JSON.stringify(merged)); } catch(e){} }
+  function appendCategoryToCache(categoryName, jsonObj){ try { const c = loadCache() || { masterRaw:null, categories:{} }; c.categories = c.categories || {}; c.categories[categoryName] = { fetchedAt: Date.now(), payload: jsonObj }; localStorage.setItem(CACHE_KEY, JSON.stringify(c)); } catch(e){} }
+
+  // ---------- master loader ----------
+  async function loadMaster() {
+    try {
+      const resp = await fetch(MASTER_URL, { cache: 'no-cache' });
+      if(!resp.ok) throw new Error('Master fetch failed ' + resp.status);
+      const master = await resp.json();
+      masterMeta = master.meta || null;
+      const cats = master.categories || {};
+      for(const name in cats){
+        const url = new URL(cats[name], MASTER_URL).href;
+        categoryMap[name] = { url, loaded:false, data:null, meta:null };
+      }
+      saveCache({ masterRaw: master });
+      return master;
+    } catch(err){
+      console.warn('Could not fetch master.json:', err);
+      const cached = loadCache();
+      if(cached && cached.masterRaw && cached.masterRaw.categories){
+        const cats = cached.masterRaw.categories;
+        masterMeta = cached.masterRaw.meta || null;
+        for(const name in cats){
+          const url = new URL(cats[name], MASTER_URL).href;
+          categoryMap[name] = { url, loaded:false, data:null, meta:null };
+        }
+        return cached.masterRaw;
+      }
+      // fallback
+      categoryMap['General'] = { url: null, loaded:true, data: { "Token":"Smallest unit of code." }, meta:null };
+      dictionary['General'] = categoryMap['General'].data;
+      return null;
+    }
+  }
+
+  // ---------- category loader ----------
+  async function loadCategory(categoryName){
+    const meta = categoryMap[categoryName];
+    if(!meta) return null;
+    if(meta.loaded) return meta.data;
+    if(!meta.url) return null;
+    try {
+      const resp = await fetch(meta.url, { cache: 'no-cache' });
+      if(!resp.ok) throw new Error('Category fetch failed ' + resp.status);
+      const j = await resp.json();
+      const terms = j.terms || {};
+      meta.loaded = true; meta.data = terms; meta.meta = j.meta || {};
+      dictionary[categoryName] = terms;
+      appendCategoryToCache(categoryName, j);
+      rebuildLunrIndex();
+      return terms;
+    } catch(err){
+      console.warn('Failed to load category', categoryName, err);
+      const cached = loadCache();
+      if(cached && cached.categories && cached.categories[categoryName] && cached.categories[categoryName].payload){
+        const j = cached.categories[categoryName].payload;
+        const terms = j.terms || {};
+        meta.loaded = true; meta.data = terms; meta.meta = j.meta || {};
+        dictionary[categoryName] = terms;
+        rebuildLunrIndex();
+        return terms;
+      }
+      return null;
+    }
+  }
+
+  // ---------- Lunr rebuild ----------
+  function rebuildLunrIndex(){
+    try {
+      lunrDocs = {};
+      lunrIndex = lunr(function(){
+        this.ref('id'); this.field('term'); this.field('cat'); this.field('def');
+        let id = 0;
+        for(const cat in dictionary){
+          for(const term in dictionary[cat]){
+            const def = String(dictionary[cat][term] || '');
+            lunrDocs[id] = { id: String(id), term, cat, def };
+            this.add({ id: String(id), term, cat, def });
+            id++;
+          }
+        }
+      });
+      console.log("✅ Lunr index built with", Object.keys(lunrDocs).length, "terms.");
+      const meta = document.createElement('div'); meta.className='crx-small'; meta.innerHTML = `Dictionary indexed (${Object.keys(lunrDocs).length} terms).`;
+      renderBotRich([meta]);
+    } catch(e){
+      console.warn("Lunr build failed:", e);
+      lunrIndex = null;
+    }
+  }
+
+  // ---------- search helpers ----------
+  function findTermExact(term){
+    const results = [];
+    if(!lunrIndex) return results;
+    const safe = String(term || '').trim();
+    if(!safe) return results;
+    let hits = [];
+    try { hits = lunrIndex.search(`${safe}`); } catch(e){ hits = []; }
+    if(!hits.length){ try { hits = lunrIndex.search(`${safe}*`); } catch(e){ hits = []; } }
+    if(!hits.length){ try { hits = lunrIndex.search(`${safe}~1`); } catch(e){ hits = []; } }
+    hits.slice(0, 40).forEach(h => { const doc = lunrDocs[h.ref]; if(doc) results.push({ cat: doc.cat, term: doc.term, def: doc.def }); });
+    return results;
+  }
+  function findTermFuzzy(term){ return findTermExact(term); }
+
+  // ---------- simple helpers ----------
+  function listCategories(){ return Object.keys(categoryMap); }
+  function listTerms(catName){
+    if(!dictionary) return null;
+    const c = Object.keys(dictionary).find(x=>x.toLowerCase()===catName.toLowerCase());
+    return c ? Object.keys(dictionary[c]).map(k=>({term:k,def:dictionary[c][k]})) : null;
+  }
+  function randomTerm(){
+    if(!dictionary) return null;
+    const cats = Object.keys(dictionary); if(!cats.length) return null;
+    const c = cats[Math.floor(Math.random()*cats.length)]; const terms = Object.keys(dictionary[c]); const t = terms[Math.floor(Math.random()*terms.length)];
+    return { cat: c, term: t, def: dictionary[c][t] };
+  }
+
+  // ---------- improved suggestions / hints ----------
+  async function showSuggestionsOrHints(term) {
+    const t = String(term || '').trim();
+    if(!t) { addBotText("No input."); return; }
+
+    // try lunr with several strategies
+    const tries = [ `${t}`, `${t}*`, `${t}~1`, `${t}^3 ${t}*` ];
+    let hits = [];
+    if (lunrIndex) {
+      for (let q of tries) {
+        try { hits = lunrIndex.search(q); } catch(e) { hits = []; }
+        if (hits.length) break;
+      }
+    }
+
+    if (hits.length) {
+      const el = document.createElement('div');
+      const title = document.createElement('div'); title.className='crx-small'; title.innerHTML = 'Close matches:';
+      el.appendChild(title);
+      const seen = new Set();
+      hits.slice(0, 12).forEach(h => {
+        const doc = lunrDocs[h.ref];
+        if (!doc) return;
+        const key = doc.cat + '||' + doc.term;
+        if(seen.has(key)) return;
+        seen.add(key);
+        const btn = document.createElement('button');
+        btn.className = 'crx-suggestion';
+        btn.innerHTML = `${doc.term} — ${doc.cat}`;
+        btn.addEventListener('click', ()=> {
+          input.value = '/define ' + doc.term;
+          send.click();
+        });
+        el.appendChild(btn);
+      });
+      renderBotRich([el]);
+      return;
+    }
+
+    // if no hits and some categories are unloaded, suggest loading them
+    const unloaded = Object.keys(categoryMap || {}).filter(k => !categoryMap[k].loaded);
+    if (unloaded.length) {
+      const el = document.createElement('div'); el.className='crx-small';
+      const hint = document.createElement('div');
+      hint.innerHTML = `No direct match found. ${unloaded.length} categories not loaded. Try:`;
+      el.appendChild(hint);
+      unloaded.slice(0,6).forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'crx-suggestion';
+        btn.innerHTML = `/load ${c}`;
+        btn.addEventListener('click', ()=> {
+          input.value = '/load ' + c;
+          send.click();
+        });
+        el.appendChild(btn);
+      });
+      const pre = document.createElement('button'); pre.className='crx-suggestion'; pre.innerHTML='/prefetch';
+      pre.addEventListener('click', ()=> { input.value='/prefetch'; send.click(); });
+      el.appendChild(pre);
+      renderBotRich([el]);
+      return;
+    }
+
+    // last resort: substring fallback within loaded dictionary
+    const fallback = [];
+    for (const cat in dictionary) {
+      for (const k in dictionary[cat]) {
+        if (k.toLowerCase().includes(t.toLowerCase()) || String(dictionary[cat][k]).toLowerCase().includes(t.toLowerCase())) {
+          fallback.push({cat,term:k,def:dictionary[cat][k]});
+          if(fallback.length >= 8) break;
+        }
+      }
+      if(fallback.length >= 8) break;
+    }
+    if (fallback.length) {
+      const nodes = fallback.map(r => termBlock(r.term, r.cat, r.def));
+      renderBotRich(nodes);
+      return;
+    }
+
+    addBotText("No matches found. Try 'list categories' or 'help' for commands. If you recently updated the JSON, use /reindex or /prefetch.");
+  }
+
+  // ---------- core bot (async) ----------
+  function addBotText(text){ const el = document.createElement('div'); el.innerHTML = text; renderBotRich([el]); }
+  function addBotHelp(){ const el = document.createElement('div'); el.className='crx-small'; el.innerHTML = 'Commands:<br>• /define term<br>• list categories<br>• list category-name<br>• /load CategoryName<br>• /prefetch<br>• /reindex<br>• /random<br>• clear'; renderBotRich([el]); }
+
+  async function handleUserText(raw){
+    const text = String(raw || '').trim(); if(!text) return;
+    renderUserMessage(text); saveHistory();
+    const low = text.toLowerCase();
+
+    if(low === 'help' || low === '/help'){ addBotHelp(); saveHistory(); return; }
+    if(low === 'clear' || low === '/clear'){ body.innerHTML=''; localStorage.removeItem(STORAGE_KEY); return; }
+
+    if (low === '/reindex') { addBotText("Rebuilding index from currently-loaded categories..."); rebuildLunrIndex(); saveHistory(); return; }
+
+    if(low === '/prefetch'){
+      addBotText("Prefetching all categories in background...");
+      const promises = [];
+      for(const c in categoryMap) if(!categoryMap[c].loaded && categoryMap[c].url) promises.push(loadCategory(c));
+      Promise.all(promises).then(()=> addBotText("Prefetch complete."), ()=> addBotText("Prefetch finished (some failed)."));
+      return;
+    }
+
+    if(low.startsWith('/load ')){
+      const cat = text.slice(6).trim();
+      if(!categoryMap[cat]) { addBotText("Category not found. Try 'list categories'"); return; }
+      addBotText("Loading category " + cat + " ...");
+      loadCategory(cat).then(data => { if(data) addBotText("Loaded and indexed category: " + cat); else addBotText("Failed to load category: " + cat); });
+      return;
+    }
+
+    if(low === '/random' || low === 'random'){
+      const r = randomTerm();
+      if(r) renderBotRich([ termBlock(r.term, r.cat, r.def) ]);
+      else addBotText("Dictionary not loaded yet.");
+      saveHistory(); return;
+    }
+
+    if(low === 'list categories'){
+      const el = document.createElement('div'); el.className='crx-small';
+      for(const name in categoryMap){
+        const status = categoryMap[name].loaded ? '✓' : '•';
+        const chip = document.createElement('div'); chip.className='crx-suggestion'; chip.innerHTML = `${status} ${name}`;
+        chip.addEventListener('click', ()=> { input.value = 'list ' + name; send.click(); });
+        el.appendChild(chip);
+      }
+      renderBotRich([el]); saveHistory(); return;
+    }
+
+    if(low.startsWith('list ')){
+      const cat = text.slice(5).trim();
+      if(categoryMap[cat] && !categoryMap[cat].loaded){
+        addBotText("Category not loaded. Loading " + cat + " ...");
+        await loadCategory(cat);
+      }
+      const terms = listTerms(cat);
+      if(!terms){ addBotText("Category not found or dictionary not loaded. Try 'list categories'"); saveHistory(); return; }
+      const el = document.createElement('div'); const title = document.createElement('strong'); title.innerHTML = cat; el.appendChild(title); el.appendChild(document.createElement('br'));
+      terms.forEach(t => { const chip = document.createElement('button'); chip.className='crx-suggestion'; chip.innerHTML = t.term; chip.addEventListener('click', ()=> { input.value = '/define ' + t.term; send.click(); }); el.appendChild(chip); });
+      renderBotRich([el]); saveHistory(); return;
+    }
+
+    if(low.startsWith('/define ') || low.startsWith('define ') || low.startsWith('what is ')){
+      const term = text.replace(/^(\/define|define|what is)\s+/i, '');
+      // search existing index
+      let exact = findTermExact(term);
+      if(exact.length){
+        const nodes = exact.map(r => termBlock(r.term, r.cat, r.def));
+        renderBotRich(nodes); saveHistory(); return;
+      }
+      // if some categories are not loaded, suggest loading them instead of blind fetching
+      const unloaded = Object.keys(categoryMap).filter(k => !categoryMap[k].loaded);
+      if(unloaded.length){
+        // improved hint instead of generic fail
+        await showSuggestionsOrHints(term);
+        saveHistory();
+        return;
+      }
+      // fallback fuzzy / substring via suggestions
+      await showSuggestionsOrHints(term);
+      saveHistory();
+      return;
+    }
+
+    if(low.includes('hello') || low.includes('hi')){ addBotText("Hello! Try /define recursion or list categories"); saveHistory(); return; }
+
+    const fb = findTermFuzzy(text);
+    if(fb.length){ const nodes = fb.map(r => termBlock(r.term, r.cat, r.def)); renderBotRich(nodes); saveHistory(); return; }
+
+    addBotText("Sorry, I couldn’t understand. Type 'help' for commands.");
+    saveHistory();
+  }
+
+  // ---------- events ----------
+  send.addEventListener('click', ()=> { const txt = input.value.trim(); if(!txt) return; handleUserText(txt); input.value=''; input.focus(); });
+  input.addEventListener('keydown', (e)=> { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send.click(); } });
+  clearBtn.addEventListener('click', ()=> { body.innerHTML=''; localStorage.removeItem(STORAGE_KEY); input.focus(); });
+  toggleCompact.addEventListener('click', ()=> { const root=document.getElementById('crx-chatbot'); root.classList.toggle('compact'); toggleCompact.innerHTML = root.classList.contains('compact') ? '▶' : '◀'; });
+  body.addEventListener('click', (e)=> { const t = e.target; if(t.classList.contains('crx-suggestion')){ const v = t.innerHTML || t.innerText || ''; if(v){ input.value = v; input.focus(); } } });
+
+  // ---------- initialize ----------
+  (async function init(){
+    await loadMaster();
+    if(!loadHistory()){
+      const helpNode = document.createElement('div'); helpNode.innerHTML = "Hello! Ask me about programming terms. Try <code>/define parse</code> or type <code>list categories</code>.";
+      renderBotRich([helpNode]);
+    } else {
+      const cached = loadCache();
+      if(cached && cached.categories){
+        for(const name in cached.categories){
+          const payload = cached.categories[name].payload;
+          if(payload && payload.terms){
+            categoryMap[name] = categoryMap[name] || { url:null, loaded:true, data: payload.terms, meta: payload.meta || null };
+            dictionary[name] = payload.terms;
+          }
+        }
+        rebuildLunrIndex();
+      }
+      if(dictionary && Object.keys(dictionary).length) {
+        const meta = document.createElement('div'); meta.className='crx-small'; meta.innerHTML = 'Dictionary loaded; search ready.';
+        renderBotRich([meta]);
+      }
+    }
+    saveHistory();
+    setInterval(saveHistory, 2000);
+  })();
+
+})();
+</script>
+

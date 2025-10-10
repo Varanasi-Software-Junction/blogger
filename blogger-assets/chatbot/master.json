@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "title": "Programming Dictionary - master",
+    "version": "2025-10-10"
+  },
+  "categories": {
+    "General": "general.json",
+    "C Program": "c_program.json",
+    "Data Structures": "dsa.json",
+    "Compiler Concepts": "compiler.json"
+  }
+}
