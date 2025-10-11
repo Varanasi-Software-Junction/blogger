@@ -40,7 +40,6 @@
     "diagram": "    *\n   **\n  ***\n ****\n*****",
     "code": "rows = 5\nfor i in range(1, rows + 1):\n    print(' ' * (rows - i) + '*' * i)",
     "explanation": "This code prints a right-aligned triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints spaces followed by asterisks to align the triangle to the right."
-
   },
   {
     "id": "7",
@@ -64,10 +63,17 @@
     "explanation": "This code prints Floyd's triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints consecutive numbers, incrementing the number after each print."
   },
   {
-    "id": "patte10rn10",
+    "id": "10",
     "title": "Pascal’s Triangle (Simple)",
     "diagram": "    1\n   1 1\n  1 2 1\n 1 3 3 1\n1 4 6 4 1",
     "code": "rows = 5\nfor i in range(rows):\n    num = 1\n    print(' ' * (rows - i), end='')\n    for j in range(i + 1):\n        print(num, end=' ')\n        num = num * (i - j) // (j + 1)\n    print()",
     "explanation": "This code prints a simple version of Pascal's triangle. The outer loop iterates through the number of rows, while the inner loop calculates and prints the binomial coefficients for each row."
+  },
+  {
+    "id": "11",
+    "title": "Open Square Pattern",
+    "diagram": "*****\n*   *\n*   *\n*   *\n*****",
+    "code": "rows = 5\nfor i in range(rows):\n    for j in range(rows):\n        if i==0 or j==0 or i==rows-1 or j==rows-1:\n            print('*',end='')\n        else:\n            print(end=' ')\n    print()",
+    "explanation": "This code prints an outline of a square pattern. The outer loop iterates through the number of rows, while the inner loop prints asterisks for the borders and spaces for the inside of the square."
   }
 ]
