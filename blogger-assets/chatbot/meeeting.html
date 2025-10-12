@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learning Sutras Live — CNBC-style Overlay</title>
+  <style>
+    :root{
+      --bg:#0a1833;            /* deep blue */
+      --card:#0f2459;          /* panel blue */
+      --accent:#33a6ff;        /* cyan-blue */
+      --accent-2:#7bdcff;      /* light accent */
+      --text:#e8f1ff;          /* near white */
+      --muted:#9bb2d1;         /* muted text */
+      --good:#28d17c;
+      --warn:#ffcc66;
+      --bad:#ff6b6b;
+      --radius:22px;
+      --glass: rgba(255,255,255,0.06);
+      --blur: blur(10px);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif;
+      background: radial-gradient(1200px 800px at 10% 10%, #0d2a5e 0%, #081427 45%, #050b15 100%);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    /* Grid Layout */
+    .shell{display:grid; gap:16px; padding:20px; max-width:1280px; margin:0 auto;}
+    @media (min-width: 1100px){
+      .shell{grid-template-columns: 320px 1fr 360px; grid-template-rows:auto;}
+    }
+
+    /* Header */
+    header{
+      grid-column: 1 / -1;
+      display:flex; align-items:center; gap:16px; padding:12px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      backdrop-filter:var(--blur);
+      border:1px solid rgba(255,255,255,0.08);
+      position:relative; overflow:hidden;
+    }
+    header:before{
+      content:""; position:absolute; inset:-40px; background: radial-gradient(600px 200px at -10% 0, rgba(51,166,255,0.25), transparent 60%);
+      filter: blur(14px); pointer-events:none;
+    }
+    .brand{display:flex; align-items:center; gap:12px; font-weight:700; font-size:1.1rem; letter-spacing:0.2px}
+    .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 22px var(--accent)}
+    .headline{margin-left:auto; font-weight:600; color:var(--accent-2)}
+
+    /* Left Column: Host card (with 3D circular webcam) + Quick Notes */
+    .left-col{display:flex; flex-direction:column; gap:16px}
+
+    .host-card{
+      position:relative; overflow:visible; border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.08);
+      padding:18px; min-height:280px;
+    }
+    .host-title{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px}
+    .host-title h2{margin:0; font-size:1rem; color:var(--muted); font-weight:600}
+
+    /* 3D circular webcam */
+    .orb-wrap{ perspective:1200px; display:grid; place-items:center; margin:8px 0;}
+    .orb{
+      width:220px; height:220px; border-radius:50%; position:relative;
+      display:grid; place-items:center; transform-style:preserve-3d; transition: transform .5s ease, filter .3s ease;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45), inset 0 0 0 2px rgba(255,255,255,0.08);
+      background: radial-gradient(120px 120px at 35% 30%, rgba(123,220,255,0.18), rgba(27,48,94,0.8));
+    }
+    .orb:hover{ transform: rotateX(9deg) rotateY(-8deg) scale(1.02); filter:saturate(1.05)}
+
+    /* glossy ring */
+    .ring{ position:absolute; inset:-8px; border-radius:50%;
+      background: conic-gradient(from 0deg, var(--accent), rgba(255,255,255,0.3), var(--accent-2), var(--accent));
+      filter: blur(6px) saturate(1.2); opacity:.7; transform: translateZ(-2px);
+      box-shadow: 0 0 60px rgba(51,166,255,0.25);
+    }
+    .bezel{ position:absolute; inset:0; border-radius:50%; border:2px solid rgba(255,255,255,0.35); box-shadow:inset 0 0 40px rgba(51,166,255,0.25);}
+
+    video#webcam{ width:92%; height:92%; border-radius:50%; object-fit:cover; transform: translateZ(10px); box-shadow:0 6px 16px rgba(0,0,0,0.55)}
+
+    .host-meta{ display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px; color:var(--muted)}
+    .pill{ padding:6px 10px; background:rgba(255,255,255,0.06); border-radius:999px; border:1px solid rgba(255,255,255,0.08)}
+
+    .controls{ display:flex; justify-content:center; gap:8px; margin-top:12px }
+    .btn{
+      background:linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+      border:1px solid rgba(255,255,255,0.15); padding:8px 12px; border-radius:10px; color:var(--text);
+      cursor:pointer; font-weight:600; letter-spacing:0.2px; transition: transform .08s ease;
+    }
+    .btn:active{ transform:translateY(1px)}
+
+    /* Middle: Main stage — slides, code, images */
+    .stage{ border-radius:var(--radius); overflow:hidden; position:relative; min-height:420px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.08); display:grid; grid-template-rows:auto 1fr;
+    }
+    .stage-tabs{ display:flex; gap:8px; padding:10px; border-bottom:1px solid rgba(255,255,255,0.08) }
+    .tab{ padding:8px 12px; border-radius:10px; border:1px solid transparent; cursor:pointer; font-weight:600; color:var(--muted)}
+    .tab.active{ border-color: rgba(255,255,255,0.2); color:var(--text); background:rgba(255,255,255,0.06)}
+    .stage-content{ padding:16px; overflow:auto }
+
+    pre.code{ background:#061024; color:#d9e8ff; padding:16px; border-radius:12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:13px; line-height:1.55; border:1px solid rgba(255,255,255,0.08)}
+    .img-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px }
+    .img-grid img{ width:100%; height:150px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,0.06)}
+
+    /* Right: Bullets + Mini Graph + Ticker */
+    .right-col{display:flex; flex-direction:column; gap:16px}
+
+    .panel{ border-radius:var(--radius); background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.08); padding:14px }
+    .panel h3{ margin:0 0 10px 0; font-size:0.95rem; color:var(--muted)}
+    ul.bullets{ margin:0; padding-left:18px; display:grid; gap:8px }
+    .badge{ display:inline-block; padding:4px 8px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:999px; font-size:12px }
+
+    /* Simple bar chart */
+    canvas{ width:100%; height:160px; display:block; }
+
+    /* Bottom ticker */
+    .ticker{ grid-column: 1 / -1; display:flex; gap:16px; align-items:center; border-radius:12px; padding:6px 10px; border:1px solid rgba(255,255,255,0.08);
+             background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); overflow:hidden; }
+    .ticker .label{ font-weight:700; color:var(--accent); white-space:nowrap }
+    .marquee{ position:relative; overflow:hidden; flex:1 }
+    .marquee-track{ position:absolute; white-space:nowrap; will-change:transform; animation: marquee 26s linear infinite }
+    @keyframes marquee { from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
+
+    /* Footer */
+    footer{ grid-column:1 / -1; text-align:center; color:var(--muted); font-size:12px; padding-bottom:10px }
+
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand"><span class="dot"></span> Learning Sutras Live</div>
+      <div class="headline">Today: Sorting Visualizer & Interview MCQs</div>
+    </header>
+
+    <div class="left-col">
+      <section class="host-card">
+        <div class="host-title">
+          <h2>Host • Champak Roy</h2>
+          <span class="badge">On Air</span>
+        </div>
+        <div class="orb-wrap">
+          <div class="orb" id="orb">
+            <div class="ring"></div>
+            <div class="bezel"></div>
+            <video id="webcam" autoplay playsinline muted></video>
+          </div>
+        </div>
+        <div class="host-meta">
+          <span class="pill">Mic: <strong id="mic-status">Muted (preview)</strong></span>
+          <span class="pill">Cam: <strong id="cam-status">Starting…</strong></span>
+        </div>
+        <div class="controls">
+          <button class="btn" id="btnStart">Start Camera</button>
+          <button class="btn" id="btnStop">Stop Camera</button>
+          <button class="btn" id="btnSnapshot">Snapshot</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3>Quick Notes</h3>
+        <ul class="bullets">
+          <li>Use a dynamic mic with pop filter.</li>
+          <li>Set editor font size to 130% for viewers.</li>
+          <li>Explain concept → Show visualization → Quiz.</li>
+        </ul>
+      </section>
+    </div>
+
+    <main class="stage">
+      <div class="stage-tabs">
+        <button class="tab active" data-tab="slides">Slides</button>
+        <button class="tab" data-tab="code">Code</button>
+        <button class="tab" data-tab="gallery">Pictures</button>
+      </div>
+      <div class="stage-content">
+        <section data-panel="slides">
+          <h2 style="margin-top:0">Bubble Sort — Concept</h2>
+          <p>We repeatedly step through the list, compare adjacent elements, and swap them if they are in the wrong order.</p>
+          <ol>
+            <li>Compare A[i] and A[i+1]</li>
+            <li>Swap if needed</li>
+            <li>Largest element “bubbles” to the end each pass</li>
+          </ol>
+        </section>
+
+        <section data-panel="code" hidden>
+          <pre class="code"><code>// Pseudocode
+for pass from 0 to n-2:
+  for i from 0 to n-2-pass:
+    if A[i] &gt; A[i+1]:
+      swap(A[i], A[i+1])
+          </code></pre>
+        </section>
+
+        <section data-panel="gallery" hidden>
+          <div class="img-grid">
+            <img src="https://images.unsplash.com/photo-1526378722454-4ae9c51b3f2d?q=80&w=1200&auto=format&fit=crop" alt="Graphs"/>
+            <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop" alt="Code"/>
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" alt="Students"/>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <aside class="right-col">
+      <section class="panel">
+        <h3>Key Points</h3>
+        <ul class="bullets">
+          <li>Stable but slow: <strong>O(n²)</strong></li>
+          <li>Great for teaching swaps</li>
+          <li>Not used in production</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <h3>Mini Graph (Live Values)</h3>
+        <canvas id="chart" width="320" height="160"></canvas>
+      </section>
+
+      <section class="panel">
+        <h3>Tags</h3>
+        <div class="badge">Arrays</div>
+        <div class="badge">Sorting</div>
+        <div class="badge">Interviews</div>
+      </section>
+    </aside>
+
+    <div class="ticker">
+      <div class="label">TICKER</div>
+      <div class="marquee">
+        <div class="marquee-track" id="tickerTrack">Next: Selection Sort • Join our WhatsApp Group • New blog: Gradient Generator • Live Q&amp;A Friday 7 PM • Follow @LearningSutras • </div>
+      </div>
+    </div>
+
+    <footer>
+      © <span id="year"></span> Learning Sutras • “Learn Code. Speak Code. Live Code.”
+    </footer>
+  </div>
+
+  <!-- Snapshot canvas (hidden) -->
+  <canvas id="snapshot" width="512" height="512" style="display:none"></canvas>
+
+  <script>
+    // Tabs
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('[data-panel]');
+    tabs.forEach(t=>t.addEventListener('click',()=>{
+      tabs.forEach(tb=>tb.classList.toggle('active', tb===t));
+      panels.forEach(p=>p.hidden = (p.getAttribute('data-panel') !== t.dataset.tab));
+    }));
+
+    // Webcam
+    const video = document.getElementById('webcam');
+    const btnStart = document.getElementById('btnStart');
+    const btnStop = document.getElementById('btnStop');
+    const btnSnapshot = document.getElementById('btnSnapshot');
+    const camStatus = document.getElementById('cam-status');
+    const micStatus = document.getElementById('mic-status');
+
+    let stream;
+
+    async function startCam(){
+      try{
+        stream = await navigator.mediaDevices.getUserMedia({ video:{ width:{ideal:1280}, height:{ideal:720}}, audio:false });
+        video.srcObject = stream;
+        camStatus.textContent = 'On';
+      }catch(err){
+        camStatus.textContent = 'Blocked';
+        alert('Camera access failed: '+ err.message);
+      }
+    }
+    function stopCam(){
+      if(stream){ stream.getTracks().forEach(t=>t.stop()); stream = null; }
+      video.srcObject = null; camStatus.textContent = 'Off';
+    }
+    btnStart.addEventListener('click', startCam);
+    btnStop.addEventListener('click', stopCam);
+
+    // Snapshot
+    btnSnapshot.addEventListener('click', ()=>{
+      if(!stream){ alert('Camera is off.'); return; }
+      const c = document.getElementById('snapshot');
+      const ctx = c.getContext('2d');
+      // draw centered circle crop from video
+      const size = Math.min(video.videoWidth, video.videoHeight);
+      const sx = (video.videoWidth - size)/2; const sy = (video.videoHeight - size)/2;
+      c.width = 768; c.height = 768;
+      ctx.clearRect(0,0,c.width,c.height);
+      ctx.save();
+      ctx.beginPath(); ctx.arc(c.width/2, c.height/2, c.width/2-6, 0, Math.PI*2); ctx.closePath(); ctx.clip();
+      ctx.drawImage(video, sx, sy, size, size, 0, 0, c.width, c.height);
+      ctx.restore();
+      const url = c.toDataURL('image/png');
+      const a = document.createElement('a'); a.href = url; a.download = 'learning-sutras-snapshot.png'; a.click();
+    });
+
+    // Simple bar chart without external libs
+    const chart = document.getElementById('chart');
+    const ctx = chart.getContext('2d');
+    const values = [12,9,15,7,18,3,11];
+    function drawChart(){
+      const W = chart.width, H = chart.height; ctx.clearRect(0,0,W,H);
+      const max = Math.max(...values) || 1; const barW = Math.floor(W/(values.length*1.8));
+      values.forEach((v,i)=>{
+        const x = 20 + i*(barW*1.8); const h = Math.round((v/max)*(H-26)); const y = H-10 - h;
+        // bar
+        const grd = ctx.createLinearGradient(0,y,0,y+h);
+        grd.addColorStop(0,'#7bdcff'); grd.addColorStop(1,'#33a6ff');
+        ctx.fillStyle = grd; ctx.fillRect(x,y,barW,h);
+        // value
+        ctx.fillStyle = 'rgba(232,241,255,0.8)'; ctx.font = '12px system-ui, sans-serif'; ctx.fillText(v, x, y-4);
+      });
+      // axes
+      ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.beginPath(); ctx.moveTo(16,H-10); ctx.lineTo(W-8,H-10); ctx.stroke();
+    }
+    drawChart();
+
+    // Animate chart values a bit (for "live" feel)
+    setInterval(()=>{
+      const i = Math.floor(Math.random()*values.length);
+      const delta = Math.random()<0.5 ? -1 : 1;
+      values[i] = Math.max(1, values[i] + delta * Math.ceil(Math.random()*3));
+      drawChart();
+    }, 1200);
+
+    // Ticker loop duplication for seamless scroll
+    const track = document.getElementById('tickerTrack');
+    track.textContent = track.textContent + ' ' + track.textContent;
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Auto-start camera if permission was previously granted
+    if (navigator.permissions && navigator.permissions.query) {
+      try {
+        navigator.permissions.query({name:'camera'}).then(p=>{
+          if(p.state==='granted') startCam();
+        });
+      } catch(e) { /* some browsers may not support this */ }
+    }
+  </script>
+</body>
+</html>
