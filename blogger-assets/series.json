@@ -1,4 +1,5 @@
-[
+
+  [
   {
     "id": "1",
     "title": "Natural Numbers 1 to 10",
@@ -94,4 +95,4 @@
     "code": "# Example for natural numbers\nnums = list(range(1, 11))\nprint(nums[::-1])",
     "explanation": "This entry contains reversed versions of the previous numerical series. For trigonometric ones, reversal is not meaningful."
   }
-]
+]  
