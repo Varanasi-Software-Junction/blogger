@@ -1,79 +1,97 @@
 [
-{
-"id": "1",
-"title": "Natural Numbers",
-"diagram": "1,2,3,4,5,6,7,8,9,10",
-"code": "n = 11 for i in range(1,n+1): print(i,end=',')",
-"explanation": "This code prints 1,2,3,,,10 using a for loop."
-},
-{
-"id": "2",
-"title": "Inverted Triangle",
-"diagram": "***** **** *** ** *",
-"code": "rows = 5 for i in range(rows, 0, -1): print('*' * i)",
-"explanation": "This code prints an inverted triangle pattern. The outer loop starts from the total number of rows and decrements down to 1, while the inner loop prints the asterisks for each row."
-},
-{
-"id": "3",
-"title": "Pyramid Pattern",
-"diagram": " * *** ***** ******* *********",
-"code": "rows = 5 for i in range(rows): print(' ' * (rows - i - 1) + '*' * (2 * i + 1))",
-"explanation": "This code prints a pyramid pattern. The outer loop iterates through the number of rows, while the inner loop prints spaces followed by asterisks to form the pyramid shape."
-},
-{
-"id": "4",
-"title": "Inverted Pyramid",
-"diagram": "********* ******* ***** *** *",
-"code": "rows = 5 for i in range(rows, 0, -1): print(' ' * (rows - i) + '*' * (2 * i - 1))",
-"explanation": "This code prints an inverted pyramid pattern. The outer loop starts from the total number of rows and decrements down to 1, while the inner loop prints spaces followed by asterisks to form the inverted pyramid shape."
-},
-{
-"id": "5",
-"title": "Diamond Pattern",
-"diagram": " * *** ***** ******* ********* ******* ***** *** *",
-"code": "rows = 5 for i in range(rows): print(' ' * (rows - i - 1) + '*' * (2 * i + 1)) for i in range(rows - 2, -1, -1): print(' ' * (rows - i - 1) + '*' * (2 * i + 1))",
-"explanation": "This code prints a diamond pattern by combining a pyramid and an inverted pyramid. The first loop creates the upper half, while the second loop creates the lower half."
-},
-{
-"id": "6",
-"title": "Right-Aligned Triangle",
-"diagram": " * ** *** **** *****",
-"code": "rows = 5 for i in range(1, rows + 1): print(' ' * (rows - i) + '*' * i)",
-"explanation": "This code prints a right-aligned triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints spaces followed by asterisks to align the triangle to the right."
-},
-{
-"id": "7",
-"title": "Number Triangle",
-"diagram": "1 12 123 1234 12345",
-"code": "rows = 5 for i in range(1, rows + 1): for j in range(1, i + 1): print(j, end='') print()",
-"explanation": "This code prints a number triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints numbers from 1 to the current row number."
-},
-{
-"id": "8",
-"title": "Inverted Number Triangle",
-"diagram": "12345 1234 123 12 1",
-"code": "rows = 5 for i in range(rows, 0, -1): for j in range(1, i + 1): print(j, end='') print()",
-"explanation": "This code prints an inverted number triangle pattern. The outer loop starts from the total number of rows and decrements down to 1, while the inner loop prints numbers from 1 to the current row number."
-},
-{
-"id": "9",
-"title": "Floyd’s Triangle",
-"diagram": "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15",
-"code": "rows = 5 num = 1 for i in range(1, rows + 1): for j in range(1, i + 1): print(num, end=' ') num += 1 print()",
-"explanation": "This code prints Floyd's triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints consecutive numbers, incrementing the number after each print."
-},
-{
-"id": "10",
-"title": "Pascal’s Triangle (Simple)",
-"diagram": " 1 1 1 1 2 1 1 3 3 1 1 4 6 4 1",
-"code": "rows = 5 for i in range(rows): num = 1 print(' ' * (rows - i), end='') for j in range(i + 1): print(num, end=' ') num = num * (i - j) // (j + 1) print()",
-"explanation": "This code prints a simple version of Pascal's triangle. The outer loop iterates through the number of rows, while the inner loop calculates and prints the binomial coefficients for each row."
-},
-{
-"id": "11",
-"title": "Open Square Pattern",
-"diagram": "***** * * * * * * *****",
-"code": "rows = 5 for i in range(rows): for j in range(rows): if i==0 or j==0 or i==rows-1 or j==rows-1: print('*',end='') else: print(end=' ') print()",
-"explanation": "This code prints an outline of a square pattern. The outer loop iterates through the number of rows, while the inner loop prints asterisks for the borders and spaces for the inside of the square."
-}
+  {
+    "id": "1",
+    "title": "Natural Numbers 1 to 10",
+    "formula": "n (where n = 1, 2, 3, ...)",
+    "series": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "code": "for i in range(1, 11):\n    print(i, end=' ')",
+    "explanation": "This series represents the first 10 natural numbers starting from 1."
+  },
+  {
+    "id": "2",
+    "title": "Odd Numbers",
+    "formula": "2n - 1",
+    "series": [1, 3, 5, 7, 9, 11, 13, 15, 17, 19],
+    "code": "for i in range(1, 20, 2):\n    print(i, end=' ')",
+    "explanation": "This series consists of all odd numbers, where each term is 2n - 1."
+  },
+  {
+    "id": "3",
+    "title": "Even Numbers",
+    "formula": "2n",
+    "series": [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
+    "code": "for i in range(2, 21, 2):\n    print(i, end=' ')",
+    "explanation": "This series contains even numbers, each term being a multiple of 2."
+  },
+  {
+    "id": "4",
+    "title": "Squares",
+    "formula": "n²",
+    "series": [1, 4, 9, 16, 25, 36, 49, 64, 81, 100],
+    "code": "for i in range(1, 11):\n    print(i**2, end=' ')",
+    "explanation": "This series contains squares of natural numbers from 1 to 10."
+  },
+  {
+    "id": "5",
+    "title": "Sine Series",
+    "formula": "sin(x) = x - x³/3! + x⁵/5! - x⁷/7! + ...",
+    "series": ["x", "-x³/3!", "+x⁵/5!", "-x⁷/7!", "+x⁹/9!"],
+    "code": "import math\nx = math.radians(30)\nterms = 5\nsine = 0\nfor i in range(terms):\n    sign = (-1)**i\n    sine += sign * (x**(2*i + 1)) / math.factorial(2*i + 1)\nprint(sine)",
+    "explanation": "This is the Taylor series expansion of sine (sin x). It alternates signs and includes odd powers of x."
+  },
+  {
+    "id": "6",
+    "title": "Cosine Series",
+    "formula": "cos(x) = 1 - x²/2! + x⁴/4! - x⁶/6! + ...",
+    "series": ["1", "-x²/2!", "+x⁴/4!", "-x⁶/6!", "+x⁸/8!"],
+    "code": "import math\nx = math.radians(30)\nterms = 5\ncosine = 0\nfor i in range(terms):\n    sign = (-1)**i\n    cosine += sign * (x**(2*i)) / math.factorial(2*i)\nprint(cosine)",
+    "explanation": "This is the Taylor series for cosine (cos x), containing only even powers of x and alternating signs."
+  },
+  {
+    "id": "7",
+    "title": "Sine Inverse Series",
+    "formula": "sin⁻¹(x) = x + (x³/6) + (3x⁵/40) + (5x⁷/112) + ...",
+    "series": ["x", "+x³/6", "+3x⁵/40", "+5x⁷/112", "+35x⁹/1152"],
+    "code": "x = 0.5\nterms = 5\nasinx = 0\ncoef = [1, 1/6, 3/40, 5/112, 35/1152]\nfor i in range(terms):\n    asinx += coef[i] * (x**(2*i + 1))\nprint(asinx)",
+    "explanation": "This is the power series expansion for sin⁻¹(x) (arcsine). It converges for |x| ≤ 1."
+  },
+  {
+    "id": "8",
+    "title": "Cosine Inverse Series",
+    "formula": "cos⁻¹(x) = π/2 - [x + (x³/6) + (3x⁵/40) + (5x⁷/112) + ...]",
+    "series": ["π/2 - x", "-x³/6", "-3x⁵/40", "-5x⁷/112", "-35x⁹/1152"],
+    "code": "import math\nx = 0.5\nterms = 5\nacosx = math.pi/2\ncoef = [1, 1/6, 3/40, 5/112, 35/1152]\nfor i in range(terms):\n    acosx -= coef[i] * (x**(2*i + 1))\nprint(acosx)",
+    "explanation": "The cosine inverse series is derived from sin⁻¹(x) using the identity cos⁻¹(x) = π/2 - sin⁻¹(x)."
+  },
+  {
+    "id": "9",
+    "title": "Factorial Series",
+    "formula": "n! = n × (n-1) × (n-2) × ... × 1",
+    "series": [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800],
+    "code": "fact = 1\nfor i in range(1, 11):\n    fact *= i\n    print(fact, end=' ')",
+    "explanation": "This series lists factorials of numbers from 1! to 10!. Each term is the product of all positive integers up to n."
+  },
+  {
+    "id": "10",
+    "title": "Prime Numbers",
+    "formula": "Numbers divisible only by 1 and themselves",
+    "series": [2, 3, 5, 7, 11, 13, 17, 19, 23, 29],
+    "code": "for num in range(2, 30):\n    for i in range(2, int(num**0.5)+1):\n        if num % i == 0:\n            break\n    else:\n        print(num, end=' ')",
+    "explanation": "This series contains prime numbers between 1 and 30, found by checking divisibility."
+  },
+  {
+    "id": "11",
+    "title": "Reversed Series of All Above",
+    "formula": "Reverse of each of the above lists",
+    "series": {
+      "Natural Numbers": [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+      "Odd Numbers": [19, 17, 15, 13, 11, 9, 7, 5, 3, 1],
+      "Even Numbers": [20, 18, 16, 14, 12, 10, 8, 6, 4, 2],
+      "Squares": [100, 81, 64, 49, 36, 25, 16, 9, 4, 1],
+      "Factorials": [3628800, 362880, 40320, 5040, 720, 120, 24, 6, 2, 1],
+      "Primes": [29, 23, 19, 17, 13, 11, 7, 5, 3, 2]
+    },
+    "code": "# Example for natural numbers\nnums = list(range(1, 11))\nprint(nums[::-1])",
+    "explanation": "This entry contains reversed versions of the previous numerical series. For trigonometric ones, reversal is not meaningful."
+  }
 ]
