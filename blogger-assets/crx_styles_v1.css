@@ -21,8 +21,13 @@
   --crx-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
   --crx-pad: 14px;
   --crx-surface-weak: #f3f6fb;
-  --crx-code-bg: #0b122a;
+  --crx-code-bg: white;
   --crx-code-text: teal;
+ code ,pre{
+  color:teal;
+  background-color:white;
+
+ }
   --crx-elev: rgba(11,94,215,0.06);
   --crx-success: #0b8a3f;
   --crx-danger: #b91c1c;
