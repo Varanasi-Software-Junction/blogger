@@ -283,3 +283,73 @@ body{
 /* Utility */
 .crx_center{display:grid; place-items:center}
 .crx_muted{color:var(--crx-muted)}
+
+
+  /* v2-specific micro styles (keeps crx_ prefix) */
+    .crx_hero_anim {
+      display:flex;
+      gap:20px;
+      align-items:center;
+    }
+
+    .crx_hero_text h2 {
+      margin:0;
+      font-size:28px;
+      letter-spacing:0.2px;
+      line-height:1.1;
+      background: linear-gradient(90deg, #0f1724, var(--crx-accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight:800;
+    }
+
+    /* subtle float animation for hero logo */
+    @keyframes crx_float {
+      0% { transform: translateY(0px) rotate(-2deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+      100% { transform: translateY(0px) rotate(-2deg); }
+    }
+    .crx_logo_float { animation: crx_float 5s ease-in-out infinite; }
+
+    /* typing caret */
+    .crx_typing {
+      font-family: var(--crx-font-sans);
+      font-weight:600;
+      color:var(--crx-muted);
+      margin-top:6px;
+      display:inline-block;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+    .crx_typing::after{
+      content: '|';
+      display:inline-block;
+      margin-left:6px;
+      opacity:1;
+      animation: crx_blink 1s steps(2, start) infinite;
+    }
+    @keyframes crx_blink { 50% { opacity:0 } }
+
+    /* fade-in section */
+    .crx_fade_in { opacity:0; transform: translateY(12px); transition:opacity .6s ease, transform .6s ease; }
+    .crx_fade_in.crx_visible { opacity:1; transform: translateY(0); }
+    /* slightly larger post thumbnails for v2 */
+    .crx_post_thumb { width:96px; height:64px; border-radius:8px; }
+
+    /* hero image / gradient badge */
+    .crx_hero_badge {
+      padding:10px 14px;
+      border-radius:12px;
+      background: linear-gradient(135deg, rgba(79,176,230,0.14), rgba(43,155,211,0.06));
+      border:1px solid rgba(43,155,211,0.06);
+      font-weight:700;
+      color:var(--crx-accent);
+    }
+
+    /* responsive tweak for hero */
+    @media (max-width:900px){
+      .crx_hero_text h2 { font-size:20px; }
+      .crx_post_thumb { width:72px; height:52px; }
+    }
+  

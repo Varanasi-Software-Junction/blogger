@@ -124,7 +124,7 @@
     if(!container) return;
 
     const sample = [
-      {title:'Welcome to Learning Sutras — Start Here', link:'#', published:'2025-10-01', thumb: ''},
+      {title:'Welcome to Learning Sutras — Start Here---Champak Roy', link:'#', published:'2025-10-01', thumb: ''},
       {title:'How to think like an algorithm', link:'#', published:'2025-09-10', thumb: ''},
       {title:'CSS transitions — simple examples', link:'#', published:'2025-08-24', thumb: ''},
     ];
@@ -150,10 +150,11 @@
     }
 
     if(!feedUrl){
+      console.log('crx_ui: no feed URL, using sample data');
       buildAndRender(sample);
       return;
     }
-
+console.log('crx_ui: fetching feed', feedUrl);
     fetch(feedUrl, {cache:'no-store'})
       .then(r=>{
         if(!r.ok) throw new Error('Feed fetch failed: ' + r.status);

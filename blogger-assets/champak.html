@@ -6,11 +6,13 @@
 -->
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Learning Sutras — Home</title>
-  <meta name="description" content="Learning Sutras — concise programming lessons, DSA visualizations, quizzes, and mini-tools." />
+  <meta name="description"
+    content="Learning Sutras — concise programming lessons, DSA visualizations, quizzes, and mini-tools." />
 
   <!-- CRX Theme CSS (hosted asset) -->
   <link rel="stylesheet" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css">
@@ -18,86 +20,120 @@
   <style>
     /* v2-specific micro styles (keeps crx_ prefix) */
     .crx_hero_anim {
-      display:flex;
-      gap:20px;
-      align-items:center;
+      display: flex;
+      gap: 20px;
+      align-items: center;
     }
 
     .crx_hero_text h2 {
-      margin:0;
-      font-size:28px;
-      letter-spacing:0.2px;
-      line-height:1.1;
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0.2px;
+      line-height: 1.1;
       background: linear-gradient(90deg, #0f1724, var(--crx-accent));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      font-weight:800;
+      font-weight: 800;
     }
 
     /* subtle float animation for hero logo */
     @keyframes crx_float {
-      0% { transform: translateY(0px) rotate(-2deg); }
-      50% { transform: translateY(-6px) rotate(2deg); }
-      100% { transform: translateY(0px) rotate(-2deg); }
+      0% {
+        transform: translateY(0px) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-6px) rotate(2deg);
+      }
+
+      100% {
+        transform: translateY(0px) rotate(-2deg);
+      }
     }
-    .crx_logo_float { animation: crx_float 5s ease-in-out infinite; }
+
+    .crx_logo_float {
+      animation: crx_float 5s ease-in-out infinite;
+    }
 
     /* typing caret */
     .crx_typing {
       font-family: var(--crx-font-sans);
-      font-weight:600;
-      color:var(--crx-muted);
-      margin-top:6px;
-      display:inline-block;
-      white-space:nowrap;
-      overflow:hidden;
+      font-weight: 600;
+      color: var(--crx-muted);
+      margin-top: 6px;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: scroll;
     }
-    .crx_typing::after{
+
+    .crx_typing::after {
       content: '|';
-      display:inline-block;
-      margin-left:6px;
-      opacity:1;
+      display: inline-block;
+      margin-left: 6px;
+      opacity: 1;
       animation: crx_blink 1s steps(2, start) infinite;
     }
-    @keyframes crx_blink { 50% { opacity:0 } }
+
+    @keyframes crx_blink {
+      50% {
+        opacity: 0
+      }
+    }
 
     /* fade-in section */
-    .crx_fade_in { opacity:0; transform: translateY(12px); transition:opacity .6s ease, transform .6s ease; }
-    .crx_fade_in.crx_visible { opacity:1; transform: translateY(0); }
+    .crx_fade_in {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .crx_fade_in.crx_visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     /* slightly larger post thumbnails for v2 */
-    .crx_post_thumb { width:96px; height:64px; border-radius:8px; }
+    .crx_post_thumb {
+      width: 96px;
+      height: 64px;
+      border-radius: 8px;
+    }
 
     /* hero image / gradient badge */
     .crx_hero_badge {
-      padding:10px 14px;
-      border-radius:12px;
-      background: linear-gradient(135deg, rgba(79,176,230,0.14), rgba(43,155,211,0.06));
-      border:1px solid rgba(43,155,211,0.06);
-      font-weight:700;
-      color:var(--crx-accent);
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(79, 176, 230, 0.14), rgba(43, 155, 211, 0.06));
+      border: 1px solid rgba(43, 155, 211, 0.06);
+      font-weight: 700;
+      color: var(--crx-accent);
     }
 
     /* responsive tweak for hero */
-    @media (max-width:900px){
-      .crx_hero_text h2 { font-size:20px; }
-      .crx_post_thumb { width:72px; height:52px; }
+    @media (max-width:900px) {
+      .crx_hero_text h2 {
+        font-size: 20px;
+      }
+
+      .crx_post_thumb {
+        width: 72px;
+        height: 52px;
+      }
     }
   </style>
 </head>
-<body
-  data-crx-feed="https://www.learnwithchampak.live/feeds/posts/default?alt=json"
-  data-crx-title="Learning Sutras"
-  data-crx-sub="Threads of wisdom in code"
->
+
+<body data-crx-feed="https://www.learnwithchampak.live/feeds/posts/default?alt=json" data-crx-title="Learning Sutras"
+  data-crx-sub="Threads of wisdom in code">
 
   <main class="crx_container" role="main">
 
     <!-- HERO / TOP -->
     <header class="crx_header crx_card crx_hero_anim" role="banner">
       <div class="crx_brand" style="gap:18px;">
-        <div class="crx_logo crx_logo_float" style="width:78px;height:78px;font-size:22px" title="Learning Sutras">LS</div>
+        <div class="crx_logo crx_logo_float" style="width:78px;height:78px;font-size:22px" title="Learning Sutras">LS
+        </div>
 
         <div class="crx_hero_text">
           <h1 class="crx_title" data-crx-blog-title>Learning Sutras</h1>
@@ -139,22 +175,34 @@
           <div class="crx_categories" style="grid-template-columns:repeat(4, 1fr); gap:10px">
             <div class="crx_cat" onclick="location.href='#beginner'">
               <div class="crx_cat_icon">💻</div>
-              <div><div style="font-weight:700">Programming Basics</div><div class="crx_muted" style="font-size:12px">C • Python • Java • Dart</div></div>
+              <div>
+                <div style="font-weight:700">Programming Basics</div>
+                <div class="crx_muted" style="font-size:12px">C • Python • Java • Dart</div>
+              </div>
             </div>
 
             <div class="crx_cat" onclick="location.href='#dsa'">
               <div class="crx_cat_icon">🧠</div>
-              <div><div style="font-weight:700">DSA</div><div class="crx_muted" style="font-size:12px">Visuals & quizzes</div></div>
+              <div>
+                <div style="font-weight:700">DSA</div>
+                <div class="crx_muted" style="font-size:12px">Visuals & quizzes</div>
+              </div>
             </div>
 
             <div class="crx_cat" onclick="location.href='#frontend'">
               <div class="crx_cat_icon">🎨</div>
-              <div><div style="font-weight:700">Frontend</div><div class="crx_muted" style="font-size:12px">HTML • CSS • JS</div></div>
+              <div>
+                <div style="font-weight:700">Frontend</div>
+                <div class="crx_muted" style="font-size:12px">HTML • CSS • JS</div>
+              </div>
             </div>
 
             <div class="crx_cat" onclick="location.href='#picnic'">
               <div class="crx_cat_icon">🎪</div>
-              <div><div style="font-weight:700">Programmer's Picnic</div><div class="crx_muted" style="font-size:12px">Tools & playground</div></div>
+              <div>
+                <div style="font-weight:700">Programmer's Picnic</div>
+                <div class="crx_muted" style="font-size:12px">Tools & playground</div>
+              </div>
             </div>
           </div>
         </div>
@@ -163,9 +211,11 @@
         <div class="crx_card crx_fade_in" id="crx_demo">
           <h3 style="margin:0 0 10px 0">Featured demo — Try JS (Ctrl/Cmd + Enter to run)</h3>
           <div class="crx_code_box">
-            <textarea class="crx_code_input" aria-label="Code input">console.log('Hello from Learning Sutras!');</textarea>
+            <textarea class="crx_code_input"
+              aria-label="Code input">console.log('Hello from Learning Sutras!');</textarea>
             <button class="crx_code_run">Run</button>
-            <pre class="crx_code_output" style="margin-top:12px;background:#fff;padding:10px;border-radius:8px;min-height:44px">Output will appear here.</pre>
+            <pre class="crx_code_output"
+              style="margin-top:12px;background:#fff;padding:10px;border-radius:8px;min-height:44px">Output will appear here.</pre>
           </div>
         </div>
 
@@ -209,7 +259,8 @@
           <h4 style="margin:0 0 8px 0">Subscribe</h4>
           <p class="crx_muted" style="margin:0 0 10px 0">Get weekly tips & short notes</p>
           <form onsubmit="event.preventDefault(); alert('Thanks — you are subscribed!');" style="display:flex;gap:8px">
-            <input type="email" placeholder="Your email" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--crx-border)" required>
+            <input type="email" placeholder="Your email"
+              style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--crx-border)" required>
             <button class="crx_btn" type="submit">Join</button>
           </form>
         </div>
@@ -223,7 +274,8 @@
       <div style="display:flex;gap:12px;align-items:center">
         <a href="#about" style="text-decoration:none;color:inherit">About</a>
         <a href="#contact" style="text-decoration:none;color:inherit">Contact</a>
-        <a href="https://github.com/varanasi-software-junction" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">GitHub</a>
+        <a href="https://github.com/varanasi-software-junction" target="_blank" rel="noopener"
+          style="text-decoration:none;color:inherit">GitHub</a>
       </div>
     </footer>
   </main>
@@ -234,11 +286,12 @@
   </div>
 
   <!-- CRX UI JS (hosted asset) -->
-  <script src="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js"></script>
+  <script src="crx_ui_v1.js"></script>
+  <!-- <script src="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js"></script> -->
 
   <script>
     /* v2 page script: typing effect, headline animation, reveal on scroll, small init */
-    (function(){
+    (function () {
       'use strict';
 
       // TYPING EFFECT for small welcome messages (rotating messages)
@@ -249,45 +302,45 @@
         'DSA explained visually — see how algorithms move.',
         'Join our community — learn with others.'
       ];
-      let msgIndex = 0, charIndex = 0, typingSpeed = 35, pauseBetween = 1600, deleting=false;
+      let msgIndex = 0, charIndex = 0, typingSpeed = 35, pauseBetween = 1600, deleting = false;
 
-      function tick(){
-        if(!typingEl) return;
+      function tick() {
+        if (!typingEl) return;
         const current = messages[msgIndex % messages.length];
-        if(!deleting){
+        if (!deleting) {
           charIndex++;
-          typingEl.textContent = current.slice(0,charIndex);
-          if(charIndex >= current.length){
+          typingEl.textContent = current.slice(0, charIndex);
+          if (charIndex >= current.length) {
             deleting = true;
             setTimeout(tick, pauseBetween);
             return;
           }
         } else {
           charIndex--;
-          typingEl.textContent = current.slice(0,charIndex);
-          if(charIndex <= 0){
+          typingEl.textContent = current.slice(0, charIndex);
+          if (charIndex <= 0) {
             deleting = false;
             msgIndex++;
           }
         }
-        setTimeout(tick, deleting ? typingSpeed/1.5 : typingSpeed);
+        setTimeout(tick, deleting ? typingSpeed / 1.5 : typingSpeed);
       }
-      document.addEventListener('DOMContentLoaded', ()=> {
+      document.addEventListener('DOMContentLoaded', () => {
         tick();
       });
 
       // Animated headline small transform (rotate subtle)
       const headline = document.getElementById('crx_animated_headline');
-      if(headline){
+      if (headline) {
         // small sequence of words to fade between
         const words = ['Threads of wisdom for modern coders',
-                       'Clear lessons • Practical projects',
-                       'From basics to DSA, step-by-step'];
+          'Clear lessons • Practical projects',
+          'From basics to DSA, step-by-step'];
         let i = 0;
-        setInterval(()=> {
-          i = (i+1) % words.length;
+        setInterval(() => {
+          i = (i + 1) % words.length;
           headline.style.opacity = 0;
-          setTimeout(()=> {
+          setTimeout(() => {
             headline.textContent = words[i];
             headline.style.opacity = 1;
           }, 420);
@@ -296,11 +349,11 @@
 
       // Reveal elements on scroll
       const toReveal = Array.from(document.querySelectorAll('.crx_fade_in'));
-      function revealOnScroll(){
+      function revealOnScroll() {
         const top = window.innerHeight * 0.85;
-        toReveal.forEach(el=>{
+        toReveal.forEach(el => {
           const rect = el.getBoundingClientRect();
-          if(rect.top < top) el.classList.add('crx_visible');
+          if (rect.top < top) el.classList.add('crx_visible');
         });
       }
       document.addEventListener('scroll', revealOnScroll);
@@ -308,29 +361,30 @@
       window.addEventListener('resize', revealOnScroll);
 
       // small keyboard shortcut for mini runner: Ctrl/Cmd + Enter
-      document.addEventListener('keydown', function(e){
-        if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+      document.addEventListener('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
           const run = document.querySelector('.crx_code_run');
-          if(run) run.click();
+          if (run) run.click();
         }
       });
 
       // init crx recent posts render using feed URL from body attribute if present
-      document.addEventListener('DOMContentLoaded', function(){
+      document.addEventListener('DOMContentLoaded', function () {
         const feed = document.body.dataset.crxFeed || '';
-        if(feed && window.crxUI && typeof window.crxUI.renderRecentPosts === 'function'){
+        if (feed && window.crxUI && typeof window.crxUI.renderRecentPosts === 'function') {
           window.crxUI.renderRecentPosts(feed);
-        } else if(window.crxUI){
+        } else if (window.crxUI) {
           // calls with no feed will show sample data
           window.crxUI.renderRecentPosts();
         }
 
         // set WhatsApp number here (international, without +). e.g. '919812345678'
         const wa = document.querySelector('.crx_whatsapp');
-        if(wa) wa.dataset.number = ''; // <-- add your number if you want the button to open chat
+        if (wa) wa.dataset.number = ''; // <-- add your number if you want the button to open chat
       });
 
     })();
   </script>
 </body>
+
 </html>
