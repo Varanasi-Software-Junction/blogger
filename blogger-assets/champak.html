@@ -1,444 +1,336 @@
-  <!doctype html>
+<!-- crx_home_v2.html
+     Learning Sutras — Home v2 (feed integrated)
+     - Uses crx_styles_v1.css and crx_ui_v1.js hosted at your provided URLs
+     - Animated heading, typing effect, improved layout
+     - data-crx-feed set to your feed: https://www.learnwithchampak.live/feeds/posts/default?alt=json
+-->
+<!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Champak Roy — Live Programming Channel</title>
-  <meta name="description" content="Live programming lessons — code, charts, and interactive teaching in a CNBC-style studio." />
-  <link rel="icon" href="me.jpg" />
+  <title>Learning Sutras — Home</title>
+  <meta name="description" content="Learning Sutras — concise programming lessons, DSA visualizations, quizzes, and mini-tools." />
 
-  <!-- Chart.js for live charts -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Highlight.js for code styling -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <!-- CRX Theme CSS (hosted asset) -->
+  <link rel="stylesheet" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css">
 
   <style>
-    :root{
-      --bg1:#07112a;
-      --bg2:#071a3a;
-      --panel:#071833;
-      --accent:#0ea5ff;
-      --accent-2:#ffd166;
-      --muted:#bcd5e6;
-      --glass: rgba(255,255,255,0.03);
-      --card-shadow: 0 12px 30px rgba(2,6,23,0.8);
+    /* v2-specific micro styles (keeps crx_ prefix) */
+    .crx_hero_anim {
+      display:flex;
+      gap:20px;
+      align-items:center;
     }
-    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
-    body{
+
+    .crx_hero_text h2 {
       margin:0;
-      min-height:100vh;
-      background:linear-gradient(180deg,var(--bg1),var(--bg2));
-      color:var(--muted);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:18px;
-      padding:18px;
+      font-size:28px;
+      letter-spacing:0.2px;
+      line-height:1.1;
+      background: linear-gradient(90deg, #0f1724, var(--crx-accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight:800;
     }
 
-    /* Top bar (logo + live badge + headline) */
-    header{
-      width:100%;
-      max-width:1200px;
-      display:flex;
-      align-items:center;
-      gap:16px;
-      justify-content:space-between;
+    /* subtle float animation for hero logo */
+    @keyframes crx_float {
+      0% { transform: translateY(0px) rotate(-2deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+      100% { transform: translateY(0px) rotate(-2deg); }
     }
-    .brand{
-      display:flex;
-      gap:12px;
-      align-items:center;
-    }
-    .brand .logo{
-      width:64px;height:64px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#0066cc);
-      display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:20px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.6);
-    }
-    .brand h1{margin:0;font-size:20px;color:var(--accent);letter-spacing:0.6px;}
-    .live-badge{
-      display:flex;gap:8px;align-items:center;background:linear-gradient(90deg,#ff3b3b,#ff6b6b);
-      color:#fff;padding:8px 12px;border-radius:999px;font-weight:700;box-shadow:0 8px 24px rgba(255,59,59,0.15);
-    }
-    .headline{
-      margin-left:12px;
-      color:var(--muted);
+    .crx_logo_float { animation: crx_float 5s ease-in-out infinite; }
+
+    /* typing caret */
+    .crx_typing {
+      font-family: var(--crx-font-sans);
       font-weight:600;
-      opacity:0.95;
+      color:var(--crx-muted);
+      margin-top:6px;
+      display:inline-block;
+      white-space:nowrap;
+      overflow:hidden;
     }
-
-    /* Main layout */
-    .stage{
-      width:100%;
-      max-width:1200px;
-      display:grid;
-      grid-template-columns: 420px 1fr;
-      gap:18px;
-      align-items:start;
+    .crx_typing::after{
+      content: '|';
+      display:inline-block;
+      margin-left:6px;
+      opacity:1;
+      animation: crx_blink 1s steps(2, start) infinite;
     }
+    @keyframes crx_blink { 50% { opacity:0 } }
 
-    /* Left column: studio card + controls */
-    .left{
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
-      border-radius:12px;padding:14px;box-shadow:var(--card-shadow);
-    }
+    /* fade-in section */
+    .crx_fade_in { opacity:0; transform: translateY(12px); transition:opacity .6s ease, transform .6s ease; }
+    .crx_fade_in.crx_visible { opacity:1; transform: translateY(0); }
 
-    .cam-wrap{ perspective:1000px; display:flex;align-items:center;justify-content:center;padding:8px 0;}
-    .cam-card{
-      width:320px;height:320px;border-radius:50%;overflow:hidden;border:4px solid rgba(255,255,255,0.04);
-      display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.12));
-      box-shadow: 0 10px 30px rgba(2,10,23,0.9), inset 0 -8px 30px rgba(0,0,0,0.45);
-      position:relative;
-    }
-    .cam-card video{ width:100%;height:100%;object-fit:cover;border-radius:50%;transform:translateZ(40px) scale(1.02); }
-    .cam-card .placeholder{color:rgba(230,238,248,0.6);text-align:center;padding:14px;}
+    /* slightly larger post thumbnails for v2 */
+    .crx_post_thumb { width:96px; height:64px; border-radius:8px; }
 
-    .left .meta{margin-top:10px;display:flex;justify-content:space-between;gap:8px;align-items:center}
-    .topic{background:linear-gradient(90deg,var(--accent),#0066cc);padding:6px 10px;border-radius:8px;font-weight:700;color:#081222;}
-    .small{font-size:13px;color:rgba(230,238,248,0.7)}
-
-    /* Right column: broadcast + controls */
-    .right{
-      background:transparent;display:flex;flex-direction:column;gap:12px;
-    }
-
-    .player{
-      width:100%;
-      background:#000;border-radius:12px;overflow:hidden;
-      position:relative;min-height:360px;box-shadow:0 8px 30px rgba(0,0,0,0.6);
-    }
-    .player iframe{position:absolute;inset:0;border:0;width:100%;height:100%}
-
-    .overlay-top{
-      position:absolute;left:14px;top:14px;background:linear-gradient(90deg,rgba(2,6,23,0.6),rgba(14,165,255,0.06));
-      padding:8px 10px;border-radius:8px;font-weight:700;color:#eaf6ff;backdrop-filter:blur(6px);
-    }
-
-    /* ticker (bottom news bar) */
-    .ticker-wrap{
-      width:100%;max-width:1200px;overflow:hidden;border-radius:6px;
-      background:linear-gradient(90deg,#071a2f,#04233e);
-      box-shadow:0 4px 14px rgba(0,0,0,0.6);
-      border-top:3px solid rgba(255,209,102,0.06);
-    }
-    .ticker{
-      display:flex;align-items:center;gap:24px;padding:8px 0;white-space:nowrap;
-      animation:scroll-left linear infinite;
-      will-change:transform;
+    /* hero image / gradient badge */
+    .crx_hero_badge {
+      padding:10px 14px;
+      border-radius:12px;
+      background: linear-gradient(135deg, rgba(79,176,230,0.14), rgba(43,155,211,0.06));
+      border:1px solid rgba(43,155,211,0.06);
       font-weight:700;
-      color:var(--muted);
-      padding-left:100%;
-    }
-    @keyframes scroll-left{
-      0%{transform:translateX(0);}
-      100%{transform:translateX(-100%);}
+      color:var(--crx-accent);
     }
 
-    /* ribbon (like stock ticker with languages) */
-    .ribbon{
-      display:flex;gap:6px;padding:10px 14px;align-items:center;flex-wrap:wrap;
-      background:linear-gradient(90deg,rgba(255,209,102,0.06),rgba(14,165,255,0.02));
-      border-radius:8px;margin-top:10px;color:#07122a;font-weight:800;
-    }
-    .ribbon .chip{background:#001a33;padding:6px 10px;border-radius:8px;color:var(--accent-2);font-weight:800}
-
-    /* right column smaller panels */
-    .panels{display:grid;grid-template-columns:1fr 280px;gap:12px;margin-top:12px;}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.06));border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,0.5)}
-    .card h3{margin:0 0 8px 0;color:var(--accent);font-size:16px}
-
-    /* code area */
-    pre code{display:block;padding:12px;border-radius:8px;overflow:auto;background:#0b1220;color:#d2e9ff}
-    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-    .btn{background:var(--accent);color:#021428;padding:8px 10px;border-radius:8px;font-weight:700;text-decoration:none}
-
-    /* chat */
-    .chat{height:220px;overflow:auto;background:rgba(0,0,0,0.15);padding:8px;border-radius:8px;color:var(--muted)}
-    .chat input{width:100%;padding:8px;margin-top:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--muted)}
-
-    /* responsiveness */
-    @media (max-width:1100px){
-      .stage{grid-template-columns:1fr; padding-bottom:8px}
-      .panels{grid-template-columns:1fr}
-      .cam-card{width:260px;height:260px}
+    /* responsive tweak for hero */
+    @media (max-width:900px){
+      .crx_hero_text h2 { font-size:20px; }
+      .crx_post_thumb { width:72px; height:52px; }
     }
   </style>
 </head>
+<body
+  data-crx-feed="https://www.learnwithchampak.live/feeds/posts/default?alt=json"
+  data-crx-title="Learning Sutras"
+  data-crx-sub="Threads of wisdom in code"
+>
 
-<body>
-<<<<<<< HEAD
-    <div style="
-  position:relative;
-  width:90%;
-  max-width:960px;
-  padding-bottom:56.25%;
-  margin:auto;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 0 25px rgba(0,0,0,0.5);">
-        <iframe src="https://www.youtube.com/embed/live_stream?channel=UCkwKVR1zN4y4Fzgca2Jycvw"
-            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="autoplay; encrypted-media"
-            allowfullscreen></iframe>
-    </div>
-=======
->>>>>>> e30fa032f4aeb545f1bd3d2e90de0dbbc53f4d57
+  <main class="crx_container" role="main">
 
-  <header>
-    <div class="brand">
-      <div class="logo">CR</div>
-      <div>
-        <h1>Champak Roy • Program News</h1>
-        <div class="headline small">Live lessons • algorithms • system design • coding demos</div>
-      </div>
-    </div>
+    <!-- HERO / TOP -->
+    <header class="crx_header crx_card crx_hero_anim" role="banner">
+      <div class="crx_brand" style="gap:18px;">
+        <div class="crx_logo crx_logo_float" style="width:78px;height:78px;font-size:22px" title="Learning Sutras">LS</div>
 
-    <div style="display:flex;align-items:center;gap:12px">
-      <div class="live-badge">LIVE</div>
-      <div class="small">Now: Sorting visualizations • QuickSort deep dive</div>
-    </div>
-  </header>
-
-  <div class="stage">
-    <!-- LEFT: presenter preview + topic -->
-    <div class="left">
-      <div class="cam-wrap">
-        <div class="cam-card" id="camCard">
-          <div class="placeholder" id="camPlaceholder">Webcam stopped<br>Click Start</div>
+        <div class="crx_hero_text">
+          <h1 class="crx_title" data-crx-blog-title>Learning Sutras</h1>
+          <h2 id="crx_animated_headline">Threads of wisdom for modern coders</h2>
+          <div class="crx_typing" id="crx_typing_line" aria-live="polite"></div>
         </div>
       </div>
 
-      <div class="meta">
-        <div class="topic">Topic: QuickSort — In-place</div>
-        <div class="small">Instructor: Champak Roy</div>
+      <div class="crx_cta" aria-hidden="false">
+        <div class="crx_hero_badge">Start Learning • Free</div>
+        <button class="crx_btn" onclick="location.href='#lessons'">Start Learning</button>
+        <button class="crx_btn secondary" onclick="location.href='#picnic'">Programmer's Picnic</button>
       </div>
+    </header>
 
-      <div class="ribbon" style="margin-top:12px">
-        <!-- programming 'prices' -->
-        <div class="chip">Python ↑ 98%</div>
-        <div class="chip">JavaScript ↔ 76%</div>
-        <div class="chip">Dart ↑ 68%</div>
-        <div class="chip">C++ ↓ 45%</div>
-        <div class="chip">Go ↑ 54%</div>
-      </div>
+    <!-- GRID -->
+    <section class="crx_grid" style="align-items:start">
+      <!-- MAIN -->
+      <div class="crx_main">
 
-      <div style="margin-top:12px" class="card">
-        <h3>Quick Controls</h3>
-        <div class="controls">
-          <button class="btn" id="btnStartCam">Start Webcam</button>
-          <a class="btn" href="https://www.youtube.com/channel/UCkwKVR1zN4y4Fzgca2Jycvw" target="_blank">Open Channel</a>
-          <a class="btn" href="https://github.com/varanasi-software-junction" target="_blank">Resources</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT: player + chart + chat -->
-    <div class="right">
-      <div class="player">
-        <!-- overlay label -->
-        <div class="overlay-top">Champak Roy Live — Programming</div>
-        <!-- embed your youtube live stream (user provided url) -->
-        <iframe src="https://www.youtube.com/embed/live_stream?channel=UCkwKVR1zN4y4Fzgca2Jycvw"
-                allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      </div>
-
-      <div class="panels">
-        <div class="card">
-          <h3>Live Chart — Algorithm Perf</h3>
-          <canvas id="liveChart" height="160"></canvas>
-          <div style="margin-top:10px" class="small">This chart simulates average running time in ms (updates every 2s)</div>
-        </div>
-
-        <div class="card">
-          <h3>Live Chat</h3>
-          <div class="chat" id="chatBox">
-            <div style="opacity:0.7">Chat ready — viewers can chat on YouTube Live chat.</div>
+        <!-- Focus / quick path -->
+        <div class="crx_card crx_fade_in" id="crx_quick_path">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3 style="margin:0">Choose a learning path</h3>
+            <small class="crx_muted">Pick one and follow the sequence</small>
           </div>
-          <input id="chatInput" placeholder="Local test chat (demo)"/>
-        </div>
-      </div>
 
-      <div style="display:flex;gap:12px;margin-top:12px">
-        <div class="card" style="flex:1">
-          <h3>Code Snippet</h3>
-          <pre><code id="codeBlock" class="language-python">
-// QuickSort - in-place partition
-def quicksort(a, lo, hi):
-    if lo < hi:
-        p = partition(a, lo, hi)
-        quicksort(a, lo, p-1)
-        quicksort(a, p+1, hi)
-
-def partition(a, lo, hi):
-    pivot = a[hi]
-    i = lo
-    for j in range(lo, hi):
-        if a[j] <= pivot:
-            a[i], a[j] = a[j], a[i]
-            i += 1
-    a[i], a[hi] = a[hi], a[i]
-    return i
-          </code></pre>
-        </div>
-
-        <div class="card" style="width:220px">
-          <h3>Actions</h3>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <a class="btn" id="btnSnapshot">Snapshot</a>
-            <a class="btn" id="btnNotes" href="#" target="_blank">Download Notes</a>
-            <a class="btn" id="btnWhatsApp" href="https://wa.me/91YOURNUMBER" target="_blank">Contact on WhatsApp</a>
+          <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+            <a class="crx_btn" href="#beginner">Beginner Path</a>
+            <a class="crx_btn" href="#dsa">DSA Path</a>
+            <a class="crx_btn" href="#projects">Projects</a>
+            <a class="crx_btn" href="#tools">Tools</a>
           </div>
         </div>
+
+        <!-- Featured categories (slightly condensed) -->
+        <div class="crx_card crx_fade_in" id="crx_categories_v2">
+          <h3 style="margin:0 0 10px 0">What you'll learn</h3>
+          <div class="crx_categories" style="grid-template-columns:repeat(4, 1fr); gap:10px">
+            <div class="crx_cat" onclick="location.href='#beginner'">
+              <div class="crx_cat_icon">💻</div>
+              <div><div style="font-weight:700">Programming Basics</div><div class="crx_muted" style="font-size:12px">C • Python • Java • Dart</div></div>
+            </div>
+
+            <div class="crx_cat" onclick="location.href='#dsa'">
+              <div class="crx_cat_icon">🧠</div>
+              <div><div style="font-weight:700">DSA</div><div class="crx_muted" style="font-size:12px">Visuals & quizzes</div></div>
+            </div>
+
+            <div class="crx_cat" onclick="location.href='#frontend'">
+              <div class="crx_cat_icon">🎨</div>
+              <div><div style="font-weight:700">Frontend</div><div class="crx_muted" style="font-size:12px">HTML • CSS • JS</div></div>
+            </div>
+
+            <div class="crx_cat" onclick="location.href='#picnic'">
+              <div class="crx_cat_icon">🎪</div>
+              <div><div style="font-weight:700">Programmer's Picnic</div><div class="crx_muted" style="font-size:12px">Tools & playground</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured lesson demo -->
+        <div class="crx_card crx_fade_in" id="crx_demo">
+          <h3 style="margin:0 0 10px 0">Featured demo — Try JS (Ctrl/Cmd + Enter to run)</h3>
+          <div class="crx_code_box">
+            <textarea class="crx_code_input" aria-label="Code input">console.log('Hello from Learning Sutras!');</textarea>
+            <button class="crx_code_run">Run</button>
+            <pre class="crx_code_output" style="margin-top:12px;background:#fff;padding:10px;border-radius:8px;min-height:44px">Output will appear here.</pre>
+          </div>
+        </div>
+
+        <!-- Recent posts -->
+        <div class="crx_card crx_fade_in" id="crx_recent_v2">
+          <h3 style="margin:0 0 10px 0">Latest Posts</h3>
+          <div class="crx_recent_list">
+            <!-- Filled automatically by crx_ui_v1.js (or sample fallback) -->
+            <div class="crx_muted">Loading posts…</div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end">
+            <a class="crx_btn secondary" href="/search/label/All%20Posts">View all posts</a>
+          </div>
+        </div>
+
       </div>
 
-    </div>
+      <!-- SIDEBAR -->
+      <aside class="crx_sidebar">
+
+        <div class="crx_card crx_about crx_fade_in">
+          <div class="crx_about_img" style="background:url('me.jpg') center/cover"></div>
+          <div>
+            <div style="font-weight:700">Champak Roy</div>
+            <div class="crx_muted" style="font-size:13px">Developer • Teacher • Writer — Varanasi</div>
+            <div style="margin-top:10px"><a class="crx_btn" href="#about">About</a></div>
+          </div>
+        </div>
+
+        <div class="crx_card crx_fade_in">
+          <h4 style="margin:0 0 8px 0">Quick Tools</h4>
+          <ul style="padding-left:18px;margin:0;color:var(--crx-muted)">
+            <li><a href="#picnic">Code Visualizer</a></li>
+            <li><a href="#picnic">Quiz Runner</a></li>
+            <li><a href="#picnic">Gradient Generator</a></li>
+          </ul>
+        </div>
+
+        <div class="crx_card crx_fade_in">
+          <h4 style="margin:0 0 8px 0">Subscribe</h4>
+          <p class="crx_muted" style="margin:0 0 10px 0">Get weekly tips & short notes</p>
+          <form onsubmit="event.preventDefault(); alert('Thanks — you are subscribed!');" style="display:flex;gap:8px">
+            <input type="email" placeholder="Your email" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--crx-border)" required>
+            <button class="crx_btn" type="submit">Join</button>
+          </form>
+        </div>
+
+      </aside>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="crx_footer">
+      <div>© <strong>Learning Sutras</strong> — Champak Roy</div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <a href="#about" style="text-decoration:none;color:inherit">About</a>
+        <a href="#contact" style="text-decoration:none;color:inherit">Contact</a>
+        <a href="https://github.com/varanasi-software-junction" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">GitHub</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Floating WhatsApp -->
+  <div class="crx_whatsapp" data-number="" data-text="Hello Champak, I want to learn!">
+    <small>WhatsApp</small>
   </div>
 
-  <!-- ticker (bottom scrolling bar) -->
-  <div class="ticker-wrap" aria-hidden="true">
-    <div class="ticker" id="ticker">
-      <!-- repeating content will be cloned by JS to create continuous scroll -->
-      LIVE: QuickSort deep dive • Tip: test on duplicates & empty arrays • Next: MergeSort animation at 10:30 AM • Sponsor: Learning Sutras • New tutorial: Dart DSA series • Use tests to validate edge cases • Follow @ChampakRoy on YouTube •
-    </div>
-  </div>
+  <!-- CRX UI JS (hosted asset) -->
+  <script src="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_ui_v1.js"></script>
 
-<script>
-  // ---- small config ----
-  const TICKER_REPEAT = 8; // how many times to repeat the ticker text to make it continuous
+  <script>
+    /* v2 page script: typing effect, headline animation, reveal on scroll, small init */
+    (function(){
+      'use strict';
 
-  // Clone ticker content to make smooth scrolling
-  (function makeTicker() {
-    const t = document.getElementById('ticker');
-    const text = t.textContent.trim();
-    t.textContent = '';
-    for (let i=0;i<TICKER_REPEAT;i++){
-      const span = document.createElement('span');
-      span.style.paddingRight = '60px';
-      span.textContent = text;
-      t.appendChild(span);
-    }
-    // compute animation duration based on content width
-    requestAnimationFrame(()=> {
-      const width = t.scrollWidth;
-      const parentWidth = t.parentElement.clientWidth;
-      const px = width + parentWidth;
-      const speed = 70; // px per second
-      const duration = px / speed;
-      t.style.animationDuration = duration + 's';
-      t.style.paddingLeft = parentWidth + 'px';
-    });
-  })();
+      // TYPING EFFECT for small welcome messages (rotating messages)
+      const typingEl = document.getElementById('crx_typing_line');
+      const messages = [
+        'Start with a simple example — run code in your browser.',
+        'Daily short lessons — 10 minutes a day.',
+        'DSA explained visually — see how algorithms move.',
+        'Join our community — learn with others.'
+      ];
+      let msgIndex = 0, charIndex = 0, typingSpeed = 35, pauseBetween = 1600, deleting=false;
 
-  // ---- webcam preview for presenter (local only) ----
-  const btnStartCam = document.getElementById('btnStartCam');
-  const camCard = document.getElementById('camCard');
-  const camPlaceholder = document.getElementById('camPlaceholder');
-  let localStream = null;
+      function tick(){
+        if(!typingEl) return;
+        const current = messages[msgIndex % messages.length];
+        if(!deleting){
+          charIndex++;
+          typingEl.textContent = current.slice(0,charIndex);
+          if(charIndex >= current.length){
+            deleting = true;
+            setTimeout(tick, pauseBetween);
+            return;
+          }
+        } else {
+          charIndex--;
+          typingEl.textContent = current.slice(0,charIndex);
+          if(charIndex <= 0){
+            deleting = false;
+            msgIndex++;
+          }
+        }
+        setTimeout(tick, deleting ? typingSpeed/1.5 : typingSpeed);
+      }
+      document.addEventListener('DOMContentLoaded', ()=> {
+        tick();
+      });
 
-  btnStartCam.addEventListener('click', async () => {
-    if (localStream) {
-      stopTracks(localStream);
-      localStream = null;
-      const v = camCard.querySelector('video');
-      if (v) v.remove();
-      camPlaceholder.style.display = 'block';
-      btnStartCam.textContent = 'Start Webcam';
-      return;
-    }
-    try {
-      const s = await navigator.mediaDevices.getUserMedia({video:{width:1280,height:720}, audio:false});
-      localStream = s;
-      camPlaceholder.style.display = 'none';
-      let v = document.createElement('video');
-      v.autoplay = true; v.playsInline = true; v.muted = true;
-      v.srcObject = s;
-      camCard.appendChild(v);
-      btnStartCam.textContent = 'Stop Webcam';
-    } catch (err) {
-      alert('Webcam access error: ' + err.message);
-      console.error(err);
-    }
-  });
+      // Animated headline small transform (rotate subtle)
+      const headline = document.getElementById('crx_animated_headline');
+      if(headline){
+        // small sequence of words to fade between
+        const words = ['Threads of wisdom for modern coders',
+                       'Clear lessons • Practical projects',
+                       'From basics to DSA, step-by-step'];
+        let i = 0;
+        setInterval(()=> {
+          i = (i+1) % words.length;
+          headline.style.opacity = 0;
+          setTimeout(()=> {
+            headline.textContent = words[i];
+            headline.style.opacity = 1;
+          }, 420);
+        }, 4200);
+      }
 
-  function stopTracks(s){
-    if (!s) return;
-    s.getTracks().forEach(t=>t.stop());
-  }
+      // Reveal elements on scroll
+      const toReveal = Array.from(document.querySelectorAll('.crx_fade_in'));
+      function revealOnScroll(){
+        const top = window.innerHeight * 0.85;
+        toReveal.forEach(el=>{
+          const rect = el.getBoundingClientRect();
+          if(rect.top < top) el.classList.add('crx_visible');
+        });
+      }
+      document.addEventListener('scroll', revealOnScroll);
+      window.addEventListener('load', revealOnScroll);
+      window.addEventListener('resize', revealOnScroll);
 
-  // ---- live chart simulation ----
-  const ctx = document.getElementById('liveChart').getContext('2d');
-  const labels = ['n=100','n=1k','n=10k','n=100k','n=1M'];
-  const chart = new Chart(ctx, {
-    type:'line',
-    data:{
-      labels,
-      datasets:[
-        { label:'QuickSort (ms)', data:[30,70,190,800,3500], tension:0.35, borderWidth:2 },
-        { label:'MergeSort (ms)', data:[40,90,200,820,3600], tension:0.35, borderWidth:2, hidden:true }
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom'}},
-      scales:{ y:{ beginAtZero:true } }
-    }
-  });
+      // small keyboard shortcut for mini runner: Ctrl/Cmd + Enter
+      document.addEventListener('keydown', function(e){
+        if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+          const run = document.querySelector('.crx_code_run');
+          if(run) run.click();
+        }
+      });
 
-  // update chart periodically (simulate live)
-  setInterval(()=> {
-    chart.data.datasets.forEach(ds=>{
-      ds.data = ds.data.map(v => Math.max(1, Math.round(v*(0.9 + Math.random()*0.2))));
-    });
-    // random small change in last bucket to show "live" effect
-    chart.data.datasets.forEach(ds => ds.data[ds.data.length-1] = ds.data[ds.data.length-1] + Math.round(Math.random()*200 - 100));
-    chart.update();
-  }, 2000);
+      // init crx recent posts render using feed URL from body attribute if present
+      document.addEventListener('DOMContentLoaded', function(){
+        const feed = document.body.dataset.crxFeed || '';
+        if(feed && window.crxUI && typeof window.crxUI.renderRecentPosts === 'function'){
+          window.crxUI.renderRecentPosts(feed);
+        } else if(window.crxUI){
+          // calls with no feed will show sample data
+          window.crxUI.renderRecentPosts();
+        }
 
-  // ---- local chat demo ----
-  const chatBox = document.getElementById('chatBox');
-  const chatInput = document.getElementById('chatInput');
-  chatInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      const txt = chatInput.value.trim();
-      if (!txt) return;
-      const el = document.createElement('div');
-      el.textContent = '[You] ' + txt;
-      el.style.padding = '6px 0';
-      chatBox.appendChild(el);
-      chatBox.scrollTop = chatBox.scrollHeight;
-      chatInput.value = '';
-    }
-  });
+        // set WhatsApp number here (international, without +). e.g. '919812345678'
+        const wa = document.querySelector('.crx_whatsapp');
+        if(wa) wa.dataset.number = ''; // <-- add your number if you want the button to open chat
+      });
 
-  // ---- highlight code block ----
-  document.querySelectorAll('pre code').forEach((el)=>hljs.highlightElement(el));
-
-  // ---- snapshot: capture the player card area as image using html2canvas on demand ----
-  document.getElementById('btnSnapshot').addEventListener('click', async () => {
-    if (!window.html2canvasLoaded) {
-      const s = document.createElement('script');
-      s.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
-      document.body.appendChild(s);
-      await new Promise(r=>s.onload=r);
-      window.html2canvasLoaded = true;
-    }
-    const player = document.querySelector('.player');
-    html2canvas(player).then(canvas => {
-      const url = canvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = url; a.download = 'snapshot.png'; a.click();
-    }).catch(err => alert('Snapshot failed: ' + err.message));
-  });
-
-  // Cleanup on unload
-  window.addEventListener('beforeunload', ()=> stopTracks(localStream));
-</script>
+    })();
+  </script>
 </body>
-<<<<<<< HEAD
-
 </html>
-=======
-</html>  
->>>>>>> e30fa032f4aeb545f1bd3d2e90de0dbbc53f4d57
