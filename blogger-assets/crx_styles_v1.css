@@ -6,994 +6,1426 @@
    All major sections wrapped with COMPONENT markers
    ============================ */
 
-/* ---------- THEME VARIABLES ---------- */
-:root{
-  --crx-bg: #f7f9fc;
-  --crx-card: #ffffff;
-  --crx-border: #e6eef8;
-  --crx-muted: #6b7280;
-  --crx-primary: #0b5ed7;
-  --crx-primary-dark: #084298;
-  --crx-accent: #ff9933;
-  --crx-accent-deep: #e68325;
-  --crx-shadow: 0 8px 22px rgba(8,20,40,0.08);
-  --crx-radius: 12px;
-  --crx-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-  --crx-pad: 14px;
-  --crx-surface-weak: #f3f6fb;
-  --crx-code-bg: #0b122a;
-  --crx-code-text: teal;
-  --crx-elev: rgba(11,94,215,0.06);
-  --crx-success: #0b8a3f;
-  --crx-danger: #b91c1c;
-  --crx-focus: 0 0 0 4px rgba(11,94,215,0.12);
+ /* ---------- THEME VARIABLES ---------- */
+ :root {
+   --crx-bg: #f7f9fc;
+   --crx-card: #ffffff;
+   --crx-border: #e6eef8;
+   --crx-muted: #6b7280;
+   --crx-primary: #0b5ed7;
+   --crx-primary-dark: #084298;
+   --crx-accent: #ff9933;
+   --crx-accent-deep: #e68325;
+   --crx-shadow: 0 8px 22px rgba(8, 20, 40, 0.08);
+   --crx-radius: 12px;
+   --crx-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+   --crx-pad: 14px;
+   --crx-surface-weak: #f3f6fb;
+   --crx-code-bg: #0b122a;
+   --crx-code-text: teal;
+   --crx-elev: rgba(11, 94, 215, 0.06);
+   --crx-success: #0b8a3f;
+   --crx-danger: #b91c1c;
+   --crx-focus: 0 0 0 4px rgba(11, 94, 215, 0.12);
 
-  /* extras for affiliate visuals */
-  --crx-disclaimer-bg: linear-gradient(90deg,#fff6e9,#fff0dc);
-  --crx-disclaimer-border: linear-gradient(180deg,#ffd58a,#ffb452);
-  --crx-3d-edge: linear-gradient(135deg, rgba(11,94,215,0.18), rgba(255,96,67,0.08));
-}
+   /* extras for affiliate visuals */
+   --crx-disclaimer-bg: linear-gradient(90deg, #fff6e9, #fff0dc);
+   --crx-disclaimer-border: linear-gradient(180deg, #ffd58a, #ffb452);
+   --crx-3d-edge: linear-gradient(135deg, rgba(11, 94, 215, 0.18), rgba(255, 96, 67, 0.08));
+ }
 
-/* ---------- BASE ---------- */
-* { box-sizing: border-box; }
-html, body { height:100%; }
-body{
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  margin: 18px;
-  background: var(--crx-bg);
-  color: #071022;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  line-height:1.55;
-  -webkit-tap-highlight-color: transparent;
-}
+ /* ---------- BASE ---------- */
+ * {
+   box-sizing: border-box;
+ }
 
-/* COMPONENT: Container - BEGIN */
-.crx-container { max-width: 1100px; margin: 0 auto; display: block; gap: 16px; padding: 0 12px; }
-/* COMPONENT: Container - END */
+ html,
+ body {
+   height: 100%;
+ }
 
-/* headings */
-.crx_header h1 { margin: 0 0 .25rem 0; font-size: 22px; color: var(--crx-primary); }
-.crx_header h2 { color: var(--crx-primary-dark); margin: 0 0 .4rem 0; }
-.crx_small { font-size: 13px; color: var(--crx-muted); }
+ body {
+   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+   margin: 18px;
+   background: var(--crx-bg);
+   color: #071022;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   line-height: 1.55;
+   -webkit-tap-highlight-color: transparent;
+ }
 
-/* generic card */
-/* COMPONENT: Card - BEGIN */
-.crx_card {
-  background: var(--crx-card);
-  padding: var(--crx-pad);
-  border-radius: var(--crx-radius);
-  box-shadow: var(--crx-shadow);
-  margin-bottom: 14px;
-  border: 1px solid var(--crx-border);
-}
-/* COMPONENT: Card - END */
+ /* COMPONENT: Container - BEGIN */
+ .crx-container {
+   max-width: 1100px;
+   margin: 0 auto;
+   display: block;
+   gap: 16px;
+   padding: 0 12px;
+ }
 
-/* subtle surface */
-.crx_surface {
-  background: var(--crx-surface-weak);
-  border-radius: 10px;
-  padding: 10px;
-}
+ /* COMPONENT: Container - END */
 
-/* ---------- EDITOR & OUTPUT ---------- */
-/* COMPONENT: Editor / Output - BEGIN */
-.crx_editor-card { }
-.crx_output-card  { }
+ /* headings */
+ .crx_header h1 {
+   margin: 0 0 .25rem 0;
+   font-size: 22px;
+   color: var(--crx-primary);
+ }
 
-.crx_editor {
-  height: 420px;
-  min-height: 180px;
-  width: 100%;
-  border-radius: 10px;
-  border: 1px solid var(--crx-border);
-  box-sizing: border-box;
-  overflow: hidden;
-  background: linear-gradient(180deg, #ffffff, #fbfdff);
-}
+ .crx_header h2 {
+   color: var(--crx-primary-dark);
+   margin: 0 0 .4rem 0;
+ }
 
-/* make Ace font-size consistent */
-.ace_editor { font-size: 14px; font-family: var(--crx-mono); }
+ .crx_small {
+   font-size: 13px;
+   color: var(--crx-muted);
+ }
 
-/* controls row */
-.crx_controls { display:flex; gap:.6rem; align-items:center; margin-top:.75rem; flex-wrap:wrap; }
-/* COMPONENT: Editor / Output - END */
+ /* generic card */
+ /* COMPONENT: Card - BEGIN */
+ .crx_card {
+   background: var(--crx-card);
+   padding: var(--crx-pad);
+   border-radius: var(--crx-radius);
+   box-shadow: var(--crx-shadow);
+   margin-bottom: 14px;
+   border: 1px solid var(--crx-border);
+ }
 
-/* ---------- BUTTONS ---------- */
-/* COMPONENT: Buttons - BEGIN */
-.crx_btn {
-  appearance: none;
-  border: 1px solid rgba(11,18,32,0.06);
-  background: linear-gradient(180deg,#fff,#f7fbff);
-  padding: .5rem .9rem;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 14px;
-  box-shadow: 0 6px 16px rgba(11,94,215,0.06);
-  color: var(--crx-primary-dark);
-  transition: transform .14s ease, box-shadow .14s ease, background .14s ease, color .12s ease;
-}
-.crx_btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(11,94,215,0.08); }
+ /* COMPONENT: Card - END */
 
-/* primary button (blue) */
-.crx_btn.crx_primary {
-  background: linear-gradient(180deg,var(--crx-primary),var(--crx-primary-dark));
-  color: #fff;
-  border: none;
-  box-shadow: 0 10px 30px rgba(11,94,215,0.14);
-}
-.crx_btn.crx_primary:hover { background: linear-gradient(180deg,var(--crx-primary-dark),#05336f); }
+ /* subtle surface */
+ .crx_surface {
+   background: var(--crx-surface-weak);
+   border-radius: 10px;
+   padding: 10px;
+ }
 
-/* accent (saffron) variant */
-.crx_btn.crx_accent {
-  background: linear-gradient(180deg,var(--crx-accent),var(--crx-accent-deep));
-  color: #fff;
-  border: none;
-}
-.crx_btn.crx_accent:hover { transform: translateY(-2px); }
+ /* ---------- EDITOR & OUTPUT ---------- */
+ /* COMPONENT: Editor / Output - BEGIN */
+ .crx_editor-card {}
 
-/* secondary / ghost */
-.crx_btn.secondary { background: transparent; border: 1px solid var(--crx-border); color: var(--crx-primary-dark); padding: .45rem .7rem; font-weight:700; }
-.crx_btn.small { font-size: 13px; padding: .36rem .64rem; border-radius:8px; }
+ .crx_output-card {}
 
-/* status */
-.crx_status { padding: .25rem .6rem; border-radius: 8px; font-weight: 600; font-size: 13px; background: transparent; color: var(--crx-muted); }
-.crx_status.ok { color: var(--crx-success); }
-.crx_status.err { color: var(--crx-danger); }
+ .crx_editor {
+   height: 420px;
+   min-height: 180px;
+   width: 100%;
+   border-radius: 10px;
+   border: 1px solid var(--crx-border);
+   box-sizing: border-box;
+   overflow: hidden;
+   background: linear-gradient(180deg, #ffffff, #fbfdff);
+ }
 
-/* focus */
-.crx_btn:focus, .crx_input:focus, .crx_textarea:focus { outline: none; box-shadow: var(--crx-focus); border-color: var(--crx-primary); }
-/* COMPONENT: Buttons - END */
+ /* make Ace font-size consistent */
+ .ace_editor {
+   font-size: 14px;
+   font-family: var(--crx-mono);
+ }
 
-/* ---------- OUTPUT / CODE BLOCKS ---------- */
-/* COMPONENT: Code Blocks - BEGIN */
-.crx_output {
-  margin-top: .6rem;
-  padding: 14px;
-  background-color: lightgray;
-  border-radius: 10px;
-  white-space: pre-wrap;
-  word-break: break-word;
-  max-height: 320px;
-  overflow: auto;
-  font-family: var(--crx-mono);
-  font-size: 13px;
-  color: var(--crx-code-text);
-  border: 1px solid rgba(255,255,255,0.04);
-  box-shadow: inset 0 -2px 0 rgba(255,255,255,0.02);
-}
+ /* controls row */
+ .crx_controls {
+   display: flex;
+   gap: .6rem;
+   align-items: center;
+   margin-top: .75rem;
+   flex-wrap: wrap;
+ }
 
-/* code label */
-pre.crx_output::before, .crx_post-body pre::before {
-  display: block;
-  content: "Code";
-  font-size: 12px;
-  font-weight: 700;
-  color: #cbd5e1;
-  background: rgba(255,255,255,0.03);
-  padding: 6px 10px;
-  margin: -14px -14px 8px -14px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
+ /* COMPONENT: Editor / Output - END */
 
-/* copy button styles */
-.crx_copybtn {
-  display: inline-flex;
-  align-items: center;
-  gap: .45rem;
-  padding: .32rem .6rem;
-  font-size: 13px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.06);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  color: var(--crx-code-text);
-  cursor: pointer;
-}
-/* small responsive tweak for code */
-@media (max-width:520px) {
-  .crx_output { font-size: 12px; padding: 10px; max-height: 260px; }
-}
-/* COMPONENT: Code Blocks - END */
+ /* ---------- BUTTONS ---------- */
+ /* COMPONENT: Buttons - BEGIN */
+ .crx_btn {
+   appearance: none;
+   border: 1px solid rgba(11, 18, 32, 0.06);
+   background: linear-gradient(180deg, #fff, #f7fbff);
+   padding: .5rem .9rem;
+   border-radius: 10px;
+   cursor: pointer;
+   font-weight: 700;
+   font-size: 14px;
+   box-shadow: 0 6px 16px rgba(11, 94, 215, 0.06);
+   color: var(--crx-primary-dark);
+   transition: transform .14s ease, box-shadow .14s ease, background .14s ease, color .12s ease;
+ }
 
-/* ---------- POST BODY LINK & LIST STYLES ---------- */
-/* COMPONENT: Post Body - BEGIN */
-.crx_post-body a {
-  color: teal;
-  text-decoration: none;
-  border-bottom: 2px solid rgba(255,153,51,0.06);
-  transition: color .12s ease, border-color .12s ease;
-}
-.crx_post-body a:hover,
-.crx_post-body a:focus {
-  color: var(--crx-primary-dark);
-  border-bottom-color: var(--crx-accent);
-  text-decoration: none;
-}
+ .crx_btn:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 10px 26px rgba(11, 94, 215, 0.08);
+ }
 
-/* lists */
-.crx_post-body ul { margin-left: 1.06rem; padding-left: 0; }
-.crx_post-body ul li {
-  margin: 8px 0;
-  line-height: 1.55;
-  list-style: none;
-  position: relative;
-  padding-left: 1.3rem;
-}
-.crx_post-body ul li::before {
-  content: "";
-  position: absolute;
-  left: 0.2rem;
-  top: .78rem;
-  width: 8px; height: 8px;
-  border-radius: 2px;
-  background: var(--crx-accent);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
-}
+ /* primary button (blue) */
+ .crx_btn.crx_primary {
+   background: linear-gradient(180deg, var(--crx-primary), var(--crx-primary-dark));
+   color: #fff;
+   border: none;
+   box-shadow: 0 10px 30px rgba(11, 94, 215, 0.14);
+ }
 
-/* blockquote */
-.crx_post-body blockquote {
-  border-left: 4px solid var(--crx-accent);
-  padding: 10px 14px;
-  background: linear-gradient(180deg, rgba(250,250,250,0.6), rgba(255,250,240,0.02));
-  margin: 12px 0;
-  border-radius: 8px;
-  color: var(--crx-muted);
-}
+ .crx_btn.crx_primary:hover {
+   background: linear-gradient(180deg, var(--crx-primary-dark), #05336f);
+ }
 
-/* images */
-.crx_post-body img { border-radius: 8px; max-width: 100%; height: auto; display: block; }
+ /* accent (saffron) variant */
+ .crx_btn.crx_accent {
+   background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep));
+   color: #fff;
+   border: none;
+ }
 
-/* tables */
-.crx_post-body table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-.crx_post-body th, .crx_post-body td { border: 1px solid rgba(11,18,32,0.06); padding: 8px 10px; text-align: left; }
-.crx_post-body thead th { background: rgba(11,94,215,0.06); }
-/* COMPONENT: Post Body - END */
+ .crx_btn.crx_accent:hover {
+   transform: translateY(-2px);
+ }
 
-/* ---------- MCQs ---------- */
-/* COMPONENT: MCQs - BEGIN */
-.crx_mcqs { display:flex; flex-direction:column; gap:14px; margin:8px 0 18px; }
-.crx_mcq { padding:12px; border-radius:10px; border:1px solid rgba(11,18,32,0.04); background:var(--crx-card); box-shadow: 0 6px 16px rgba(11,94,215,0.04); }
-.crx_mcq_q { font-weight:800; margin-bottom:8px; color: var(--crx-primary-dark); }
-.crx_mcq_opts { margin:0 0 8px 0.6rem; padding-left:0.6rem; }
-.crx_mcq_opts li { margin:8px 0; list-style:none; padding:8px 10px; border-radius:8px; background: #fbfdff; border:1px solid rgba(11,18,32,0.03); cursor:pointer; transition: background .12s, transform .12s; }
-.crx_mcq_opts li:hover { background: linear-gradient(180deg, #fff, #fbfdff); transform: translateY(-2px); }
-.crx_mcq_ans { background: rgba(11,18,32,0.04); padding:10px; border-radius:8px; color: var(--crx-muted); }
-.crx_mcq .crx_btn { margin-top:6px; }
-/* COMPONENT: MCQs - END */
+ /* secondary / ghost */
+ .crx_btn.secondary {
+   background: transparent;
+   border: 1px solid var(--crx-border);
+   color: var(--crx-primary-dark);
+   padding: .45rem .7rem;
+   font-weight: 700;
+ }
 
-/* ---------- AVATAR ---------- */
-/* COMPONENT: Avatar - BEGIN */
-.crx_avatar{
-  border-radius: 50%;
-  height: 100px;
-  width:100px;
-  object-fit: cover;
-  border: 3px solid rgba(11,94,215,0.08);
-  box-shadow: 0 8px 18px rgba(11,94,215,0.06);
-}
-/* COMPONENT: Avatar - END */
+ .crx_btn.small {
+   font-size: 13px;
+   padding: .36rem .64rem;
+   border-radius: 8px;
+ }
 
-/* ---------- AFFILIATE CARD (REPLACED / ENHANCED) ---------- */
-/* COMPONENT: Affiliate - BEGIN */
-/* Visible, impossible-to-miss disclaimer banner above affiliate cards */
-.crx_affiliate_disclaimer {
-  display: flex;
-  gap:12px;
-  align-items:center;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: var(--crx-disclaimer-bg);
-  border: 2px solid transparent;
-  box-shadow: 0 8px 26px rgba(11,94,215,0.06), inset 0 -2px 0 rgba(255,255,255,0.6);
-  position: relative;
-  margin-bottom: 14px;
-  font-weight:800;
-  color: #7a4f09;
-  line-height:1.15;
-  font-size:14px;
-}
+ /* status */
+ .crx_status {
+   padding: .25rem .6rem;
+   border-radius: 8px;
+   font-weight: 600;
+   font-size: 13px;
+   background: transparent;
+   color: var(--crx-muted);
+ }
 
-/* decorative left accent */
-.crx_affiliate_disclaimer::before {
-  content: "";
-  width:6px;
-  height:56%;
-  position:absolute;
-  left:8px;
-  top:22%;
-  border-radius:4px;
-  background: var(--crx-disclaimer-border);
-  box-shadow: 0 6px 18px rgba(230,120,30,0.14);
-}
+ .crx_status.ok {
+   color: var(--crx-success);
+ }
 
-/* optional small link on the right */
-.crx_affiliate_disclaimer .crx_disclaimer_actions {
-  margin-left: auto;
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-.crx_affiliate_disclaimer a { color: #b24b00; font-weight:800; text-decoration:underline; }
+ .crx_status.err {
+   color: var(--crx-danger);
+ }
 
-/* Make the wrapper a single-column stacked list (one product per row) */
-.crx_affiliates_wrap {
-  display: grid;
-  grid-template-columns: 1fr; /* single column — vertical list */
-  gap: 14px;
-  margin: 8px 0 18px 0;
-}
+ /* focus */
+ .crx_btn:focus,
+ .crx_input:focus,
+ .crx_textarea:focus {
+   outline: none;
+   box-shadow: var(--crx-focus);
+   border-color: var(--crx-primary);
+ }
 
-/* Card: slightly taller, content stacked horizontally on wide screens but meta stacked vertically */
-.crx_affiliate_card {
-  position: relative;
-  display: flex;
-  gap: 16px;
-  padding: 14px;
-  border-radius: 14px;
-  background: linear-gradient(180deg,#fff,#fbfdff);
-  box-shadow: 0 20px 40px rgba(7,16,32,0.12), 0 6px 18px rgba(11,35,60,0.06);
-  border: 1px solid rgba(11,35,60,0.06);
-  transition: transform .14s ease, box-shadow .14s ease;
-  align-items: flex-start;
-  overflow: visible;
-}
+ /* COMPONENT: Buttons - END */
 
-/* 3D skewed edge pseudo-element (gives card a 'lifted' 3D frame) */
-.crx_affiliate_card::before {
-  content: "";
-  position: absolute;
-  right: -12px;
-  top: 8px;
-  width: 12px;
-  height: calc(100% - 16px);
-  border-radius: 6px;
-  transform: skewY(-12deg);
-  background: var(--crx-3d-edge);
-  box-shadow: 6px 10px 18px rgba(8,20,40,0.08);
-  z-index: -1;
-  filter: brightness(.98);
-}
+ /* ---------- OUTPUT / CODE BLOCKS ---------- */
+ /* COMPONENT: Code Blocks - BEGIN */
+ .crx_output {
+   margin-top: .6rem;
+   padding: 14px;
+   background-color: lightgray;
+   border-radius: 10px;
+   white-space: pre-wrap;
+   word-break: break-word;
+   max-height: 320px;
+   overflow: auto;
+   font-family: var(--crx-mono);
+   font-size: 13px;
+   color: var(--crx-code-text);
+   border: 1px solid rgba(255, 255, 255, 0.04);
+   box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.02);
+ }
 
-/* hover makes the card 'pop' */
-.crx_affiliate_card:hover,
-.crx_affiliate_card:focus-within {
-  transform: translateY(-8px) rotateX(1deg);
-  box-shadow:
-    0 30px 60px rgba(7,16,32,0.16),
-    0 12px 28px rgba(11,35,60,0.08);
-}
+ /* code label */
+ pre.crx_output::before,
+ .crx_post-body pre::before {
+   display: block;
+   content: "Code";
+   font-size: 12px;
+   font-weight: 700;
+   color: #cbd5e1;
+   background: rgba(255, 255, 255, 0.03);
+   padding: 6px 10px;
+   margin: -14px -14px 8px -14px;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+ }
 
-/* image column */
-.crx_affiliate_img_wrap {
-  flex: 0 0 120px;
-  width: 120px;
-  height: 78px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, rgba(11,99,212,0.03), rgba(34,197,94,0.02));
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid rgba(11,35,60,0.03);
-}
-.crx_affiliate_img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
+ /* copy button styles */
+ .crx_copybtn {
+   display: inline-flex;
+   align-items: center;
+   gap: .45rem;
+   padding: .32rem .6rem;
+   font-size: 13px;
+   border-radius: 8px;
+   border: 1px solid rgba(255, 255, 255, 0.06);
+   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+   color: var(--crx-code-text);
+   cursor: pointer;
+ }
 
-/* content column: allow wrap for title & desc */
-.crx_affiliate_content {
-  flex: 1 1 auto;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  min-width:0;
-}
+ /* small responsive tweak for code */
+ @media (max-width:520px) {
+   .crx_output {
+     font-size: 12px;
+     padding: 10px;
+     max-height: 260px;
+   }
+ }
 
-/* Title: multi-line, prominent */
-.crx_affiliate_title {
-  font-weight:800;
-  font-size:16px;
-  color:#06243a;
-  line-height:1.18;
-  display:block;
-  word-break:break-word;
-  overflow: visible;
-}
+ /* COMPONENT: Code Blocks - END */
 
-/* Description: show up to 3 lines, readable */
-.crx_affiliate_desc {
-  font-size:14px;
-  color:#334b57;
-  line-height:1.25;
-  display: -webkit-box;
-  -webkit-line-clamp:3;
-  -webkit-box-orient:vertical;
-  overflow: hidden;
-  margin-bottom:4px;
-}
+ /* ---------- POST BODY LINK & LIST STYLES ---------- */
+ /* COMPONENT: Post Body - BEGIN */
+ .crx_post-body a {
+   color: teal;
+   text-decoration: none;
+   border-bottom: 2px solid rgba(255, 153, 51, 0.06);
+   transition: color .12s ease, border-color .12s ease;
+ }
 
-/* META — stack rating, price and CTA vertically (each on its own line) */
-.crx_affiliate_meta {
-  display:flex;
-  flex-direction: column; /* stack vertically */
-  align-items: flex-start;
-  gap:8px;
-  margin-top:6px;
-  width:100%;
-}
+ .crx_post-body a:hover,
+ .crx_post-body a:focus {
+   color: var(--crx-primary-dark);
+   border-bottom-color: var(--crx-accent);
+   text-decoration: none;
+ }
 
-/* price */
-.crx_affiliate_price {
-  font-weight:900;
-  font-size:15px;
-  color:#0b63d4;
-  background: rgba(11,99,212,0.06);
-  padding:6px 10px;
-  border-radius:8px;
-}
+ /* lists */
+ .crx_post-body ul {
+   margin-left: 1.06rem;
+   padding-left: 0;
+ }
 
-/* rating */
-.crx_affiliate_rating { display:flex; gap:8px; align-items:center; font-size:13px; color:#6b7280; }
+ .crx_post-body ul li {
+   margin: 8px 0;
+   line-height: 1.55;
+   list-style: none;
+   position: relative;
+   padding-left: 1.3rem;
+ }
 
-/* CTA: full-width style on its own line */
-.crx_affiliate_cta { width:100%; }
-.crx_btn.crx_aff_buy {
-  width:100%;
-  display:inline-flex;
-  justify-content:center;
-  background: linear-gradient(180deg,#ff7a59,#ff6043);
-  color:#fff;
-  padding:10px 12px;
-  border-radius:10px;
-  font-weight:800;
-  border:0;
-  box-shadow:0 10px 26px rgba(255,96,67,0.16);
-  text-decoration:none;
-  gap:8px;
-  font-size:14px;
-}
+ .crx_post-body ul li::before {
+   content: "";
+   position: absolute;
+   left: 0.2rem;
+   top: .78rem;
+   width: 8px;
+   height: 8px;
+   border-radius: 2px;
+   background: var(--crx-accent);
+   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+ }
 
-/* small inside-card disclaimer (keeps legal text with each card) */
-.crx_aff_small_disclaimer {
-  display:inline-block;
-  margin-left:8px;
-  font-size:12px;
-  color:#8a5b1a;
-  background: rgba(255,235,205,0.45);
-  padding:6px 8px;
-  border-radius:8px;
-  font-weight:700;
-  border:1px solid rgba(255,200,140,0.25);
-}
+ /* blockquote */
+ .crx_post-body blockquote {
+   border-left: 4px solid var(--crx-accent);
+   padding: 10px 14px;
+   background: linear-gradient(180deg, rgba(250, 250, 250, 0.6), rgba(255, 250, 240, 0.02));
+   margin: 12px 0;
+   border-radius: 8px;
+   color: var(--crx-muted);
+ }
 
-/* ensure links inherit readable color */
-.crx_affiliate_card a { text-decoration: none; color: inherit; }
+ /* images */
+ .crx_post-body img {
+   border-radius: 8px;
+   max-width: 100%;
+   height: auto;
+   display: block;
+ }
 
-/* accessibility: large focus ring for keyboard users */
-.crx_affiliate_card a:focus { box-shadow: var(--crx-focus); outline: none; border-radius:10px; }
+ /* tables */
+ .crx_post-body table {
+   width: 100%;
+   border-collapse: collapse;
+   margin: 10px 0;
+ }
 
-/* small-screen adjustments: stack image above content on very narrow screens */
-@media (max-width:520px) {
-  .crx_affiliate_card { flex-direction: column; align-items: stretch; }
-  .crx_affiliate_img_wrap { width:100%; height:160px; flex: 0 0 auto; }
-  .crx_affiliate_meta { gap:10px; }
-  .crx_affiliate_cta .crx_btn.crx_aff_buy { padding:12px; font-size:15px; }
-}
-/* COMPONENT: Affiliate - END */
+ .crx_post-body th,
+ .crx_post-body td {
+   border: 1px solid rgba(11, 18, 32, 0.06);
+   padding: 8px 10px;
+   text-align: left;
+ }
 
-/* ---------- BIO WIDGET ---------- */
-/* COMPONENT: Bio - BEGIN */
-.crx_bio {
-  display:flex;
-  gap:14px;
-  align-items:center;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid rgba(11,94,215,0.06);
-  background: linear-gradient(180deg, #fff, #fbfdff);
-  box-shadow: 0 8px 20px rgba(11,94,215,0.04);
-}
-.crx_bio .bio_name { font-weight:800; color: var(--crx-primary-dark); font-size:16px; }
-.crx_bio .bio_name::after { content: ""; display:block; width:36px; height:4px; background: var(--crx-accent); border-radius:4px; margin-top:6px; }
-.crx_bio .bio_tagline { color: var(--crx-muted); margin-top:6px; font-size:14px; }
-.crx_bio .bio_actions { margin-top:10px; }
+ .crx_post-body thead th {
+   background: rgba(11, 94, 215, 0.06);
+ }
 
-/* whatsapp button specifically saffron styled */
-.crx_bio .crx_btn.whatsapp {
-  background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep));
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  display:inline-flex;
-  gap:8px;
-  align-items:center;
-}
-/* COMPONENT: Bio - END */
+ /* COMPONENT: Post Body - END */
 
-/* ---------- DONATE WIDGET ---------- */
-/* COMPONENT: Donate - BEGIN */
-.crx_donate_card {
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-  max-width:520px;
-  margin:12px 0;
-  padding:12px;
-  border-radius:12px;
-  box-shadow:0 10px 26px rgba(11,94,215,0.06);
-  background: linear-gradient(180deg,#ffffff,#fbfdff);
-  display:flex;
-  gap:12px;
-  align-items:center;
-  border: 1px solid rgba(11,94,215,0.06);
-}
-.crx_donate_qr {
-  width:110px;
-  height:110px;
-  border-radius:10px;
-  background: linear-gradient(180deg,#fff,#fbfdff);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  flex-shrink:0;
-  border: 1px solid rgba(11,18,32,0.03);
-}
-.crx_donate_qr img { width:100%; height:100%; object-fit:contain; display:block; }
+ /* ---------- MCQs ---------- */
+ /* COMPONENT: MCQs - BEGIN */
+ .crx_mcqs {
+   display: flex;
+   flex-direction: column;
+   gap: 14px;
+   margin: 8px 0 18px;
+ }
 
-.crx_donate_title { font-size:17px; font-weight:800; margin-bottom:6px; color: var(--crx-primary-dark); }
-.crx_donate_desc { font-size:14px; color:var(--crx-muted); line-height:1.35; margin-bottom:8px; }
+ .crx_mcq {
+   padding: 12px;
+   border-radius: 10px;
+   border: 1px solid rgba(11, 18, 32, 0.04);
+   background: var(--crx-card);
+   box-shadow: 0 6px 16px rgba(11, 94, 215, 0.04);
+ }
 
-.crx_action_row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-.crx_preset { background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep)); border:none; padding:8px 10px; border-radius:8px; font-weight:800; cursor:pointer; color:#fff; box-shadow: 0 6px 18px rgba(230,140,60,0.10); }
-.crx_open_qr { text-decoration:none; border-radius:8px; padding:8px 10px; border:1px solid rgba(11,18,32,0.04); background:transparent; color:var(--crx-primary-dark); }
+ .crx_mcq_q {
+   font-weight: 800;
+   margin-bottom: 8px;
+   color: var(--crx-primary-dark);
+ }
 
-.crx_small_hint { font-size:13px; color:var(--crx-muted); margin-top:8px; }
-.crx_donate_smallprint { font-size:12px; color:var(--crx-muted); margin-top:6px; }
-/* COMPONENT: Donate - END */
+ .crx_mcq_opts {
+   margin: 0 0 8px 0.6rem;
+   padding-left: 0.6rem;
+ }
 
-/* ---------- FLOATING DONATE BUTTON ---------- */
-/* COMPONENT: Floating Donate - BEGIN */
-#crx_floating_donate {
-  position: fixed;
-  z-index: 9998;
-  --size:64px;
-  width:var(--size);
-  height:var(--size);
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 14px 34px rgba(3,10,30,0.18);
-  background: linear-gradient(180deg,var(--crx-accent),var(--crx-primary));
-  color:white;
-  font-weight:800;
-  cursor:pointer;
-  border: 2px solid rgba(255,255,255,0.06);
-  transition: transform 350ms ease, opacity 300ms ease, right 1s ease, left 1s ease, bottom 1s ease, top 1s ease;
-  opacity:0;
-  pointer-events:none;
-}
-#crx_floating_donate.visible { opacity:1; pointer-events:auto; transform: translateY(0); }
-#crx_floating_donate:focus { outline: none; box-shadow: var(--crx-focus); transform: scale(1.04); }
-#crx_floating_label {
-  position:fixed;
-  z-index:9997;
-  background:#fff;
-  color:#071022;
-  padding:8px 12px;
-  border-radius:10px;
-  box-shadow:0 10px 26px rgba(6,12,22,0.12);
-  font-weight:700;
-  font-size:13px;
-  transition:opacity 200ms, transform 200ms;
-  opacity:0;
-  pointer-events:none;
-  border:1px solid rgba(11,18,32,0.04);
-}
-#crx_floating_donate:hover + #crx_floating_label,
-#crx_floating_donate:focus + #crx_floating_label { opacity:1; transform:translateY(-6px); }
+ .crx_mcq_opts li {
+   margin: 8px 0;
+   list-style: none;
+   padding: 8px 10px;
+   border-radius: 8px;
+   background: #fbfdff;
+   border: 1px solid rgba(11, 18, 32, 0.03);
+   cursor: pointer;
+   transition: background .12s, transform .12s;
+ }
 
-#crx_floating_dismiss { position:absolute; right:-8px; top:-8px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,0.12); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center; border:0; }
-#crx_floating_donate:hover #crx_floating_dismiss { opacity:1; }
-/* COMPONENT: Floating Donate - END */
+ .crx_mcq_opts li:hover {
+   background: linear-gradient(180deg, #fff, #fbfdff);
+   transform: translateY(-2px);
+ }
 
-/* ---------- VISUALIZER / OVERLAYS ---------- */
-/* COMPONENT: Visualizer - BEGIN */
-.crx_visual_container { position: relative; background: #fafafa; border-radius:10px; border: 1px dashed rgba(11,18,32,0.04); padding:10px; overflow-x:auto; }
-.crx_box {
-  position:absolute;
-  width:56px;
-  height:56px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:8px;
-  font-weight:800;
-  color:white;
-  box-shadow: 0 8px 18px rgba(8,20,40,0.06);
-  transition: transform .28s cubic-bezier(.2,.9,.2,1), left .28s ease;
-}
-.crx_box .idx { position:absolute; font-size:10px; bottom:4px; right:6px; opacity:0.6; color:rgba(255,255,255,0.75); }
+ .crx_mcq_ans {
+   background: rgba(11, 18, 32, 0.04);
+   padding: 10px;
+   border-radius: 8px;
+   color: var(--crx-muted);
+ }
 
-/* highlight for compare */
-.crx_highlight { box-shadow: 0 10px 30px rgba(11,94,215,0.18), 0 2px 8px rgba(0,0,0,0.06); transform: translateY(-6px) scale(1.02); }
+ .crx_mcq .crx_btn {
+   margin-top: 6px;
+ }
 
-/* overlays */
-.crx_overlay { position:absolute; top:0; bottom:0; border-radius:8px; pointer-events:none; opacity:0.9; }
-.crx_overlay_left { background: rgba(11,94,215,0.06); border: 1px solid rgba(11,94,215,0.06); }
-.crx_overlay_right { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.06); }
-.crx_overlay_unsorted { background: rgba(250,204,21,0.06); border: 1px dashed rgba(250,204,21,0.08); }
-/* COMPONENT: Visualizer - END */
+ /* COMPONENT: MCQs - END */
 
-/* ---------- POST FOOTER / TAGS ---------- */
-/* COMPONENT: Tags / Share - BEGIN */
-.crx_tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
-.crx_tag { background: linear-gradient(180deg, rgba(255,153,51,0.12), rgba(255,153,51,0.08)); color: var(--crx-primary-dark); padding:6px 10px; border-radius:999px; font-weight:700; font-size:13px; border:1px solid rgba(11,18,32,0.03); }
+ /* ---------- AVATAR ---------- */
+ /* COMPONENT: Avatar - BEGIN */
+ .crx_avatar {
+   border-radius: 50%;
+   height: 100px;
+   width: 100px;
+   object-fit: cover;
+   border: 3px solid rgba(11, 94, 215, 0.08);
+   box-shadow: 0 8px 18px rgba(255, 94, 215, 0.06);
+ }
 
-/* share buttons */
-.crx_share { display:flex; gap:8px; margin-top:10px; }
-.crx_share .btn { border-radius:8px; padding:8px; background:#fff; border:1px solid rgba(11,18,32,0.04); display:inline-flex; align-items:center; justify-content:center; min-width:44px; height:44px; cursor:pointer; }
-.crx_share .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(11,94,215,0.06); }
-/* COMPONENT: Tags / Share - END */
+ /* COMPONENT: Avatar - END */
 
-/* ---------- FOOTER ---------- */
-/* COMPONENT: Site Footer - BEGIN */
-.site_footer {
-  background: var(--crx-primary-dark);
-  color: #f4f7ff;
-  padding: 28px;
-  border-radius: 10px;
-  margin-top: 20px;
-  font-size: 14px;
-  box-shadow: 0 8px 30px rgba(8,20,40,0.06);
-}
-/* COMPONENT: Site Footer - END */
+ /* ---------- AFFILIATE CARD (REPLACED / ENHANCED) ---------- */
+ /* COMPONENT: Affiliate - BEGIN */
+ /* Visible, impossible-to-miss disclaimer banner above affiliate cards */
+ .crx_affiliate_disclaimer {
+   display: flex;
+   gap: 12px;
+   align-items: center;
+   padding: 12px 14px;
+   border-radius: 12px;
+   background: var(--crx-disclaimer-bg);
+   border: 2px solid transparent;
+   box-shadow: 0 8px 26px rgba(11, 94, 215, 0.06), inset 0 -2px 0 rgba(255, 255, 255, 0.6);
+   position: relative;
+   margin-bottom: 14px;
+   font-weight: 800;
+   color: #7a4f09;
+   line-height: 1.15;
+   font-size: 14px;
+ }
 
-/* ---------- RESPONSIVE ---------- */
-/* COMPONENT: Responsive - BEGIN */
-@media (max-width:1100px) {
-  .crx-container { padding: 8px; margin: 8px auto; }
-  .crx_editor { height: 360px; }
-}
-@media (max-width:720px){
-  .crx_editor { height: 300px; }
-  .crx_bio { flex-direction: row; gap:10px; align-items:center; }
-  .crx_affiliate_img { width: 88px; height: 66px; }
-  .crx_donate_qr { width:96px; height:96px; }
-  #crx_floating_label { display:none; }
-}
+ /* decorative left accent */
+ .crx_affiliate_disclaimer::before {
+   content: "";
+   width: 6px;
+   height: 56%;
+   position: absolute;
+   left: 8px;
+   top: 22%;
+   border-radius: 4px;
+   background: var(--crx-disclaimer-border);
+   box-shadow: 0 6px 18px rgba(230, 120, 30, 0.14);
+ }
 
-/* Accessibility: reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none; animation: none; }
-  #crx_floating_donate { transition: none; }
-}
-/* COMPONENT: Responsive - END */
+ /* optional small link on the right */
+ .crx_affiliate_disclaimer .crx_disclaimer_actions {
+   margin-left: auto;
+   display: flex;
+   gap: 8px;
+   align-items: center;
+ }
 
-/* =========================
+ .crx_affiliate_disclaimer a {
+   color: #b24b00;
+   font-weight: 800;
+   text-decoration: underline;
+ }
+
+ /* Make the wrapper a single-column stacked list (one product per row) */
+ .crx_affiliates_wrap {
+   display: grid;
+   grid-template-columns: 1fr;
+   /* single column — vertical list */
+   gap: 14px;
+   margin: 8px 0 18px 0;
+ }
+
+ /* Card: slightly taller, content stacked horizontally on wide screens but meta stacked vertically */
+ .crx_affiliate_card {
+   position: relative;
+   display: flex;
+   gap: 16px;
+   padding: 14px;
+   border-radius: 14px;
+   background: linear-gradient(180deg, #fff, #fbfdff);
+   box-shadow: 0 20px 40px rgba(7, 16, 32, 0.12), 0 6px 18px rgba(11, 35, 60, 0.06);
+   border: 1px solid rgba(11, 35, 60, 0.06);
+   transition: transform .14s ease, box-shadow .14s ease;
+   align-items: flex-start;
+   overflow: visible;
+ }
+
+ /* 3D skewed edge pseudo-element (gives card a 'lifted' 3D frame) */
+ .crx_affiliate_card::before {
+   content: "";
+   position: absolute;
+   right: -12px;
+   top: 8px;
+   width: 12px;
+   height: calc(100% - 16px);
+   border-radius: 6px;
+   transform: skewY(-12deg);
+   background: var(--crx-3d-edge);
+   box-shadow: 6px 10px 18px rgba(8, 20, 40, 0.08);
+   z-index: -1;
+   filter: brightness(.98);
+ }
+
+ /* hover makes the card 'pop' */
+ .crx_affiliate_card:hover,
+ .crx_affiliate_card:focus-within {
+   transform: translateY(-8px) rotateX(1deg);
+   box-shadow:
+     0 30px 60px rgba(7, 16, 32, 0.16),
+     0 12px 28px rgba(11, 35, 60, 0.08);
+ }
+
+ /* image column */
+ .crx_affiliate_img_wrap {
+   flex: 0 0 120px;
+   width: 120px;
+   height: 78px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: linear-gradient(135deg, rgba(11, 99, 212, 0.03), rgba(34, 197, 94, 0.02));
+   border-radius: 10px;
+   overflow: hidden;
+   border: 1px solid rgba(11, 35, 60, 0.03);
+ }
+
+ .crx_affiliate_img {
+   max-width: 100%;
+   max-height: 100%;
+   object-fit: contain;
+   display: block;
+ }
+
+ /* content column: allow wrap for title & desc */
+ .crx_affiliate_content {
+   flex: 1 1 auto;
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+   min-width: 0;
+ }
+
+ /* Title: multi-line, prominent */
+ .crx_affiliate_title {
+   font-weight: 800;
+   font-size: 16px;
+   color: #06243a;
+   line-height: 1.18;
+   display: block;
+   word-break: break-word;
+   overflow: visible;
+ }
+
+ /* Description: show up to 3 lines, readable */
+ .crx_affiliate_desc {
+   font-size: 14px;
+   color: #334b57;
+   line-height: 1.25;
+   display: -webkit-box;
+   -webkit-line-clamp: 3;
+   -webkit-box-orient: vertical;
+   overflow: hidden;
+   margin-bottom: 4px;
+ }
+
+ /* META — stack rating, price and CTA vertically (each on its own line) */
+ .crx_affiliate_meta {
+   display: flex;
+   flex-direction: column;
+   /* stack vertically */
+   align-items: flex-start;
+   gap: 8px;
+   margin-top: 6px;
+   width: 100%;
+ }
+
+ /* price */
+ .crx_affiliate_price {
+   font-weight: 900;
+   font-size: 15px;
+   color: #0b63d4;
+   background: rgba(11, 99, 212, 0.06);
+   padding: 6px 10px;
+   border-radius: 8px;
+ }
+
+ /* rating */
+ .crx_affiliate_rating {
+   display: flex;
+   gap: 8px;
+   align-items: center;
+   font-size: 13px;
+   color: #6b7280;
+ }
+
+ /* CTA: full-width style on its own line */
+ .crx_affiliate_cta {
+   width: 100%;
+ }
+
+ .crx_btn.crx_aff_buy {
+   width: 100%;
+   display: inline-flex;
+   justify-content: center;
+   background: linear-gradient(180deg, #ff7a59, #ff6043);
+   color: #fff;
+   padding: 10px 12px;
+   border-radius: 10px;
+   font-weight: 800;
+   border: 0;
+   box-shadow: 0 10px 26px rgba(255, 96, 67, 0.16);
+   text-decoration: none;
+   gap: 8px;
+   font-size: 14px;
+ }
+
+ /* small inside-card disclaimer (keeps legal text with each card) */
+ .crx_aff_small_disclaimer {
+   display: inline-block;
+   margin-left: 8px;
+   font-size: 12px;
+   color: #8a5b1a;
+   background: rgba(255, 235, 205, 0.45);
+   padding: 6px 8px;
+   border-radius: 8px;
+   font-weight: 700;
+   border: 1px solid rgba(255, 200, 140, 0.25);
+ }
+
+ /* ensure links inherit readable color */
+ .crx_affiliate_card a {
+   text-decoration: none;
+   color: inherit;
+ }
+
+ /* accessibility: large focus ring for keyboard users */
+ .crx_affiliate_card a:focus {
+   box-shadow: var(--crx-focus);
+   outline: none;
+   border-radius: 10px;
+ }
+
+ /* small-screen adjustments: stack image above content on very narrow screens */
+ @media (max-width:520px) {
+   .crx_affiliate_card {
+     flex-direction: column;
+     align-items: stretch;
+   }
+
+   .crx_affiliate_img_wrap {
+     width: 100%;
+     height: 160px;
+     flex: 0 0 auto;
+   }
+
+   .crx_affiliate_meta {
+     gap: 10px;
+   }
+
+   .crx_affiliate_cta .crx_btn.crx_aff_buy {
+     padding: 12px;
+     font-size: 15px;
+   }
+ }
+
+ /* COMPONENT: Affiliate - END */
+
+ /* ---------- BIO WIDGET ---------- */
+ /* COMPONENT: Bio - BEGIN */
+ .crx_bio {
+   display: flex;
+   gap: 14px;
+   align-items: center;
+   padding: 12px;
+   border-radius: 12px;
+   border: 1px solid rgba(11, 94, 215, 0.06);
+   background: linear-gradient(180deg, #fff, #fbfdff);
+   box-shadow: 0 8px 20px rgba(11, 94, 215, 0.04);
+ }
+
+ .crx_bio .bio_name {
+   font-weight: 800;
+   color: var(--crx-primary-dark);
+   font-size: 16px;
+ }
+
+ .crx_bio .bio_name::after {
+   content: "";
+   display: block;
+   width: 36px;
+   height: 4px;
+   background: var(--crx-accent);
+   border-radius: 4px;
+   margin-top: 6px;
+ }
+
+ .crx_bio .bio_tagline {
+   color: var(--crx-muted);
+   margin-top: 6px;
+   font-size: 14px;
+ }
+
+ .crx_bio .bio_actions {
+   margin-top: 10px;
+ }
+
+ /* whatsapp button specifically saffron styled */
+ .crx_bio .crx_btn.whatsapp {
+   background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep));
+   color: #fff;
+   border: none;
+   padding: 8px 12px;
+   display: inline-flex;
+   gap: 8px;
+   align-items: center;
+ }
+
+ /* COMPONENT: Bio - END */
+
+ /* ---------- DONATE WIDGET ---------- */
+ /* COMPONENT: Donate - BEGIN */
+ .crx_donate_card {
+   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+   max-width: 520px;
+   margin: 12px 0;
+   padding: 12px;
+   border-radius: 12px;
+   box-shadow: 0 10px 26px rgba(11, 94, 215, 0.06);
+   background: linear-gradient(180deg, #ffffff, #fbfdff);
+   display: flex;
+   gap: 12px;
+   align-items: center;
+   border: 1px solid rgba(11, 94, 215, 0.06);
+ }
+
+ .crx_donate_qr {
+   width: 110px;
+   height: 110px;
+   border-radius: 10px;
+   background: linear-gradient(180deg, #fff, #fbfdff);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   overflow: hidden;
+   flex-shrink: 0;
+   border: 1px solid rgba(11, 18, 32, 0.03);
+ }
+
+ .crx_donate_qr img {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   display: block;
+ }
+
+ .crx_donate_title {
+   font-size: 17px;
+   font-weight: 800;
+   margin-bottom: 6px;
+   color: var(--crx-primary-dark);
+ }
+
+ .crx_donate_desc {
+   font-size: 14px;
+   color: var(--crx-muted);
+   line-height: 1.35;
+   margin-bottom: 8px;
+ }
+
+ .crx_action_row {
+   display: flex;
+   gap: 8px;
+   align-items: center;
+   flex-wrap: wrap;
+ }
+
+ .crx_preset {
+   background: linear-gradient(180deg, var(--crx-accent), var(--crx-accent-deep));
+   border: none;
+   padding: 8px 10px;
+   border-radius: 8px;
+   font-weight: 800;
+   cursor: pointer;
+   color: #fff;
+   box-shadow: 0 6px 18px rgba(230, 140, 60, 0.10);
+ }
+
+ .crx_open_qr {
+   text-decoration: none;
+   border-radius: 8px;
+   padding: 8px 10px;
+   border: 1px solid rgba(11, 18, 32, 0.04);
+   background: transparent;
+   color: var(--crx-primary-dark);
+ }
+
+ .crx_small_hint {
+   font-size: 13px;
+   color: var(--crx-muted);
+   margin-top: 8px;
+ }
+
+ .crx_donate_smallprint {
+   font-size: 12px;
+   color: var(--crx-muted);
+   margin-top: 6px;
+ }
+
+ /* COMPONENT: Donate - END */
+
+ /* ---------- FLOATING DONATE BUTTON ---------- */
+ /* COMPONENT: Floating Donate - BEGIN */
+ #crx_floating_donate {
+   position: fixed;
+   z-index: 9998;
+   --size: 64px;
+   width: var(--size);
+   height: var(--size);
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   box-shadow: 0 14px 34px rgba(3, 10, 30, 0.18);
+   background: linear-gradient(180deg, var(--crx-accent), var(--crx-primary));
+   color: white;
+   font-weight: 800;
+   cursor: pointer;
+   border: 2px solid rgba(255, 255, 255, 0.06);
+   transition: transform 350ms ease, opacity 300ms ease, right 1s ease, left 1s ease, bottom 1s ease, top 1s ease;
+   opacity: 0;
+   pointer-events: none;
+ }
+
+ #crx_floating_donate.visible {
+   opacity: 1;
+   pointer-events: auto;
+   transform: translateY(0);
+ }
+
+ #crx_floating_donate:focus {
+   outline: none;
+   box-shadow: var(--crx-focus);
+   transform: scale(1.04);
+ }
+
+ #crx_floating_label {
+   position: fixed;
+   z-index: 9997;
+   background: #fff;
+   color: #071022;
+   padding: 8px 12px;
+   border-radius: 10px;
+   box-shadow: 0 10px 26px rgba(6, 12, 22, 0.12);
+   font-weight: 700;
+   font-size: 13px;
+   transition: opacity 200ms, transform 200ms;
+   opacity: 0;
+   pointer-events: none;
+   border: 1px solid rgba(11, 18, 32, 0.04);
+ }
+
+ #crx_floating_donate:hover+#crx_floating_label,
+ #crx_floating_donate:focus+#crx_floating_label {
+   opacity: 1;
+   transform: translateY(-6px);
+ }
+
+ #crx_floating_dismiss {
+   position: absolute;
+   right: -8px;
+   top: -8px;
+   width: 22px;
+   height: 22px;
+   border-radius: 50%;
+   background: rgba(0, 0, 0, 0.12);
+   color: #fff;
+   font-size: 12px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border: 0;
+ }
+
+ #crx_floating_donate:hover #crx_floating_dismiss {
+   opacity: 1;
+ }
+
+ /* COMPONENT: Floating Donate - END */
+
+ /* ---------- VISUALIZER / OVERLAYS ---------- */
+ /* COMPONENT: Visualizer - BEGIN */
+ .crx_visual_container {
+   position: relative;
+   background: #fafafa;
+   border-radius: 10px;
+   border: 1px dashed rgba(11, 18, 32, 0.04);
+   padding: 10px;
+   overflow-x: auto;
+ }
+
+ .crx_box {
+   position: absolute;
+   width: 56px;
+   height: 56px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 8px;
+   font-weight: 800;
+   color: white;
+   box-shadow: 0 8px 18px rgba(8, 20, 40, 0.06);
+   transition: transform .28s cubic-bezier(.2, .9, .2, 1), left .28s ease;
+ }
+
+ .crx_box .idx {
+   position: absolute;
+   font-size: 10px;
+   bottom: 4px;
+   right: 6px;
+   opacity: 0.6;
+   color: rgba(255, 255, 255, 0.75);
+ }
+
+ /* highlight for compare */
+ .crx_highlight {
+   box-shadow: 0 10px 30px rgba(11, 94, 215, 0.18), 0 2px 8px rgba(0, 0, 0, 0.06);
+   transform: translateY(-6px) scale(1.02);
+ }
+
+ /* overlays */
+ .crx_overlay {
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   border-radius: 8px;
+   pointer-events: none;
+   opacity: 0.9;
+ }
+
+ .crx_overlay_left {
+   background: rgba(11, 94, 215, 0.06);
+   border: 1px solid rgba(11, 94, 215, 0.06);
+ }
+
+ .crx_overlay_right {
+   background: rgba(34, 197, 94, 0.06);
+   border: 1px solid rgba(34, 197, 94, 0.06);
+ }
+
+ .crx_overlay_unsorted {
+   background: rgba(250, 204, 21, 0.06);
+   border: 1px dashed rgba(250, 204, 21, 0.08);
+ }
+
+ /* COMPONENT: Visualizer - END */
+
+ /* ---------- POST FOOTER / TAGS ---------- */
+ /* COMPONENT: Tags / Share - BEGIN */
+ .crx_tags {
+   display: flex;
+   gap: 8px;
+   flex-wrap: wrap;
+   margin-top: 12px;
+ }
+
+ .crx_tag {
+   background: linear-gradient(180deg, rgba(255, 153, 51, 0.12), rgba(255, 153, 51, 0.08));
+   color: var(--crx-primary-dark);
+   padding: 6px 10px;
+   border-radius: 999px;
+   font-weight: 700;
+   font-size: 13px;
+   border: 1px solid rgba(11, 18, 32, 0.03);
+ }
+
+ /* share buttons */
+ .crx_share {
+   display: flex;
+   gap: 8px;
+   margin-top: 10px;
+ }
+
+ .crx_share .btn {
+   border-radius: 8px;
+   padding: 8px;
+   background: #fff;
+   border: 1px solid rgba(11, 18, 32, 0.04);
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   min-width: 44px;
+   height: 44px;
+   cursor: pointer;
+ }
+
+ .crx_share .btn:hover {
+   transform: translateY(-3px);
+   box-shadow: 0 8px 20px rgba(11, 94, 215, 0.06);
+ }
+
+ /* COMPONENT: Tags / Share - END */
+
+ /* ---------- FOOTER ---------- */
+ /* COMPONENT: Site Footer - BEGIN */
+ .site_footer {
+   background: var(--crx-primary-dark);
+   color: #f4f7ff;
+   padding: 28px;
+   border-radius: 10px;
+   margin-top: 20px;
+   font-size: 14px;
+   box-shadow: 0 8px 30px rgba(8, 20, 40, 0.06);
+ }
+
+ /* COMPONENT: Site Footer - END */
+
+ /* ---------- RESPONSIVE ---------- */
+ /* COMPONENT: Responsive - BEGIN */
+ @media (max-width:1100px) {
+   .crx-container {
+     padding: 8px;
+     margin: 8px auto;
+   }
+
+   .crx_editor {
+     height: 360px;
+   }
+ }
+
+ @media (max-width:720px) {
+   .crx_editor {
+     height: 300px;
+   }
+
+   .crx_bio {
+     flex-direction: row;
+     gap: 10px;
+     align-items: center;
+   }
+
+   .crx_affiliate_img {
+     width: 88px;
+     height: 66px;
+   }
+
+   .crx_donate_qr {
+     width: 96px;
+     height: 96px;
+   }
+
+   #crx_floating_label {
+     display: none;
+   }
+ }
+
+ /* Accessibility: reduced motion preference */
+ @media (prefers-reduced-motion: reduce) {
+   * {
+     transition: none;
+     animation: none;
+   }
+
+   #crx_floating_donate {
+     transition: none;
+   }
+ }
+
+ /* COMPONENT: Responsive - END */
+
+ /* =========================
    CRX — Patch overrides to neutralize theme !important rules
    Paste this at the END of crx_styles_v1.css
    (No !important used — relies on selector specificity and cascade)
    ========================= */
 
-/* COMPONENT: Patch Overrides - BEGIN */
-/* ---------- 1) Contact form layout fixes (replace earlier !important rules) ---------- */
-html body #contact .contact-form-widget,
-body#layout #contact .contact-form-widget {
-  max-width: 100%;
-  box-sizing: border-box;
-}
+ /* COMPONENT: Patch Overrides - BEGIN */
+ /* ---------- 1) Contact form layout fixes (replace earlier !important rules) ---------- */
+ html body #contact .contact-form-widget,
+ body#layout #contact .contact-form-widget {
+   max-width: 100%;
+   box-sizing: border-box;
+ }
 
-html body #contact .contact-form-name,
-html body #contact .contact-form-email,
-html body #contact .contact-form-email-message,
-body#layout #contact .contact-form-name,
-body#layout #contact .contact-form-email,
-body#layout #contact .contact-form-email-message {
-  margin-bottom: 10px;
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
-}
+ html body #contact .contact-form-name,
+ html body #contact .contact-form-email,
+ html body #contact .contact-form-email-message,
+ body#layout #contact .contact-form-name,
+ body#layout #contact .contact-form-email,
+ body#layout #contact .contact-form-email-message {
+   margin-bottom: 10px;
+   max-width: 100%;
+   width: 100%;
+   box-sizing: border-box;
+ }
 
-/* Normalize submit padding (overrides inline theme rules if any) */
-html body #contact .contact-form-button-submit,
-body#layout #contact .contact-form-button-submit {
-  padding: 10px 14px;
-  font-weight: 700;
-  border-radius: 8px;
-  cursor: pointer;
-}
+ /* Normalize submit padding (overrides inline theme rules if any) */
+ html body #contact .contact-form-button-submit,
+ body#layout #contact .contact-form-button-submit {
+   padding: 10px 14px;
+   font-weight: 700;
+   border-radius: 8px;
+   cursor: pointer;
+ }
 
-/* ---------- 2) Mobile sidebar / toggle recovery (replace heavy !important mobile rules) ---------- */
-@media (max-width: 767px) {
-  /* prefer narrow-scope selectors to avoid global side effects */
-  body#layout #sidebar-toggle-widget,
-  html body#layout #sidebar-toggle-widget {
-    display: none;
-  }
+ /* ---------- 2) Mobile sidebar / toggle recovery (replace heavy !important mobile rules) ---------- */
+ @media (max-width: 767px) {
 
-  body#layout #sidebar-right,
-  body#layout #sidebar-right.hidden,
-  html body#layout #sidebar-right,
-  html body#layout #sidebar-right.hidden {
-    transform: none;
-    opacity: 1;
-    width: auto;
-    pointer-events: auto;
-    overflow: visible;
-    transition: none;
-  }
-}
+   /* prefer narrow-scope selectors to avoid global side effects */
+   body#layout #sidebar-toggle-widget,
+   html body#layout #sidebar-toggle-widget {
+     display: none;
+   }
 
-/* ---------- 3) Neutralize animation overrides inserted with !important (prefers-reduced-motion) ---------- */
-@media (prefers-reduced-motion: reduce) {
-  /* target common widgets that previously used !important to force animations off */
-  .share-widget,
-  .share-widget.revealed,
-  .crx_visualizer_wrapper,
-  #crx_floating_donate,
-  .crx_float-output {
-    animation: none;
-    transition: none;
-    transform: none;
-    opacity: 1;
-  }
-}
+   body#layout #sidebar-right,
+   body#layout #sidebar-right.hidden,
+   html body#layout #sidebar-right,
+   html body#layout #sidebar-right.hidden {
+     transform: none;
+     opacity: 1;
+     width: auto;
+     pointer-events: auto;
+     overflow: visible;
+     transition: none;
+   }
+ }
 
-/* ---------- 4) Scoped CRX code block enforcement (replace previous !important code block rules) ---------- */
-.crx_post-body .crx_output,
-.crx_post-body pre.crx_output,
-.crx_post-body pre,
-.crx_post-body pre code,
-.crx_post-body code,
-.crx_post-body textarea.crx_output,
-.post-body .crx_output {
-  background-color:lightgray;
-  color: teal;
-  border: 1px solid rgba(255,255,255,0.04);
-  padding: 12px;
-  border-radius: 8px;
-  font-family: var(--crx-mono);
-  font-size: 13px;
-  line-height: 1.45;
-  overflow: auto;
-  word-break: break-word;
-}
+ /* ---------- 3) Neutralize animation overrides inserted with !important (prefers-reduced-motion) ---------- */
+ @media (prefers-reduced-motion: reduce) {
 
-/* Slightly higher specificity for pages where theme uses .post-body or .entry-content */
-.post-body .crx_output,
-.entry-content .crx_output,
-.article-body .crx_output {
-  background: var(--crx-code-bg);
-  color: var(--crx-code-text);
-}
+   /* target common widgets that previously used !important to force animations off */
+   .share-widget,
+   .share-widget.revealed,
+   .crx_visualizer_wrapper,
+   #crx_floating_donate,
+   .crx_float-output {
+     animation: none;
+     transition: none;
+     transform: none;
+     opacity: 1;
+   }
+ }
 
-/* ---------- 5) Replace any heavy-handed list/table/blockquote overrides from theme ---------- */
-html body .crx_post-body ul li {
-  list-style: none;
-  position: relative;
-  padding-left: 1.3rem;
-  margin: 8px 0;
-  line-height: 1.55;
-}
-html body .crx_post-body ul li::before {
-  content: "";
-  position: absolute;
-  left: 0.2rem;
-  top: .78rem;
-  width: 8px; height: 8px;
-  border-radius: 2px;
-  background: var(--crx-accent);
-}
+ /* ---------- 4) Scoped CRX code block enforcement (replace previous !important code block rules) ---------- */
+ .crx_post-body .crx_output,
+ .crx_post-body pre.crx_output,
+ .crx_post-body pre,
+ .crx_post-body pre code,
+ .crx_post-body code,
+ .crx_post-body textarea.crx_output,
+ .post-body .crx_output {
+   background-color: lightgray;
+   color: teal;
+   border: 1px solid rgba(255, 255, 255, 0.04);
+   padding: 12px;
+   border-radius: 8px;
+   font-family: var(--crx-mono);
+   font-size: 13px;
+   line-height: 1.45;
+   overflow: auto;
+   word-break: break-word;
+ }
 
-/* ensure tables inside posts keep CRX-friendly look */
-html body .crx_post-body table,
-html body .crx_post-body th,
-html body .crx_post-body td {
-  border-color: rgba(11,18,32,0.06);
-}
+ /* Slightly higher specificity for pages where theme uses .post-body or .entry-content */
+ .post-body .crx_output,
+ .entry-content .crx_output,
+ .article-body .crx_output {
+   background: var(--crx-code-bg);
+   color: var(--crx-code-text);
+ }
 
-/* ---------- 6) Floating donate safe placement & dismiss behavior override ---------- */
-html body #crx_floating_donate,
-body#layout #crx_floating_donate {
-  position: fixed;
-  z-index: 9998;
-  pointer-events: auto;
-}
+ /* ---------- 5) Replace any heavy-handed list/table/blockquote overrides from theme ---------- */
+ html body .crx_post-body ul li {
+   list-style: none;
+   position: relative;
+   padding-left: 1.3rem;
+   margin: 8px 0;
+   line-height: 1.55;
+ }
 
-/* Keep floating label visible behavior consistent */
-html body #crx_floating_label,
-body#layout #crx_floating_label {
-  position: fixed;
-  z-index: 9997;
-}
+ html body .crx_post-body ul li::before {
+   content: "";
+   position: absolute;
+   left: 0.2rem;
+   top: .78rem;
+   width: 8px;
+   height: 8px;
+   border-radius: 2px;
+   background: var(--crx-accent);
+ }
 
-/* ---------- 7) Recover some layout blocks that theme forced to display:block via !important ---------- */
-body#layout .theme-options,
-body#layout #main-menu .widget,
-html body#layout .theme-options,
-html body#layout #main-menu .widget {
-  display: block;
-}
+ /* ensure tables inside posts keep CRX-friendly look */
+ html body .crx_post-body table,
+ html body .crx_post-body th,
+ html body .crx_post-body td {
+   border-color: rgba(11, 18, 32, 0.06);
+ }
 
-/* ---------- 8) Accessibility: ensure focus outlines remain visible (in case theme removed them) ---------- */
-html body a:focus,
-html body button:focus,
-html body input:focus,
-html body textarea:focus {
-  outline: none;
-  box-shadow: var(--crx-focus);
-}
+ /* ---------- 6) Floating donate safe placement & dismiss behavior override ---------- */
+ html body #crx_floating_donate,
+ body#layout #crx_floating_donate {
+   position: fixed;
+   z-index: 9998;
+   pointer-events: auto;
+ }
 
-/* ---------- 9) Specificity booster for stubborn selectors (last resort — still no !important) ---------- */
-html body .crx_bio,
-html body .crx_donate_card,
-html body .crx_card,
-body#layout .crx_bio,
-body#layout .crx_donate_card {
-  background: var(--crx-card);
-  border-color: rgba(11,94,215,0.06);
-}
-/* COMPONENT: Patch Overrides - END */
+ /* Keep floating label visible behavior consistent */
+ html body #crx_floating_label,
+ body#layout #crx_floating_label {
+   position: fixed;
+   z-index: 9997;
+ }
 
-/* ===== CRX — commentwas contrast fixes (wheat-on-wheat) ===== */
-/* COMPONENT: commentwas - BEGIN */
-/* Container background & padding for commentwas area */
-.commentwa-thread,
-.commentwas,
-#commentwas,
-.widget .commentwas,
-.widget[id*="commentwas"] {
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 12px 14px;
-  border: 1px solid rgba(11,18,32,0.04);
-  box-shadow: 0 6px 18px rgba(8,20,40,0.04);
-}
+ /* ---------- 7) Recover some layout blocks that theme forced to display:block via !important ---------- */
+ body#layout .theme-options,
+ body#layout #main-menu .widget,
+ html body#layout .theme-options,
+ html body#layout #main-menu .widget {
+   display: block;
+ }
 
-/* commentwa item (author + body) — readable text */
-.commentwa,
-.commentwa-item,
-.commentwa-block,
-.commentwa-body,
-#commentwas .commentwa,
-.widget .commentwa {
-  color: #0b122a;
-  background: transparent;
-  margin: 10px 0;
-  line-height: 1.55;
-  font-size: 14px;
-}
+ /* ---------- 8) Accessibility: ensure focus outlines remain visible (in case theme removed them) ---------- */
+ html body a:focus,
+ html body button:focus,
+ html body input:focus,
+ html body textarea:focus {
+   outline: none;
+   box-shadow: var(--crx-focus);
+ }
 
-/* Author name — use primary blue and slightly bolder */
-.commentwa-author,
-.commentwaer,
-.commentwa-meta .user,
-.widget .commentwa-author {
-  color: var(--crx-primary);
-  font-weight: 700;
-  font-size: 14px;
-}
+ /* ---------- 9) Specificity booster for stubborn selectors (last resort — still no !important) ---------- */
+ html body .crx_bio,
+ html body .crx_donate_card,
+ html body .crx_card,
+ body#layout .crx_bio,
+ body#layout .crx_donate_card {
+   background: var(--crx-card);
+   border-color: rgba(11, 94, 215, 0.06);
+ }
 
-/* Timestamps / metadata — muted gray */
-.commentwa-meta,
-.commentwa-date,
-.commentwa-time {
-  background-color: wheat;
-  color: teal;
-  font-size: 12px;
-}
+ /* COMPONENT: Patch Overrides - END */
 
-/* commentwa links (reply, edit, view) — saffron accent on hover */
-.commentwa a,
-.commentwa-item a,
-.widget .commentwas a {
-  color: teal;
-  text-decoration: none;
-}
-.commentwa a:hover,
-.commentwa-item a:hover,
-.widget .commentwas a:hover {
-  color: var(--crx-primary-dark);
-  text-decoration: underline;
-}
+ /* ===== CRX — commentwas contrast fixes (wheat-on-wheat) ===== */
+ /* COMPONENT: commentwas - BEGIN */
+ /* Container background & padding for commentwas area */
+ .commentwa-thread,
+ .commentwas,
+ #commentwas,
+ .widget .commentwas,
+ .widget[id*="commentwas"] {
+   background: #ffffff;
+   border-radius: 10px;
+   padding: 12px 14px;
+   border: 1px solid rgba(11, 18, 32, 0.04);
+   box-shadow: 0 6px 18px rgba(8, 20, 40, 0.04);
+ }
 
-/* If commentwas use small 'wheat' background chips, force them to readable surface */
-.commentwa .commentwa-content,
-.commentwa .content,
-.commentwa-text,
-.widget .commentwa-body .commentwa-content {
-  background: transparent;
-  color: #0b122a;
-  padding: 6px 0;
-}
+ /* commentwa item (author + body) — readable text */
+ .commentwa,
+ .commentwa-item,
+ .commentwa-block,
+ .commentwa-body,
+ #commentwas .commentwa,
+ .widget .commentwa {
+   color: #0b122a;
+   background: transparent;
+   margin: 10px 0;
+   line-height: 1.55;
+   font-size: 14px;
+ }
 
-/* Replies indentation */
-.commentwa-thread .children,
-.commentwa .children {
-  margin-left: 12px;
-  border-left: 2px solid rgba(11,94,215,0.04);
-  padding-left: 12px;
-}
+ /* Author name — use primary blue and slightly bolder */
+ .commentwa-author,
+ .commentwaer,
+ .commentwa-meta .user,
+ .widget .commentwa-author {
+   color: var(--crx-primary);
+   font-weight: 700;
+   font-size: 14px;
+ }
 
-/* Ensure commentwa form fields are visible & readable */
-#commentwa-editor,
-textarea#commentwa,
-input#commentwa-name,
-input#commentwa-email,
-input#commentwa-url,
-.form-commentwa textarea,
-.form-commentwa input {
-  background: #fff;
-  color: #071022;
-  border: 1px solid rgba(11,18,32,0.06);
-  border-radius: 8px;
-  padding: 8px;
-}
+ /* Timestamps / metadata — muted gray */
+ .commentwa-meta,
+ .commentwa-date,
+ .commentwa-time {
+   background-color: wheat;
+   color: teal;
+   font-size: 12px;
+ }
 
-/* Mobile tweaks */
-@media (max-width:720px) {
-  .commentwa, .commentwa-item { font-size: 15px; }
-  .commentwa-author { font-size: 15px; }
-}
-/* COMPONENT: commentwas - END */
+ /* commentwa links (reply, edit, view) — saffron accent on hover */
+ .commentwa a,
+ .commentwa-item a,
+ .widget .commentwas a {
+   color: teal;
+   text-decoration: none;
+ }
 
-/* ===== CRX — Stylish Post a commentwa button ===== */
-/* COMPONENT: commentwa Button - BEGIN */
-#commentwas a.commentwa-reply,
-#commentwas a.commentwa-link,
-#commentwas a[href*="commentwa"],
-.commentwas .commentwa-actions a,
-.post-commentwa-link,
-#commentwa-post-message a,
-#commentwas a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 18px;
-  margin: 10px;
-  /* display: block; */
-  flex-wrap: wrap;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  background-color: gray;
-  color: teal;
-  border: none;
-  box-shadow: 0 6px 16px rgba(230,140,60,0.25);
-  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-}
+ .commentwa a:hover,
+ .commentwa-item a:hover,
+ .widget .commentwas a:hover {
+   color: var(--crx-primary-dark);
+   text-decoration: underline;
+ }
 
-/* Hover / focus effect */
-#commentwas a.commentwa-reply:hover,
-#commentwas a.commentwa-link:hover,
-#commentwas a[href*="commentwa"]:hover,
-.commentwas .commentwa-actions a:hover,
-.post-commentwa-link:hover,
-#commentwa-post-message a:hover,
-#commentwas a:hover {
-  background: linear-gradient(180deg, var(--crx-primary), var(--crx-primary-dark));
-  box-shadow: 0 10px 24px rgba(11,94,215,0.25);
-  transform: translateY(-2px);
-  color: #fff;
-}
+ /* If commentwas use small 'wheat' background chips, force them to readable surface */
+ .commentwa .commentwa-content,
+ .commentwa .content,
+ .commentwa-text,
+ .widget .commentwa-body .commentwa-content {
+   background: transparent;
+   color: #0b122a;
+   padding: 6px 0;
+ }
 
-/* Active click effect */
-#commentwas a:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(11,94,215,0.18);
-}
-/* COMPONENT: commentwa Button - END */
+ /* Replies indentation */
+ .commentwa-thread .children,
+ .commentwa .children {
+   margin-left: 12px;
+   border-left: 2px solid rgba(11, 94, 215, 0.04);
+   padding-left: 12px;
+ }
 
-/* small embed helper */
-.crx_dartpadembed{
-  overflow: auto;
-  width:100%;
-  height:500px;
-}
+ /* Ensure commentwa form fields are visible & readable */
+ #commentwa-editor,
+ textarea#commentwa,
+ input#commentwa-name,
+ input#commentwa-email,
+ input#commentwa-url,
+ .form-commentwa textarea,
+ .form-commentwa input {
+   background: #fff;
+   color: #071022;
+   border: 1px solid rgba(11, 18, 32, 0.06);
+   border-radius: 8px;
+   padding: 8px;
+ }
 
-/* End of file */
-a{
-  color: teal !important;
-}
+ /* Mobile tweaks */
+ @media (max-width:720px) {
+
+   .commentwa,
+   .commentwa-item {
+     font-size: 15px;
+   }
+
+   .commentwa-author {
+     font-size: 15px;
+   }
+ }
+
+ /* COMPONENT: commentwas - END */
+
+ /* ===== CRX — Stylish Post a commentwa button ===== */
+ /* COMPONENT: commentwa Button - BEGIN */
+ #commentwas a.commentwa-reply,
+ #commentwas a.commentwa-link,
+ #commentwas a[href*="commentwa"],
+ .commentwas .commentwa-actions a,
+ .post-commentwa-link,
+ #commentwa-post-message a,
+ #commentwas a {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   padding: 10px 18px;
+   margin: 10px;
+   /* display: block; */
+   flex-wrap: wrap;
+   border-radius: 10px;
+   font-size: 14px;
+   font-weight: 700;
+   text-decoration: none;
+   background-color: gray;
+   color: teal;
+   border: none;
+   box-shadow: 0 6px 16px rgba(230, 140, 60, 0.25);
+   transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+ }
+
+ /* Hover / focus effect */
+ #commentwas a.commentwa-reply:hover,
+ #commentwas a.commentwa-link:hover,
+ #commentwas a[href*="commentwa"]:hover,
+ .commentwas .commentwa-actions a:hover,
+ .post-commentwa-link:hover,
+ #commentwa-post-message a:hover,
+ #commentwas a:hover {
+   background: linear-gradient(180deg, var(--crx-primary), var(--crx-primary-dark));
+   box-shadow: 0 10px 24px rgba(11, 94, 215, 0.25);
+   transform: translateY(-2px);
+   color: #fff;
+ }
+
+ /* Active click effect */
+ #commentwas a:active {
+   transform: translateY(0);
+   box-shadow: 0 4px 12px rgba(11, 94, 215, 0.18);
+ }
+
+ /* COMPONENT: commentwa Button - END */
+
+ /* small embed helper */
+ .crx_dartpadembed {
+   overflow: auto;
+   width: 100%;
+   height: 500px;
+ }
+
+ /* End of file */
+ a {
+   color: teal !important;
+ }
