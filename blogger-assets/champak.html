@@ -1,9 +1,4 @@
- <!-- crx_home_v2.html
-     Learning Sutras — Home v2 (feed integrated)
-     - Uses crx_styles_v1.css and crx_ui_v1.js hosted at your provided URLs
-     - Animated heading, typing effect, improved layout
-     - data-crx-feed set to your feed: https://www.learnwithchampak.live/feeds/posts/default?alt=json
--->
+<!-- Learning Sutras — Home v2 (Professional CRX Dashboard) by Champak Roy -->
 <!doctype html>
 <html lang="en">
 
@@ -15,1140 +10,908 @@
     content="Learning Sutras — concise programming lessons, DSA visualizations, quizzes, and mini-tools." />
 
   <!-- CRX Theme CSS (hosted asset) -->
-  <link rel="stylesheet" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css">
+  <link rel="stylesheet"
+    href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css">
 
   <style>
-    /* v2-specific micro styles (keeps crx_ prefix) */
-    .crx_hero_anim {
-      display: flex;
-      gap: 20px;
-      align-items: center;
+    /* ===========================
+       PROFESSIONAL CRX DASHBOARD STYLES
+       =========================== */
+
+    :root {
+      --crx-accent: #0ea5e9; /* light accent (used for gradient) */
+      --crx-accent-dark: #0a5fad;
+      --crx-bg-1: #f4fbff;
+      --crx-bg-2: #eef7ff;
+      --card-bg: rgba(255, 255, 255, 0.82);
+      --glass-border: rgba(15, 23, 42, 0.04);
+      --muted: #61707b;
+      --headline: #08263f;
     }
 
-    .crx_hero_text h2 {
+    html, body {
+      height: 100%;
       margin: 0;
-      font-size: 28px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* subtle animated background (very low-cost) */
+    body {
+      background: linear-gradient(180deg, var(--crx-bg-1) 0%, var(--crx-bg-2) 100%);
+      background-attachment: fixed;
+      color: var(--headline);
+    }
+
+    /* tiny gentle motion for background */
+    @keyframes subtleShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      z-index: -1;
+      background: radial-gradient(600px 300px at 10% 10%, rgba(13, 110, 253, 0.03), transparent),
+                  radial-gradient(500px 240px at 90% 90%, rgba(6, 182, 212, 0.02), transparent);
+      pointer-events: none;
+      animation: subtleShift 18s linear infinite;
+      opacity: 1;
+    }
+
+    /* container max width for center alignment */
+    main#crx-dashboard-home {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+
+    /* ===========================
+       FROSTED HEADER — PROFESSIONAL
+       =========================== */
+    #ls-header {
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      backdrop-filter: blur(8px) saturate(120%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250, 252, 255, 0.80));
+      border-bottom: 1px solid var(--glass-border);
+      box-shadow: 0 6px 18px rgba(8, 38, 64, 0.06);
+      transition: box-shadow .28s ease, transform .12s ease;
+    }
+
+    #ls-header:hover {
+      box-shadow: 0 12px 28px rgba(8, 38, 64, 0.09);
+    }
+
+    #ls-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    #ls-brand img {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 8px 22px rgba(2, 6, 23, 0.08);
+      border: 1px solid rgba(255,255,255,0.6);
+      background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(250,250,250,0.5));
+      flex-shrink: 0;
+    }
+
+    #ls-title {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .title-main {
+      font-size: 18px;
+      font-weight: 800;
       letter-spacing: 0.2px;
-      line-height: 1.1;
-      background: linear-gradient(90deg, #0f1724, var(--crx-accent));
+      background: linear-gradient(90deg, #061124, var(--crx-accent-dark));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      transition: filter .18s ease;
+    }
+
+    #ls-header:hover .title-main {
+      filter: drop-shadow(0 2px 6px rgba(31, 99, 214, 0.08));
+    }
+
+    .title-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* SEARCH AREA (right) */
+    #ls-search {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 720px;
+      justify-content: flex-end;
+      position: relative;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* refined input style */
+    #ls-search input[type="search"] {
+      flex: 1;
+      height: 44px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(13, 24, 40, 0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.95));
+      font-size: 14px;
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(12, 22, 30, 0.03);
+      transition: box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    #ls-search input[type="search"]:focus {
+      border-color: rgba(31, 99, 214, 0.28);
+      box-shadow: 0 6px 20px rgba(31, 99, 214, 0.06);
+    }
+
+    #ls-search button {
+      padding: 10px 14px;
+      height: 44px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(29, 78, 216, 0.12);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    #ls-search button:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(29,78,216,0.14); }
+
+    #ls-suggestions {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 10px);
+      width: calc(100% - 160px);
+      max-width: 560px;
+      background: rgba(255,255,255,0.98);
+      border-radius: 10px;
+      border: 1px solid rgba(13, 24, 40, 0.04);
+      box-shadow: 0 12px 32px rgba(9, 20, 40, 0.06);
+      max-height: 340px;
+      overflow: auto;
+      z-index: 10000;
+    }
+
+    #ls-suggestions .ls-item {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.03);
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--headline);
+    }
+
+    #ls-suggestions .ls-item:hover { background: rgba(31, 99, 214, 0.03); }
+
+    /* ===========================
+       Page sections: glass cards, refined
+       =========================== */
+
+    .crx-section {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 24px;
+      margin: 20px 0;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 28px rgba(8, 36, 64, 0.04);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      backdrop-filter: blur(4px);
+    }
+
+    .crx-section:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 48px rgba(8, 36, 64, 0.06);
+    }
+
+    .crx-section h1, .crx-section h2 {
+      margin: 0 0 12px;
+      color: var(--headline);
       font-weight: 800;
     }
 
-    /* subtle float animation for hero logo */
-    @keyframes crx_float {
-      0% {
-        transform: translateY(0px) rotate(-2deg);
-      }
+    .crx-section p { color: var(--muted); margin: 0 0 8px; }
 
-      50% {
-        transform: translateY(-6px) rotate(2deg);
-      }
-
-      100% {
-        transform: translateY(0px) rotate(-2deg);
-      }
-    }
-
-    .crx_logo_float {
-      animation: crx_float 5s ease-in-out infinite;
-    }
-
-    /* typing caret */
-    .crx_typing {
-      font-family: var(--crx-font-sans);
-      font-weight: 600;
-      color: var(--crx-muted);
-      margin-top: 6px;
+    .crx-keyword {
+      background-color: lightblue;
+      color: white;
       display: inline-block;
-      white-space: nowrap;
-      overflow: scroll;
+      padding: 8px 12px;
+      border-radius: 999px;
+      margin: 6px;
+      font-size: 24px;
+      box-shadow: 0 6px 18px rgba(31,99,214,0.08);
+      text-decoration: none;
     }
 
-    .crx_typing::after {
-      content: '|';
-      display: inline-block;
-      margin-left: 6px;
-      opacity: 1;
-      animation: crx_blink 1s steps(2, start) infinite;
+    /* PYODIDE / JS editors improved */
+    textarea.editor {
+      width: 100%;
+      min-height: 160px;
+      border-radius: 10px;
+      border: 1px solid rgba(13,24,40,0.06);
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+      font-size: 24px;
+      box-shadow: inset 0 6px 18px rgba(2,6,23,0.03);
+      resize: vertical;
     }
 
-    @keyframes crx_blink {
-      50% {
-        opacity: 0
-      }
+    .btn {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    /* fade-in section */
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid rgba(13,24,40,0.06);
+      color: var(--headline);
+    }
+
+    .btn.primary {
+      background-color:lightblue;
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(29,78,216,0.10);
+      font-size: 24px;
+    }
+
+    .status { font-size: 13px; color: var(--muted); }
+
+    .output {
+      margin-top: 12px;
+      background: rgba(243, 250, 255, 0.9);
+      border-radius: 10px;
+      padding: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+      font-size: 13px;
+      color: #08303f;
+      min-height: 80px;
+    }
+
+    /* Matplotlib cards refined */
+    .mpl-card { border-radius: 10px; padding: 14px; background: #fff; box-shadow: 0 8px 20px rgba(8,36,64,0.04); }
+    .mpl-thumb { height: 120px; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(180deg,#f7fbff,#ffffff); color:var(--crx-accent-dark); margin-bottom:10px; }
+
+    /* FEED PANEL refinement */
+    #crx-feed-panel {
+      max-height: 520px;
+      overflow-y: auto;
+      border-radius: 12px;
+      border: 1px solid rgba(13,24,40,0.04);
+      padding: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.98));
+      box-shadow: 0 10px 30px rgba(9,20,40,0.03);
+    }
+
+    .crx-card-row {
+      display:flex;
+      gap:16px;
+      align-items:center;
+      padding:12px;
+      border-radius:10px;
+      margin:10px 6px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,251,255,0.98));
+      border: 1px solid rgba(13,24,40,0.03);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+
+    .crx-card-row:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(8,36,64,0.04); }
+
+    .crx-thumb-square { width:88px; height:88px; border-radius:10px; object-fit:cover; flex-shrink:0; }
+    .crx-avatar-circle { width:56px; height:56px; border-radius:50%; object-fit:cover; border: 3px solid var(--card-bg); position:absolute; left:12px; top:50%; transform:translateY(-50%) translateX(-36px); box-shadow: 0 10px 18px rgba(2,6,23,0.06); }
+
+    .crx-post-title { background:#0e63d6; color:white; padding:8px 12px; border-radius:8px; font-weight:700; display:inline-block; font-size:0.95rem; }
+    .crx-post-meta { color: var(--muted); margin-top:8px; font-size:13px; }
+
+    /* small screens tweaks */
+    @media (max-width: 720px) {
+      #ls-header { padding: 10px 12px; }
+      #ls-search { max-width: 100%; }
+      .search-box { max-width: 100%; }
+      .crx-section { padding: 18px; }
+    }
+
+    @media (max-width: 480px) {
+      #ls-brand img { width:44px; height:44px; }
+      .title-main { font-size: 15px; }
+      .title-sub { display:none; }
+      .crx-thumb-square { width:72px; height:72px; }
+      .crx-avatar-circle { width:48px; height:48px; transform:translateY(-50%) translateX(-30px); }
+    }
+
+    /* ===========================
+       ON-SCROLL REVEAL (0.6s)
+       =========================== */
     .crx_fade_in {
       opacity: 0;
       transform: translateY(12px);
-      transition: opacity .6s ease, transform .6s ease;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      will-change: opacity, transform;
     }
-
     .crx_fade_in.crx_visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    /* slightly larger post thumbnails for v2 */
-    .crx_post_thumb {
-      width: 96px;
-      height: 64px;
-      border-radius: 8px;
+    /* ===========================
+       BACK TO TOP BUTTON (discrete, professional)
+       =========================== */
+    #back-to-top {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg,#1f7fc1,#2563eb);
+      color: white;
+      box-shadow: 0 12px 30px rgba(31,99,214,0.12);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 9998;
     }
+    #back-to-top.visible { opacity: 1; transform: translateY(0); }
+    #back-to-top:active { transform: translateY(1px) scale(0.99); }
 
-    /* hero image / gradient badge */
-    .crx_hero_badge {
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(79, 176, 230, 0.14), rgba(43, 155, 211, 0.06));
-      border: 1px solid rgba(43, 155, 211, 0.06);
-      font-weight: 700;
-      color: var(--crx-accent);
-    }
-
-    /* responsive tweak for hero */
-    @media (max-width:900px) {
-      .crx_hero_text h2 {
-        font-size: 20px;
-      }
-
-      .crx_post_thumb {
-        width: 72px;
-        height: 52px;
-      }
-    }
   </style>
 </head>
 
 <body>
-  <div id="crx-dashboard-home" style="margin:auto;">
-    <style>
-      @import url('https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css');
+  <!-- ===========================
+       STICKY PROFESSIONAL HEADER (BRANDED)
+       =========================== -->
+  <header id="ls-header" role="banner" aria-label="Learning Sutras header">
+    <div id="ls-brand" aria-hidden="false">
+      <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257"
+        alt="Champak Roy avatar" loading="lazy" />
+      <div id="ls-title">
+        <div class="title-main">Learning Sutras</div>
+        <div class="title-sub">Practical coding lessons & visualizations</div>
+      </div>
+    </div>
 
-      :root {
-        --crx-accent-dark: #0a5fad;
-      }
+    <div id="ls-search" role="search" aria-label="Search this blog">
+      <div class="search-box">
+        <input id="ls-search-input" type="search" placeholder="Search this blog..." aria-label="Search this blog"
+          autocomplete="off" />
+        <button id="ls-search-btn" title="Search" class="btn primary">Search</button>
+      </div>
+      <div id="ls-suggestions" role="listbox" aria-label="Search suggestions"></div>
+    </div>
+  </header>
 
-      code,
-      pre {
-        font-size: 24px;
-        background-color: white;
-        color: teal;
-      }
-
-      .crx-matplotlib-run {
-        color: white !important;
-        font-size: 24px;
-      }
-    </style>
-
-    <!-- 🏠 INTRODUCTION SECTION -->
-    <section class="crx-section intro">
-
-
-
-
-      <h1>👨‍💻 Welcome to Learn With Champak</h1>
-      <img class="crx_avatar"
-        src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257"
-        alt="Learn With Champak" />
-      <hr>
-      <hr>
-      <h1></h1>
-      <p>
-        Hi, I’m <strong>Champak Roy</strong> — a software developer, writer, and teacher from Varanasi.
-        This blog, <em>Learn With Champak</em>, is dedicated to helping students and programmers learn
-        <strong>Data Structures, Algorithms, Web Development, and Python</strong> in a practical, joyful way.
-        Whether you’re a beginner or an experienced coder, you’ll find guides, quizzes, and examples that make
-        learning coding simple, structured, and effective.
-      </p>
+  <!-- ===========================
+       MAIN CONTENT
+       =========================== -->
+  <main id="crx-dashboard-home">
+    <!-- INTRO -->
+    <section class="crx-section intro crx_fade_in" id="intro-section">
+      <div style="display:flex;gap:18px;align-items:flex-start;">
+        <div style="flex:1;min-width:0;">
+          <h1>👨‍💻 Welcome to Learn With Champak</h1>
+          <p>
+            Hi, I’m <strong>Champak Roy</strong> — a software developer, writer, and teacher from Varanasi.
+            This blog, <em>Learn With Champak</em>, is dedicated to helping students and programmers learn
+            <strong>Data Structures, Algorithms, Web Development, and Python</strong> in a practical, joyful way.
+          </p>
+        </div>
+        <div style="width:140px;flex-shrink:0;">
+          <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257"
+            alt="Learn With Champak" style="width:100%;border-radius:12px;box-shadow:0 10px 28px rgba(2,6,23,0.06);">
+        </div>
+      </div>
     </section>
 
-    <!-- 🌟 IMPORTANCE SECTION -->
-    <section class="crx-section importance">
+    <!-- IMPORTANCE -->
+    <section class="crx-section importance crx_fade_in" id="importance-section">
       <h2>🌱 Why This Blog Matters</h2>
       <p>
-        In today’s fast-changing tech world, learning through examples is the fastest way to master programming.
-        That’s why every post here blends <strong>concepts + code + visuals</strong>.
-        You’ll find short lessons, Python and JavaScript demos, and live quizzes to reinforce learning —
-        all designed with the same care I use when teaching my students in class.
+        Learning through examples is the fastest way to master programming. Every post blends <strong>concepts + code
+        + visuals</strong>. You’ll find short lessons, Python and JavaScript demos, and live quizzes to reinforce learning.
       </p>
     </section>
 
-    <!-- 🔍 KEYWORDS SECTION -->
-    <section class="crx-section keywords">
-
+    <!-- KEYWORDS -->
+    <section class="crx-section keywords crx_fade_in" id="keywords-section">
       <h2>🔑 Keywords</h2>
-      <p style="display: flex;justify-content: center;flex-wrap: wrap;gap: 12px;  ">
-        <a target="_parent" href="https://www.learnwithchampak.live/search?q=python"><span
-            class="crx-keyword">Python</span></a>
-        <a target="_parent" href="https://www.learnwithchampak.live/search?q=JavaScript"><span
-            class="crx-keyword">JavaScript</span></a>
-        <a target="_parent" href="https://www.learnwithchampak.live/search?q=html"><span
-            class="crx-keyword">HTML</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=css"><span
-            class="crx-keyword">CSS</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=algorithms"><span
-            class="crx-keyword">Algorithms</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=data structures"><span
-            class="crx-keyword">Data Structures</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=flutter"><span
-            class="crx-keyword">Flutter</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=sorting"><span
-            class="crx-keyword">Sorting</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=recursion"><span
-            class="crx-keyword">Recursion</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=firebase"><span
-            class="crx-keyword">Firebase</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=django"><span
-            class="crx-keyword">Django</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=projects"><span
-            class="crx-keyword">Projects</span></a>
-        <a target="champak" href="https://www.learnwithchampak.live/search?q=champak%20;roy"><span
-            class="crx-keyword">Learn with Champak</span></a>
+      <p style="display:flex;flex-wrap:wrap;gap:10px;">
+        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=python">Python</a>
+        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=javascript">JavaScript</a>
+        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=html">HTML</a>
+        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=css">CSS</a>
+        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=algorithms">Algorithms</a>
+        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=data%20structures">Data
+          Structures</a>
       </p>
-
     </section>
 
-    <!-- 🐍 PYTHON CODER SECTION -->
-    <section class="crx-section coder python-coder">
+    <!-- PYODIDE RUNNER -->
+    <section class="crx-section coder python-coder crx_fade_in" id="python-section">
       <h2>🐍 Python Coder</h2>
-      <p>
-        Python is my go-to language for teaching logic and problem-solving.
-        On this blog, you’ll find <strong>step-by-step algorithms</strong>, clean Python code snippets, and live
-        execution blocks
-        (using Pyodide) that let you run Python right inside your browser!
-        Perfect for students learning loops, recursion, and DSA fundamentals.
-      </p>
+      <p style="margin-bottom:14px;color:var(--muted);">Run Python snippets using Pyodide directly in your browser.</p>
 
-
-
-
-      <!-- ▶ Robust Python Runner (Pyodide) — paste into Theme HTML or an HTML/JavaScript Gadget -->
-      <section id="python-runner-robust" style="margin-top:18px;">
-        <style>
-          #python-runner-robust {
-            font-family: Inter, system-ui, Arial;
-            --accent: #1f7fc1;
-            color: #073149;
-            font-size: 24px;
-          }
-
-          .prunner {
-            background: #fff;
-            padding: 14px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(10, 30, 50, 0.04)
-          }
-
-          .prunner h3 {
-            margin: 0 0 6px;
-            color: var(--accent)
-          }
-
-          .prunner .editor {
-            width: 100%;
-            min-height: 160px;
-            border-radius: 8px;
-            border: 1px solid #eef7fb;
-            padding: 10px;
-            font-family: monospace;
-            resize: vertical;
-            font-size: 24px;
-          }
-
-          .controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 10px
-          }
-
-          .btn {
-            background: var(--accent);
-            color: #fff;
-            border: 0;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700
-          }
-
-          .btn.ghost {
-            background: transparent;
-            color: var(--accent);
-            border: 1px solid rgba(31, 127, 193, 0.12)
-          }
-
-          .output {
-            margin-top: 10px;
-            background: #f7fbff;
-            border-radius: 8px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 13px;
-            min-height: 100px;
-            overflow: auto;
-            white-space: pre-wrap;
-            color: #08263f
-          }
-
-          .status {
-            font-size: 13px;
-            color: #5b768a;
-            margin-left: auto
-          }
-
-          .spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 3px solid rgba(0, 0, 0, 0.08);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin .9s linear infinite;
-            margin-left: 8px;
-            vertical-align: middle
-          }
-
-          @keyframes spin {
-            to {
-              transform: rotate(360deg)
-            }
-          }
-        </style>
-
-        <div class="prunner" role="region" aria-label="Python runner (Pyodide)">
-          <h3>▶ Python Runner (Pyodide) — Robust</h3>
-          <p style="margin:0 0 8px;color:#5b768a">Runs Python in the browser via Pyodide. Click <strong>Preload
-              Pyodide</strong> once before running heavy code.</p>
-
-          <textarea id="pyEditorRobust" class="editor"># Example: simple math & print
+      <textarea id="pyEditor" class="editor" style="min-height:160px;"># Example: simple math & print
 print("Hello from Pyodide!")
-print("1 + 1 =", 1+1)
-    </textarea>
+print("1 + 1 =", 1+1)</textarea>
 
-          <div class="controls">
-            <button id="preloadPyBtn" class="btn">Preload Pyodide</button>
-            <button id="runPyBtn" class="btn">Run</button>
-            <button id="clearPyBtn" class="btn ghost">Clear Output</button>
-            <button id="downloadPyBtn" class="btn ghost">Download .py</button>
-            <div id="pyStatusRobust" class="status" aria-live="polite">Idle</div>
-          </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+        <button id="py-preload" class="btn primary">Preload Pyodide</button>
+        <button id="py-run" class="btn primary">Run</button>
+        <button id="py-clear" class="btn ghost">Clear Output</button>
+        <button id="py-download" class="btn ghost">Download .py</button>
+        <div id="py-status" class="status" style="margin-left:auto">Idle</div>
+      </div>
 
-          <div id="pyOutputRobust" class="output" aria-live="polite"></div>
-        </div>
-
-        <script>
-          (function () {
-            const preloadBtn = document.getElementById('preloadPyBtn');
-            const runBtn = document.getElementById('runPyBtn');
-            const clearBtn = document.getElementById('clearPyBtn');
-            const downloadBtn = document.getElementById('downloadPyBtn');
-            const editor = document.getElementById('pyEditorRobust');
-            const out = document.getElementById('pyOutputRobust');
-            const status = document.getElementById('pyStatusRobust');
-
-            let pyodide = null;
-            let loading = false;
-
-            // Use a clearly versioned Pyodide. Update version if needed.
-            const PYODIDE_VERSION = '0.23.4';
-            const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
-            const PYODIDE_SCRIPT = PYODIDE_BASE + 'pyodide.js';
-
-            function appendOutput(text, isError = false) {
-              const now = new Date().toLocaleTimeString();
-              const div = document.createElement('div');
-              div.textContent = `[${now}] ${text}`;
-              if (isError) div.style.color = '#a33';
-              out.appendChild(div);
-              out.scrollTop = out.scrollHeight;
-            }
-
-            async function loadPyodideOnce() {
-              if (pyodide) return pyodide;
-              if (loading) throw new Error('Pyodide is already loading');
-              loading = true;
-              status.innerHTML = 'Loading Pyodide <span class="spinner" aria-hidden="true"></span>';
-              // load script tag
-              try {
-                await new Promise((resolve, reject) => {
-                  // if script already present (maybe from other page), wait for it
-                  if (window.loadPyodide) { resolve(); return; }
-                  const s = document.createElement('script');
-                  s.src = PYODIDE_SCRIPT;
-                  s.async = true;
-                  s.onload = resolve;
-                  s.onerror = () => reject(new Error('Failed to load pyodide.js (network or blocked)'));
-                  document.head.appendChild(s);
-                });
-                // loadPyodide should now exist
-                // eslint-disable-next-line no-undef
-                pyodide = await loadPyodide({ indexURL: PYODIDE_BASE });
-                status.textContent = 'Pyodide ready';
-                loading = false;
-                return pyodide;
-              } catch (err) {
-                loading = false;
-                status.textContent = 'Load failed';
-                appendOutput('Pyodide load failed: ' + err, true);
-                throw err;
-              }
-            }
-
-            // Run python code and capture stdout/stderr
-            async function runPython(code) {
-              out.innerHTML = '';
-              try {
-                await loadPyodideOnce();
-              } catch (e) {
-                appendOutput('Cannot run: Pyodide not loaded.', true);
-                return;
-              }
-              status.textContent = 'Running...';
-              try {
-                pyodide.setStdout({
-                  batched: s => { if (s && s.length) appendOutput(s); }
-                });
-                pyodide.setStderr({
-                  batched: s => { if (s && s.length) appendOutput(s, true); }
-                });
-                // run asynchronously
-                const result = await pyodide.runPythonAsync(code);
-                if (result !== undefined && result !== null) {
-                  appendOutput('Return: ' + String(result));
-                }
-                status.textContent = 'Done';
-              } catch (err) {
-                appendOutput('Runtime error: ' + err, true);
-                status.textContent = 'Error';
-              } finally {
-                try { pyodide.setStdout({ batched: () => { } }); pyodide.setStderr({ batched: () => { } }); } catch (e) { }
-              }
-            }
-
-            // UI bindings
-            preloadBtn.addEventListener('click', async () => {
-              if (pyodide) { status.textContent = 'Already loaded'; return; }
-              try {
-                await loadPyodideOnce();
-              } catch (e) {
-                // error already appended by loader
-              }
-            });
-
-            runBtn.addEventListener('click', async () => {
-              const code = editor.value;
-              await runPython(code);
-            });
-
-            clearBtn.addEventListener('click', () => { out.innerHTML = ''; status.textContent = 'Idle'; });
-
-            downloadBtn.addEventListener('click', () => {
-              const blob = new Blob([editor.value], { type: 'text/x-python' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url; a.download = 'script.py'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-            });
-
-            // Helpful hint if Blogger strips scripts: detect if load fails early
-            // (If you paste this into a post and it silently doesn't run, check Theme or Gadget)
-          })();
-        </script>
-      </section>
-
-
-
-
+      <div id="py-output" class="output" style="margin-top:12px; min-height:100px;"></div>
     </section>
 
-    <!-- ⚙️ JAVASCRIPT CODER SECTION -->
-    <section class="crx-section coder js-coder">
+    <!-- JAVASCRIPT RUNNER -->
+    <section class="crx-section coder js-coder crx_fade_in" id="js-section">
       <h2>⚙️ JavaScript Coder</h2>
-      <p>
-        JavaScript brings your ideas to life.
-        From <strong>interactive quizzes</strong> and <strong>sorting visualizers</strong> to live dashboards,
-        the posts here teach you how to use JS to create real-world effects with elegance and simplicity.
-        Each example is small, powerful, and connected with web technologies like HTML5 and CSS3.
-      </p>
-      <!-- 🟨 JAVASCRIPT RUNNER SECTION -->
-      <section id="js-runner-section" style="margin-top:20px;">
-        <style>
-          #js-runner-section {
-            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-            color: #073149;
-            --accent: #1f7fc1;
-          }
+      <p style="margin-bottom:12px;color:var(--muted);">Try JavaScript snippets and see console output below.</p>
 
-          .runner {
-            background: #fff;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 6px 22px rgba(10, 30, 50, 0.04);
-          }
-
-          .runner h2 {
-            color: var(--accent);
-            margin: 0 0 6px;
-            font-size: clamp(18px, 2.6vw, 22px);
-          }
-
-          .editor {
-            width: 100%;
-            min-height: 160px;
-            border-radius: 8px;
-            border: 1px solid #eef7fb;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 24px;
-            resize: vertical;
-          }
-
-          .controls {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-          }
-
-          .btn {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-weight: 700;
-          }
-
-          .btn.ghost {
-            background: transparent;
-            color: var(--accent);
-            border: 1px solid rgba(31, 127, 193, 0.12);
-          }
-
-          .output {
-            margin-top: 10px;
-            background: #f7fbff;
-            border-radius: 8px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 13px;
-            min-height: 80px;
-            white-space: pre-wrap;
-            overflow-y: auto;
-            color: #08263f;
-          }
-        </style>
-
-        <div class="runner">
-          <h2>▶ JavaScript Runner</h2>
-          <p style="color:#58758d;margin-top:0;">Write and run JavaScript code instantly in your browser.</p>
-          <textarea id="jsEditor" class="editor">// Example
+      <textarea id="jsEditor" class="editor" style="min-height:160px;">// Example
 console.log('Hello from JavaScript!');
-for(let i=1;i<=5;i++){console.log('Count:',i);}
-    </textarea>
+for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
 
-          <div class="controls">
-            <button class="btn" id="runJsBtn">Run Code</button>
-            <button class="btn ghost" id="clearJsBtn">Clear Output</button>
-            <button class="btn ghost" id="downloadJsBtn">Download .js</button>
-          </div>
-
-          <div id="jsOutput" class="output" aria-live="polite"></div>
-
-
-          <script>
-            (function () {
-              const editor = document.getElementById('jsEditor');
-              const output = document.getElementById('jsOutput');
-              const run = document.getElementById('runJsBtn');
-              const clear = document.getElementById('clearJsBtn');
-              const download = document.getElementById('downloadJsBtn');
-
-              function appendOut(text) { output.textContent += text + "\\n"; output.scrollTop = output.scrollHeight; }
-
-              run.onclick = () => {
-                output.textContent = '';
-                const code = editor.value;
-                const origLog = console.log;
-                console.log = (...args) => { appendOut(args.join(' ')); origLog(...args); };
-                try {
-                  const fn = new Function(code);
-                  const res = fn();
-                  if (res !== undefined) appendOut('Return: ' + res);
-                } catch (e) { appendOut('Error: ' + e.message); }
-                console.log = origLog;
-              };
-
-              clear.onclick = () => output.textContent = '';
-              download.onclick = () => {
-                const blob = new Blob([editor.value], { type: 'text/javascript' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url; a.download = 'script.js';
-                a.click(); URL.revokeObjectURL(url);
-              };
-            })();
-          </script>
-
-
-
-          <section>
-            <!--Matplotlib -->
-
-
-            <!-- 📈 MATPLOTLIB VISUALIZATIONS SECTION -->
-            <section id="matplotlib-visuals" class="ls-matplot" style="margin-top:20px;">
-              <style>
-                /* Scoped styles for matplotlib visuals section */
-                #matplotlib-visuals {
-                  background: linear-gradient(180deg, #f5fbff, #ffffff);
-                  border-radius: 12px;
-                  padding: 18px;
-                  box-shadow: 0 4px 18px rgba(10, 30, 60, 0.05);
-                }
-
-                #matplotlib-visuals h2 {
-                  color: var(--accent, #1f7fc1);
-                  margin-top: 0;
-                  font-size: clamp(18px, 2.4vw, 22px);
-                  display: flex;
-                  align-items: center;
-                  gap: 6px;
-                }
-
-                #matplotlib-visuals h2 svg {
-                  width: 22px;
-                  height: 22px;
-                  fill: var(--accent, #1f7fc1);
-                }
-
-                .mpl-grid {
-                  display: grid;
-                  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-                  gap: 12px;
-                  margin-top: 12px;
-                }
-
-                .mpl-card {
-                  background: white;
-                  border-radius: 10px;
-                  padding: 12px;
-                  box-shadow: 0 6px 20px rgba(10, 30, 50, 0.04);
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: space-between;
-                  transition: transform 0.2s ease;
-                }
-
-                .mpl-card:hover {
-                  transform: translateY(-4px);
-                }
-
-                .mpl-thumb {
-                  border-radius: 8px;
-                  background: linear-gradient(135deg, #e9f7ff, #ffffff);
-                  height: 140px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 22px;
-                  font-weight: 800;
-                  color: var(--accent, #1f7fc1);
-                  margin-bottom: 8px;
-                }
-
-                .mpl-card h3 {
-                  font-size: 16px;
-                  margin: 0;
-                  color: #0a304a;
-                }
-
-                .mpl-card p {
-                  font-size: 13px;
-                  color: var(--muted, #58758d);
-                  margin: 6px 0 10px;
-                }
-
-                .mpl-card a {
-                  align-self: flex-start;
-                  background: var(--accent, #1f7fc1);
-                  color: #fff;
-                  padding: 8px 10px;
-                  border-radius: 8px;
-                  text-decoration: none;
-                  font-size: 13px;
-                  font-weight: 600;
-                  transition: background 0.2s;
-                }
-
-                .mpl-card a:hover {
-                  background: #1588d1;
-                }
-              </style>
-
-              <h2>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M3 3h18v2H3V3m0 4h10v2H3V7m0 4h18v2H3v-2m0 4h10v2H3v-2m0 4h18v2H3v-2Z" />
-                </svg>
-                Python Matplotlib Visualizations
-              </h2>
-              <p style="color: var(--muted, #5b768a); margin-bottom: 10px;">
-                Explore Python Matplotlib examples with beautiful charts, data visualizations, and explanations.
-                Each visualization includes code snippets, output previews, and analysis.
-              </p>
-
-              <div class="mpl-grid">
-                <div class="mpl-card">
-                  <div class="mpl-thumb">📊</div>
-                  <h3>Bar Charts in Matplotlib</h3>
-                  <p>Learn how to create and style bar charts using Matplotlib’s simple API.</p>
-                  <a class="crx-matplotlib-run"
-                    href="https://www.learnwithchampak.live/2025/10/matplotlib-in-python-bar-charts.html"
-                    target="_blank">View Example</a>
-                </div>
-
-                <div class="mpl-card">
-                  <div class="mpl-thumb">📈</div>
-                  <h3>Line Graphs & Trends</h3>
-                  <p>Visualize data trends over time using line plots and custom themes.</p>
-                  <a class="crx-matplotlib-run"
-                    href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-linegraphs-trends.html"
-                    target="_blank">Open Tutorial</a>
-                </div>
-
-                <div class="mpl-card">
-                  <div class="mpl-thumb">🟢</div>
-                  <h3>Scatter & Bubble Plots</h3>
-                  <p>Show relationships between variables with scatter and bubble charts.</p>
-                  <a class="crx-matplotlib-run"
-                    href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-scatter-plots.html"
-                    target="_blank">Try Now</a>
-                </div>
-
-                <!--  <div class="mpl-card">
-      <div class="mpl-thumb">🧩</div>
-      <h3>Pie Charts & Subplots</h3>
-      <p>Combine multiple visualizations using Matplotlib’s subplot system.</p>
-      <a href="https://yourblog.blogspot.com/p/matplotlib-pie-subplots.html" target="_blank">See Demo</a>
-    </div>
-  </div>-->
-            </section>
-
-
-
-
-            <!--  Matplotlib -->
-          </section>
-
-
-
-
-
-          <!-- 🔎 LIVE SEARCH + SCROLLABLE RESULTS -->
-          <div class="crx-section live-search">
-            <h2>🧭 Explore Posts</h2>
-            <!--
-Search Widget for your Blogger site (paste as an "HTML/JavaScript" gadget in Layout)
-Features:
- - Lightweight search box that redirects to your blog search results
- - Optional live autocomplete (fetches post titles via Blogger JSONP feed)
- - Click a suggestion to open the post directly
-
-Usage: Add this as a gadget in your Blogger Layout -> Add a Gadget -> HTML/JavaScript
--->
-            <div id="vsj-search-widget" style="font-family: Inter, system-ui, Arial; max-width:90%;">
-              <style>
-                /* widget styles (keeps look compact) */
-                #vsj-search-widget .vsj-search {
-                  display: flex;
-                  gap: 8px;
-                }
-
-                #vsj-search-widget input[type='search'] {
-                  flex: 1;
-                  padding: 10px 12px;
-                  border-radius: 8px;
-                  border: 1px solid #cbd5e1;
-                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-                  font-size: 14px
-                }
-
-                #vsj-search-widget button {
-                  padding: 10px 14px;
-                  border-radius: 8px;
-                  border: 0;
-                  background: #2563eb;
-                  color: white;
-                  font-weight: 600;
-                  cursor: pointer
-                }
-
-                #vsj-search-widget .vsj-suggestions {
-                  margin-top: 6px;
-                  border-radius: 8px;
-                  border: 1px solid #e6edf8;
-                  max-height: 220px;
-                  overflow: auto;
-                  background: white
-                }
-
-                #vsj-search-widget .vsj-item {
-                  padding: 10px;
-                  cursor: pointer;
-                  border-bottom: 1px solid #f1f5f9
-                }
-
-                #vsj-search-widget .vsj-item:last-child {
-                  border-bottom: 0
-                }
-
-                #vsj-search-widget .vsj-item:hover {
-                  background: #f1f7ff
-                }
-
-                #vsj-search-widget .vsj-snippet {
-                  display: block;
-                  font-size: 12px;
-                  color: #475569;
-                  margin-top: 6px
-                }
-
-                #vsj-search-widget .vsj-empty {
-                  padding: 10px;
-                  color: #64748b
-                }
-              </style>
-              <div class="vsj-search">
-                <input id="vsj-search-input" type="search" placeholder="Search this blog..."
-                  aria-label="Search this blog" />
-                <button id="vsj-search-btn" title="Search">Search</button>
-              </div>
-              <div id="vsj-suggestions" class="vsj-suggestions" style="display:none"></div>
-            </div>
-            <script>
-              (function () {
-                const blogBase = 'https://www.learnwithchampak.live';
-                const input = document.getElementById('vsj-search-input');
-                const btn = document.getElementById('vsj-search-btn');
-                const suggestions = document.getElementById('vsj-suggestions');
-                let posts = []; // {title, url, snippet}
-                let loaded = false;
-
-                // Redirect to blog search results (works without JS on server too)
-                function doSearch(q) {
-                  q = (q || '').trim();
-                  if (!q) return;
-                  const searchUrl = blogBase + '/search?q=' + encodeURIComponent(q) + '&m=1';
-                  window.location.href = searchUrl;
-                }
-
-                // Load posts via Blogger JSONP (max-results up to 5000). JSONP endpoint: /feeds/posts/default?alt=json-in-script&callback=...
-                function loadPostsJSONP() {
-                  if (loaded) return;
-                  loaded = true;
-                  const cbName = 'vsjPostsCallback_' + Date.now();
-                  window[cbName] = function (data) {
-                    try {
-                      const items = (data.feed && data.feed.entry) || [];
-                      posts = items.map(e => {
-                        // title
-                        const title = e.title && e.title.$t ? e.title.$t : '(no title)';
-                        // link selection - prefer alternate links
-                        let url = '';
-                        if (e.link) {
-                          for (const L of e.link) { if (L.rel === 'alternate') { url = L.href; break } }
-                        }
-                        // snippet - first paragraph or content slice
-                        let snippet = '';
-                        if (e.summary && e.summary.$t) snippet = e.summary.$t;
-                        else if (e.content && e.content.$t) snippet = e.content.$t.replace(/<[^>]+>/g, '').slice(0, 160) + '...';
-                        // clean snippet
-                        snippet = snippet.replace(/\s+/g, ' ').trim();
-                        return { title, url, snippet };
-                      });
-                    } catch (err) { console.warn('vsj jsonp parse error', err) }
-                    // cleanup script tag
-                    const s = document.getElementById(cbName + '_script'); if (s) s.remove();
-                  };
-                  const script = document.createElement('script');
-                  script.id = cbName + '_script';
-                  // request up to 1000 posts — if you have many posts increase max-results (beware payload size)
-                  script.src = blogBase + '/feeds/posts/default?alt=json-in-script&max-results=1000&callback=' + cbName;
-                  script.async = true;
-                  script.onerror = function () { console.warn('vsj jsonp load failed'); script.remove(); };
-                  document.body.appendChild(script);
-                }
-
-                // Show suggestions matching q
-                function showSuggestions(q) {
-                  q = (q || '').trim().toLowerCase();
-                  if (!q) { suggestions.style.display = 'none'; suggestions.innerHTML = ''; return }
-                  // if posts not loaded yet, try load (then still fallback to redirect)
-                  if (!posts.length) loadPostsJSONP();
-                  const matched = posts.filter(p => p.title.toLowerCase().includes(q) || p.snippet.toLowerCase().includes(q)).slice(0, 8);
-                  if (!matched.length) { suggestions.style.display = 'block'; suggestions.innerHTML = '<div class="vsj-empty">No quick matches — press Enter to view full search results.</div>'; return }
-                  suggestions.style.display = 'block';
-                  suggestions.innerHTML = matched.map(p => `
-      <div class="vsj-item" data-url="${p.url}" tabindex="0">
-        <strong>${escapeHtml(p.title)}</strong>
-        <span class="vsj-snippet">${escapeHtml(p.snippet)}</span>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+        <button id="js-run" class="btn primary">Run Code</button>
+        <button id="js-clear" class="btn ghost">Clear Output</button>
+        <button id="js-download" class="btn ghost">Download .js</button>
       </div>
-    `).join('');
-                  // attach click handlers
-                  Array.from(suggestions.querySelectorAll('.vsj-item')).forEach(item => {
-                    item.addEventListener('click', () => { window.location.href = item.dataset.url });
-                    item.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.location.href = item.dataset.url });
-                  });
-                }
 
-                function escapeHtml(s) { return String(s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" }[m] }) }
+      <div id="js-output" class="output" style="margin-top:12px; min-height:80px;"></div>
+    </section>
 
-                // events
-                input.addEventListener('input', (e) => { showSuggestions(e.target.value) });
-                input.addEventListener('keydown', (e) => {
-                  if (e.key === 'Enter') {
-                    const q = input.value.trim();
-                    // if suggestion visible and focused, let click handler run; otherwise search
-                    if (!q) return; // ignore empty
-                    doSearch(q);
-                  }
-                  if (e.key === 'Escape') {
-                    suggestions.style.display = 'none'; suggestions.innerHTML = '';
-                  }
-                });
-                btn.addEventListener('click', () => doSearch(input.value));
+    <!-- MATPLOTLIB -->
+    <section class="crx-section ls-matplot crx_fade_in" id="matplotlib-section">
+      <h2>📈 Python Matplotlib Visualizations</h2>
+      <p style="color:var(--muted);margin-bottom:12px;">Examples, charts and step-by-step explanations.</p>
 
-                // close suggestions when clicking outside
-                document.addEventListener('click', (ev) => {
-                  if (!document.getElementById('vsj-search-widget').contains(ev.target)) {
-                    suggestions.style.display = 'none';
-                  }
-                });
-
-                // Load posts lazily after a short delay to avoid blocking gadget render
-                setTimeout(loadPostsJSONP, 800);
-
-                // Expose a minimal API (optional) if another script wants to trigger search
-                window.vsjSearchWidget = { search: doSearch };
-              })();
-            </script>
-          </div>
-
-          <style>
-            /* General section styling */
-            .crx-section {
-              background: var(--crx-panel);
-              border-radius: 14px;
-              padding: 22px 20px;
-              margin: 20px 0;
-              box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
-            }
-
-            .crx-section h1,
-            .crx-section h2 {
-              color: var(--crx-accent-dark);
-              margin-bottom: 10px;
-            }
-
-            .crx-section p {
-              font-size: 1rem;
-              color: #444;
-              line-height: 1.6;
-            }
-
-            /* Keywords styling */
-            .crx-keyword {
-              background: var(--crx-accent);
-              color: white;
-              display: inline-block;
-              padding: 6px 12px;
-              border-radius: 20px;
-              margin: 4px;
-              font-size: 0.9em;
-              box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            }
-
-            /* Scroll area */
-            #crx-scroll-area {
-              max-height: 500px;
-              overflow-y: auto;
-              padding-right: 6px;
-              scrollbar-width: thin;
-              scrollbar-color: var(--crx-accent) #e6f2ff;
-              border-radius: 12px;
-            }
-
-            #crx-scroll-area::-webkit-scrollbar {
-              width: 8px;
-            }
-
-            #crx-scroll-area::-webkit-scrollbar-track {
-              background: #e6f2ff;
-              border-radius: 8px;
-            }
-
-            #crx-scroll-area::-webkit-scrollbar-thumb {
-              background-color: var(--crx-accent);
-              border-radius: 8px;
-            }
-
-            /* Post cards */
-            #crx-card-list .crx-card-row {
-              background: var(--crx-panel);
-              border-radius: 12px;
-              padding: 14px;
-              margin: 16px 6px;
-              display: flex;
-              align-items: center;
-              gap: 18px;
-              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-              position: relative;
-            }
-
-            .crx-thumb-square {
-              width: 110px;
-              height: 110px;
-              border-radius: 12px;
-              object-fit: cover;
-            }
-
-            .crx-avatar-circle {
-              width: 80px;
-              height: 80px;
-              border-radius: 50%;
-              object-fit: cover;
-              border: 4px solid var(--crx-panel);
-              position: absolute;
-              left: 18px;
-              top: 50%;
-              transform: translateY(-50%) translateX(-30px);
-              box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
-            }
-
-            .crx-content {
-              flex: 1;
-              padding-left: 32px;
-              min-height: 110px;
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-            }
-
-            .crx-post-title {
-              display: inline-block;
-              background: #0e63d6;
-              color: white;
-              padding: 12px 18px;
-              border-radius: 10px;
-              font-weight: 600;
-              font-size: 1rem;
-            }
-
-            .crx-post-meta {
-              margin-top: 8px;
-              color: #666;
-              font-size: 0.9rem;
-            }
-
-            @media (max-width:600px) {
-              .crx-thumb-square {
-                width: 92px;
-                height: 92px;
-              }
-
-              .crx-avatar-circle {
-                width: 66px;
-                height: 66px;
-                left: 14px;
-                transform: translateY(-50%) translateX(-26px);
-              }
-            }
-          </style>
-
-          <!-- 🧠 Script for Live Blogger Feed -->
-          <script>
-            (function () {
-              var CRX_BLOGGER_URL = "https://www.learnwithchampak.live";
-              var CRX_MAX_POSTS = 60;
-              var TIMEOUT = 9000;
-
-              var feedUrl = CRX_BLOGGER_URL.replace(/\/$/, "") + "/feeds/posts/default?alt=json-in-script&max-results=" + CRX_MAX_POSTS + "&callback=crx_live_feed_callback";
-              var s = document.createElement("script");
-              s.src = feedUrl;
-              s.async = true;
-              document.head.appendChild(s);
-
-              var timer = setTimeout(() => {
-                document.getElementById("crx-card-list").innerHTML = '<div style="padding:20px;text-align:center;color:#b33;">Unable to load posts.</div>';
-              }, TIMEOUT);
-
-              window.crx_live_feed_callback = function (data) {
-                clearTimeout(timer);
-                try {
-                  var entries = (data.feed.entry) || [];
-                  renderCards(entries);
-                } catch (err) {
-                  document.getElementById("crx-card-list").innerHTML = '<div style="padding:20px;text-align:center;color:#b33;">Feed parse error.</div>';
-                }
-              };
-
-              function renderCards(entries) {
-                var container = document.getElementById("crx-card-list");
-                container.innerHTML = "";
-                if (!entries.length) { container.innerHTML = '<div style="padding:20px;text-align:center;">No posts yet.</div>'; return; }
-
-                entries.forEach(e => {
-                  var title = e.title?.$t || "Untitled";
-                  var url = e.link?.find(l => l.rel === 'alternate')?.href || "#";
-                  var published = e.published ? new Date(e.published.$t).toLocaleDateString() : "";
-                  var snippet = (e.summary?.$t || e.content?.$t || "").replace(/<[^>]+>/g, '').slice(0, 140) + "...";
-                  var thumb = e.media$thumbnail?.url || "";
-                  if (!thumb) { var m = (e.content?.$t || "").match(/<img[^>]+src=["']([^"']+)["']/i); thumb = m ? m[1] : ""; }
-                  if (!thumb) thumb = "https://varanasi-software-junction.github.io/blogger/blogger-assets/default-thumb.svg";
-
-                  var row = document.createElement("div");
-                  row.className = "crx-card-row";
-                  row.dataset.title = title.toLowerCase();
-                  row.dataset.snippet = snippet.toLowerCase();
-
-                  row.innerHTML = `
-          <img class="crx-thumb-square" src="${thumb}" alt="${title}">
-          <div class="crx-content">
-            <div class="crx-post-title"><a href="${url}" target="_blank" style="color:white;text-decoration:none;">${title}</a></div>
-            <div class="crx-post-meta">${published} • ${snippet}</div>
-          </div>
-          <img class="crx-avatar-circle" src="${thumb}" alt="${title}">
-        `;
-                  container.appendChild(row);
-                });
-                updateFound(entries.length);
-              }
-
-              window.crxFilterPosts = function () {
-                const q = document.getElementById("crx-live-search").value.toLowerCase();
-                const posts = document.querySelectorAll(".crx-card-row");
-                let shown = 0;
-                posts.forEach(p => {
-                  const t = p.dataset.title, s = p.dataset.snippet;
-                  if (!q || t.includes(q) || s.includes(q)) { p.style.display = "flex"; shown++; }
-                  else p.style.display = "none";
-                });
-                updateFound(shown);
-              };
-
-              function updateFound(n) { document.getElementById("crx-found-num").innerText = n; }
-            })();
-          </script>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+        <div class="mpl-card">
+          <div class="mpl-thumb">📊</div>
+          <h3 style="margin:6px 0 8px;">Bar Charts in Matplotlib</h3>
+          <p style="margin:0 0 8px;color:var(--muted);font-size:13px;">Learn to create and style bar charts.</p>
+          <a href="https://www.learnwithchampak.live/2025/10/matplotlib-in-python-bar-charts.html" target="_blank"
+            class="btn primary" style="padding:8px 10px;font-size:14px;">View Example</a>
         </div>
+
+        <div class="mpl-card">
+          <div class="mpl-thumb">📈</div>
+          <h3 style="margin:6px 0 8px;">Line Graphs & Trends</h3>
+          <p style="margin:0 0 8px;color:var(--muted);font-size:13px;">Visualize trends using line plots.</p>
+          <a href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-linegraphs-trends.html" target="_blank"
+            class="btn primary" style="padding:8px 10px;font-size:14px;">Open Tutorial</a>
+        </div>
+
+        <div class="mpl-card">
+          <div class="mpl-thumb">🟢</div>
+          <h3 style="margin:6px 0 8px;">Scatter & Bubble Plots</h3>
+          <p style="margin:0 0 8px;color:var(--muted);font-size:13px;">Show relationships between variables.</p>
+          <a href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-scatter-plots.html" target="_blank"
+            class="btn primary" style="padding:8px 10px;font-size:14px;">Try Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPLORE / FEED -->
+    <section class="crx-section live-search crx_fade_in" id="explore-section">
+      <h2>🧭 Explore Posts</h2>
+      <p style="color:var(--muted);margin-bottom:12px;">Browse recent lessons and tutorials. Use search to find exact topics.</p>
+
+      <div id="crx-feed-panel">
+        <div id="crx-card-list" aria-live="polite">
+          <div style="padding:18px;color:#64748b;">Loading posts…</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BACK TO TOP -->
+  <div id="back-to-top" title="Back to top" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5l-7 7h4v7h6v-7h4l-7-7z" fill="currentColor"/></svg>
+  </div>
+
+  <!-- ===========================
+       ORGANIZED SCRIPTS (bottom)
+       - Search suggestions
+       - Feed loader
+       - Pyodide runner
+       - JS runner
+       - Scroll reveal + back-to-top
+       =========================== -->
+
+  <script>
+    /* ===== SEARCH: header suggestions (Blogger JSONP) ===== */
+    (function headerSearch() {
+      const blogBase = 'https://www.learnwithchampak.live';
+      const input = document.getElementById('ls-search-input');
+      const btn = document.getElementById('ls-search-btn');
+      const suggBox = document.getElementById('ls-suggestions');
+      let posts = [];
+      let loaded = false;
+      let debounceTimer = null;
+
+      function doSearch(q) {
+        q = (q || '').trim();
+        if (!q) return;
+        window.location.href = blogBase + '/search?q=' + encodeURIComponent(q) + '&m=1';
+      }
+
+      function loadPostsJSONP() {
+        if (loaded) return;
+        loaded = true;
+        const cb = 'lsPosts_' + Date.now();
+        window[cb] = function (data) {
+          try {
+            const items = (data.feed && data.feed.entry) || [];
+            posts = items.map(e => {
+              const title = e.title?.$t || '(no title)';
+              let url = '#';
+              if (e.link) {
+                for (const L of e.link) { if (L.rel === 'alternate') { url = L.href; break; } }
+              }
+              let snippet = '';
+              if (e.summary && e.summary.$t) snippet = e.summary.$t;
+              else if (e.content && e.content.$t) snippet = e.content.$t.replace(/<[^>]+>/g, '').slice(0, 160) + '...';
+              snippet = snippet.replace(/\s+/g, ' ').trim();
+              return { title, url, snippet };
+            });
+          } catch (err) {
+            console.warn('ls jsonp parse error', err);
+          }
+          const s = document.getElementById(cb + '_script'); if (s) s.remove();
+        };
+        const s = document.createElement('script');
+        s.id = cb + '_script';
+        s.src = blogBase + '/feeds/posts/default?alt=json-in-script&max-results=1000&callback=' + cb;
+        s.async = true;
+        s.onerror = () => { console.warn('ls jsonp load failed'); s.remove(); };
+        document.body.appendChild(s);
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" }[m] });
+      }
+
+      function showSuggestions(q) {
+        q = (q || '').trim().toLowerCase();
+        if (!q) { suggBox.style.display = 'none'; suggBox.innerHTML = ''; return; }
+        if (!posts.length) loadPostsJSONP();
+        const matched = posts.filter(p => p.title.toLowerCase().includes(q) || p.snippet.toLowerCase().includes(q)).slice(0, 8);
+        if (!matched.length) {
+          suggBox.innerHTML = '<div class="ls-item">No quick matches — press Enter to view full results.</div>';
+        } else {
+          suggBox.innerHTML = matched.map(p =>
+            `<div class="ls-item" data-url="${p.url}" title="${escapeHtml(p.title)}"><strong>${escapeHtml(p.title)}</strong><div style="font-size:12px;color:#475569;margin-top:6px;">${escapeHtml(p.snippet)}</div></div>`
+          ).join('');
+        }
+        suggBox.style.display = 'block';
+        Array.from(suggBox.querySelectorAll('.ls-item')).forEach(it => {
+          it.addEventListener('click', () => { window.location.href = it.dataset.url; });
+        });
+      }
+
+      input.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        const v = e.target.value;
+        debounceTimer = setTimeout(() => showSuggestions(v), 160);
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const q = input.value.trim();
+          if (!q) return;
+          doSearch(q);
+        }
+        if (e.key === 'Escape') {
+          suggBox.style.display = 'none';
+          suggBox.innerHTML = '';
+        }
+      });
+
+      btn.addEventListener('click', () => doSearch(input.value));
+
+      document.addEventListener('click', (ev) => {
+        const header = document.getElementById('ls-header');
+        if (!header.contains(ev.target)) {
+          suggBox.style.display = 'none';
+        }
+      });
+
+      setTimeout(loadPostsJSONP, 900);
+    })();
+  </script>
+
+  <script>
+    /* ===== LIVE FEED loader & renderer ===== */
+    (function loadFeed() {
+      const CRX_BLOGGER_URL = "https://www.learnwithchampak.live";
+      const CRX_MAX_POSTS = 60;
+      const TIMEOUT = 9000;
+      const container = document.getElementById('crx-card-list');
+
+      function showError(msg) {
+        container.innerHTML = `<div style="padding:20px;text-align:center;color:#b33;">${msg}</div>`;
+      }
+
+      const cb = 'crxFeed_' + Date.now();
+      window[cb] = function (data) {
+        try {
+          const entries = (data.feed && data.feed.entry) || [];
+          renderCards(entries);
+        } catch (err) {
+          console.error(err);
+          showError('Feed parse error.');
+        } finally {
+          const s = document.getElementById(cb + '_script'); if (s) s.remove();
+        }
+      };
+
+      const s = document.createElement('script');
+      s.id = cb + '_script';
+      s.src = CRX_BLOGGER_URL.replace(/\/$/, "") + "/feeds/posts/default?alt=json-in-script&max-results=" + CRX_MAX_POSTS + "&callback=" + cb;
+      s.async = true;
+      s.onerror = function () { showError('Unable to load posts.'); s.remove(); };
+      document.head.appendChild(s);
+
+      const timer = setTimeout(() => {
+        if (!document.querySelector('#crx-card-list .crx-card-row')) {
+          showError('Unable to load posts.');
+        }
+      }, TIMEOUT);
+
+      function renderCards(entries) {
+        container.innerHTML = "";
+        if (!entries.length) { container.innerHTML = '<div style="padding:20px;text-align:center;">No posts yet.</div>'; return; }
+
+        entries.forEach(e => {
+          const title = e.title?.$t || "Untitled";
+          const url = (e.link || []).find(l => l.rel === 'alternate')?.href || "#";
+          const published = e.published ? new Date(e.published.$t).toLocaleDateString() : "";
+          let snippet = (e.summary?.$t || e.content?.$t || "").replace(/<[^>]+>/g, '').slice(0, 140) + "...";
+          snippet = snippet.replace(/\s+/g, ' ').trim();
+
+          let thumb = e.media$thumbnail?.url || "";
+          if (!thumb) {
+            const m = (e.content?.$t || "").match(/<img[^>]+src=["']([^"']+)["']/i);
+            thumb = m ? m[1] : "";
+          }
+          if (!thumb) thumb = "https://varanasi-software-junction.github.io/blogger/blogger-assets/default-thumb.svg";
+
+          const row = document.createElement('div');
+          row.className = "crx-card-row";
+          row.style.position = 'relative'; // for avatar absolute
+          row.dataset.title = title.toLowerCase();
+          row.dataset.snippet = snippet.toLowerCase();
+
+          row.innerHTML = `
+            <img class="crx-thumb-square" src="${thumb}" alt="${title}">
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="crx-post-title"><a href="${url}" target="_blank" style="color:white;text-decoration:none;"><span style='color:white;font-size:24px;'>${title}</span></a></div>
+                <div style="margin-left:auto;color:var(--muted);font-size:12px;">${published}</div>
+              </div>
+              <div class="crx-post-meta">${snippet}</div>
+            </div>
+            <img class="crx-avatar-circle" src="${thumb}" alt="${title}">
+          `;
+          container.appendChild(row);
+        });
+        clearTimeout(timer);
+      }
+    })();
+  </script>
+
+  <script>
+    /* ===== PYODIDE RUNNER (organized) ===== */
+    (function pyodideRunner() {
+      const PYODIDE_VERSION = '0.23.4';
+      const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+      const PYODIDE_SCRIPT = PYODIDE_BASE + 'pyodide.js';
+      let pyodide = null;
+      let loading = false;
+
+      const preloadBtn = document.getElementById('py-preload');
+      const runBtn = document.getElementById('py-run');
+      const clearBtn = document.getElementById('py-clear');
+      const downloadBtn = document.getElementById('py-download');
+      const editor = document.getElementById('pyEditor');
+      const out = document.getElementById('py-output');
+      const status = document.getElementById('py-status');
+
+      function appendOutput(text, isError = false) {
+        const now = new Date().toLocaleTimeString();
+        const div = document.createElement('div');
+        div.textContent = `[${now}] ${text}`;
+        if (isError) div.style.color = '#a33';
+        out.appendChild(div);
+        out.scrollTop = out.scrollHeight;
+      }
+
+      async function loadPyodideOnce() {
+        if (pyodide) return pyodide;
+        if (loading) throw new Error('Pyodide is already loading');
+        loading = true;
+        status.textContent = 'Loading Pyodide…';
+
+        await new Promise((resolve, reject) => {
+          if (window.loadPyodide) { resolve(); return; }
+          const s = document.createElement('script');
+          s.src = PYODIDE_SCRIPT;
+          s.async = true;
+          s.onload = resolve;
+          s.onerror = () => reject(new Error('Failed to load pyodide.js'));
+          document.head.appendChild(s);
+        });
+
+        pyodide = await loadPyodide({ indexURL: PYODIDE_BASE });
+        status.textContent = 'Pyodide ready';
+        loading = false;
+        return pyodide;
+      }
+
+      async function runPython(code) {
+        out.innerHTML = '';
+        try {
+          await loadPyodideOnce();
+        } catch (e) {
+          appendOutput('Cannot run: Pyodide not loaded.', true);
+          return;
+        }
+        status.textContent = 'Running...';
+        try {
+          pyodide.setStdout({
+            batched: s => { if (s && s.length) appendOutput(s); }
+          });
+          pyodide.setStderr({
+            batched: s => { if (s && s.length) appendOutput(s, true); }
+          });
+          const result = await pyodide.runPythonAsync(code);
+          if (result !== undefined && result !== null) {
+            appendOutput('Return: ' + String(result));
+          }
+          status.textContent = 'Done';
+        } catch (err) {
+          appendOutput('Runtime error: ' + err, true);
+          status.textContent = 'Error';
+        } finally {
+          try { pyodide.setStdout({ batched: () => {} }); pyodide.setStderr({ batched: () => {} }); } catch (e) {}
+        }
+      }
+
+      preloadBtn.addEventListener('click', async () => {
+        if (pyodide) { status.textContent = 'Already loaded'; return; }
+        try { await loadPyodideOnce(); } catch (e) { appendOutput('Load failed: ' + e, true); }
+      });
+
+      runBtn.addEventListener('click', async () => {
+        const code = editor.value;
+        await runPython(code);
+      });
+
+      clearBtn.addEventListener('click', () => { out.innerHTML = ''; status.textContent = 'Idle'; });
+
+      downloadBtn.addEventListener('click', () => {
+        const blob = new Blob([editor.value], { type: 'text/x-python' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'script.py';
+        document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      });
+    })();
+  </script>
+
+  <script>
+    /* ===== JAVASCRIPT RUNNER ===== */
+    (function jsRunner() {
+      const editor = document.getElementById('jsEditor');
+      const output = document.getElementById('js-output');
+      const runBtn = document.getElementById('js-run');
+      const clearBtn = document.getElementById('js-clear');
+      const downloadBtn = document.getElementById('js-download');
+
+      function appendOut(text) { output.textContent += text + "\n"; output.scrollTop = output.scrollHeight; }
+
+      runBtn.addEventListener('click', () => {
+        output.textContent = '';
+        const code = editor.value;
+        const origLog = console.log;
+        console.log = (...args) => { appendOut(args.join(' ')); origLog(...args); };
+        try {
+          const fn = new Function(code);
+          const res = fn();
+          if (res !== undefined) appendOut('Return: ' + res);
+        } catch (e) {
+          appendOut('Error: ' + (e && e.message ? e.message : e));
+        }
+        console.log = origLog;
+      });
+
+      clearBtn.addEventListener('click', () => output.textContent = '');
+      downloadBtn.addEventListener('click', () => {
+        const blob = new Blob([editor.value], { type: 'text/javascript' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'script.js';
+        a.click(); URL.revokeObjectURL(url);
+      });
+    })();
+  </script>
+
+  <script>
+    /* ===== SCROLL REVEAL + BACK-TO-TOP ===== */
+    (function scrollRevealBackTop() {
+      // reveal
+      const els = document.querySelectorAll('.crx_fade_in');
+      if (els.length) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(en => {
+            if (en.isIntersecting) {
+              en.target.classList.add('crx_visible');
+              obs.unobserve(en.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        els.forEach(e => obs.observe(e));
+      }
+
+      // back to top
+      const btt = document.getElementById('back-to-top');
+      let lastScroll = 0;
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY || window.pageYOffset;
+        if (y > 360) btt.classList.add('visible'); else btt.classList.remove('visible');
+        lastScroll = y;
+      });
+
+      btt.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
 
 </body>
-
 </html>
