@@ -1,4 +1,4 @@
-<!-- Learning Sutras — Home v2 (Explore search + counter — full working page) -->
+<!-- Learning Sutras — Home v2 (Explore search + counter — target="_parent" added to generated search URLs) -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -28,7 +28,7 @@
     #ls-search button{padding:10px 14px;height:44px;border-radius:10px;border:none;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(29,78,216,0.12);transition:transform 0.12s ease,box-shadow 0.12s ease}
     #ls-search button:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(29,78,216,0.14)}
     #ls-suggestions{display:none;position:absolute;right:0;top:calc(100% + 10px);width:calc(100% - 160px);max-width:560px;background:rgba(255,255,255,0.98);border-radius:10px;border:1px solid rgba(13,24,40,0.04);box-shadow:0 12px 32px rgba(9,20,40,0.06);max-height:340px;overflow:auto;z-index:10000}
-    #ls-suggestions .ls-item{padding:12px 14px;border-bottom:1px solid rgba(15,23,42,0.03);cursor:pointer;font-size:14px;color:var(--headline)}
+    #ls-suggestions .ls-item{display:block;padding:12px 14px;border-bottom:1px solid rgba(15,23,42,0.03);cursor:pointer;font-size:14px;color:var(--headline);text-decoration:none}
     #ls-suggestions .ls-item:hover{background:rgba(31,99,214,0.03)}
     .crx-section{background:var(--card-bg);border-radius:14px;padding:24px;margin:20px 0;border:1px solid var(--glass-border);box-shadow:0 8px 28px rgba(8,36,64,0.04);transition:transform 0.18s ease,box-shadow 0.18s ease;backdrop-filter:blur(4px)}
     .crx-section:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(8,36,64,0.06)}
@@ -206,7 +206,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
     const $$ = (s,ctx=document)=>Array.from(ctx.querySelectorAll(s));
     const escapeHtml = s => String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
 
-    /* ===== HEADER SEARCH (JSONP) ===== */
+    /* ===== HEADER SEARCH (JSONP) — suggestions rendered as links with target="_parent" ===== */
     (function headerSearch(){
       const blogBase = 'https://www.learnwithchampak.live';
       const input = $('#ls-search-input');
@@ -259,12 +259,13 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
         if(!matched.length){
           suggBox.innerHTML = '<div class="ls-item">No quick matches — press Enter to view full results.</div>';
         } else {
+          // Render as anchor tags with target="_parent"
           suggBox.innerHTML = matched.map(p=>
-            `<div class="ls-item" data-url="${p.url}" title="${escapeHtml(p.title)}"><strong>${escapeHtml(p.title)}</strong><div style="font-size:12px;color:#475569;margin-top:6px;">${escapeHtml(p.snippet)}</div></div>`
+            `<a class="ls-item" href="${p.url}" target="_parent" title="${escapeHtml(p.title)}"><strong>${escapeHtml(p.title)}</strong><div style="font-size:12px;color:#475569;margin-top:6px;">${escapeHtml(p.snippet)}</div></a>`
           ).join('');
         }
         suggBox.style.display = 'block';
-        $$('.ls-item', suggBox).forEach(it => it.addEventListener('click', ()=>{ window.location.href = it.dataset.url; }));
+        // anchors will follow target on click naturally; no extra handlers needed
       }
 
       input.addEventListener('input', e => {
@@ -292,7 +293,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
       setTimeout(loadPostsJSONP, 900);
     })();
 
-    /* ===== FEED LOADER & RENDERER (JSONP) ===== */
+    /* ===== FEED LOADER & RENDERER (JSONP) — post anchors use target="_parent" ===== */
     (function loadFeed(){
       const CRX_BLOGGER_URL = "https://www.learnwithchampak.live";
       const CRX_MAX_POSTS = 60;
@@ -352,11 +353,12 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
           row.dataset.title = title.toLowerCase();
           row.dataset.snippet = snippet.toLowerCase();
 
+          // Note: anchor now uses target="_parent"
           row.innerHTML = `
             <img class="crx-thumb-square" src="${thumb}" alt="${escapeHtml(title)}">
             <div style="flex:1;min-width:0;">
               <div style="display:flex;align-items:center;gap:10px;">
-                <div class="crx-post-title"><a href="${url}" target="_blank" style="color:white;text-decoration:none;"><span style='color:white;font-size:24px;'>${escapeHtml(title)}</span></a></div>
+                <div class="crx-post-title"><a href="${url}" target="_parent" style="color:white;text-decoration:none;"><span style='color:white;font-size:24px;'>${escapeHtml(title)}</span></a></div>
                 <div style="margin-left:auto;color:var(--muted);font-size:12px;">${escapeHtml(published)}</div>
               </div>
               <div class="crx-post-meta">${escapeHtml(snippet)}</div>
