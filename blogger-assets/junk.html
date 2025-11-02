@@ -1,287 +1,82 @@
-<div>
-    <h1 style="text-align: center;"><br /></h1>
-    <div>
-        <div>### **Understanding QuerySet in Python (Django)**</div>
-        <div><br /></div>
-        <div>In Django, a **QuerySet** is a collection of database queries that retrieve objects from your database. It
-            represents a set of objects from your database, and can filter, order, or combine data from multiple tables.
-            QuerySets are lazy, meaning they won't hit the database until they are evaluated.</div>
-        <div><br /></div>
-        <div>QuerySets are one of the most powerful features of Django's Object-Relational Mapping (ORM) and are
-            essential for interacting with the database efficiently.</div>
-        <div><br /></div>
-        <div>---</div>
-        <div><br /></div>
-        <div>### **Key Characteristics of QuerySets**</div>
-        <div><br /></div>
-        <div>1. **Lazy Evaluation**: A QuerySet doesn’t actually hit the database until it is evaluated (by iteration,
-            slicing, etc.). This helps optimize performance.</div>
-        <div>&nbsp; &nbsp;</div>
-        <div>2. **Chaining**: You can chain methods on a QuerySet to refine the result step by step without querying the
-            database multiple times.</div>
-        <div><br /></div>
-        <div>3. **Caching**: Once a QuerySet is evaluated, the results are cached for reuse within the same QuerySet
-            object.</div>
-        <div><br /></div>
-        <div>4. **Return Type**: QuerySets typically return lists of model instances, but they can also return
-            dictionaries, values, or specific fields.</div>
-        <div><br /></div>
-        <div>---</div>
-        <div><br /></div>
-        <div>### **Creating a QuerySet**</div>
-        <div><br /></div>
-        <div>When interacting with a Django model, QuerySets are created by using the model’s `objects` manager. For
-            example:</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Assume we have a model called Book</div>
-        <div>from myapp.models import Book</div>
-        <div><br /></div>
-        <div># QuerySet to get all Book objects</div>
-        <div>books = Book.objects.all()</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>This `books` QuerySet contains all records in the `Book` table.</div>
-        <div><br /></div>
-        <div>---</div>
-        <div><br /></div>
-        <div>### **Basic QuerySet Operations**</div>
-        <div><br /></div>
-        <div>#### 1. **Retrieve All Objects** (`all()`)</div>
-        <div>This retrieves all records from the table:</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Fetch all books</div>
-        <div>books = Book.objects.all()</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>#### 2. **Filtering Data** (`filter()`)</div>
-        <div>You can filter records based on field values. `filter()` returns a new QuerySet containing only the records
-            that match the criteria.</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Fetch books where the author is 'John Doe'</div>
-        <div>books_by_john_doe = Book.objects.filter(author='John Doe')</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>#### 3. **Excluding Data** (`exclude()`)</div>
-        <div>You can exclude records based on field values:</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Fetch all books except those by 'John Doe'</div>
-        <div>books_not_by_john_doe = Book.objects.exclude(author='John Doe')</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>#### 4. **Get a Single Object** (`get()`)</div>
-        <div>If you need a single object, you can use the `get()` method. It raises a `DoesNotExist` exception if no
-            matching record is found and raises a `MultipleObjectsReturned` exception if more than one record is found.
-        </div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Get a book with a specific title</div>
-        <div>book = Book.objects.get(title="Django for Beginners")</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>#### 5. **Field Lookups**</div>
-        <div>You can use field lookups to refine your query further. For example:</div>
-        <div><br /></div>
-        <div>- `exact`: Exact match (this is implied when using `filter()`)</div>
-        <div>- `icontains`: Case-insensitive match</div>
-        <div>- `gte`/`lte`: Greater than or equal to / Less than or equal to</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Fetch books with a title that contains 'django', case-insensitive</div>
-        <div>books = Book.objects.filter(title__icontains="django")</div>
-        <div><br /></div>
-        <div># Fetch books published after the year 2010</div>
-        <div>books_after_2010 = Book.objects.filter(published_date__gte=2010)</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>#### 6. **Ordering Data** (`order_by()`)</div>
-        <div>You can order QuerySet results using `order_by()`. Add a `-` in front of the field name for descending
-            order.</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Order books by title (ascending)</div>
-        <div>books = Book.objects.order_by('title')</div>
-        <div><br /></div>
-        <div># Order books by published date (descending)</div>
-        <div>books = Book.objects.order_by('-published_date')</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>#### 7. **Slicing**</div>
-        <div>QuerySets can be sliced like Python lists:</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Get the first 10 books</div>
-        <div>books = Book.objects.all()[:10]</div>
-        <div><br /></div>
-        <div># Get books 5 through 15</div>
-        <div>books = Book.objects.all()[5:15]</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>#### 8. **Values** (`values()` and `values_list()`)</div>
-        <div>If you need only specific fields from the database (not entire objects), you can use `values()` or
-            `values_list()`.</div>
-        <div><br /></div>
-        <div>- `values()`: Returns dictionaries with key-value pairs where the keys are field names.</div>
-        <div>- `values_list()`: Returns tuples, with each tuple containing values for the specified fields.</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Fetch only the title and author of books</div>
-        <div>books = Book.objects.values('title', 'author')</div>
-        <div><br /></div>
-        <div># Fetch only the title of books as a list</div>
-        <div>book_titles = Book.objects.values_list('title', flat=True)</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>---</div>
-        <div><br /></div>
-        <div>### **Complex QuerySet Operations**</div>
-        <div><br /></div>
-        <div>#### 1. **Chaining QuerySets**</div>
-        <div>Since QuerySets are lazy, you can chain multiple QuerySet methods to refine your results. For example:
-        </div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Fetch books by 'John Doe' published after 2015, ordered by title</div>
-        <div>books = Book.objects.filter(author='John Doe').filter(published_date__gte=2015).order_by('title')</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>Each step returns a new QuerySet, and the database query is only executed when the final result is
-            evaluated.</div>
-        <div><br /></div>
-        <div>#### 2. **Aggregation** (`aggregate()`)</div>
-        <div>Django’s ORM provides aggregation functions like `Count`, `Avg`, `Max`, `Min`, `Sum`.</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div>from django.db.models import Avg, Count</div>
-        <div><br /></div>
-        <div># Find the average number of pages in all books</div>
-        <div>average_pages = Book.objects.all().aggregate(Avg('num_pages'))</div>
-        <div><br /></div>
-        <div># Find the total number of books by 'John Doe'</div>
-        <div>count = Book.objects.filter(author='John Doe').aggregate(Count('id'))</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>#### 3. **Annotation** (`annotate()`)</div>
-        <div>`annotate()` is used to add aggregate values for each item in a QuerySet.</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div>from django.db.models import Count</div>
-        <div><br /></div>
-        <div># Annotate each book with the number of reviews it has</div>
-        <div>books_with_review_count = Book.objects.annotate(review_count=Count('reviews'))</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>#### 4. **Distinct** (`distinct()`)</div>
-        <div>To remove duplicates from a QuerySet, use the `distinct()` method.</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># Fetch distinct authors from the Book model</div>
-        <div>authors = Book.objects.values('author').distinct()</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>---</div>
-        <div><br /></div>
-        <div>### **Evaluating a QuerySet**</div>
-        <div><br /></div>
-        <div>As mentioned, QuerySets are **lazy**. This means no database query is executed until the QuerySet is
-            actually evaluated. Common ways a QuerySet gets evaluated are:</div>
-        <div><br /></div>
-        <div>- **Iteration**: Looping over the QuerySet.</div>
-        <div>- **Slicing**: Using slicing syntax to retrieve a portion of the QuerySet.</div>
-        <div>- **Serialization**: Converting the QuerySet into a list or some other form.</div>
-        <div>- **Method calls**: Using methods like `len()`, `list()`, or `bool()`.</div>
-        <div><br /></div>
-        <div>---</div>
-        <div><br /></div>
-        <div>### **Caching in QuerySets**</div>
-        <div><br /></div>
-        <div>Once a QuerySet is evaluated, Django caches the results to avoid hitting the database again in subsequent
-            evaluations. For example:</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div>books = Book.objects.all()</div>
-        <div><br /></div>
-        <div># This will hit the database</div>
-        <div>print(books)</div>
-        <div><br /></div>
-        <div># This will use the cached result</div>
-        <div>print(books)</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>However, if you modify the QuerySet by applying more filters or calling additional methods, the cache will
-            be cleared, and the query will be re-executed.</div>
-        <div><br /></div>
-        <div>---</div>
-        <div><br /></div>
-        <div>### **Conclusion**</div>
-        <div><br /></div>
-        <div>Django's QuerySet is a powerful tool for interacting with the database in a clean and Pythonic way. It
-            allows you to retrieve, filter, order, and aggregate data efficiently while abstracting the complexities of
-            raw SQL queries. By mastering QuerySets, you can perform complex data retrieval operations with ease, making
-            your Django applications more robust and scalable.</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>Improved Test Page</title>
+
+    <!-- Preload and external stylesheet -->
+    <link rel="preload" href="/mnt/data/test_styles_extracted.css" as="style">
+    <link rel="stylesheet" href="/mnt/data/test_styles_extracted.css">
+
+    <!-- Critical accessibility CSS -->
+    <style>
+        .skip-link {
+            position: absolute;
+            left: -999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: static;
+            left: auto;
+            width: auto;
+            height: auto;
+            padding: 12px;
+            background: #000;
+            color: #fff;
+            z-index: 9999;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <div id="main-content">
+        <h1>Welcome to the Improved Page</h1>
+        <p>This is a cleaner, more optimized version of your original HTML file.</p>
+        <img src="example.jpg" alt="Example Image" loading="lazy">
+        <p>All images are now lazy-loaded for better performance.</p>
     </div>
-    <h1 style="text-align: center;"><br /></h1>
-    <div>
-        <div>Yes, the `len()` function can be used on a Django QuerySet, but it behaves in a specific way.</div>
-        <div><br /></div>
-        <div>When you call `len()` on a QuerySet, it forces the QuerySet to be **evaluated**. This means Django will
-            execute the SQL query and fetch the results from the database to count the number of records. After that,
-            `len()` will return the number of items in the QuerySet.</div>
-        <div><br /></div>
-        <div>### Example:</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div>from myapp.models import Book</div>
-        <div><br /></div>
-        <div># Fetch all books</div>
-        <div>books = Book.objects.all()</div>
-        <div><br /></div>
-        <div># Get the length of the QuerySet</div>
-        <div>number_of_books = len(books)</div>
-        <div>print(number_of_books)</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>### How It Works:</div>
-        <div>- If the QuerySet has not been evaluated (i.e., no query has been executed yet), calling `len()` will
-            trigger the database query to fetch the results.</div>
-        <div>- Once evaluated, the results are cached, so calling `len()` again will not hit the database but will use
-            the cached result.</div>
-        <div><br /></div>
-        <div>### Alternative: Using `count()`</div>
-        <div><br /></div>
-        <div>If you're only interested in the number of records and don’t need the actual data, it is more efficient to
-            use the `count()` method instead of `len()`. This executes a more optimized SQL query (`SELECT COUNT(*)`)
-            and avoids fetching all the records into memory.</div>
-        <div><br /></div>
-        <div>```python</div>
-        <div># A more efficient way to count the number of books</div>
-        <div>number_of_books = Book.objects.count()</div>
-        <div>print(number_of_books)</div>
-        <div>```</div>
-        <div><br /></div>
-        <div>### Summary:</div>
-        <div>- `len()` is available for QuerySets and triggers evaluation (fetches data).</div>
-        <div>- `count()` is more efficient when you only need the number of records and not the actual objects.</div>
+
+    <script defer src="script.js"></script>
+
+    <!-- Cookie consent banner -->
+    <div id="cookie-consent" style="position:fixed;right:16px;bottom:16px;background:#fff;border-radius:8px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,.12);max-width:320px;z-index:99999;font-family:Arial,Helvetica,sans-serif;">
+        <div style="font-size:14px;margin-bottom:8px;">This site uses cookies for analytics. Accept to enable analytics.</div>
+        <div style="text-align:right;">
+            <button id="cookie-decline" style="margin-right:8px;padding:6px 10px;border-radius:6px;border:1px solid #999;background:transparent;cursor:pointer;">Decline</button>
+            <button id="cookie-accept" style="padding:6px 10px;border-radius:6px;border:0;background:#007bff;color:#fff;cursor:pointer;">Accept</button>
+        </div>
     </div>
-     
-    <h2 style="clear: both;">
-        <div>
-             
-            <div><br /></div>
-        </div>
-        <div><br /></div>
-        <div><br style="font-size: medium; font-weight: 400;" /></div>
-    </h2>
-    <h1>
-        <div class="separator" style="clear: both;"><br /><i><br /></i></div>
-        <div class="separator" style="clear: both; text-align: center;">
-            <div class="separator" style="clear: both; text-align: left;"><i><br /></i></div>
-        </div>
-        <p><br style="font-size: medium; font-weight: 400;" /></p>
-    </h1>
-</div>
-<h1><br /></h1>
-<h1>&nbsp;</h1>
+    <script>
+        (function(){
+            function hide(){ var el=document.getElementById('cookie-consent'); if(el) el.style.display='none'; }
+            if(localStorage.getItem('cookie_analytics')==='accepted'){ hide(); return; }
+            document.getElementById('cookie-accept').addEventListener('click', function(){
+                try{ localStorage.setItem('cookie_analytics','accepted'); }catch(e){}
+                hide();
+                var gtagId = null;
+                var match = document.documentElement.innerHTML.match(/G-[A-Z0-9]+|UA-[0-9-]+/);
+                if(match){ gtagId = match[0]; }
+                if(gtagId && gtagId.indexOf('G-')===0){
+                    var s1 = document.createElement('script');
+                    s1.async=true;
+                    s1.src='https://www.googletagmanager.com/gtag/js?id='+gtagId;
+                    document.head.appendChild(s1);
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', gtagId);
+                }
+            });
+            document.getElementById('cookie-decline').addEventListener('click', function(){ try{ localStorage.setItem('cookie_analytics','declined'); }catch(e){}; hide(); });
+        })();
+    </script>
+</body>
+</html>
