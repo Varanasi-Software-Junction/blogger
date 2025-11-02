@@ -1,4 +1,4 @@
-<!-- Learning Sutras — Home v2 (Explore search + counter — target="_parent" added to generated search URLs) -->
+ <!-- Learning Sutras — Home v2 (Explore search + counter — mobile frosted menu) -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,37 +8,114 @@
   <meta name="description" content="Learning Sutras — concise programming lessons, DSA visualizations, quizzes, and mini-tools." />
   <link rel="stylesheet" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css">
   <style>
-    :root{--crx-accent:#0ea5e9;--crx-accent-dark:#0a5fad;--crx-bg-1:#f4fbff;--crx-bg-2:#eef7ff;--card-bg:rgba(255,255,255,0.82);--glass-border:rgba(15,23,42,0.04);--muted:#61707b;--headline:#08263f}
+    :root{
+      --crx-accent:#0ea5e9;
+      --crx-accent-dark:#0a5fad;
+      --crx-bg-1:#f4fbff;
+      --crx-bg-2:#eef7ff;
+      --card-bg:rgba(255,255,255,0.82);
+      --glass-border:rgba(15,23,42,0.04);
+      --muted:#61707b;
+      --headline:#08263f;
+      --menu-width:320px;
+    }
+
+    /* Base */
     html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
     body{background:linear-gradient(180deg,var(--crx-bg-1) 0%,var(--crx-bg-2)100%);background-attachment:fixed;color:var(--headline)}
     @keyframes subtleShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
     body::before{content:"";position:fixed;inset:-20%;z-index:-1;background:radial-gradient(600px 300px at 10% 10%, rgba(13,110,253,0.03), transparent), radial-gradient(500px 240px at 90% 90%, rgba(6,182,212,0.02), transparent);pointer-events:none;animation:subtleShift 18s linear infinite;opacity:1}
+
     main#crx-dashboard-home{max-width:1200px;margin:0 auto;padding:24px 20px}
-    #ls-header{position:sticky;top:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom-left-radius:10px;border-bottom-right-radius:10px;backdrop-filter:blur(8px) saturate(120%);background:linear-gradient(180deg,rgba(255,255,255,0.86),rgba(250,252,255,0.80));border-bottom:1px solid var(--glass-border);box-shadow:0 6px 18px rgba(8,38,64,0.06);transition:box-shadow .28s ease, transform .12s ease}
+
+    /* Header */
+    #ls-header{
+      position:sticky;
+      top:0;
+      z-index:1200;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 18px;
+      border-bottom-left-radius:10px;
+      border-bottom-right-radius:10px;
+      backdrop-filter: blur(8px) saturate(120%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250,252,255,0.80));
+      border-bottom: 1px solid var(--glass-border);
+      box-shadow: 0 6px 18px rgba(8,38,64,0.06);
+      transition: box-shadow .28s ease, transform .12s ease;
+      min-height:64px;
+    }
     #ls-header:hover{box-shadow:0 12px 28px rgba(8,38,64,0.09)}
+
+    /* Brand */
     #ls-brand{display:flex;align-items:center;gap:14px;min-width:0}
     #ls-brand img{width:52px;height:52px;border-radius:10px;object-fit:cover;box-shadow:0 8px 22px rgba(2,6,23,0.08);border:1px solid rgba(255,255,255,0.6);background:linear-gradient(180deg,rgba(255,255,255,0.55),rgba(250,250,250,0.5));flex-shrink:0}
     #ls-title{display:flex;flex-direction:column;min-width:0}
     .title-main{font-size:18px;font-weight:800;letter-spacing:0.2px;background:linear-gradient(90deg,#061124,var(--crx-accent-dark));-webkit-background-clip:text;background-clip:text;color:transparent;transition:filter .18s ease}
     .title-sub{font-size:12px;color:var(--muted);margin-top:2px}
-    #ls-search{display:flex;align-items:center;gap:12px;width:100%;max-width:720px;justify-content:flex-end;position:relative}
+
+    /* Desktop search area (right side of header) */
+    #ls-actions{display:flex;align-items:center;gap:12px;width:100%;justify-content:flex-end;min-width:0}
+    #ls-search{display:flex;align-items:center;gap:12px;width:100%;max-width:720px;position:relative}
     .search-box{display:flex;gap:8px;width:100%;max-width:560px}
     #ls-search input[type="search"]{flex:1;height:44px;padding:10px 14px;border-radius:10px;border:1px solid rgba(13,24,40,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,250,250,0.95));font-size:14px;outline:none;box-shadow:inset 0 1px 2px rgba(12,22,30,0.03);transition:box-shadow 0.18s ease,border-color 0.18s ease}
     #ls-search input[type="search"]:focus{border-color:rgba(31,99,214,0.28);box-shadow:0 6px 20px rgba(31,99,214,0.06)}
     #ls-search button{padding:10px 14px;height:44px;border-radius:10px;border:none;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(29,78,216,0.12);transition:transform 0.12s ease,box-shadow 0.12s ease}
     #ls-search button:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(29,78,216,0.14)}
-    #ls-suggestions{display:none;position:absolute;right:0;top:calc(100% + 10px);width:calc(100% - 160px);max-width:560px;background:rgba(255,255,255,0.98);border-radius:10px;border:1px solid rgba(13,24,40,0.04);box-shadow:0 12px 32px rgba(9,20,40,0.06);max-height:340px;overflow:auto;z-index:10000}
+
+    /* Suggestions */
+    #ls-suggestions{display:none;position:absolute;right:0;top:calc(100% + 10px);width:calc(100% - 160px);max-width:560px;background:rgba(255,255,255,0.98);border-radius:10px;border:1px solid rgba(13,24,40,0.04);box-shadow:0 12px 32px rgba(9,20,40,0.06);max-height:340px;overflow:auto;z-index:1400}
     #ls-suggestions .ls-item{display:block;padding:12px 14px;border-bottom:1px solid rgba(15,23,42,0.03);cursor:pointer;font-size:14px;color:var(--headline);text-decoration:none}
     #ls-suggestions .ls-item:hover{background:rgba(31,99,214,0.03)}
+
+    /* Desktop nav links (hidden on mobile) */
+    #ls-nav{display:flex;gap:12px;align-items:center}
+    #ls-nav a{font-weight:700;color:var(--crx-accent-dark);text-decoration:none;padding:8px 10px;border-radius:8px}
+    #ls-nav a:hover{background:rgba(31,99,214,0.06)}
+
+    /* Hamburger for mobile */
+    .menu-toggle{
+      display:none;
+      width:44px;height:44px;border-radius:10px;border:none;background:transparent;align-items:center;justify-content:center;cursor:pointer;
+    }
+    .hamburger{width:20px;height:2px;background:var(--headline);border-radius:2px;position:relative;transition:transform .18s ease}
+    .hamburger::before,.hamburger::after{content:"";position:absolute;left:0;right:0;height:2px;background:var(--headline);border-radius:2px;transition:transform .18s ease,top .18s ease,bottom .18s ease}
+    .hamburger::before{top:-6px}
+    .hamburger::after{bottom:-6px}
+    .menu-toggle.open .hamburger{background:transparent}
+    .menu-toggle.open .hamburger::before{top:0;transform:rotate(45deg)}
+    .menu-toggle.open .hamburger::after{bottom:0;transform:rotate(-45deg)}
+
+    /* Mobile menu panel - frosted glass */
+    .mobile-menu-backdrop{
+      position:fixed;inset:0;background:rgba(8,18,30,0.28);z-index:1190;opacity:0;pointer-events:none;transition:opacity .18s ease;
+      backdrop-filter: blur(2px);
+    }
+    .mobile-menu-backdrop.show{opacity:1;pointer-events:auto}
+    .mobile-menu{
+      position:fixed;top:64px;right:18px;z-index:1195;width:var(--menu-width);max-width:calc(100% - 36px);border-radius:12px;padding:12px 10px;background:linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.78));backdrop-filter:blur(8px) saturate(120%);border:1px solid rgba(15,23,42,0.06);box-shadow:0 18px 40px rgba(8,36,64,0.12);transform:translateY(-6px) scale(.99);opacity:0;transition:transform .26s cubic-bezier(.2,.9,.3,1),opacity .26s ease;max-height:72vh;overflow:auto}
+    .mobile-menu.show{transform:translateY(0) scale(1);opacity:1}
+
+    /* Menu contents */
+    .mobile-menu .mm-section{padding:8px 10px;border-radius:8px;margin-bottom:8px}
+    .mobile-menu .mm-section a{display:block;padding:10px 12px;text-decoration:none;color:var(--headline);border-radius:8px;font-weight:700}
+    .mobile-menu .mm-section a:hover{background:rgba(13,24,40,0.03)}
+    .mobile-menu .mm-keywords{display:flex;flex-wrap:wrap;gap:8px}
+    .mm-divider{height:1px;background:rgba(13,24,40,0.03);margin:8px 0;border-radius:2px}
+
+    /* CRX content cards */
     .crx-section{background:var(--card-bg);border-radius:14px;padding:24px;margin:20px 0;border:1px solid var(--glass-border);box-shadow:0 8px 28px rgba(8,36,64,0.04);transition:transform 0.18s ease,box-shadow 0.18s ease;backdrop-filter:blur(4px)}
     .crx-section:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(8,36,64,0.06)}
     .crx-section h1,.crx-section h2{margin:0 0 12px;color:var(--headline);font-weight:800}
     .crx-section p{color:var(--muted);margin:0 0 8px}
-    .crx-keyword{background-color:lightblue;color:white;display:inline-block;padding:8px 12px;border-radius:999px;margin:6px;font-size:24px;box-shadow:0 6px 18px rgba(31,99,214,0.08);text-decoration:none}
-    textarea.editor{width:100%;min-height:160px;border-radius:10px;border:1px solid rgba(13,24,40,0.06);padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:24px;box-shadow:inset 0 6px 18px rgba(2,6,23,0.03);resize:vertical}
+    .crx-keyword{background-color:lightblue;color:white;display:inline-block;padding:8px 12px;border-radius:999px;margin:6px;font-size:14px;box-shadow:0 6px 18px rgba(31,99,214,0.08);text-decoration:none}
+
+    textarea.editor{width:100%;min-height:160px;border-radius:10px;border:1px solid rgba(13,24,40,0.06);padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:20px;box-shadow:inset 0 6px 18px rgba(2,6,23,0.03);resize:vertical}
     .btn{border:none;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer}
     .btn.ghost{background:transparent;border:1px solid rgba(13,24,40,0.06);color:var(--headline)}
-    .btn.primary{background-color:lightblue;color:#fff;box-shadow:0 8px 24px rgba(29,78,216,0.10);font-size:24px}
+    .btn.primary{background:linear-gradient(135deg,#1f7fc1,#2563eb);color:#fff;box-shadow:0 8px 24px rgba(29,78,216,0.10);font-size:14px}
     .status{font-size:13px;color:var(--muted)}
     .output{margin-top:12px;background:rgba(243,250,255,0.9);border-radius:10px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:13px;color:#08303f;min-height:80px;white-space:pre-wrap;overflow:auto}
     .mpl-card{border-radius:10px;padding:14px;background:#fff;box-shadow:0 8px 20px rgba(8,36,64,0.04)}
@@ -50,23 +127,41 @@
     .crx-avatar-circle{width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid var(--card-bg);position:absolute;left:12px;top:50%;transform:translateY(-50%) translateX(-36px);box-shadow:0 10px 18px rgba(2,6,23,0.06)}
     .crx-post-title{background:#0e63d6;color:white;padding:8px 12px;border-radius:8px;font-weight:700;display:inline-block;font-size:0.95rem}
     .crx-post-meta{color:var(--muted);margin-top:8px;font-size:13px}
-    @media (max-width:720px){#ls-header{padding:10px 12px}#ls-search{max-width:100%}.search-box{max-width:100%}.crx-section{padding:18px}.btn.primary{font-size:16px}}
-    @media (max-width:480px){#ls-brand img{width:44px;height:44px}.title-main{font-size:15px}.title-sub{display:none}.crx-thumb-square{width:72px;height:72px}.crx-avatar-circle{width:48px;height:48px;transform:translateY(-50%) translateX(-30px)}}
+
+    /* Fade-in on scroll */
     .crx_fade_in{opacity:0;transform:translateY(12px);transition:opacity 0.6s ease,transform 0.6s ease;will-change:opacity,transform}
     .crx_fade_in.crx_visible{opacity:1;transform:translateY(0)}
+
+    /* back to top */
     #back-to-top{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,#1f7fc1,#2563eb);color:white;box-shadow:0 12px 30px rgba(31,99,214,0.12);cursor:pointer;opacity:0;transform:translateY(8px);transition:opacity 0.22s ease,transform 0.22s ease;z-index:9998}
     #back-to-top.visible{opacity:1;transform:translateY(0)}
     #back-to-top:active{transform:translateY(1px) scale(0.99)}
-    .flex-row{display:flex;gap:18px;align-items:flex-start}
-    .flex-grow{flex:1;min-width:0}
-    .card-thumb-small{width:140px;flex-shrink:0;border-radius:12px;box-shadow:0 10px 28px rgba(2,6,23,0.06)}
-    /* extra styles for explore search control */
+
+    /* Explore search control */
     #crx-explore-search{width:100%;max-width:420px;height:40px;padding:8px 12px;border-radius:10px;border:1px solid rgba(13,24,40,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,250,250,0.95));font-size:14px;outline:none}
     #crx-explore-controls{display:flex;gap:10px;align-items:center}
-    @media (max-width:720px){#crx-explore-count{margin-top:8px}}
+
+    /* Responsive: improved mobile header/menu layout */
+    @media (max-width:920px){
+      #ls-search{max-width:60%}
+      #ls-nav{display:none}
+      .menu-toggle{display:flex}
+      #ls-actions{gap:8px}
+    }
+
+    @media (max-width:720px){
+      #ls-header{padding:10px 12px}
+      #ls-search{max-width:100%}
+      .search-box{max-width:100%}
+      .title-sub{display:none}
+      .card-thumb-small{width:120px}
+      /* Mobile menu becomes full width under header on really small screens */
+      .mobile-menu{left:12px;right:12px;top:70px;width:calc(100% - 24px);max-width:none}
+    }
   </style>
 </head>
 <body>
+  <!-- Header -->
   <header id="ls-header" role="banner" aria-label="Learning Sutras header">
     <div id="ls-brand" aria-hidden="false">
       <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257" alt="Champak Roy avatar" loading="lazy" />
@@ -76,19 +171,75 @@
       </div>
     </div>
 
-    <div id="ls-search" role="search" aria-label="Search this blog">
-      <div class="search-box">
-        <input id="ls-search-input" type="search" placeholder="Search this blog..." aria-label="Search this blog" autocomplete="off" />
-        <button id="ls-search-btn" title="Search" class="btn primary">Search</button>
+    <div id="ls-actions">
+      <!-- Desktop nav links (hidden on small screens) -->
+      <nav id="ls-nav" aria-label="Main">
+        <a href="https://www.learnwithchampak.live" target="_parent">Home</a>
+        <a href="https://www.learnwithchampak.live/search?q=python" target="_parent">Python</a>
+        <a href="https://www.learnwithchampak.live/search?q=javascript" target="_parent">JavaScript</a>
+        <a href="https://www.learnwithchampak.live/search?q=projects" target="_parent">Projects</a>
+      </nav>
+
+      <!-- Search -->
+      <div id="ls-search" role="search" aria-label="Search this blog">
+        <div class="search-box">
+          <input id="ls-search-input" type="search" placeholder="Search this blog..." aria-label="Search this blog" autocomplete="off" />
+          <button id="ls-search-btn" title="Search" class="btn primary">Search</button>
+        </div>
+        <div id="ls-suggestions" role="listbox" aria-label="Search suggestions"></div>
       </div>
-      <div id="ls-suggestions" role="listbox" aria-label="Search suggestions"></div>
+
+      <!-- Hamburger menu toggle (mobile) -->
+      <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <span class="hamburger"></span>
+      </button>
     </div>
   </header>
 
-  <main id="crx-dashboard-home">
+  <!-- Mobile menu + backdrop -->
+  <div class="mobile-menu-backdrop" id="mobile-backdrop" tabindex="-1" aria-hidden="true"></div>
+
+  <aside class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" hidden>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <div id="mobile-menu-title" style="font-weight:800">Menu</div>
+      <button id="mobile-close" aria-label="Close menu" class="btn ghost" style="padding:6px 8px">Close</button>
+    </div>
+
+    <div class="mm-section">
+      <a href="https://www.learnwithchampak.live" target="_parent">Home</a>
+      <a href="https://www.learnwithchampak.live/search?q=python" target="_parent">Python</a>
+      <a href="https://www.learnwithchampak.live/search?q=javascript" target="_parent">JavaScript</a>
+      <a href="https://www.learnwithchampak.live/search?q=projects" target="_parent">Projects</a>
+      <a href="https://www.learnwithchampak.live/search?q=matplotlib" target="_parent">Matplotlib</a>
+    </div>
+
+    <div class="mm-divider" aria-hidden="true"></div>
+
+    <div class="mm-section">
+      <div style="font-weight:700;margin-bottom:8px">Quick Search</div>
+      <div style="display:flex;gap:8px;">
+        <input id="mobile-search-input" type="search" placeholder="Search..." style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(13,24,40,0.06);outline:none" />
+        <button id="mobile-search-btn" class="btn primary">Go</button>
+      </div>
+    </div>
+
+    <div class="mm-divider" aria-hidden="true"></div>
+
+    <div class="mm-section">
+      <div style="font-weight:700;margin-bottom:8px">Keywords</div>
+      <div class="mm-keywords">
+        <a class="crx-keyword" style="font-size:13px;padding:6px 10px" target="_parent" href="https://www.learnwithchampak.live/search?q=python">Python</a>
+        <a class="crx-keyword" style="font-size:13px;padding:6px 10px" target="_parent" href="https://www.learnwithchampak.live/search?q=javascript">JavaScript</a>
+        <a class="crx-keyword" style="font-size:13px;padding:6px 10px" target="_parent" href="https://www.learnwithchampak.live/search?q=css">CSS</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main id="crx-dashboard-home" role="main">
     <section class="crx-section intro crx_fade_in" id="intro-section">
-      <div class="flex-row">
-        <div class="flex-grow">
+      <div style="display:flex;gap:18px;align-items:flex-start">
+        <div style="flex:1;min-width:0">
           <h1>👨‍💻 Welcome to Learn With Champak</h1>
           <p>
             Hi, I’m <strong>Champak Roy</strong> — a software developer, writer, and teacher from Varanasi.
@@ -96,7 +247,7 @@
             <strong>Data Structures, Algorithms, Web Development, and Python</strong> in a practical, joyful way.
           </p>
         </div>
-        <div style="width:140px;">
+        <div style="width:140px">
           <img class="card-thumb-small" src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257" alt="Learn With Champak">
         </div>
       </div>
@@ -105,8 +256,7 @@
     <section class="crx-section importance crx_fade_in" id="importance-section">
       <h2>🌱 Why This Blog Matters</h2>
       <p>
-        Learning through examples is the fastest way to master programming. Every post blends <strong>concepts + code
-        + visuals</strong>. You’ll find short lessons, Python and JavaScript demos, and live quizzes to reinforce learning.
+        Learning through examples is the fastest way to master programming. Every post blends <strong>concepts + code + visuals</strong>.
       </p>
     </section>
 
@@ -117,8 +267,6 @@
         <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=javascript">JavaScript</a>
         <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=html">HTML</a>
         <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=css">CSS</a>
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=algorithms">Algorithms</a>
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=data%20structures">Data Structures</a>
       </p>
     </section>
 
@@ -160,19 +308,19 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
           <div class="mpl-thumb">📊</div>
           <h3 style="margin:6px 0 8px;">Bar Charts in Matplotlib</h3>
           <p style="margin:0 0 8px;color:var(--muted);font-size:13px;">Learn to create and style bar charts.</p>
-          <a href="https://www.learnwithchampak.live/2025/10/matplotlib-in-python-bar-charts.html" target="_blank" class="btn primary" style="padding:8px 10px;font-size:14px;">View Example</a>
+          <a href="https://www.learnwithchampak.live/2025/10/matplotlib-in-python-bar-charts.html" target="_parent" class="btn primary" style="padding:8px 10px;font-size:14px;">View Example</a>
         </div>
         <div class="mpl-card">
           <div class="mpl-thumb">📈</div>
           <h3 style="margin:6px 0 8px;">Line Graphs & Trends</h3>
           <p style="margin:0 0 8px;color:var(--muted);font-size:13px;">Visualize trends using line plots.</p>
-          <a href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-linegraphs-trends.html" target="_blank" class="btn primary" style="padding:8px 10px;font-size:14px;">Open Tutorial</a>
+          <a href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-linegraphs-trends.html" target="_parent" class="btn primary" style="padding:8px 10px;font-size:14px;">Open Tutorial</a>
         </div>
         <div class="mpl-card">
           <div class="mpl-thumb">🟢</div>
           <h3 style="margin:6px 0 8px;">Scatter & Bubble Plots</h3>
           <p style="margin:0 0 8px;color:var(--muted);font-size:13px;">Show relationships between variables.</p>
-          <a href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-scatter-plots.html" target="_blank" class="btn primary" style="padding:8px 10px;font-size:14px;">Try Now</a>
+          <a href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-scatter-plots.html" target="_parent" class="btn primary" style="padding:8px 10px;font-size:14px;">Try Now</a>
         </div>
       </div>
     </section>
@@ -192,7 +340,6 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
         </div>
       </div>
     </section>
-
   </main>
 
   <div id="back-to-top" title="Back to top" aria-hidden="true">
@@ -201,14 +348,74 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
 
   <script>
   (function(){
-    /* Small helpers */
+    /* small helpers */
     const $ = (s,ctx=document)=>ctx.querySelector(s);
     const $$ = (s,ctx=document)=>Array.from(ctx.querySelectorAll(s));
     const escapeHtml = s => String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
 
+    /* ===== Mobile menu behaviour (open/close, close on outside click / Escape) ===== */
+    const menuToggle = $('#menu-toggle');
+    const mobileMenu = $('#mobile-menu');
+    const backdrop = $('#mobile-backdrop');
+    const mobileCloseBtn = $('#mobile-close');
+    const mobileSearchInput = $('#mobile-search-input');
+    const mobileSearchBtn = $('#mobile-search-btn');
+
+    function openMobileMenu(){
+      menuToggle.classList.add('open');
+      menuToggle.setAttribute('aria-expanded','true');
+      mobileMenu.hidden = false;
+      backdrop.classList.add('show');
+      mobileMenu.classList.add('show');
+      backdrop.setAttribute('aria-hidden','false');
+      // trap focus to first interactive element in menu
+      setTimeout(()=> mobileMenu.querySelector('a, button, input')?.focus(), 120);
+      document.body.style.overflow = ''; // allow page scroll if desired; if you want to lock, set hidden
+    }
+    function closeMobileMenu(){
+      menuToggle.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded','false');
+      mobileMenu.classList.remove('show');
+      backdrop.classList.remove('show');
+      backdrop.setAttribute('aria-hidden','true');
+      // wait transition before hiding (matching CSS timing)
+      setTimeout(()=> { if(!mobileMenu.classList.contains('show')) mobileMenu.hidden = true; }, 260);
+    }
+
+    menuToggle.addEventListener('click', ()=>{
+      const open = menuToggle.classList.contains('open');
+      if(open) closeMobileMenu(); else openMobileMenu();
+    });
+
+    mobileCloseBtn.addEventListener('click', closeMobileMenu);
+    // clicking backdrop closes menu
+    backdrop.addEventListener('click', closeMobileMenu);
+
+    // close on Escape
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') closeMobileMenu();
+    });
+
+    // close when clicking outside mobileMenu (works even without backdrop visible e.g. small desktop)
+    document.addEventListener('click', (ev)=>{
+      if(!mobileMenu.hidden && !mobileMenu.contains(ev.target) && !menuToggle.contains(ev.target) && !ev.target.closest('#ls-search')) {
+        closeMobileMenu();
+      }
+    });
+
+    // mobile quick search in menu: redirect to blog search (target=_parent)
+    const blogBase = 'https://www.learnwithchampak.live';
+    mobileSearchBtn.addEventListener('click', ()=>{
+      const q = mobileSearchInput.value.trim();
+      if(!q) { mobileSearchInput.focus(); return; }
+      window.location.href = blogBase + '/search?q=' + encodeURIComponent(q) + '&m=1';
+    });
+    mobileSearchInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter') mobileSearchBtn.click();
+    });
+
     /* ===== HEADER SEARCH (JSONP) — suggestions rendered as links with target="_parent" ===== */
     (function headerSearch(){
-      const blogBase = 'https://www.learnwithchampak.live';
       const input = $('#ls-search-input');
       const btn = $('#ls-search-btn');
       const suggBox = $('#ls-suggestions');
@@ -265,7 +472,6 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
           ).join('');
         }
         suggBox.style.display = 'block';
-        // anchors will follow target on click naturally; no extra handlers needed
       }
 
       input.addEventListener('input', e => {
@@ -293,23 +499,21 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
       setTimeout(loadPostsJSONP, 900);
     })();
 
-    /* ===== FEED LOADER & RENDERER (JSONP) — post anchors use target="_parent" ===== */
+    /* ===== FEED LOADER & RENDERER (JSONP) ===== */
     (function loadFeed(){
-      const CRX_BLOGGER_URL = "https://www.learnwithchampak.live";
+      const CRX_BLOGGER_URL = blogBase;
       const CRX_MAX_POSTS = 60;
       const TIMEOUT = 9000;
       const container = $('#crx-card-list');
-
-      const showError = msg => { container.innerHTML = `<div style="padding:20px;text-align:center;color:#b33;">${msg}</div>`; };
-
       const cb = 'crxFeed_' + Date.now();
+
       window[cb] = function(data){
         try{
           const entries = (data.feed && data.feed.entry) || [];
           renderCards(entries);
         }catch(err){
           console.error(err);
-          showError('Feed parse error.');
+          container.innerHTML = '<div style="padding:20px;text-align:center;color:#b33;">Feed parse error.</div>';
         }finally{
           const s = document.getElementById(cb + '_script'); if(s) s.remove();
           try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
@@ -320,14 +524,10 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
       s.id = cb + '_script';
       s.src = CRX_BLOGGER_URL.replace(/\/$/, "") + "/feeds/posts/default?alt=json-in-script&max-results=" + CRX_MAX_POSTS + "&callback=" + cb;
       s.async = true;
-      s.onerror = function(){ showError('Unable to load posts.'); s.remove(); };
+      s.onerror = function(){ container.innerHTML = '<div style="padding:20px;text-align:center;color:#b33;">Unable to load posts.</div>'; s.remove(); };
       document.head.appendChild(s);
 
-      const timer = setTimeout(()=>{
-        if(!document.querySelector('#crx-card-list .crx-card-row')) {
-          showError('Unable to load posts.');
-        }
-      }, TIMEOUT);
+      const timer = setTimeout(()=>{ if(!document.querySelector('#crx-card-list .crx-card-row')) { container.innerHTML = '<div style="padding:20px;text-align:center;color:#b33;">Unable to load posts.</div>'; } }, TIMEOUT);
 
       function renderCards(entries){
         container.innerHTML = "";
@@ -353,12 +553,11 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
           row.dataset.title = title.toLowerCase();
           row.dataset.snippet = snippet.toLowerCase();
 
-          // Note: anchor now uses target="_parent"
           row.innerHTML = `
             <img class="crx-thumb-square" src="${thumb}" alt="${escapeHtml(title)}">
             <div style="flex:1;min-width:0;">
               <div style="display:flex;align-items:center;gap:10px;">
-                <div class="crx-post-title"><a href="${url}" target="_parent" style="color:white;text-decoration:none;"><span style='color:white;font-size:24px;'>${escapeHtml(title)}</span></a></div>
+                <div class="crx-post-title"><a href="${url}" target="_parent" style="color:white;text-decoration:none;"><span style='color:white;font-size:18px'>${escapeHtml(title)}</span></a></div>
                 <div style="margin-left:auto;color:var(--muted);font-size:12px;">${escapeHtml(published)}</div>
               </div>
               <div class="crx-post-meta">${escapeHtml(snippet)}</div>
@@ -372,14 +571,13 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
       }
     })();
 
-    /* ===== Explore search + counter ===== */
+    /* ===== Explore filter + counter ===== */
     (function exploreSearchAndCounter(){
       const searchInput = document.getElementById('crx-explore-search');
       const countEl = document.getElementById('crx-explore-count');
       const listContainer = document.getElementById('crx-card-list');
       let debounceTimer = null;
 
-      // updateExploreCount exposed globally so other code (feed renderer) can call it
       window.updateExploreCount = function(){
         const rows = $$('.crx-card-row', listContainer);
         const total = rows.length;
@@ -410,13 +608,11 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
         });
       }
 
-      // When feed items are added/changed, keep counter accurate
       const mo = new MutationObserver(() => { window.updateExploreCount(); });
       if(listContainer) mo.observe(listContainer, { childList:true });
 
-      // initial
       countEl.textContent = 'Loading…';
-      setTimeout(()=> window.updateExploreCount(), 300);
+      setTimeout(()=> window.updateExploreCount(), 400);
     })();
 
     /* ===== Pyodide runner (keeps behavior) ===== */
