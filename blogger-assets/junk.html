@@ -1,82 +1,145 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#ffffff">
-    <title>Improved Test Page</title>
-
-    <!-- Preload and external stylesheet -->
-    <link rel="preload" href="/mnt/data/test_styles_extracted.css" as="style">
-    <link rel="stylesheet" href="/mnt/data/test_styles_extracted.css">
-
-    <!-- Critical accessibility CSS -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Learn 3D & SVG Animations — Step by Step (with Rotating Numbers)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        .skip-link {
-            position: absolute;
-            left: -999px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
+        * {
+            box-sizing: border-box
         }
-        .skip-link:focus {
-            position: static;
-            left: auto;
-            width: auto;
-            height: auto;
-            padding: 12px;
-            background: #000;
-            color: #fff;
-            z-index: 9999;
-            border-radius: 6px;
-            text-decoration: none;
+section {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.03)
+        }
+.stage {
+            margin-top: 14px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+            height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden
+        }
+
+
+
+
+
+         
+        .cube {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spin 5s linear infinite
+        }
+
+        .cube div {
+            position: absolute;
+            inset: 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #012;
+            font-weight: 700
+        }
+
+        .cube .front {
+            transform: translateZ(60px);
+            background: linear-gradient(135deg, #9be6ff, #1fb6ff)
+        }
+
+        .cube .back {
+            transform: rotateY(180deg) translateZ(60px);
+            background: linear-gradient(135deg, #ffd7cf, #ff8177)
+        }
+
+        .cube .right {
+            transform: rotateY(90deg) translateZ(60px);
+            background: linear-gradient(135deg, #c7f7d7, #6de49a)
+        }
+
+        .cube .left {
+            transform: rotateY(-90deg) translateZ(60px);
+            background: linear-gradient(135deg, #f0d7ff, #d7a7ff)
+        }
+
+        .cube .top {
+            transform: rotateX(90deg) translateZ(60px);
+            background: linear-gradient(135deg, #fff6d6, #ffd66b)
+        }
+
+        .cube .bottom {
+            transform: rotateX(-90deg) translateZ(60px);
+            background: linear-gradient(135deg, #dbe9ff, #a6d0ff)
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotateX(0) rotateY(0)
+            }
+
+            100% {
+                transform: rotateX(360deg) rotateY(360deg)
+            }
+        }
+
+       
+
+
+
+
+
+        @media (max-width:720px) {
+            .scene {
+                width: 260px;
+                height: 260px
+            }
+
+            .stage {
+                height: 260px
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .cube {
+                animation: none
+            }
+
+
         }
     </style>
 </head>
+
 <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
 
-    <div id="main-content">
-        <h1>Welcome to the Improved Page</h1>
-        <p>This is a cleaner, more optimized version of your original HTML file.</p>
-        <img src="example.jpg" alt="Example Image" loading="lazy">
-        <p>All images are now lazy-loaded for better performance.</p>
-    </div>
 
-    <script defer src="script.js"></script>
+    <main>
+        <section>
 
-    <!-- Cookie consent banner -->
-    <div id="cookie-consent" style="position:fixed;right:16px;bottom:16px;background:#fff;border-radius:8px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,.12);max-width:320px;z-index:99999;font-family:Arial,Helvetica,sans-serif;">
-        <div style="font-size:14px;margin-bottom:8px;">This site uses cookies for analytics. Accept to enable analytics.</div>
-        <div style="text-align:right;">
-            <button id="cookie-decline" style="margin-right:8px;padding:6px 10px;border-radius:6px;border:1px solid #999;background:transparent;cursor:pointer;">Decline</button>
-            <button id="cookie-accept" style="padding:6px 10px;border-radius:6px;border:0;background:#007bff;color:#fff;cursor:pointer;">Accept</button>
-        </div>
-    </div>
-    <script>
-        (function(){
-            function hide(){ var el=document.getElementById('cookie-consent'); if(el) el.style.display='none'; }
-            if(localStorage.getItem('cookie_analytics')==='accepted'){ hide(); return; }
-            document.getElementById('cookie-accept').addEventListener('click', function(){
-                try{ localStorage.setItem('cookie_analytics','accepted'); }catch(e){}
-                hide();
-                var gtagId = null;
-                var match = document.documentElement.innerHTML.match(/G-[A-Z0-9]+|UA-[0-9-]+/);
-                if(match){ gtagId = match[0]; }
-                if(gtagId && gtagId.indexOf('G-')===0){
-                    var s1 = document.createElement('script');
-                    s1.async=true;
-                    s1.src='https://www.googletagmanager.com/gtag/js?id='+gtagId;
-                    document.head.appendChild(s1);
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', gtagId);
-                }
-            });
-            document.getElementById('cookie-decline').addEventListener('click', function(){ try{ localStorage.setItem('cookie_analytics','declined'); }catch(e){}; hide(); });
-        })();
-    </script>
+            <div class="stage">
+                <div class="cube" id="demoCube">
+                    <div class="front">FRONT</div>
+                    <div class="back">BACK</div>
+                    <div class="right">RIGHT</div>
+                    <div class="left">LEFT</div>
+                    <div class="top">TOP</div>
+                    <div class="bottom">BOT</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
 </body>
+
 </html>
