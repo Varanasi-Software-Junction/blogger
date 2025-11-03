@@ -668,16 +668,6 @@
 </head>
 
 <body>
-  <!-- 🌐 Learn With Champak — Page Labels / Topics -->
-<div class="page-labels" style="display: none;">
-  <span>Data Structures</span>
-  <span>Algorithms</span>
-  <span>Web Development</span>
-  <span>Python</span>
-  <span>Coding Interviews</span>
-  <span>Career Growth</span>
-</div>
-
   <!-- Header -->
   <header id="ls-header" role="banner" aria-label="Learning Sutras header">
     <div id="ls-brand" aria-hidden="false">
@@ -769,12 +759,159 @@
 
   <!-- Main content -->
   <main id="crx-dashboard-home" role="main">
-    
-    
-<section class="why-blog-section">
-  <div class="why-blog-card">
-    <h2> Hi, I’m <span style="color:#2563eb;">Champak Roy</span> — Developer · Writer · Teacher</h2>
-   <div class="intro-sub">Where professional performance meets warm mentorship</div>
+    <section class="crx-section intro crx_fade_in" id="intro-section">
+      <div style="display:flex;gap:18px;align-items:flex-start">
+        <div style="flex:1;min-width:0">
+          <h1>👨‍💻 Welcome to Learn With Champak</h1>
+          
+
+
+<!-- 🌐 Learn With Champak — Responsive Intro with Fade-in & Hover Glow -->
+<!-- Paste this into your Blogger HTML (inside <head> for the meta and inside body for the section) -->
+<meta name="description" content="Learn With Champak — Champak Roy helps students and professionals master Data Structures, Algorithms, Web Development, and Python, improving interview performance and unlocking real job opportunities.">
+
+<style>
+  /* Intro card styling (self-contained, paste into page head or stylesheet) */
+  .intro-wrapper {
+    display:flex;
+    justify-content:center;
+    padding:48px 20px;
+    background: linear-gradient(180deg, rgba(37,99,235,0.04), rgba(59,130,246,0.02));
+  }
+
+  .intro-card {
+    width:100%;
+    max-width:900px;
+    background: rgba(255,255,255,0.9);
+    border-radius:14px;
+    padding:30px 28px;
+    box-shadow: 0 10px 30px rgba(16,24,40,0.08);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transform-origin: center;
+    animation: fadeInUp 700ms ease both;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity:0; transform: translateY(18px) scale(0.995); }
+    to   { opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  .intro-eyebrow {
+    display:inline-block;
+    background:#eef2ff;
+    color:#1e3a8a;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:0.82rem;
+    margin-bottom:12px;
+  }
+
+  .intro-title {
+    font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+    font-size:1.9rem;
+    margin:4px 0 8px 0;
+    color:#0f172a;
+    line-height:1.06;
+    letter-spacing: -0.02em;
+  }
+
+  .intro-sub {
+    color:#475569;
+    margin-bottom:18px;
+    font-weight:600;
+    font-size:0.98rem;
+  }
+
+  .intro-paragraph {
+    color:#0f172a;
+    line-height:1.68;
+    font-size:1.03rem;
+    margin-bottom:12px;
+  }
+
+  .intro-cta {
+    margin-top:18px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  .btn-whatsapp {
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    background: linear-gradient(90deg,#2563eb,#1e40af);
+    color:#fff;
+    padding:12px 20px;
+    border-radius:999px;
+    font-weight:700;
+    box-shadow: 0 8px 20px rgba(37,99,235,0.18);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .btn-whatsapp:hover,
+  .btn-whatsapp:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(37,99,235,0.22), 0 0 30px rgba(37,99,235,0.08);
+    outline: none;
+  }
+
+  .btn-secondary {
+    background:transparent;
+    border:1px solid rgba(15,23,42,0.06);
+    color:#0f172a;
+    padding:10px 16px;
+    border-radius:12px;
+    font-weight:600;
+    text-decoration:none;
+  }
+
+  /* Accent line on the left for larger screens */
+  .intro-card::before{
+    content:"";
+    display:none;
+  }
+
+  /* Responsive adjustments */
+  @media (min-width:920px){
+    .intro-card {
+      padding:36px 44px;
+    }
+    .intro-title { font-size:2.4rem; }
+    .intro-paragraph { font-size:1.05rem; }
+    .intro-card::before{
+      display:block;
+      position:absolute;
+    }
+  }
+
+  @media (max-width:520px){
+    .intro-card { padding:22px; border-radius:12px; }
+    .intro-title { font-size:1.4rem; }
+    .intro-sub { font-size:0.92rem; }
+    .intro-paragraph { font-size:0.98rem; }
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce){
+    .intro-card { animation: none; transform: none; }
+    .btn-whatsapp:hover { transform:none; box-shadow: 0 8px 20px rgba(37,99,235,0.18); }
+  }
+</style>
+
+<section class="intro-wrapper" aria-label="Learn With Champak introduction">
+  <article class="intro-card" role="region" aria-labelledby="intro-heading">
+    <div class="intro-eyebrow">Learn With Champak</div>
+
+    <h1 id="intro-heading" class="intro-title">
+      Hi, I’m <span style="color:#2563eb;">Champak Roy</span> — Developer · Writer · Teacher
+    </h1>
+
+    <div class="intro-sub">Where professional performance meets warm mentorship</div>
 
     <p class="intro-paragraph">
       I help students and professionals master practical skills in <strong>Data Structures, Algorithms, Web Development, and Python</strong>.
@@ -786,121 +923,28 @@
     </p>
 
     
-    <p>
-      From mastering <strong>Data Structures and Algorithms</strong> to building 
-      <strong>Web Development projects</strong> and exploring <strong>Python applications</strong>,  
-      you’ll find <strong>interactive lessons</strong>, <strong>hands-on challenges</strong>, and 
-      <strong>career-focused insights</strong> that turn your knowledge into job-ready skills.
-    </p>
-  </div>
+  </article>
 </section>
 
 
 
 
+        </div>
+        <div style="width:140px">
+          <img class="crx-avatar" 
+            src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257"
+            alt="Learn With Champak">
+        </div>
+      </div>
+    </section>
 
-<!-- 🌐 Learn With Champak — Why This Blog Matters Section -->
-<section class="why-blog-section">
-  <div class="why-blog-card">
-    <h2>Why This Website Matters</h2>
-    <p>
-      <strong>Learn With Champak</strong> is built for learners who want more than just theory.  
-      Every post is thoughtfully crafted with <strong>real-world examples</strong>, 
-      <strong>step-by-step explanations</strong>, <strong>visual demos</strong>, and 
-      <strong>complete code snippets</strong> — all designed to help you understand 
-      how programming truly works in practice.
-    </p>
-    <p>
-      From mastering <strong>Data Structures and Algorithms</strong> to building 
-      <strong>Web Development projects</strong> and exploring <strong>Python applications</strong>,  
-      you’ll find <strong>interactive lessons</strong>, <strong>hands-on challenges</strong>, and 
-      <strong>career-focused insights</strong> that turn your knowledge into job-ready skills.
-    </p>
-  </div>
-</section>
-
-<style>
-  /* 🌀 WHY BLOG SECTION — Consistent with blue 3D theme */
-  .why-blog-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 60px 20px;
-    background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
-  }
-
-  .why-blog-card {
-    max-width: 880px;
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 40px 36px;
-    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.12), 0 2px 6px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    animation: fadeInUp 0.9s ease both;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .why-blog-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 35px rgba(37, 99, 235, 0.18), 0 4px 10px rgba(0, 0, 0, 0.06);
-  }
-
-  .why-blog-card h2 {
-    font-family: "Segoe UI", Roboto, sans-serif;
-    font-size: 2em;
-    font-weight: 700;
-    color: #1e3a8a;
-    margin-bottom: 20px;
-    position: relative;
-  }
-
-  .why-blog-card h2::after {
-    content: "";
-    display: block;
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, #2563eb, #1e40af);
-    margin: 10px auto 0;
-    border-radius: 3px;
-  }
-
-  .why-blog-card p {
-    font-size: 1.08em;
-    color: #1e293b;
-    line-height: 1.75;
-    margin-bottom: 16px;
-  }
-
-  .why-blog-card strong {
-    color: #2563eb;
-    font-weight: 600;
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Mobile responsive adjustments */
-  @media (max-width: 600px) {
-    .why-blog-card {
-      padding: 28px 20px;
-    }
-    .why-blog-card h2 {
-      font-size: 1.6em;
-    }
-    .why-blog-card p {
-      font-size: 1em;
-    }
-  }
-</style>
-
+    <section class="crx-section importance crx_fade_in" id="importance-section">
+      <h2>🌱 Why This Blog Matters</h2>
+      <p>
+        Learning through examples is the fastest way to master programming. Every post blends <strong>concepts + code +
+          visuals</strong>.
+      </p>
+    </section>
 
     <section class="crx-section keywords crx_fade_in" id="keywords-section">
       <h2>🔑 Keywords</h2>
