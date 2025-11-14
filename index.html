@@ -1,0 +1,657 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Photos — KashiFrame Studios (SVG Animated, Smooth)</title>
+  <link rel="stylesheet" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css">
+  <style>
+    :root{
+      --saffron:#b7410e;
+      --bg:#fff;
+      --muted:#666;
+      --row-gap:180px;
+      --caption-bg: rgba(0,0,0,0.6);
+      --tile-ease: cubic-bezier(.16,.84,.3,1);
+      --tile-duration: 700ms;
+      --stagger: 60ms;
+      --expander-duration: 1100ms;
+    }html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:#222;background:var(--bg);scroll-behavior:smooth}
+header{background:linear-gradient(135deg,#ffecd2,#fcb69f);padding:18px 16px;box-shadow:0 6px 20px rgba(0,0,0,0.05)}
+.container{max-width:1300px;margin:24px auto;padding:0 16px}
+.back{display:inline-block;margin-bottom:10px;color:var(--saffron);text-decoration:none}
+h1{margin:6px 0 8px}
+
+main.container{scroll-snap-type:y mandatory;scroll-padding-top:24px}
+.gallery-section{position:relative;scroll-snap-align:start;margin-bottom:var(--row-gap);padding:80px 0}
+
+.row{display:flex;gap:12px;align-items:stretch;justify-content:center;transition:box-shadow 520ms var(--tile-ease);transform-origin:center top;z-index:10;position:relative;will-change:transform}
+
+/* Tile base */
+.tile{flex:1 1 240px;min-width:220px;border-radius:12px;overflow:hidden;background:#f6f6f6;position:relative;box-shadow:0 6px 18px rgba(0,0,0,0.04);transform-origin:center;will-change:transform,filter,opacity}
+.tile svg{width:100%;height:100%;display:block}
+
+/* meta */
+.tile .meta{position:absolute;left:8px;bottom:8px;background:linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.35));color:#fff;padding:6px 8px;border-radius:8px;font-size:0.9rem;backdrop-filter:blur(4px)}
+
+/* Hover: lift + soft glint (smooth) */
+.tile:hover{transform:translateY(-8px) scale(1.015);box-shadow:0 28px 48px rgba(0,0,0,0.16)}
+.tile:hover svg{transform:scale(1.04);transition:transform calc(var(--tile-duration)) var(--tile-ease)}
+
+/* 3D pointer tilt (subtle) */
+.tile.tilt{transition:box-shadow 220ms linear;}
+
+/* Entrance: fade/slide + stagger using CSS variable delay */
+.tile{opacity:0;transform:translateY(18px) scale(0.995);transition:transform calc(var(--tile-duration)) var(--tile-ease), opacity 420ms ease;}
+.tile.visible{opacity:1;transform:translateY(0) scale(1);}
+
+/* use CSS custom property for per-tile delay */
+.tile{transition-delay:var(--delay, 0s)}
+
+/* Active row sticky rise with gentle animation */
+.row.active{position:-webkit-sticky;position:sticky;top:40px;z-index:60}
+.row.active .tile{transform:translateY(-6vh) scale(1.015);transition:transform 700ms var(--tile-ease)}
+
+/* caption */
+.row-caption{position:fixed;top:20px;right:28px;background:var(--caption-bg);color:#fff;padding:12px 18px;border-radius:10px;font-weight:600;font-size:1.05rem;box-shadow:0 12px 30px rgba(0,0,0,0.24);opacity:0;transform:translateY(-8px) scale(0.99);transition:opacity 420ms ease,transform 420ms var(--tile-ease);pointer-events:none;z-index:200;max-width:46%;backdrop-filter:blur(6px)}
+.row-caption.show{opacity:1;transform:translateY(0) scale(1)}
+.row-caption .sub{display:block;font-size:0.85rem;opacity:0.95;font-weight:400;margin-top:4px}
+
+/* Expander: will contain SVG nodes directly (no image URLs) */
+.expander{position:fixed;inset:0;pointer-events:none;z-index:40;display:block;overflow:hidden}
+.expander .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform var(--expander-duration) var(--tile-ease),opacity calc(var(--expander-duration)) ease-in-out,filter calc(var(--expander-duration)) var(--tile-ease);will-change:transform,opacity,filter;opacity:0}
+.expander .layer svg{width:110%;height:110%;object-fit:cover}
+.expander .layer.base{z-index:1;opacity:0.95}
+.expander .layer.blur{z-index:2;filter:blur(14px) saturate(120%);opacity:0.55;transform:scale(1.02)}
+.expander .layer.glaze{z-index:3;opacity:0.22;transform:scale(1.06);background-color:rgba(183,65,14,0.12)}
+.expander.show .layer.base{transform:translateY(-2.4vh) scale(1.005);opacity:1}
+.expander.show .layer.blur{transform:translateY(-4.8vh) scale(1.06);opacity:0.85}
+.expander.show .layer.glaze{transform:translateY(-7.2vh) scale(1.08);opacity:0.42}
+
+/* small screens tweaks */
+@media(max-width:980px){.row{flex-wrap:wrap}.tile{flex:1 1 calc(50% - 12px)}.row-caption{right:16px;left:16px;bottom:18px;top:auto;text-align:center;max-width:unset}}
+@media(max-width:520px){.tile{flex:1 1 100%}.row.active{position:relative;transform:none;top:auto}}
+
+@media (prefers-reduced-motion: reduce){
+  .expander .layer, .row, .tile svg, .row-caption, .tile, .tile.visible {transition:none!important; animation:none!important; transform:none!important;}
+}
+
+footer{margin-top:80px;padding:18px;text-align:center;color:var(--muted)}
+
+/* loading placeholder */
+.placeholder{background:linear-gradient(90deg,#eee #f6f6f6 #eee);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* accessible focus style */
+.tile:focus-within{outline:3px solid rgba(183,65,14,0.12);outline-offset:6px}
+
+/* small decorative gradient overlay for SVGs */
+.svg-overlay{pointer-events:none;mix-blend-mode:overlay;opacity:0.15}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a class="back" href="index.html">← Back to Home</a>
+      <h1>Photo Albums</h1>
+      <p style="max-width:820px">Images are rendered as SVG placeholders here. Each tile uses vector art so it works even if raster images are not available.</p>
+    </div>
+  </header>  <main class="container" id="main">
+    <div id="gallery">
+      <!-- rows using inline SVGs as placeholders -->
+      <section class="gallery-section" data-caption="Ghats & Morning Life">
+        <div class="row">
+          <figure class="tile" tabindex="0" data-key="0">
+            <svg viewBox="0 0 800 560" role="img" aria-labelledby="t0"><title id="t0">Ghats — Sunrise</title>
+              <defs>
+                <linearGradient id="g0" x1="0" x2="1"><stop offset="0" stop-color="#ffd9b3"/><stop offset="1" stop-color="#fcb69f"/></linearGradient>
+                <filter id="grain"><feTurbulence baseFrequency="0.8" numOctaves="1" stitchTiles="stitch" result="t"/><feColorMatrix type="saturate" values="0.05" in="t" result="s"/><feBlend in="SourceGraphic" in2="s" mode="overlay"/></filter>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#g0)"/>
+              <g transform="translate(0,200)">
+                <ellipse cx="400" cy="200" rx="420" ry="180" fill="#f2c8a0" opacity="0.2"/>
+              </g>
+              <g>
+                <rect x="40" y="120" width="240" height="260" rx="8" fill="#ffffff22" />
+                <rect x="120" y="160" width="520" height="220" rx="10" fill="#ffffff10" />
+              </g>
+              <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Ghats — Sunrise</text>
+            </svg>
+            <figcaption class="meta">Ghats — Sunrise</figcaption>
+          </figure><figure class="tile" tabindex="0" data-key="1">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t1"><title id="t1">Wedding — Varanasi</title>
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#fff0d9"/><stop offset="1" stop-color="#ffd1b3"/></linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#g1)"/>
+          <circle cx="600" cy="160" r="88" fill="#ffd8a6" opacity="0.9"/>
+          <rect x="60" y="200" width="660" height="220" rx="12" fill="#ffffff10" />
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Wedding — Varanasi</text>
+        </svg>
+        <figcaption class="meta">Wedding — Varanasi</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="2">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t2"><title id="t2">Aerial — Old City</title>
+          <defs>
+            <linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#dfeaf7"/><stop offset="1" stop-color="#c8dff0"/></linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#g2)"/>
+          <g fill="#ffffff20">
+            <rect x="80" y="120" width="120" height="60" rx="6"/>
+            <rect x="220" y="100" width="140" height="80" rx="6"/>
+            <rect x="380" y="130" width="160" height="60" rx="6"/>
+            <rect x="560" y="110" width="120" height="80" rx="6"/>
+          </g>
+          <text x="28" y="520" font-size="30" fill="#2b4b6b" font-weight="700">Aerial — Old City</text>
+        </svg>
+        <figcaption class="meta">Aerial — Old City</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="3">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t3"><title id="t3">Street — Market</title>
+          <defs>
+            <linearGradient id="g3" x1="0" x2="1"><stop offset="0" stop-color="#fff3e0"/><stop offset="1" stop-color="#ffe0c7"/></linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#g3)"/>
+          <g>
+            <rect x="60" y="180" width="120" height="220" rx="10" fill="#ffffff14"/>
+            <rect x="200" y="160" width="460" height="260" rx="12" fill="#ffffff10"/>
+          </g>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Street — Market</text>
+        </svg>
+        <figcaption class="meta">Street — Market</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Duplicate sections below with SVG placeholders -->
+  <section class="gallery-section" data-caption="Weddings & Rituals">
+    <div class="row">
+      <figure class="tile" tabindex="0" data-key="4">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t4"><title id="t4">Bride — Ghats</title>
+          <rect width="100%" height="100%" fill="url(#g1)"/>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Bride — Ghats</text>
+        </svg>
+        <figcaption class="meta">Bride — Ghats</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="5">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t5"><title id="t5">Aerial — Sunset</title>
+          <defs><linearGradient id="g5" x1="0" x2="1"><stop offset="0" stop-color="#ffd9b3"/><stop offset="1" stop-color="#d89a6e"/></linearGradient></defs>
+          <rect width="100%" height="100%" fill="url(#g5)"/>
+          <text x="28" y="520" font-size="30" fill="#7a3a12" font-weight="700">Aerial — Sunset</text>
+        </svg>
+        <figcaption class="meta">Aerial — Sunset</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="6">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t6"><title id="t6">Street — Art</title>
+          <rect width="100%" height="100%" fill="#f7efe6"/>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Street — Art</text>
+        </svg>
+        <figcaption class="meta">Street — Art</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="7">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t7"><title id="t7">Ghats — Twilight</title>
+          <rect width="100%" height="100%" fill="#e8d2c2"/>
+          <text x="28" y="520" font-size="30" fill="#6b3411" font-weight="700">Ghats — Twilight</text>
+        </svg>
+        <figcaption class="meta">Ghats — Twilight</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-caption="Aerial & Cityscapes">
+    <div class="row">
+      <figure class="tile" tabindex="0" data-key="8">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t8"><title id="t8">Aerial — Over Ghats</title>
+          <rect width="100%" height="100%" fill="#dfeaf7"/>
+          <text x="28" y="520" font-size="30" fill="#2b4b6b" font-weight="700">Aerial — Over Ghats</text>
+        </svg>
+        <figcaption class="meta">Aerial — Over Ghats</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="9">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t9"><title id="t9">Wedding — Lamps</title>
+          <rect width="100%" height="100%" fill="#fff0d9"/>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Wedding — Lamps</text>
+        </svg>
+        <figcaption class="meta">Wedding — Lamps</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="10">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t10"><title id="t10">Street — Vendors</title>
+          <rect width="100%" height="100%" fill="#fff3e0"/>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Street — Vendors</text>
+        </svg>
+        <figcaption class="meta">Street — Vendors</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="11">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t11"><title id="t11">Ghats — Reflections</title>
+          <rect width="100%" height="100%" fill="#f3e7df"/>
+          <text x="28" y="520" font-size="30" fill="#7a3a12" font-weight="700">Ghats — Reflections</text>
+        </svg>
+        <figcaption class="meta">Ghats — Reflections</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-caption="The Golden Evening">
+    <div class="row">
+      <figure class="tile" tabindex="0" data-key="12">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t12"><title id="t12">Ghats — Evening Glow</title>
+          <rect width="100%" height="100%" fill="#ffe8cf"/>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Ghats — Evening Glow</text>
+        </svg>
+        <figcaption class="meta">Ghats — Evening Glow</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="13">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t13"><title id="t13">Aerial — City Lights</title>
+          <rect width="100%" height="100%" fill="#d1eefc"/>
+          <text x="28" y="520" font-size="30" fill="#23445e" font-weight="700">Aerial — City Lights</text>
+        </svg>
+        <figcaption class="meta">Aerial — City Lights</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="14">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t14"><title id="t14">Street — People</title>
+          <rect width="100%" height="100%" fill="#fff7f2"/>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Street — People</text>
+        </svg>
+        <figcaption class="meta">Street — People</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="15">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t15"><title id="t15">Wedding — Ceremony</title>
+          <rect width="100%" height="100%" fill="#fff1df"/>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Wedding — Ceremony</text>
+        </svg>
+        <figcaption class="meta">Wedding — Ceremony</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-caption="Riverside Moments">
+    <div class="row">
+      <figure class="tile" tabindex="0" data-key="16">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t16"><title id="t16">Ritual — Lamps</title>
+          <rect width="100%" height="100%" fill="#fff0d9"/>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Ritual — Lamps</text>
+        </svg>
+        <figcaption class="meta">Ritual — Lamps</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="17">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t17"><title id="t17">Boats — Morning</title>
+          <rect width="100%" height="100%" fill="#e8f7ff"/>
+          <text x="28" y="520" font-size="30" fill="#21607a" font-weight="700">Boats — Morning</text>
+        </svg>
+        <figcaption class="meta">Boats — Morning</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="18">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t18"><title id="t18">Sunset — Silhouette</title>
+          <rect width="100%" height="100%" fill="#ffd6b8"/>
+          <text x="28" y="520" font-size="30" fill="#7a3a12" font-weight="700">Sunset — Silhouette</text>
+        </svg>
+        <figcaption class="meta">Sunset — Silhouette</figcaption>
+      </figure>
+
+      <figure class="tile" tabindex="0" data-key="19">
+        <svg viewBox="0 0 800 560" role="img" aria-labelledby="t19"><title id="t19">Market — Colors</title>
+          <rect width="100%" height="100%" fill="#fff8f2"/>
+          <text x="28" y="520" font-size="30" fill="#8a3b16" font-weight="700">Market — Colors</text>
+        </svg>
+        <figcaption class="meta">Market — Colors</figcaption>
+      </figure>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <p>Want a custom album or prints? <a href="contact.html">Contact us</a> for pricing and delivery.</p>
+</footer>
+
+  </main>  <div id="row-caption" class="row-caption" aria-live="polite" role="status" aria-atomic="true"></div>
+  <div id="expander-root" class="expander" aria-hidden="true"></div>  <script>
+  (function(){
+    const sections = Array.from(document.querySelectorAll('.gallery-section'));
+    const rows = Array.from(document.querySelectorAll('.row'));
+    const tiles = Array.from(document.querySelectorAll('.tile'));
+    const expanderRoot = document.getElementById('expander-root');
+    const rowCaption = document.getElementById('row-caption');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function randomEffect(){
+      const arr = ['effect-slide','effect-rotate','effect-fade'];
+      return arr[Math.floor(Math.random()*arr.length)];
+    }
+    function captionForSection(sec){
+      return sec.getAttribute('data-caption') || (sec.querySelector('.meta') ? sec.querySelector('.meta').textContent.trim() : 'Gallery');
+    }
+
+    function createExpanderForSVG(svgString){
+      // If identical SVG already present, skip
+      const current = expanderRoot.querySelector('.layer.base');
+      if(current && current.innerHTML === svgString) return;
+
+      expanderRoot.innerHTML='';
+      const base=document.createElement('div'); base.className='layer base';
+      const blur=document.createElement('div'); blur.className='layer blur';
+      const glaze=document.createElement('div'); glaze.className='layer glaze';
+
+      // insert SVG nodes (use <g> wrapper so transforms scale well)
+      base.innerHTML = svgString;
+      blur.innerHTML = svgString;
+      glaze.innerHTML = svgString;
+
+      expanderRoot.append(base,blur,glaze);
+      requestAnimationFrame(()=> expanderRoot.classList.add('show'));
+    }
+    function removeExpander(){
+      expanderRoot.classList.remove('show');
+      setTimeout(()=>{ expanderRoot.innerHTML=''; }, 900);
+    }
+
+    // Tile reveal observer with smooth stagger via CSS variable
+    const tileObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const tile = entry.target;
+        const svg = tile.querySelector('svg');
+        if (!svg) return;
+        if(entry.isIntersecting && entry.intersectionRatio > 0.28){
+          const siblings = Array.from(tile.parentElement.querySelectorAll('.tile'));
+          const idx = siblings.indexOf(tile);
+          tile.style.setProperty('--delay', `${idx * 0.06}s`);
+          tile.classList.add('visible');
+
+          // update expander when tile near center
+          const rect = tile.getBoundingClientRect();
+          const centerY = rect.top + rect.height / 2;
+          if(centerY > window.innerHeight*0.2 && centerY < window.innerHeight*0.8){
+            createExpanderForSVG(svg.outerHTML);
+          }
+        } else {
+          const still = tiles.some(t => {
+            const r = t.getBoundingClientRect();
+            const cy = r.top + r.height/2;
+            return cy > (window.innerHeight * 0.2) && cy < (window.innerHeight * 0.8);
+          });
+          if(!still) removeExpander();
+        }
+      });
+    }, { threshold: [0.2, 0.35, 0.6] });
+    tiles.forEach(t => tileObserver.observe(t));
+
+    // Row observer to pick the most visible section
+    const rowObserver = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio);
+      rows.forEach(r => r.classList.remove('active','effect-slide','effect-rotate','effect-fade'));
+      if(visible.length > 0){
+        const bestSection = visible[0].target;
+        const row = bestSection.querySelector('.row');
+        row.classList.add('active');
+        if(!prefersReduced) row.classList.add(randomEffect());
+        const text = captionForSection(bestSection);
+        const count = bestSection.querySelectorAll('.tile').length;
+        rowCaption.textContent = text + ' ';
+        const sub = document.createElement('span'); sub.className = 'sub'; sub.textContent = `${count} photos`;
+        rowCaption.appendChild(sub);
+        rowCaption.classList.add('show');
+      } else {
+        rowCaption.classList.remove('show');
+      }
+    }, { root:null, rootMargin:'0px', threshold:[0.35,0.55,0.8] });
+    sections.forEach(s => rowObserver.observe(s));
+
+    rows.forEach(r => { r.addEventListener('animationend', () => { r.classList.remove('effect-slide','effect-rotate','effect-fade'); }); });
+
+    // Smooth pointer tilt using lerp and requestAnimationFrame
+    function attachTilt(tile){
+      if(prefersReduced) return;
+      tile.classList.add('tilt');
+      let rect = null;
+      let targetX = 0, targetY = 0;
+      let currentX = 0, currentY = 0;
+      let rafId = null;
+
+      function update(){
+        currentX += (targetX - currentX) * 0.16;
+        currentY += (targetY - currentY) * 0.16;
+        const rotateY = currentX;
+        const rotateX = currentY;
+        tile.style.transform = `perspective(900px) translateZ(0) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.015)`;
+        rafId = requestAnimationFrame(update);
+      }
+
+      tile.addEventListener('pointermove', (e)=>{
+        rect = rect || tile.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        targetX = (0.5 - py) * 5;
+        targetY = (px - 0.5) * 6;
+        if(!rafId) update();
+      });
+      tile.addEventListener('pointerleave', ()=>{ targetX = 0; targetY = 0; });
+      tile.addEventListener('pointerdown', ()=>{ tile.style.transition = 'transform 160ms var(--tile-ease)'; tile.style.transform += ' scale(0.995)'; });
+      tile.addEventListener('pointerup', ()=>{ tile.style.transition = ''; });
+    }
+    tiles.forEach(t => attachTilt(t));
+
+    // respect reduced-motion changes
+    const mm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    mm.addEventListener('change', () => { if(mm.matches){ rows.forEach(r => r.classList.remove('effect-slide','effect-rotate','effect-fade')); } });
+
+    // keyboard focus -> reveal tile
+    tiles.forEach(tile => tile.addEventListener('focus', ()=>{ tile.style.setProperty('--delay','0s'); tile.classList.add('visible'); }));
+
+    // reveal tiles in view on load to avoid flicker
+    window.addEventListener('load', ()=>{ tiles.forEach((t,i)=>{ if(t.getBoundingClientRect().top < window.innerHeight) t.classList.add('visible'); }); });
+
+  })();
+  </script>  <!-- Animation Picker Modal --><button id="anim-open" aria-haspopup="dialog" aria-controls="anim-modal" title="Choose animations" style="position:fixed;right:18px;bottom:18px;background:var(--saffron);color:#fff;border:none;padding:12px 14px;border-radius:12px;z-index:400;box-shadow:0 10px 30px rgba(0,0,0,0.14);cursor:pointer;font-weight:700">Animations</button>
+
+  <div id="anim-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;z-index:500;visibility:hidden;opacity:0;transition:opacity .22s ease,visibility .22s ease">
+    <div style="max-width:820px;width:100%;background:var(--bg);border-radius:12px;box-shadow:0 18px 60px rgba(0,0,0,0.35);padding:18px;overflow:auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
+        <h3 style="margin:0;color:var(--saffron)">Choose animation preset</h3>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="anim-save" class="btn" style="background:var(--saffron);color:white">Save</button>
+          <button id="anim-close" class="btn alt" style="background:transparent;color:var(--saffron);border:1px solid rgba(0,0,0,0.06)">Close</button>
+        </div>
+      </div><div style="display:grid;grid-template-columns:260px 1fr;gap:14px">
+    <aside style="border-right:1px solid #f0f0f0;padding-right:12px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label><input type="radio" name="preset" value="smooth" checked> Smooth (default)</label>
+        <label><input type="radio" name="preset" value="cinematic"> Cinematic (slower)</label>
+        <label><input type="radio" name="preset" value="bouncy"> Bouncy (spring)</label>
+        <label><input type="radio" name="preset" value="fade"> Simple Fade</label>
+        <label><input type="radio" name="preset" value="none"> Off (reduced motion)</label>
+      </div>
+
+      <hr style="margin:12px 0">
+      <div style="font-size:0.95rem;color:#444">Row entrance effect:</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+        <label><input type="radio" name="rowEffect" value="auto" checked> Auto (random)</label>
+        <label><input type="radio" name="rowEffect" value="effect-slide"> Slide</label>
+        <label><input type="radio" name="rowEffect" value="effect-rotate"> Rotate</label>
+        <label><input type="radio" name="rowEffect" value="effect-fade"> Fade dip</label>
+        <label><input type="radio" name="rowEffect" value="none"> None</label>
+      </div>
+    </aside>
+
+    <section>
+      <p style="margin-top:0">Pick a preset to immediately preview it on the current page. Use <strong>Save</strong> to persist your preference in local storage.</p>
+
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+        <div style="flex:1">
+          <div style="background:#f9f9f9;border-radius:10px;padding:12px;border:1px solid #fafafa">
+            <small style="color:#666">Preview controls</small>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button id="preview-apply" class="btn">Apply</button>
+              <button id="preview-reset" class="btn alt">Reset</button>
+            </div>
+          </div>
+        </div>
+        <div style="width:180px;text-align:right;color:#777;font-size:0.95rem">Current: <span id="current-preset">Smooth</span></div>
+      </div>
+
+      <div style="border-radius:12px;padding:12px;background:linear-gradient(180deg,#fff,#fbfbfb);box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);">
+        <h4 style="margin:6px 0 10px">Live preview</h4>
+        <!-- a small preview row duplicated from page but controlled separately -->
+        <div id="preview-row" style="display:flex;gap:12px;align-items:stretch;justify-content:center;padding:8px">
+          <div style="width:180px;height:110px;border-radius:10px;background:linear-gradient(180deg,#fff,#f3e7df);box-shadow:0 6px 18px rgba(0,0,0,0.06)"></div>
+          <div style="width:180px;height:110px;border-radius:10px;background:linear-gradient(180deg,#fff,#e8f7ff);box-shadow:0 6px 18px rgba(0,0,0,0.06)"></div>
+          <div style="width:180px;height:110px;border-radius:10px;background:linear-gradient(180deg,#fff,#fff0d9);box-shadow:0 6px 18px rgba(0,0,0,0.06)"></div>
+        </div>
+      </div>
+
+      <hr style="margin:12px 0">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">
+        <div style="flex:1;min-width:220px">
+          <h5 style="margin:6px 0">Advanced</h5>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label>Tile duration (ms): <input id="adv-duration" type="number" value="700" style="width:100px;margin-left:8px"></label>
+            <label>Stagger (ms): <input id="adv-stagger" type="number" value="60" style="width:100px;margin-left:8px"></label>
+            <label>Expander duration (ms): <input id="adv-exp" type="number" value="1100" style="width:100px;margin-left:8px"></label>
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:220px">
+          <h5 style="margin:6px 0">Export / Import</h5>
+          <p style="margin:0 0 8px">Export your animation preset JSON to share.</p>
+          <div style="display:flex;gap:8px"><button id="export-preset" class="btn">Export</button><button id="import-preset" class="btn alt">Import</button></div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+  </div>  <script>
+  (function(){
+    const openBtn = document.getElementById('anim-open');
+    const modal = document.getElementById('anim-modal');
+    const closeBtn = document.getElementById('anim-close');
+    const saveBtn = document.getElementById('anim-save');
+    const previewApply = document.getElementById('preview-apply');
+    const previewReset = document.getElementById('preview-reset');
+    const currentPresetLabel = document.getElementById('current-preset');
+
+    const presets = {
+      smooth: {duration:700, stagger:60, expander:1100, ease:'cubic-bezier(.16,.84,.3,1)'},
+      cinematic: {duration:1100, stagger:90, expander:1600, ease:'cubic-bezier(.12,.8,.22,1)'},
+      bouncy: {duration:500, stagger:40, expander:900, ease:'cubic-bezier(.2,1.25,.35,1)'},
+      fade: {duration:520, stagger:50, expander:800, ease:'linear'},
+      none: {duration:0, stagger:0, expander:0, ease:'linear'}
+    };
+
+    function openModal(){ modal.style.visibility='visible'; modal.style.opacity='1'; modal.setAttribute('aria-hidden','false'); }
+    function closeModal(){ modal.style.opacity='0'; modal.style.visibility='hidden'; modal.setAttribute('aria-hidden','true'); }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+
+    // apply preset settings to document root vars
+    function applyPreset(name){
+      const p = presets[name];
+      if(!p) return;
+      const root = document.documentElement;
+      root.style.setProperty('--tile-duration', p.duration + 'ms');
+      root.style.setProperty('--stagger', p.stagger + 'ms');
+      root.style.setProperty('--expander-duration', p.expander + 'ms');
+      root.style.setProperty('--tile-ease', p.ease);
+      currentPresetLabel.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+      // store temporarily on body for CSS hooks
+      document.body.dataset.animationPreset = name;
+    }
+
+    // read form selection
+    function getSelectedPreset(){ const v = document.querySelector('input[name="preset"]:checked'); return v ? v.value : 'smooth'; }
+    function getSelectedRowEffect(){ const v = document.querySelector('input[name="rowEffect"]:checked'); return v ? v.value : 'auto'; }
+
+    // apply and preview
+    previewApply.addEventListener('click', ()=>{
+      const name = getSelectedPreset();
+      applyPreset(name);
+      // set row effect
+      const re = getSelectedRowEffect();
+      document.querySelectorAll('.row').forEach(r=> r.classList.remove('effect-slide','effect-rotate','effect-fade'));
+      if(re !== 'auto' && re !== 'none') document.querySelectorAll('.row').forEach(r=> r.classList.add(re));
+      // quick visual bounce: add and remove a class to trigger sticky lift for preview
+      const firstRow = document.querySelector('.row');
+      if(firstRow){ firstRow.classList.add('active'); setTimeout(()=> firstRow.classList.remove('active'), 800); }
+    });
+
+    previewReset.addEventListener('click', ()=>{
+      // reset to saved or default
+      const saved = localStorage.getItem('kashi-anim-preset') || 'smooth';
+      applyPreset(saved);
+      // reset row effects
+      document.querySelectorAll('.row').forEach(r=> r.classList.remove('effect-slide','effect-rotate','effect-fade'));
+    });
+
+    // save current configuration to localStorage
+    saveBtn.addEventListener('click', ()=>{
+      const name = getSelectedPreset();
+      const advDur = Number(document.getElementById('adv-duration').value) || presets[name].duration;
+      const advStag = Number(document.getElementById('adv-stagger').value) || presets[name].stagger;
+      const advExp = Number(document.getElementById('adv-exp').value) || presets[name].expander;
+      const rowEffect = getSelectedRowEffect();
+      const conf = {name, duration:advDur, stagger:advStag, expander:advExp, rowEffect};
+      localStorage.setItem('kashi-anim-preset', JSON.stringify(conf));
+      applyPreset(name);
+      // apply advanced overrides
+      document.documentElement.style.setProperty('--tile-duration', advDur + 'ms');
+      document.documentElement.style.setProperty('--stagger', advStag + 'ms');
+      document.documentElement.style.setProperty('--expander-duration', advExp + 'ms');
+      if(rowEffect !== 'auto' && rowEffect !== 'none'){
+        document.querySelectorAll('.row').forEach(r=> r.classList.remove('effect-slide','effect-rotate','effect-fade'));
+        document.querySelectorAll('.row').forEach(r=> r.classList.add(rowEffect));
+      }
+      closeModal();
+    });
+
+    // export / import
+    document.getElementById('export-preset').addEventListener('click', ()=>{
+      const conf = localStorage.getItem('kashi-anim-preset') || JSON.stringify({name:'smooth'});
+      const blob = new Blob([conf], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'kashi-anim-preset.json'; a.click(); URL.revokeObjectURL(url);
+    });
+    document.getElementById('import-preset').addEventListener('click', ()=>{
+      const txt = prompt('Paste preset JSON here');
+      if(!txt) return; try{ const conf = JSON.parse(txt); localStorage.setItem('kashi-anim-preset', JSON.stringify(conf)); alert('Imported'); }catch(err){ alert('Invalid JSON'); }
+    });
+
+    // initialize from saved preset
+    (function initFromSaved(){
+      const saved = localStorage.getItem('kashi-anim-preset');
+      if(saved){
+        try{
+          const conf = JSON.parse(saved);
+          // apply
+          const name = conf.name || 'smooth';
+          applyPreset(name);
+          if(conf.duration) document.documentElement.style.setProperty('--tile-duration', conf.duration + 'ms');
+          if(conf.stagger) document.documentElement.style.setProperty('--stagger', conf.stagger + 'ms');
+          if(conf.expander) document.documentElement.style.setProperty('--expander-duration', conf.expander + 'ms');
+          if(conf.rowEffect && conf.rowEffect !== 'auto' && conf.rowEffect !== 'none'){
+            document.querySelectorAll('.row').forEach(r=> r.classList.add(conf.rowEffect));
+          }
+        }catch(e){ console.warn('Invalid saved preset'); applyPreset('smooth'); }
+      } else { applyPreset('smooth'); }
+    })();
+
+    // accessibility: close modal on ESC
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ closeModal(); }});
+
+  })();
+  </script></body>
+</html>     
