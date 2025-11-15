@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Champak Roy – Online Whiteboard</title>
+
+<style>
+  :root{
+    --blue:#4a74ff;
+    --bg:#eef3ff;
+    --panel:#ffffff;
+    --muted:#b5c7ff;
+  }
+  *{box-sizing:border-box}
+  body {
+    margin: 0;
+    background: var(--bg);
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .board-container {
+    width: 90%;
+    max-width:1200px;
+    height: 85vh;
+    background: var(--panel);
+    border: 3px solid var(--blue);
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Responsive toolbar */
+  .toolbar {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    z-index: 20;
+  }
+
+  .tool-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.9);
+    padding: 8px 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid var(--muted);
+  }
+
+  .tool-group.hidden { display: none; }
+
+  .tool-group label{font-size:14px; color:#2b2b2b}
+  .tool-group input[type="color"], .tool-group input[type="range"]{
+    cursor: pointer;
+  }
+
+  .toolbar button, .toolbar input, .toolbar select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--muted);
+    background: #f7faff;
+    cursor: pointer;
+  }
+
+  .toolbar button:hover{background:#e6f0ff}
+
+  /* Hamburger for small screens */
+  .hamburger{
+    display:none;
+    background: var(--panel);
+    border: 1px solid var(--muted);
+    padding: 8px;
+    border-radius: 8px;
+    cursor:pointer;
+  }
+
+  /* Dropdown menu when hamburger clicked */
+  .dropdown{
+    position: absolute;
+    top: 52px;
+    left: 12px;
+    right: 12px;
+    display:none;
+    gap:10px;
+    flex-direction:column;
+    padding:10px;
+    background: rgba(255,255,255,0.98);
+    border-radius:10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    z-index: 19;
+    border:1px solid var(--muted);
+  }
+
+  .dropdown.show{display:flex}
+
+  /* Canvas fills container */
+  #board {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:100%;
+    touch-action: none; /* prevent scrolling while drawing */
+  }
+
+  /* Media queries: collapse toolbar into hamburger on narrow screens */
+  @media (max-width:700px){
+    .tool-group.desktop-only{display:none}
+    .hamburger{display:block}
+    .toolbar{top:10px; left:10px; right:10px}
+  }
+
+  /* Small tweaks for very small devices */
+  @media (max-width:380px){
+    .toolbar button, .toolbar input{font-size:13px; padding:6px}
+  }
+</style>
+</head>
+
+<body>
+
+<div class="board-container">
+
+  <div class="toolbar">
+    <!-- Left: main tools (desktop) -->
+    <div class="tool-group desktop-only" id="mainTools">
+      <label for="colorPicker">Color</label>
+      <input type="color" id="colorPicker" value="#000000">
+
+      <label for="sizePicker">Size</label>
+      <input type="range" id="sizePicker" min="1" max="40" value="4">
+
+      <button id="eraserBtn">Eraser</button>
+      <button id="clearBtn">Clear</button>
+      <button id="saveBtn">Download</button>
+    </div>
+
+    <!-- Right: hamburger (mobile) -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
+
+    <!-- Extra quick-controls always visible -->
+    <div class="tool-group" id="quickTools">
+      <button id="undoBtn" title="Undo (session)">Undo</button>
+      <button id="redoBtn" title="Redo (session)">Redo</button>
+    </div>
+  </div>
+
+  <!-- Dropdown menu for small screens -->
+  <div class="dropdown" id="mobileMenu">
+    <div style="display:flex;gap:10px;align-items:center;">
+      <label style="min-width:50px">Color</label>
+      <input type="color" id="colorPickerMobile" value="#000000">
+    </div>
+
+    <div style="display:flex;gap:10px;align-items:center;">
+      <label style="min-width:50px">Size</label>
+      <input type="range" id="sizePickerMobile" min="1" max="40" value="4">
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button id="eraserBtnMobile">Eraser</button>
+      <button id="clearBtnMobile">Clear</button>
+      <button id="saveBtnMobile">Download</button>
+    </div>
+  </div>
+
+  <canvas id="board"></canvas>
+
+</div>
+
+<script>
+  // Canvas & container
+  const canvas = document.getElementById("board");
+  const container = document.querySelector(".board-container");
+  const ctx = canvas.getContext("2d");
+
+  function resizeCanvas(){
+    const rect = container.getBoundingClientRect();
+    // preserve drawing by using an offscreen copy when resizing
+    const temp = document.createElement('canvas');
+    temp.width = canvas.width || rect.width;
+    temp.height = canvas.height || rect.height;
+    const tctx = temp.getContext('2d');
+    if(canvas.width) tctx.drawImage(canvas,0,0);
+
+    canvas.width = Math.floor(rect.width);
+    canvas.height = Math.floor(rect.height);
+
+    // restore previous drawing scaled to new size
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(temp,0,0, temp.width, temp.height, 0,0, canvas.width, canvas.height);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // Drawing state
+  let drawing = false;
+  let last = {x:0,y:0};
+  let color = document.getElementById('colorPicker').value;
+  let size = parseInt(document.getElementById('sizePicker').value,10);
+
+  // Mobile controls mirror
+  const colorMobile = document.getElementById('colorPickerMobile');
+  const sizeMobile = document.getElementById('sizePickerMobile');
+
+  // Sync mobile/desktop controls
+  function syncControlsFromDesktop(){
+    if(colorMobile) colorMobile.value = color;
+    if(sizeMobile) sizeMobile.value = size;
+  }
+  function syncControlsFromMobile(){
+    const c = colorMobile && colorMobile.value;
+    const s = sizeMobile && parseInt(sizeMobile.value,10);
+    if(c) color = c;
+    if(s) size = s;
+    document.getElementById('colorPicker').value = color;
+    document.getElementById('sizePicker').value = size;
+  }
+
+  // pointer helpers
+  function getPointerPos(ev){
+    // ev can be a MouseEvent or Touch
+    const rect = canvas.getBoundingClientRect();
+    let clientX = ev.clientX;
+    let clientY = ev.clientY;
+    // Touch objects also have clientX/clientY
+    if(typeof clientX === 'undefined' && ev.targetTouches && ev.targetTouches[0]){
+      clientX = ev.targetTouches[0].clientX; clientY = ev.targetTouches[0].clientY;
+    }
+    return {
+      x: (clientX - rect.left),
+      y: (clientY - rect.top)
+    };
+  }
+
+  function start(e){
+    // Accept either the original event (MouseEvent or TouchEvent) or a Touch/Mouse object.
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+
+    // normalize to an object with clientX/clientY
+    let ev = e;
+    if (e && e.touches && e.touches[0]) ev = e.touches[0];
+    if (e && e.changedTouches && e.changedTouches[0]) ev = e.changedTouches[0];
+
+    drawing = true;
+    const p = getPointerPos(ev);
+    last.x = p.x; last.y = p.y;
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+  }
+
+  function draw(e){
+    // normalize event
+    let ev = e;
+    if (e && e.touches && e.touches[0]) ev = e.touches[0];
+    if (e && e.changedTouches && e.changedTouches[0]) ev = e.changedTouches[0];
+
+    if(!drawing) return;
+    const p = getPointerPos(ev);
+    ctx.lineWidth = size;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = color;
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    last.x = p.x; last.y = p.y;
+  }
+
+  function stop(e){
+    // some browsers send a TouchEvent without preventDefault; safe to call if exists
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    if(drawing) ctx.closePath();
+    drawing = false;
+    saveSnapshot();
+  }
+
+  // Events
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stop);
+  canvas.addEventListener('mouseout', stop);
+
+  // touch support (use full event so we can call preventDefault)
+  canvas.addEventListener('touchstart', (ev)=>{ start(ev); });
+  canvas.addEventListener('touchmove', (ev)=>{ draw(ev); });
+  canvas.addEventListener('touchend', (ev)=>{ stop(ev); });
+
+  // Controls wiring
+  document.getElementById('colorPicker').addEventListener('input', (e)=>{ color = e.target.value; syncControlsFromDesktop(); });
+  document.getElementById('sizePicker').addEventListener('input', (e)=>{ size = parseInt(e.target.value,10); syncControlsFromDesktop(); });
+
+  if(colorMobile){ colorMobile.addEventListener('input',(e)=>{ color = e.target.value; syncControlsFromMobile(); }); }
+  if(sizeMobile){ sizeMobile.addEventListener('input',(e)=>{ size = parseInt(e.target.value,10); syncControlsFromMobile(); }); }
+
+  // Eraser / Clear / Save (desktop)
+  document.getElementById('eraserBtn').addEventListener('click', ()=>{ color = '#ffffff'; syncControlsFromDesktop(); });
+  document.getElementById('clearBtn').addEventListener('click', ()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); saveSnapshot(); });
+  document.getElementById('saveBtn').addEventListener('click', ()=>{ const link = document.createElement('a'); link.download='whiteboard.png'; link.href = canvas.toDataURL(); link.click(); });
+
+  // Eraser / Clear / Save (mobile)
+  document.getElementById('eraserBtnMobile').addEventListener('click', ()=>{ color = '#ffffff'; syncControlsFromDesktop(); });
+  document.getElementById('clearBtnMobile').addEventListener('click', ()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); saveSnapshot(); });
+  document.getElementById('saveBtnMobile').addEventListener('click', ()=>{ const link = document.createElement('a'); link.download='whiteboard.png'; link.href = canvas.toDataURL(); link.click(); });
+
+  // Hamburger menu toggle
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', ()=>{ mobileMenu.classList.toggle('show'); });
+
+  // Simple undo/redo using snapshots
+  let snapshots = [];
+  let snapIndex = -1;
+  function saveSnapshot(){
+    // drop any redo states
+    snapshots = snapshots.slice(0, snapIndex+1);
+    // keep a copy of the canvas
+    snapshots.push(canvas.toDataURL());
+    snapIndex = snapshots.length -1;
+    // limit memory
+    if(snapshots.length>20) { snapshots.shift(); snapIndex = snapshots.length-1; }
+  }
+
+  function restoreSnapshot(index){
+    if(index<0 || index>=snapshots.length) return;
+    const img = new Image();
+    img.onload = ()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0,canvas.width,canvas.height); };
+    img.src = snapshots[index];
+  }
+
+  document.getElementById('undoBtn').addEventListener('click', ()=>{
+    if(snapIndex>0){ snapIndex--; restoreSnapshot(snapIndex); }
+  });
+  document.getElementById('redoBtn').addEventListener('click', ()=>{
+    if(snapIndex < snapshots.length-1){ snapIndex++; restoreSnapshot(snapIndex); }
+  });
+
+  // initialize first empty snapshot
+  saveSnapshot();
+
+  // close mobile menu when clicking outside
+  document.addEventListener('click', (e)=>{
+    if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
+      mobileMenu.classList.remove('show');
+    }
+  });
+
+  // prevent page scrolling while drawing on mobile
+  document.body.addEventListener('touchstart', (e)=>{ if(e.target===canvas && typeof e.preventDefault === 'function') e.preventDefault(); }, {passive:false});
+  document.body.addEventListener('touchmove', (e)=>{ if(e.target===canvas && typeof e.preventDefault === 'function') e.preventDefault(); }, {passive:false});
+
+</script>
+
+</body>
+</html>
