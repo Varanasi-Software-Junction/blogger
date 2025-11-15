@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Champak Roy — Whiteboard with Recording & Laser Pointer</title>
+<title>Champak Roy — Whiteboard (Text fix + Guide)</title>
 <style>
   :root{--blue:#3f6bff;--bg:#eef3ff;--panel:#fff;--muted:#c7d6ff}
   *{box-sizing:border-box}
@@ -18,7 +18,7 @@
   .spacer{flex:1}
   .canvas-wrap{position:relative;flex:1;display:block;background:#fff}
   canvas#board{position:absolute;left:0;top:0;width:100%;height:100%;touch-action:none;display:block}
-  .text-note{position:absolute;min-width:120px;min-height:28px;padding:6px 8px;border-radius:6px;border:1px dashed rgba(0,0,0,0.12);background:rgba(255,255,255,0.96);resize:both;overflow:auto}
+  .text-note{position:absolute;min-width:120px;min-height:28px;padding:6px 8px;border-radius:6px;border:1px dashed rgba(0,0,0,0.12);background:rgba(255,255,255,0.96);resize:both;overflow:auto;font-size:16px}
   .laser{position:absolute;pointer-events:none;border-radius:50%;width:28px;height:28px;margin-left:-14px;margin-top:-14px;box-shadow:0 0 12px rgba(255,0,0,0.45);display:none;z-index:120}
   .playbackProgress{width:160px;height:8px;background:rgba(0,0,0,0.06);border-radius:6px;overflow:hidden}
   .playbackBar{height:100%;width:0;background:linear-gradient(90deg,var(--blue),#7cc0ff)}
@@ -26,9 +26,57 @@
   .fileInput{display:none}
   .status{font-size:13px;color:#333;padding-left:8px}
   @media(max-width:760px){.desktop-only{display:none}}
+
+  /* GUIDE (top-right) */
+  .guide {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 320px;
+    max-width: calc(100% - 28px);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,249,255,0.98));
+    border: 1px solid rgba(99,123,255,0.12);
+    box-shadow: 0 10px 30px rgba(31,41,55,0.08);
+    border-radius: 10px;
+    z-index: 200;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  .guide .head {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:8px 10px;
+    background: rgba(255,255,255,0.9);
+    border-bottom:1px solid rgba(0,0,0,0.03);
+  }
+  .guide .title { font-weight:600; color:#14213d; }
+  .guide .controls { display:flex; gap:8px; align-items:center; }
+  .guide .btn {
+    background:transparent; border:1px solid rgba(0,0,0,0.06); padding:6px 8px; border-radius:6px; cursor:pointer;
+  }
+  .guide .btn.small { padding:4px 6px; font-size:12px }
+  .guide .content {
+    padding:10px;
+    line-height:1.4;
+    color:#222;
+    max-height: 360px;
+    overflow:auto;
+  }
+  .guide h4 { margin:6px 0 6px 0; font-size:14px; }
+  .guide ol, .guide ul { margin:6px 0 10px 18px; padding:0; }
+  .guide .shortcut { display:inline-block; background:#f1f7ff; border:1px solid #e6efff; padding:2px 6px; border-radius:6px; font-weight:600; margin-right:6px; font-size:12px; }
+  .guide .footer { padding:8px 10px; border-top:1px solid rgba(0,0,0,0.03); background: rgba(255,255,255,0.96); display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .guide .pin { cursor:pointer; font-size:12px; padding:6px; border-radius:6px; background:transparent; border:1px solid rgba(0,0,0,0.04) }
+  .guide.collapsed { width:44px; height:44px; border-radius:50%; overflow:visible; padding:0; right:12px; top:12px; }
+  .guide.collapsed .head { display:flex; justify-content:center; align-items:center; padding:0; border-bottom:none; }
+  .guide.collapsed .content, .guide.collapsed .footer { display:none; }
+  .guide .help-title { font-size:13px; color:#0b2545; }
 </style>
 </head>
 <body>
+
 <div class="center">
   <div class="board-container" id="boardContainer">
 
@@ -48,7 +96,6 @@
 
       <div class="tool-group">
         <div class="controls">
-          <!-- Recording controls -->
           <button id="recordBtn" class="small" title="Start recording">● Record</button>
           <button id="stopRecBtn" class="small" title="Stop recording" disabled>■ Stop</button>
 
@@ -74,15 +121,75 @@
       <div id="laser" class="laser" style="background: rgba(255,0,0,0.55); display:none"></div>
     </div>
 
+    <!-- How to use guide (top-right) -->
+    <div id="howto" class="guide" role="region" aria-label="How to use whiteboard guide">
+      <div class="head">
+        <div>
+          <div class="title help-title">How to use — Whiteboard</div>
+          <div style="font-size:11px;color:#445;opacity:0.9">Quick guide</div>
+        </div>
+        <div class="controls">
+          <button id="toggleGuide" class="btn small" title="Collapse/expand guide">–</button>
+          <button id="closeGuide" class="btn small" title="Hide guide temporarily">✕</button>
+        </div>
+      </div>
+
+      <div class="content" id="guideContent">
+        <h4>Basic steps</h4>
+        <ol>
+          <li>Select a tool: <strong>Pen</strong>, <strong>Highlighter</strong>, <strong>Eraser</strong>, or <strong>Text</strong>.</li>
+          <li>Pick <span class="shortcut">Color</span>, adjust <span class="shortcut">Size</span> and <span class="shortcut">Opacity</span> as needed.</li>
+          <li>Draw on the board using mouse, touch, or pen. Use the <strong>Text</strong> tool to click and add editable text boxes.</li>
+        </ol>
+
+        <h4>Recording & playback</h4>
+        <ul>
+          <li>Click <strong>Record</strong> to start recording your strokes. Click <strong>Stop</strong> to finish.</li>
+          <li>Use <strong>Play</strong> to replay the recorded session, <strong>Pause</strong> to pause, and <strong>Stop</strong> to end playback.</li>
+          <li><strong>Export</strong> saves the recording as JSON. Use <strong>Import</strong> to load a saved recording.</li>
+        </ul>
+
+        <h4>Laser pointer</h4>
+        <ul>
+          <li>Toggle <strong>Laser</strong> to get a non-destructive red pointer that follows your cursor or finger while explaining live.</li>
+          <li>Laser does NOT draw on the board — it’s only for presentation.</li>
+        </ul>
+
+        <h4>Tips</h4>
+        <ul>
+          <li>Text boxes are editable and draggable (double-click to delete a box).</li>
+          <li>Recording saves pen/highlighter/eraser strokes and timing — text boxes are not recorded in this version.</li>
+          <li>Use <span class="shortcut">Ctrl/Cmd + R</span> to start recording and <span class="shortcut">Ctrl/Cmd + P</span> to play.</li>
+        </ul>
+
+        <h4>Keyboard shortcuts</h4>
+        <ul>
+          <li><span class="shortcut">P</span> — Pen</li>
+          <li><span class="shortcut">H</span> — Highlighter</li>
+          <li><span class="shortcut">E</span> — Eraser</li>
+          <li><span class="shortcut">T</span> — Text</li>
+          <li><span class="shortcut">Ctrl/Cmd + R</span> — Start recording</li>
+          <li><span class="shortcut">Ctrl/Cmd + P</span> — Play</li>
+        </ul>
+      </div>
+
+      <div class="footer">
+        <div style="font-size:12px;color:#445">Guide</div>
+        <div>
+          <button id="pinGuide" class="pin" title="Pin guide (remember state)">📌 Pin</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
-/* Whiteboard with recording & laser pointer
-   - Uses pointer events
-   - Records stroke events (start, move, end) with timestamps (ms) relative to record start
-   - Playback replays strokes preserving timing
-   - Laser pointer shows a temporary overlay that follows pointer (non-destructive)
+/* Fixed Text tool + existing features (record/play/laser/guide)
+   Key changes:
+   - When tool === 'text' a movable/resizable contentEditable DIV is created at the click position.
+   - Text notes are preserved on saveSnapshot and not disturbed by playback (playback draws on canvas).
+   - Double-click deletes a text note.
 */
 
 (() => {
@@ -92,7 +199,6 @@
   const ctx = canvas.getContext('2d', {alpha:false}); // opaque white background
   function resizeCanvas(){
     const r = wrap.getBoundingClientRect();
-    // preserve image
     const tmp = document.createElement('canvas');
     tmp.width = canvas.width || Math.max(800, Math.floor(r.width));
     tmp.height = canvas.height || Math.max(400, Math.floor(r.height));
@@ -114,7 +220,6 @@
         eraserBtn = document.getElementById('eraserBtn'), textBtn = document.getElementById('textBtn');
   const colorInput = document.getElementById('color'), sizeInput = document.getElementById('size'), opacityInput = document.getElementById('opacity');
 
-  // Recording UI
   const recordBtn = document.getElementById('recordBtn'), stopRecBtn = document.getElementById('stopRecBtn');
   const playBtn = document.getElementById('playBtn'), pauseBtn = document.getElementById('pauseBtn'), stopPlayBtn = document.getElementById('stopPlayBtn');
   const exportBtn = document.getElementById('exportBtn'), importFile = document.getElementById('importFile'), importBtn = document.getElementById('importBtn');
@@ -125,10 +230,10 @@
   let tool = 'pen';
   let color = colorInput.value, size = Number(sizeInput.value), opacity = Number(opacityInput.value);
   let drawing = false;
-  let points = []; // current stroke points
+  let points = [];
   let lastPointerId = null;
 
-  // snapshot stack for undo/redo (optional small)
+  // snapshot stack for undo/redo (small)
   let snapshots = [], snapIdx = -1;
   function saveSnapshot(){
     try{
@@ -147,20 +252,17 @@
   }
   saveSnapshot(); // initial
 
-  // --- Recording model ---
-  // recording object: { events: [ {type:'start'|'move'|'end', t:ms, tool:, color:, size:, opacity:, x:, y:... } ], duration: ms }
-  let recording = null; // currently recording object
+  // --- Recording ---
+  let recording = null; // active recording while recording
+  let recordingMemory = null; // saved recording (for playback/import/export)
   let isRecording = false;
   let recordStartTime = 0;
 
   // playback state
-  let playback = null; // {script, startTime, timerIds[], pausedAt, playing}
-  let playbackTimerIds = [];
+  let playback = null;
 
-  // helpers
-  function currentMs(){ return performance.now(); }
+  const currentMs = () => performance.now();
 
-  // start a recording
   function startRecording(){
     recording = { events: [], duration:0 };
     isRecording = true;
@@ -176,21 +278,21 @@
     if(!isRecording) return;
     isRecording = false;
     recording.duration = Math.max(0, currentMs() - recordStartTime);
+    recordingMemory = recording;
     recordBtn.disabled = false;
     stopRecBtn.disabled = true;
-    playBtn.disabled = recording.events.length > 0 ? false : true;
-    exportBtn.disabled = recording.events.length > 0 ? false : true;
+    playBtn.disabled = recordingMemory.events.length > 0 ? false : true;
+    exportBtn.disabled = recordingMemory.events.length > 0 ? false : true;
     status.textContent = `Recorded ${Math.round(recording.duration)} ms`;
   }
 
-  // push event to recording (only if isRecording)
   function pushEvent(ev){
     if(!isRecording || !recording) return;
     const t = Math.round(currentMs() - recordStartTime);
     recording.events.push(Object.assign({ t }, ev));
   }
 
-  // --- Pointer drawing (simple smoothing omitted for brevity) ---
+  // drawing helpers
   function applyStrokeSettings(ctxLocal, evTool, evColor, evSize, evOpacity){
     if(evTool === 'eraser'){
       ctxLocal.globalCompositeOperation = 'destination-out';
@@ -214,20 +316,82 @@
     ctx.stroke();
   }
 
-  // pointer events
+  // --- Text note helper (working) ---
+  function addTextNoteAt(x, y, html = '', w = 180, h = 40, styles = null){
+    const note = document.createElement('div');
+    note.className = 'text-note';
+    note.contentEditable = true;
+    note.innerHTML = html || '';
+    note.style.left = (x)+'px';
+    note.style.top = (y)+'px';
+    note.style.width = (w || 160) + 'px';
+    note.style.height = (h || 36) + 'px';
+    note.style.zIndex = 110;
+    if(styles){
+      if(styles.fontSize) note.style.fontSize = styles.fontSize;
+      if(styles.color) note.style.color = styles.color;
+    }
+    // focus and add behavior
+    note.addEventListener('blur', () => { saveSnapshot(); });
+    // dragging
+    let dragging = false, start = null, orig = null;
+    note.addEventListener('pointerdown', (ev) => {
+      // if resizing (browser shows resize handle) pointerdown may be on resize; let that through
+      if(ev.button && ev.button !== 0) return;
+      ev.stopPropagation();
+      dragging = true;
+      start = {x:ev.clientX, y:ev.clientY};
+      const r = note.getBoundingClientRect();
+      const parentRect = wrap.getBoundingClientRect();
+      orig = {left: r.left - parentRect.left, top: r.top - parentRect.top};
+      note.style.touchAction = 'none';
+      note.setPointerCapture && note.setPointerCapture(ev.pointerId);
+    });
+    window.addEventListener('pointermove', (ev) => {
+      if(!dragging) return;
+      const dx = ev.clientX - start.x;
+      const dy = ev.clientY - start.y;
+      note.style.left = (orig.left + dx) + 'px';
+      note.style.top = (orig.top + dy) + 'px';
+    });
+    window.addEventListener('pointerup', (ev) => {
+      if(!dragging) return;
+      dragging = false;
+      note.style.touchAction = '';
+      note.releasePointerCapture && note.releasePointerCapture(ev.pointerId);
+      saveSnapshot();
+    });
+    // double-click to delete
+    note.addEventListener('dblclick', (ev) => {
+      if(confirm('Delete this text box?')) { note.remove(); saveSnapshot(); }
+    });
+    wrap.appendChild(note);
+    // focus for immediate typing
+    setTimeout(()=> note.focus(), 10);
+    return note;
+  }
+
+  // pointer events (with text handling)
   canvas.addEventListener('pointerdown', (e)=>{
-    // ignore right-click
+    // if text tool — create a text note and do not begin drawing
+    if(tool === 'text'){
+      const rp = wrap.getBoundingClientRect();
+      const x = e.clientX - rp.left;
+      const y = e.clientY - rp.top;
+      addTextNoteAt(x, y, '', 220, 36, { fontSize: '16px', color: color });
+      // stop propagation to avoid any drawing behavior
+      e.preventDefault();
+      return;
+    }
+
+    // normal drawing tools
     if(e.button && e.button !== 0) return;
     canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
     drawing = true;
     lastPointerId = e.pointerId;
     const pos = getPos(e);
     points = [pos];
-
-    // push start event if recording
     pushEvent({ type:'start', tool, color, size, opacity, x:pos.x, y:pos.y });
-
-    // immediate dot
     applyStrokeSettings(ctx, tool, color, size, opacity);
     ctx.beginPath();
     ctx.moveTo(pos.x, pos.y);
@@ -242,33 +406,27 @@
     const prev = points[points.length-1];
     points.push(pos);
     drawSegment(prev, pos, tool, color, size, opacity);
-
-    // push move event
     pushEvent({ type:'move', x:pos.x, y:pos.y });
     e.preventDefault();
-    // update laser position if laser active
-    if(laserActive) {
-      positionLaser(e.clientX, e.clientY);
-    }
+    if(laserActive) positionLaser(e.clientX, e.clientY);
   }, {passive:false});
 
   window.addEventListener('pointerup', (e)=>{
-    if(!drawing || e.pointerId !== lastPointerId) return;
-    drawing = false;
-    canvas.releasePointerCapture && canvas.releasePointerCapture(e.pointerId);
-    // push end event
-    const pos = points[points.length-1] || getPos(e);
-    pushEvent({ type:'end', x:pos.x, y:pos.y });
-    saveSnapshot();
+    if(drawing && e.pointerId === lastPointerId){
+      drawing = false;
+      canvas.releasePointerCapture && canvas.releasePointerCapture(e.pointerId);
+      const pos = points[points.length-1] || getPos(e);
+      pushEvent({ type:'end', x:pos.x, y:pos.y });
+      saveSnapshot();
+    }
   }, {passive:false});
 
-  // helper to get pointer position relative to canvas
   function getPos(e){
     const r = canvas.getBoundingClientRect();
     return { x: e.clientX - r.left, y: e.clientY - r.top };
   }
 
-  // --- Tool toggles ---
+  // tool UI
   function setTool(t){
     tool = t;
     [penBtn, highlighterBtn, eraserBtn, textBtn].forEach(b => b.classList.remove('active'));
@@ -276,7 +434,6 @@
     if(t==='highlighter') highlighterBtn.classList.add('active');
     if(t==='eraser') eraserBtn.classList.add('active');
     if(t==='text') textBtn.classList.add('active');
-    // cursor
     canvas.style.cursor = (t==='text' ? 'text' : 'crosshair');
   }
   penBtn.addEventListener('click', ()=> setTool('pen'));
@@ -288,18 +445,16 @@
   sizeInput.addEventListener('input', (e)=> { size = Number(e.target.value); });
   opacityInput.addEventListener('input', (e)=> { opacity = Number(e.target.value); });
 
-  // --- Recording UI wiring ---
+  // recording controls
   recordBtn.addEventListener('click', ()=> {
-    // can't record while playing
-    if(playback && playback.playing) return alert('Stop playback before recording.');
+    if(playback && playback.playing) { alert('Stop playback before recording.'); return; }
     startRecording();
   });
   stopRecBtn.addEventListener('click', ()=> stopRecording());
 
-  // Export/import
   exportBtn.addEventListener('click', ()=>{
-    if(!recording) return;
-    const blob = new Blob([JSON.stringify(recording)], {type:'application/json'});
+    if(!recordingMemory) return;
+    const blob = new Blob([JSON.stringify(recordingMemory)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = 'whiteboard-recording.json';
@@ -315,72 +470,68 @@
       try{
         const data = JSON.parse(e.target.result);
         if(data && Array.isArray(data.events)){
-          // stop any playing/recording
           stopPlayback();
           isRecording = false; recording = null;
-          loadRecordingToMemory(data);
+          recordingMemory = data;
           status.textContent = `Imported ${data.events.length} events (${Math.round(data.duration||0)} ms)`;
           playBtn.disabled = false; exportBtn.disabled = false;
         } else alert('Invalid recording file.');
       }catch(err){ alert('Failed to parse file: ' + err.message); }
     };
     reader.readAsText(f);
-    // clear input for next import
     ev.target.value = '';
   });
+  importBtn.addEventListener('click', ()=> importFile.click());
 
-  // Helper to load recording into memory variable `recordingMemory`
-  let recordingMemory = null;
-  function loadRecordingToMemory(obj){
-    recordingMemory = obj;
+  // --- Recording implementation (as before) ---
+  function startRecording(){
+    recording = { events: [], duration:0 };
+    isRecording = true;
+    recordStartTime = currentMs();
+    recordBtn.disabled = true;
+    stopRecBtn.disabled = false;
+    playBtn.disabled = true;
+    exportBtn.disabled = true;
+    status.textContent = 'Recording...';
   }
 
-  // When we finish a recording we also copy it to memory for playback
   function stopRecording(){
     if(!isRecording) return;
+    isRecording = false;
     recording.duration = Math.max(0, currentMs() - recordStartTime);
     recordingMemory = recording;
-    isRecording = false;
     recordBtn.disabled = false;
     stopRecBtn.disabled = true;
-    playBtn.disabled = recordingMemory.events.length === 0;
-    exportBtn.disabled = recordingMemory.events.length === 0;
+    playBtn.disabled = recordingMemory.events.length > 0 ? false : true;
+    exportBtn.disabled = recordingMemory.events.length > 0 ? false : true;
     status.textContent = `Recorded ${Math.round(recording.duration)} ms`;
   }
 
-  // --- Playback implementation ---
+  function pushEvent(ev){
+    if(!isRecording || !recording) return;
+    const t = Math.round(currentMs() - recordStartTime);
+    recording.events.push(Object.assign({ t }, ev));
+  }
+
+  // playback (same approach)
   function playRecording(){
     if(!recordingMemory || !recordingMemory.events || recordingMemory.events.length===0) return;
-    if(isRecording) { alert('Stop recording before playback'); return; }
-    // prepare canvas: clear (optionally) and play on top
-    // We'll create a clean canvas snapshot (white) then replay strokes on it
-    stopPlayback(); // ensure no previous timers
-    playback = { script: recordingMemory, startTime: currentMs(), playing: true, pausedAt:0 };
+    stopPlayback();
+    playback = { script: recordingMemory, startTime: currentMs(), playing: true, timerIds: [] };
     setPlaybackUI(true);
-    // Clear canvas to white and optionally remove existing text notes (we leave text boxes intact)
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    // We will iterate events and schedule them with setTimeout using event.t
     const evs = recordingMemory.events;
-    let penState = null; // track last position for continuous drawing
-    let scheduled = [];
-
-    // Build a small replay engine: when start event => move pen to pos; move events => draw
+    let penState = null;
     for(let i=0;i<evs.length;i++){
       const ev = evs[i];
-      const when = ev.t; // ms relative to start
       const id = setTimeout(() => {
         if(!playback || !playback.playing) return;
-        // handle event
         if(ev.type === 'start'){
           penState = { x: ev.x, y: ev.y, tool: ev.tool, color: ev.color, size: ev.size, opacity: ev.opacity };
-          // draw a dot
           applyStrokeSettings(ctx, penState.tool, penState.color, penState.size, penState.opacity);
-          ctx.beginPath();
-          ctx.moveTo(penState.x, penState.y);
-          ctx.lineTo(penState.x+0.01, penState.y+0.01);
-          ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(penState.x, penState.y); ctx.lineTo(penState.x+0.01, penState.y+0.01); ctx.stroke();
         } else if(ev.type === 'move'){
           if(!penState) return;
           const prev = { x: penState.x, y: penState.y };
@@ -390,23 +541,19 @@
         } else if(ev.type === 'end'){
           penState = null;
         }
-        // update progress bar
         const progress = Math.min(1, (currentMs() - playback.startTime) / (playback.script.duration || 1));
         playbar.style.width = (progress*100)+'%';
         if(progress >= 1){
-          // playback finished
           setTimeout(() => { stopPlayback(); status.textContent = 'Playback finished'; }, 20);
         }
-      }, when);
-      scheduled.push(id);
+      }, ev.t);
+      playback.timerIds.push(id);
     }
-    playback.timerIds = scheduled;
     status.textContent = 'Playing...';
   }
 
   function pausePlayback(){
     if(!playback || !playback.playing) return;
-    // clear scheduled timers and store pausedAt
     playback.pausedAt = currentMs() - playback.startTime;
     playback.playing = false;
     playback.timerIds.forEach(id => clearTimeout(id));
@@ -417,40 +564,22 @@
 
   function resumePlayback(){
     if(!playback || playback.playing) return;
-    // Resume by scheduling remaining events with adjusted times
     const script = playback.script;
-    playback.startTime = currentMs() - (playback.pausedAt || 0);
+    const pausedAt = playback.pausedAt || 0;
+    playback.startTime = currentMs() - pausedAt;
     playback.playing = true;
-    const scheduled = [];
+    playback.timerIds = [];
     for(let ev of script.events){
-      const when = ev.t - (playback.pausedAt || 0);
-      if(when <= 0) {
-        // already past: apply immediately
-        if(ev.type === 'start'){
-          // create small dot
-          applyStrokeSettings(ctx, ev.tool, ev.color, ev.size, ev.opacity);
-          ctx.beginPath(); ctx.moveTo(ev.x, ev.y); ctx.lineTo(ev.x+0.01, ev.y+0.01); ctx.stroke();
-        } else if(ev.type === 'move'){
-          // draw this move immediately - best-effort (we don't have prev here)
-          // skip as we can't reliably draw without state; playback resumes normally for future events
-        }
-        continue;
-      }
+      const when = ev.t - pausedAt;
+      if(when <= 0) continue;
       const id = setTimeout(() => {
         if(!playback || !playback.playing) return;
-        // handle event similarly to playRecording loop
         if(ev.type === 'start'){
-          // small dot
           applyStrokeSettings(ctx, ev.tool, ev.color, ev.size, ev.opacity);
           ctx.beginPath(); ctx.moveTo(ev.x, ev.y); ctx.lineTo(ev.x+0.01, ev.y+0.01); ctx.stroke();
-          // store ephemeral penState? For simplicity we only rely on move events drawing sequentially
         } else if(ev.type === 'move'){
-          // draw a short segment between this move and previous recorded move (approx)
-          // To keep it simple, draw a tiny line to the given coordinates
           applyStrokeSettings(ctx, ev.tool, ev.color, ev.size, ev.opacity);
           ctx.beginPath(); ctx.moveTo(ev.x-0.5, ev.y-0.5); ctx.lineTo(ev.x, ev.y); ctx.stroke();
-        } else if(ev.type === 'end'){
-          // nothing special
         }
         const progress = Math.min(1, (currentMs() - playback.startTime) / (playback.script.duration || 1));
         playbar.style.width = (progress*100)+'%';
@@ -458,114 +587,155 @@
           setTimeout(() => { stopPlayback(); status.textContent = 'Playback finished'; }, 20);
         }
       }, when);
-      scheduled.push(id);
+      playback.timerIds.push(id);
     }
-    playback.timerIds = scheduled;
     setPlaybackUI(true);
     status.textContent = 'Playing...';
   }
 
   function stopPlayback(){
-    if(!playback) { // clear UI
+    if(!playback){
       playbar.style.width = '0%';
       playBtn.disabled = recordingMemory ? false : true;
       pauseBtn.disabled = true;
       stopPlayBtn.disabled = true;
       return;
     }
-    // clear timers
-    if(playback.timerIds) playback.timerIds.forEach(id => clearTimeout(id));
+    playback.timerIds.forEach(id => clearTimeout(id));
     playback = null;
     playbar.style.width = '0%';
     setPlaybackUI(false);
     status.textContent = 'Ready';
-    // after playback we take snapshot of resulting canvas so undo works
     saveSnapshot();
   }
 
-  // UI toggles for playback state
   function setPlaybackUI(isPlaying, isPaused=false){
     playBtn.disabled = isPlaying;
     pauseBtn.disabled = !isPlaying && !isPaused;
     stopPlayBtn.disabled = !isPlaying && !isPaused;
-    // while playing, disable drawing controls
     const disabled = !!isPlaying || isPaused;
     penBtn.disabled = disabled; highlighterBtn.disabled = disabled; eraserBtn.disabled = disabled; textBtn.disabled = disabled;
     colorInput.disabled = disabled; sizeInput.disabled = disabled; opacityInput.disabled = disabled;
   }
 
-  playBtn.addEventListener('click', ()=> {
-    if(!recordingMemory) { alert('No recording loaded. Record or import first.'); return; }
-    playRecording();
-  });
-  pauseBtn.addEventListener('click', ()=> {
-    if(playback && playback.playing) pausePlayback();
-    else if(playback && !playback.playing) resumePlayback();
-  });
+  playBtn.addEventListener('click', ()=> { if(!recordingMemory) { alert('No recording loaded. Record or import first.'); return; } playRecording(); });
+  pauseBtn.addEventListener('click', ()=> { if(playback && playback.playing) pausePlayback(); else if(playback && !playback.playing) resumePlayback(); });
   stopPlayBtn.addEventListener('click', ()=> stopPlayback());
 
-  // Load the just-finished recording into memory automatically
-  // Note: we already set recordingMemory when stopping recording
-
-  // --- Laser pointer ---
+  // laser pointer
   let laserActive = false;
   laserBtn.addEventListener('click', ()=>{
     laserActive = !laserActive;
     laserEl.style.display = laserActive ? 'block' : 'none';
     laserBtn.classList.toggle('active', laserActive);
-    // if active we should follow pointer
     status.textContent = laserActive ? 'Laser on' : 'Laser off';
   });
-
   function positionLaser(clientX, clientY){
     const r = wrap.getBoundingClientRect();
     laserEl.style.left = (clientX - r.left) + 'px';
     laserEl.style.top = (clientY - r.top) + 'px';
   }
-  // Move laser on pointer move anywhere inside wrap
-  wrap.addEventListener('pointermove', (e)=>{
-    if(laserActive){
-      positionLaser(e.clientX, e.clientY);
-    }
-  });
+  wrap.addEventListener('pointermove', (e)=> { if(laserActive) positionLaser(e.clientX, e.clientY); });
 
-  // Also show laser briefly when clicking Play to simulate presenter laser (optional)
-  // we won't do that by default.
-
-  // --- Import button wiring (trigger file input) ---
-  importBtn.addEventListener('click', ()=> importFile.click());
-
-  // Utility: load recording from last recording variable (stopRecording sets recordingMemory)
-  // expose stopRecording to inner scope; earlier stopRecording defined twice — ensure final binding:
-  // (we replaced earlier with this one; if duplication occurs browsers use last definition)
-
-  // Safety: disable drawing if playback active
-  // done via setPlaybackUI
-
-  // small UX: disable play until recording exists
-  playBtn.disabled = true; pauseBtn.disabled = true; stopPlayBtn.disabled = true; exportBtn.disabled = true;
-
-  // Make sure the recordingMemory is set when a recording finishes
-  // (stopRecording sets it; earlier we had two stopRecording functions in initial code, but here the latest is used.)
-
-  // Provide keyboard shortcuts for convenience
+  // keyboard shortcuts
   window.addEventListener('keydown', (e)=>{
+    if(e.key === 'p') setTool('pen');
+    if(e.key === 'h') setTool('highlighter');
+    if(e.key === 'e') setTool('eraser');
+    if(e.key === 't') setTool('text');
     if((e.ctrlKey || e.metaKey) && e.key === 'r'){ e.preventDefault(); recordBtn.click(); }
     if((e.ctrlKey || e.metaKey) && e.key === 'p'){ e.preventDefault(); playBtn.click(); }
   });
 
-  // Ensure canvas background is white initially
+  // initial UI state
+  playBtn.disabled = true; pauseBtn.disabled = true; stopPlayBtn.disabled = true; exportBtn.disabled = true;
+
   ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  // When recording finishes the 'recording' variable holds the session, and recordingMemory references it
-  // Implementation of stopRecording above sets recordingMemory.
+  // -----------------------
+  // GUIDE: collapse/close/pin behavior
+  // -----------------------
+  const GUIDE_KEY = 'whiteboard_guide_state_v1';
+  const guideEl = document.getElementById('howto');
+  const toggleBtn = document.getElementById('toggleGuide');
+  const closeBtn = document.getElementById('closeGuide');
+  const pinBtn = document.getElementById('pinGuide');
 
-  // Edge-case: if user recorded then navigated away and returns, they lose recording (browser memory). Use Export to persist.
+  function loadGuideState(){
+    try{
+      const raw = localStorage.getItem(GUIDE_KEY);
+      if(!raw) return { open:true, pinned:false };
+      return JSON.parse(raw);
+    }catch(e){ return { open:true, pinned:false }; }
+  }
+  function saveGuideState(state){
+    try{ localStorage.setItem(GUIDE_KEY, JSON.stringify(state)); }catch(e){}
+  }
+  let guideState = loadGuideState();
+  function applyGuideState(){
+    if(!guideState.open) {
+      guideEl.classList.add('collapsed');
+      toggleBtn.textContent = '+';
+    } else {
+      guideEl.classList.remove('collapsed');
+      toggleBtn.textContent = '–';
+    }
+    pinBtn.textContent = guideState.pinned ? '📌 Pinned' : '📌 Pin';
+  }
+  applyGuideState();
 
-  // Quick demo helper: load last recording into memory when created
-  // (the stopRecording handler already does this)
+  toggleBtn.addEventListener('click', ()=>{
+    guideState.open = !guideState.open;
+    applyGuideState();
+    saveGuideState(guideState);
+  });
 
-  // That's it — the essentials are provided above.
+  closeBtn.addEventListener('click', ()=>{
+    guideEl.style.display = 'none';
+    guideState.open = false;
+    saveGuideState(guideState);
+  });
+
+  pinBtn.addEventListener('click', ()=>{
+    guideState.pinned = !guideState.pinned;
+    applyGuideState();
+    saveGuideState(guideState);
+  });
+
+  // allow dragging guide when not pinned
+  let draggingGuide = false, dragStart = null, guideOrig = null;
+  guideEl.addEventListener('pointerdown', (e)=>{
+    const target = e.target;
+    if(guideState.pinned) return;
+    if(target.closest('.controls') || target.closest('.btn') || target.closest('.pin')) return;
+    draggingGuide = true;
+    dragStart = { x: e.clientX, y: e.clientY };
+    const rect = guideEl.getBoundingClientRect();
+    guideOrig = { left: rect.left, top: rect.top };
+    guideEl.style.transition = 'none';
+    guideEl.setPointerCapture && guideEl.setPointerCapture(e.pointerId);
+  });
+
+  window.addEventListener('pointermove', (e)=>{
+    if(!draggingGuide) return;
+    const dx = e.clientX - dragStart.x;
+    const dy = e.clientY - dragStart.y;
+    const left = Math.min(window.innerWidth - 40, Math.max(8, guideOrig.left + dx));
+    const top = Math.min(window.innerHeight - 40, Math.max(8, guideOrig.top + dy));
+    guideEl.style.position = 'fixed';
+    guideEl.style.left = left + 'px';
+    guideEl.style.top = top + 'px';
+  });
+
+  window.addEventListener('pointerup', (e)=>{
+    if(!draggingGuide) return;
+    draggingGuide = false;
+    guideEl.releasePointerCapture && guideEl.releasePointerCapture(e.pointerId);
+    guideEl.style.transition = '';
+    guideState.pos = { left: guideEl.style.left, top: guideEl.style.top };
+    saveGuideState(guideState);
+  });
+
 })();
 </script>
 </body>
