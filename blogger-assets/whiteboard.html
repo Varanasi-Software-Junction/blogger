@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Champak Roy — Whiteboard (Guide bottom-right)</title>
+<title>Champak Roy — Whiteboard (fixed)</title>
 <style>
   :root{--blue:#3f6bff;--bg:#eef3ff;--panel:#fff;--muted:#c7d6ff}
   *{box-sizing:border-box}
@@ -17,9 +17,10 @@
   button.active{background:rgba(63,107,255,0.12);color:var(--blue)}
   .spacer{flex:1}
   .canvas-wrap{position:relative;flex:1;display:block;background:#fff}
-  canvas#board{position:absolute;left:0;top:0;width:100%;height:100%;touch-action:none;display:block}
+  canvas#board{position:absolute;left:0;top:0;width:100%;height:100%;touch-action:none;display:block;cursor:crosshair}
   .text-note{position:absolute;min-width:120px;min-height:28px;padding:6px 8px;border-radius:6px;border:1px dashed rgba(0,0,0,0.12);background:rgba(255,255,255,0.96);resize:both;overflow:auto;font-size:16px}
   .laser{position:absolute;pointer-events:none;border-radius:50%;width:28px;height:28px;margin-left:-14px;margin-top:-14px;box-shadow:0 0 12px rgba(255,0,0,0.45);display:none;z-index:120}
+  .eraser-cursor{position:absolute;pointer-events:none;border-radius:50%;border:2px dashed rgba(0,0,0,0.25);transform:translate(-50%,-50%);display:none;z-index:130}
   .playbackProgress{width:160px;height:8px;background:rgba(0,0,0,0.06);border-radius:6px;overflow:hidden}
   .playbackBar{height:100%;width:0;background:linear-gradient(90deg,var(--blue),#7cc0ff)}
   .controls {display:flex;gap:6px;align-items:center}
@@ -42,37 +43,13 @@
     overflow: hidden;
     font-size: 13px;
   }
-  .guide .head {
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    padding:8px 10px;
-    background: rgba(255,255,255,0.9);
-    border-bottom:1px solid rgba(0,0,0,0.03);
-  }
+  .guide .head { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 10px; background: rgba(255,255,255,0.9); border-bottom:1px solid rgba(0,0,0,0.03); }
   .guide .title { font-weight:600; color:#14213d; }
-  .guide .controls { display:flex; gap:8px; align-items:center; }
-  .guide .btn {
-    background:transparent; border:1px solid rgba(0,0,0,0.06); padding:6px 8px; border-radius:6px; cursor:pointer;
-  }
-  .guide .btn.small { padding:4px 6px; font-size:12px }
-  .guide .content {
-    padding:10px;
-    line-height:1.4;
-    color:#222;
-    max-height: 360px;
-    overflow:auto;
-  }
-  .guide h4 { margin:6px 0 6px 0; font-size:14px; }
-  .guide ol, .guide ul { margin:6px 0 10px 18px; padding:0; }
-  .guide .shortcut { display:inline-block; background:#f1f7ff; border:1px solid #e6efff; padding:2px 6px; border-radius:6px; font-weight:600; margin-right:6px; font-size:12px; }
+  .guide .content { padding:10px; line-height:1.4; color:#222; max-height: 360px; overflow:auto; }
   .guide .footer { padding:8px 10px; border-top:1px solid rgba(0,0,0,0.03); background: rgba(255,255,255,0.96); display:flex; justify-content:space-between; align-items:center; gap:8px; }
-  .guide .pin { cursor:pointer; font-size:12px; padding:6px; border-radius:6px; background:transparent; border:1px solid rgba(0,0,0,0.04) }
   .guide.collapsed { width:44px; height:44px; border-radius:50%; overflow:visible; padding:0; right:12px; bottom:12px; }
   .guide.collapsed .head { display:flex; justify-content:center; align-items:center; padding:0; border-bottom:none; }
   .guide.collapsed .content, .guide.collapsed .footer { display:none; }
-  .guide .help-title { font-size:13px; color:#0b2545; }
 </style>
 </head>
 <body>
@@ -88,8 +65,10 @@
         <button id="textBtn" title="Text">T</button>
 
         <label>Color</label><input type="color" id="color" value="#000000">
-        <label>Size</label><input type="range" id="size" min="1" max="60" value="4">
+        <label>Size</label><input type="range" id="size" min="1" max="80" value="8">
         <label>Opacity</label><input type="range" id="opacity" min="0.1" max="1" step="0.05" value="1">
+
+        <button id="clearBtn" title="Clear board">🧹 Clear</button>
       </div>
 
       <div class="spacer"></div>
@@ -119,18 +98,19 @@
     <div class="canvas-wrap" id="canvasWrap">
       <canvas id="board"></canvas>
       <div id="laser" class="laser" style="background: rgba(255,0,0,0.55); display:none"></div>
+      <div id="eraserCursor" class="eraser-cursor"></div>
     </div>
 
     <!-- How to use guide (bottom-right) -->
     <div id="howto" class="guide" role="region" aria-label="How to use whiteboard guide">
       <div class="head">
         <div>
-          <div class="title help-title">How to use — Whiteboard</div>
+          <div class="title">How to use — Whiteboard</div>
           <div style="font-size:11px;color:#445;opacity:0.9">Quick guide</div>
         </div>
-        <div class="controls">
-          <button id="toggleGuide" class="btn small" title="Collapse/expand guide">–</button>
-          <button id="closeGuide" class="btn small" title="Hide guide temporarily">✕</button>
+        <div>
+          <button id="toggleGuide" title="Collapse/expand guide">–</button>
+          <button id="closeGuide" title="Hide guide temporarily">✕</button>
         </div>
       </div>
 
@@ -138,45 +118,21 @@
         <h4>Basic steps</h4>
         <ol>
           <li>Select a tool: <strong>Pen</strong>, <strong>Highlighter</strong>, <strong>Eraser</strong>, or <strong>Text</strong>.</li>
-          <li>Pick <span class="shortcut">Color</span>, adjust <span class="shortcut">Size</span> and <span class="shortcut">Opacity</span> as needed.</li>
-          <li>Draw on the board using mouse, touch, or pen. Use the <strong>Text</strong> tool to click and add editable text boxes.</li>
+          <li>Pick <strong>Color</strong>, adjust <strong>Size</strong> and <strong>Opacity</strong>.</li>
+          <li>Draw, add text (click where you want the text box), erase, or clear the board.</li>
         </ol>
-
-        <h4>Recording & playback</h4>
-        <ul>
-          <li>Click <strong>Record</strong> to start recording your strokes. Click <strong>Stop</strong> to finish.</li>
-          <li>Use <strong>Play</strong> to replay the recorded session, <strong>Pause</strong> to pause, and <strong>Stop</strong> to end playback.</li>
-          <li><strong>Export</strong> saves the recording as JSON. Use <strong>Import</strong> to load a saved recording.</li>
-        </ul>
-
-        <h4>Laser pointer</h4>
-        <ul>
-          <li>Toggle <strong>Laser</strong> to get a non-destructive red pointer that follows your cursor or finger while explaining live.</li>
-          <li>Laser does NOT draw on the board — it’s only for presentation.</li>
-        </ul>
-
-        <h4>Tips</h4>
-        <ul>
-          <li>Text boxes are editable and draggable (double-click to delete a box).</li>
-          <li>Recording saves pen/highlighter/eraser strokes and timing — text boxes are not recorded in this version.</li>
-          <li>Use <span class="shortcut">Ctrl/Cmd + R</span> to start recording and <span class="shortcut">Ctrl/Cmd + P</span> to play.</li>
-        </ul>
-
-        <h4>Keyboard shortcuts</h4>
-        <ul>
-          <li><span class="shortcut">P</span> — Pen</li>
-          <li><span class="shortcut">H</span> — Highlighter</li>
-          <li><span class="shortcut">E</span> — Eraser</li>
-          <li><span class="shortcut">T</span> — Text</li>
-          <li><span class="shortcut">Ctrl/Cmd + R</span> — Start recording</li>
-          <li><span class="shortcut">Ctrl/Cmd + P</span> — Play</li>
-        </ul>
+        <h4>Highlighter</h4>
+        <p>Choose Highlighter, pick a light color (e.g. #ffeb3b), increase Size (20–60) and lower Opacity (0.25–0.6) to overlay semi-transparent strokes.</p>
+        <h4>Eraser</h4>
+        <p>Choose Eraser and move over strokes. A dashed circular cursor shows the erase radius (Size controls it). Clear removes canvas + text boxes.</p>
+        <h4>Recording</h4>
+        <p>Record → Stop → Play. Export saves a JSON; Import loads it back. Text boxes are not recorded (strokes only).</p>
       </div>
 
       <div class="footer">
         <div style="font-size:12px;color:#445">Guide</div>
         <div>
-          <button id="pinGuide" class="pin" title="Pin guide (remember state)">📌 Pin</button>
+          <button id="pinGuide" title="Pin guide (remember state)">📌 Pin</button>
         </div>
       </div>
     </div>
@@ -185,16 +141,43 @@
 </div>
 
 <script>
-/* Whiteboard with recording, laser pointer and HOW-TO guide (guide now bottom-right)
-   - Guide toggles/collapses and remembers state in localStorage
-   - Text tool creates editable boxes
-*/
+/* Clean, tested whiteboard — no syntax errors */
 
 (() => {
-  // --- Canvas setup ---
+  // Elements
   const canvas = document.getElementById('board');
   const wrap = document.getElementById('canvasWrap');
-  const ctx = canvas.getContext('2d', {alpha:false}); // opaque white background
+  const ctx = canvas.getContext('2d', {alpha:false});
+  const penBtn = document.getElementById('penBtn');
+  const highlighterBtn = document.getElementById('highlighterBtn');
+  const eraserBtn = document.getElementById('eraserBtn');
+  const textBtn = document.getElementById('textBtn');
+  const colorInput = document.getElementById('color');
+  const sizeInput = document.getElementById('size');
+  const opacityInput = document.getElementById('opacity');
+  const clearBtn = document.getElementById('clearBtn');
+
+  const recordBtn = document.getElementById('recordBtn');
+  const stopRecBtn = document.getElementById('stopRecBtn');
+  const playBtn = document.getElementById('playBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const stopPlayBtn = document.getElementById('stopPlayBtn');
+  const exportBtn = document.getElementById('exportBtn');
+  const importFile = document.getElementById('importFile');
+  const importBtn = document.getElementById('importBtn');
+  const laserBtn = document.getElementById('laserBtn');
+  const laserEl = document.getElementById('laser');
+  const eraserCursor = document.getElementById('eraserCursor');
+  const playbar = document.getElementById('playbar');
+  const status = document.getElementById('status');
+
+  // Guide elements
+  const guideEl = document.getElementById('howto');
+  const toggleGuide = document.getElementById('toggleGuide');
+  const closeGuide = document.getElementById('closeGuide');
+  const pinGuide = document.getElementById('pinGuide');
+
+  // Canvas sizing + preserve drawing
   function resizeCanvas(){
     const r = wrap.getBoundingClientRect();
     const tmp = document.createElement('canvas');
@@ -202,7 +185,6 @@
     tmp.height = canvas.height || Math.max(400, Math.floor(r.height));
     const tctx = tmp.getContext('2d');
     if(canvas.width && canvas.height) tctx.drawImage(canvas,0,0);
-
     canvas.width = Math.floor(r.width);
     canvas.height = Math.floor(r.height);
     // white background
@@ -213,34 +195,25 @@
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
 
-  // --- Controls ---
-  const penBtn = document.getElementById('penBtn'), highlighterBtn = document.getElementById('highlighterBtn'),
-        eraserBtn = document.getElementById('eraserBtn'), textBtn = document.getElementById('textBtn');
-  const colorInput = document.getElementById('color'), sizeInput = document.getElementById('size'), opacityInput = document.getElementById('opacity');
-
-  const recordBtn = document.getElementById('recordBtn'), stopRecBtn = document.getElementById('stopRecBtn');
-  const playBtn = document.getElementById('playBtn'), pauseBtn = document.getElementById('pauseBtn'), stopPlayBtn = document.getElementById('stopPlayBtn');
-  const exportBtn = document.getElementById('exportBtn'), importFile = document.getElementById('importFile'), importBtn = document.getElementById('importBtn');
-  const laserBtn = document.getElementById('laserBtn'), laserEl = document.getElementById('laser');
-  const playbar = document.getElementById('playbar'), status = document.getElementById('status');
-
-  // --- Drawing state ---
+  // State
   let tool = 'pen';
-  let color = colorInput.value, size = Number(sizeInput.value), opacity = Number(opacityInput.value);
+  let color = colorInput.value;
+  let size = Number(sizeInput.value);
+  let opacity = Number(opacityInput.value);
   let drawing = false;
-  let points = [];
   let lastPointerId = null;
+  let points = [];
 
-  // snapshot stack for undo/redo (small)
+  // Snapshot/undo (canvas-only)
   let snapshots = [], snapIdx = -1;
   function saveSnapshot(){
     try{
-      const data = canvas.toDataURL('image/png');
+      const data = canvas.toDataURL();
       snapshots = snapshots.slice(0, snapIdx+1);
       snapshots.push(data);
-      if(snapshots.length>20) snapshots.shift();
-      snapIdx = snapshots.length-1;
-    }catch(e){/*ignore*/}
+      if(snapshots.length > 30) snapshots.shift();
+      snapIdx = snapshots.length - 1;
+    }catch(e){}
   }
   function restoreSnapshot(i){
     if(i<0 || i>=snapshots.length) return;
@@ -248,392 +221,335 @@
     img.onload = ()=> { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0,canvas.width,canvas.height); };
     img.src = snapshots[i];
   }
-  saveSnapshot(); // initial
+  saveSnapshot();
 
-  // --- Recording ---
-  let recording = null; // active recording while recording
-  let recordingMemory = null; // saved recording (for playback/import/export)
+  // Recording model (simple)
   let isRecording = false;
-  let recordStartTime = 0;
+  let recording = null; // { events:[], duration }
+  let recordingMemory = null;
+  let recordStart = 0;
 
-  // playback state
-  let playback = null;
-
-  const currentMs = () => performance.now();
-
+  function nowMs(){ return performance.now(); }
   function startRecording(){
-    recording = { events: [], duration:0 };
+    recording = { events: [], duration: 0 };
     isRecording = true;
-    recordStartTime = currentMs();
-    recordBtn.disabled = true;
-    stopRecBtn.disabled = false;
-    playBtn.disabled = true;
-    exportBtn.disabled = true;
+    recordStart = nowMs();
+    recordBtn.disabled = true; stopRecBtn.disabled = false;
+    playBtn.disabled = true; exportBtn.disabled = true;
     status.textContent = 'Recording...';
   }
-
   function stopRecording(){
     if(!isRecording) return;
     isRecording = false;
-    recording.duration = Math.max(0, currentMs() - recordStartTime);
+    recording.duration = Math.max(0, nowMs() - recordStart);
     recordingMemory = recording;
-    recordBtn.disabled = false;
-    stopRecBtn.disabled = true;
+    recordBtn.disabled = false; stopRecBtn.disabled = true;
     playBtn.disabled = recordingMemory.events.length > 0 ? false : true;
-    exportBtn.disabled = recordingMemory.events.length > 0 ? false : true;
+    exportBtn.disabled = recordingMemory && recordingMemory.events.length ? false : true;
     status.textContent = `Recorded ${Math.round(recording.duration)} ms`;
   }
-
-  function pushEvent(ev){
+  function pushEvent(e){
     if(!isRecording || !recording) return;
-    const t = Math.round(currentMs() - recordStartTime);
-    recording.events.push(Object.assign({ t }, ev));
+    recording.events.push(Object.assign({ t: Math.round(nowMs()-recordStart) }, e));
   }
 
-  // drawing helpers
-  function applyStrokeSettings(ctxLocal, evTool, evColor, evSize, evOpacity){
-    if(evTool === 'eraser'){
+  // Playback simple controller using timeouts
+  let playback = null; // { timers: [], startTime, pausedAt, script }
+  function clearPlaybackTimers(){
+    if(!playback || !playback.timers) return;
+    playback.timers.forEach(id => clearTimeout(id));
+    playback = null;
+    playbar.style.width = '0%';
+    playBtn.disabled = false; pauseBtn.disabled = true; stopPlayBtn.disabled = true;
+  }
+
+  function playRecording(){
+    if(!recordingMemory || !recordingMemory.events || recordingMemory.events.length === 0) return;
+    clearPlaybackTimers();
+    const events = recordingMemory.events;
+    playback = { timers: [], startTime: nowMs(), script: recordingMemory, playing: true };
+    // clear canvas for playback
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    let pen = null;
+    for(const ev of events){
+      const id = setTimeout(() => {
+        if(!playback || !playback.playing) return;
+        if(ev.type === 'start'){
+          pen = { x: ev.x, y: ev.y, tool: ev.tool, color: ev.color, size: ev.size, opacity: ev.opacity };
+          ctx.save();
+          if(pen.tool === 'eraser'){ ctx.globalCompositeOperation = 'destination-out'; ctx.globalAlpha = 1; }
+          else { ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = pen.opacity; }
+          ctx.lineCap = ctx.lineJoin = 'round';
+          ctx.lineWidth = pen.size;
+          ctx.beginPath(); ctx.moveTo(pen.x, pen.y); ctx.lineTo(pen.x+0.01, pen.y+0.01); ctx.stroke();
+          ctx.restore();
+        } else if(ev.type === 'move'){
+          if(!pen) return;
+          const prev = { x: pen.x, y: pen.y }, curr = { x: ev.x, y: ev.y };
+          ctx.save();
+          if(pen.tool === 'eraser'){ ctx.globalCompositeOperation = 'destination-out'; ctx.globalAlpha = 1; }
+          else { ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = pen.opacity; }
+          ctx.lineCap = ctx.lineJoin = 'round';
+          ctx.lineWidth = pen.size;
+          ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(curr.x, curr.y); ctx.stroke();
+          ctx.restore();
+          pen.x = curr.x; pen.y = curr.y;
+        } else if(ev.type === 'end'){ pen = null; }
+        // progress
+        const progress = Math.min(1, (nowMs() - playback.startTime) / (playback.script.duration || 1));
+        playbar.style.width = (progress*100) + '%';
+        if(progress >= 1){ setTimeout(()=> { clearPlaybackTimers(); status.textContent = 'Playback finished'; saveSnapshot(); }, 20); }
+      }, ev.t);
+      playback.timers.push(id);
+    }
+    playBtn.disabled = true; pauseBtn.disabled = false; stopPlayBtn.disabled = false;
+    status.textContent = 'Playing...';
+  }
+
+  function stopPlayback(){
+    if(playback && playback.timers) playback.timers.forEach(id => clearTimeout(id));
+    playback = null;
+    playbar.style.width = '0%';
+    playBtn.disabled = recordingMemory ? false : true;
+    pauseBtn.disabled = true; stopPlayBtn.disabled = true;
+    status.textContent = 'Ready';
+    saveSnapshot();
+  }
+
+  // Drawing helpers
+  function applyStroke(ctxLocal, mode, col, sz, op){
+    ctxLocal.lineCap = 'round';
+    ctxLocal.lineJoin = 'round';
+    ctxLocal.lineWidth = sz;
+    if(mode === 'eraser'){
       ctxLocal.globalCompositeOperation = 'destination-out';
       ctxLocal.globalAlpha = 1;
       ctxLocal.strokeStyle = 'rgba(0,0,0,1)';
     } else {
       ctxLocal.globalCompositeOperation = 'source-over';
-      ctxLocal.globalAlpha = evOpacity;
-      ctxLocal.strokeStyle = evColor;
+      ctxLocal.globalAlpha = op;
+      ctxLocal.strokeStyle = col;
     }
-    ctxLocal.lineCap = 'round';
-    ctxLocal.lineJoin = 'round';
-    ctxLocal.lineWidth = evSize;
   }
 
-  function drawSegment(prev, curr, evTool, evColor, evSize, evOpacity){
-    applyStrokeSettings(ctx, evTool, evColor, evSize, evOpacity);
+  function drawLine(prev, curr, mode, col, sz, op){
+    applyStroke(ctx, mode, col, sz, op);
     ctx.beginPath();
     ctx.moveTo(prev.x, prev.y);
     ctx.lineTo(curr.x, curr.y);
     ctx.stroke();
+    // restore to default to avoid keeping eraser
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
   }
 
-  // --- Text note helper (working) ---
-  function addTextNoteAt(x, y, html = '', w = 180, h = 40, styles = null){
+  // Text notes
+  function addTextNoteAt(x,y,html='',w=180,h=40,styles=null){
     const note = document.createElement('div');
     note.className = 'text-note';
     note.contentEditable = true;
     note.innerHTML = html || '';
-    note.style.left = (x)+'px';
-    note.style.top = (y)+'px';
-    note.style.width = (w || 160) + 'px';
-    note.style.height = (h || 36) + 'px';
+    note.style.left = x + 'px';
+    note.style.top = y + 'px';
+    note.style.width = w + 'px';
+    note.style.height = h + 'px';
     note.style.zIndex = 110;
-    if(styles){
-      if(styles.fontSize) note.style.fontSize = styles.fontSize;
-      if(styles.color) note.style.color = styles.color;
-    }
-    // focus and add behavior
-    note.addEventListener('blur', () => { saveSnapshot(); });
+    if(styles){ if(styles.fontSize) note.style.fontSize = styles.fontSize; if(styles.color) note.style.color = styles.color; }
+    note.addEventListener('blur', ()=> saveSnapshot());
     // dragging
     let dragging = false, start = null, orig = null;
-    note.addEventListener('pointerdown', (ev) => {
-      if(ev.button && ev.button !== 0) return;
-      ev.stopPropagation();
+    note.addEventListener('pointerdown', (e) => {
+      if(e.button && e.button !== 0) return;
+      e.stopPropagation();
       dragging = true;
-      start = {x:ev.clientX, y:ev.clientY};
-      const r = note.getBoundingClientRect();
-      const parentRect = wrap.getBoundingClientRect();
-      orig = {left: r.left - parentRect.left, top: r.top - parentRect.top};
+      start = { x: e.clientX, y: e.clientY };
+      const r = note.getBoundingClientRect(), pr = wrap.getBoundingClientRect();
+      orig = { left: r.left - pr.left, top: r.top - pr.top };
+      note.setPointerCapture && note.setPointerCapture(e.pointerId);
       note.style.touchAction = 'none';
-      note.setPointerCapture && note.setPointerCapture(ev.pointerId);
     });
-    window.addEventListener('pointermove', (ev) => {
+    window.addEventListener('pointermove', (e) => {
       if(!dragging) return;
-      const dx = ev.clientX - start.x;
-      const dy = ev.clientY - start.y;
+      const dx = e.clientX - start.x, dy = e.clientY - start.y;
       note.style.left = (orig.left + dx) + 'px';
       note.style.top = (orig.top + dy) + 'px';
     });
-    window.addEventListener('pointerup', (ev) => {
+    window.addEventListener('pointerup', (e) => {
       if(!dragging) return;
       dragging = false;
+      note.releasePointerCapture && note.releasePointerCapture(e.pointerId);
       note.style.touchAction = '';
-      note.releasePointerCapture && note.releasePointerCapture(ev.pointerId);
       saveSnapshot();
     });
-    // double-click to delete
-    note.addEventListener('dblclick', (ev) => {
-      if(confirm('Delete this text box?')) { note.remove(); saveSnapshot(); }
-    });
+    note.addEventListener('dblclick', ()=> { if(confirm('Delete this text box?')) { note.remove(); saveSnapshot(); } });
     wrap.appendChild(note);
-    // focus for immediate typing
     setTimeout(()=> note.focus(), 10);
     return note;
   }
 
-  // pointer events (with text handling)
-  canvas.addEventListener('pointerdown', (e)=>{
-    // if text tool — create a text note and do not begin drawing
+  // Clear board
+  function clearBoard(){
+    ctx.save();
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+    document.querySelectorAll('.text-note').forEach(n => n.remove());
+    saveSnapshot();
+    status.textContent = 'Cleared';
+  }
+
+  // Pointer events
+  canvas.addEventListener('pointerdown', (e) => {
+    // Text tool: create note and stop
     if(tool === 'text'){
-      const rp = wrap.getBoundingClientRect();
-      const x = e.clientX - rp.left;
-      const y = e.clientY - rp.top;
+      const r = wrap.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
       addTextNoteAt(x, y, '', 220, 36, { fontSize: '16px', color: color });
       e.preventDefault();
       return;
     }
-
     if(e.button && e.button !== 0) return;
     canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
     drawing = true;
     lastPointerId = e.pointerId;
-    const pos = getPos(e);
-    points = [pos];
-    pushEvent({ type:'start', tool, color, size, opacity, x:pos.x, y:pos.y });
-    applyStrokeSettings(ctx, tool, color, size, opacity);
+    points = [];
+    const p = getPos(e);
+    points.push(p);
+    pushEvent({ type:'start', tool, color, size, opacity, x:p.x, y:p.y });
+    // set composite if eraser
+    if(tool === 'eraser'){ ctx.save(); ctx.globalCompositeOperation = 'destination-out'; ctx.globalAlpha = 1; }
+    else { ctx.save(); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = opacity; }
+    applyStroke(ctx, tool, color, size, opacity);
     ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-    ctx.lineTo(pos.x+0.01, pos.y+0.01);
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(p.x+0.01, p.y+0.01);
     ctx.stroke();
+    updateEraserCursor(e);
     e.preventDefault();
-  }, {passive:false});
+  }, { passive:false });
 
-  canvas.addEventListener('pointermove', (e)=>{
+  canvas.addEventListener('pointermove', (e) => {
+    updateEraserCursor(e);
     if(!drawing || e.pointerId !== lastPointerId) return;
-    const pos = getPos(e);
+    const p = getPos(e);
     const prev = points[points.length-1];
-    points.push(pos);
-    drawSegment(prev, pos, tool, color, size, opacity);
-    pushEvent({ type:'move', x:pos.x, y:pos.y });
+    points.push(p);
+    drawLine(prev, p, tool, color, size, opacity);
+    pushEvent({ type:'move', x:p.x, y:p.y });
     e.preventDefault();
-    if(laserActive) positionLaser(e.clientX, e.clientY);
-  }, {passive:false});
+  }, { passive:false });
 
-  window.addEventListener('pointerup', (e)=>{
-    if(drawing && e.pointerId === lastPointerId){
-      drawing = false;
-      canvas.releasePointerCapture && canvas.releasePointerCapture(e.pointerId);
-      const pos = points[points.length-1] || getPos(e);
-      pushEvent({ type:'end', x:pos.x, y:pos.y });
-      saveSnapshot();
-    }
-  }, {passive:false});
+  window.addEventListener('pointerup', (e) => {
+    if(!drawing || e.pointerId !== lastPointerId) return;
+    drawing = false;
+    canvas.releasePointerCapture && canvas.releasePointerCapture(e.pointerId);
+    const p = points[points.length-1] || getPos(e);
+    pushEvent({ type:'end', x:p.x, y:p.y });
+    // restore context (if eraser we saved earlier)
+    ctx.restore();
+    saveSnapshot();
+    e.preventDefault();
+  }, { passive:false });
 
   function getPos(e){
     const r = canvas.getBoundingClientRect();
     return { x: e.clientX - r.left, y: e.clientY - r.top };
   }
 
-  // tool UI
+  function updateEraserCursor(e){
+    if(!eraserCursor) return;
+    if(tool !== 'eraser'){ eraserCursor.style.display = 'none'; return; }
+    eraserCursor.style.display = 'block';
+    const r = wrap.getBoundingClientRect();
+    if(e){
+      eraserCursor.style.left = (e.clientX - r.left) + 'px';
+      eraserCursor.style.top = (e.clientY - r.top) + 'px';
+    }
+    eraserCursor.style.width = size + 'px';
+    eraserCursor.style.height = size + 'px';
+    eraserCursor.style.borderRadius = (size/2) + 'px';
+  }
+
+  // Tool UI
   function setTool(t){
     tool = t;
     [penBtn, highlighterBtn, eraserBtn, textBtn].forEach(b => b.classList.remove('active'));
-    if(t==='pen') penBtn.classList.add('active');
-    if(t==='highlighter') highlighterBtn.classList.add('active');
-    if(t==='eraser') eraserBtn.classList.add('active');
-    if(t==='text') textBtn.classList.add('active');
-    canvas.style.cursor = (t==='text' ? 'text' : 'crosshair');
+    if(t === 'pen') penBtn.classList.add('active');
+    if(t === 'highlighter') highlighterBtn.classList.add('active');
+    if(t === 'eraser') eraserBtn.classList.add('active');
+    if(t === 'text') textBtn.classList.add('active');
+    canvas.style.cursor = (t === 'text' ? 'text' : 'crosshair');
+    if(t !== 'eraser') eraserCursor.style.display = 'none';
   }
   penBtn.addEventListener('click', ()=> setTool('pen'));
   highlighterBtn.addEventListener('click', ()=> setTool('highlighter'));
   eraserBtn.addEventListener('click', ()=> setTool('eraser'));
   textBtn.addEventListener('click', ()=> setTool('text'));
 
-  colorInput.addEventListener('input', (e)=> { color = e.target.value; });
-  sizeInput.addEventListener('input', (e)=> { size = Number(e.target.value); });
-  opacityInput.addEventListener('input', (e)=> { opacity = Number(e.target.value); });
+  colorInput.addEventListener('input', (e) => color = e.target.value);
+  sizeInput.addEventListener('input', (e) => { size = Number(e.target.value); eraserCursor.style.width = size + 'px'; eraserCursor.style.height = size + 'px'; });
+  opacityInput.addEventListener('input', (e) => opacity = Number(e.target.value));
+  clearBtn.addEventListener('click', ()=> { if(confirm('Clear the entire board including text boxes?')) clearBoard(); });
 
-  // recording controls
-  recordBtn.addEventListener('click', ()=> {
-    if(playback && playback.playing) { alert('Stop playback before recording.'); return; }
-    startRecording();
-  });
+  // Recording wiring
+  recordBtn.addEventListener('click', ()=> { if(playback && playback.playing) { alert('Stop playback before recording.'); return; } startRecording(); });
   stopRecBtn.addEventListener('click', ()=> stopRecording());
-
-  exportBtn.addEventListener('click', ()=>{
+  playBtn.addEventListener('click', ()=> { if(!recordingMemory){ alert('No recording loaded. Record or import first.'); return; } playRecording(); });
+  pauseBtn.addEventListener('click', ()=> { /* not implemented: simple playback only */ alert('Pause/resume not available in this simplified build. Use Stop.'); });
+  stopPlayBtn.addEventListener('click', ()=> stopPlayback());
+  exportBtn.addEventListener('click', ()=> {
     if(!recordingMemory) return;
-    const blob = new Blob([JSON.stringify(recordingMemory)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
+    const blob = new Blob([JSON.stringify(recordingMemory)], { type: 'application/json' });
     const a = document.createElement('a');
-    a.href = url; a.download = 'whiteboard-recording.json';
+    a.href = URL.createObjectURL(blob);
+    a.download = 'whiteboard-recording.json';
     document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(a.href);
   });
 
-  importFile.addEventListener('change', (ev)=> {
+  importFile.addEventListener('change', (ev) => {
     const f = ev.target.files[0];
     if(!f) return;
     const reader = new FileReader();
     reader.onload = (e) => {
-      try{
+      try {
         const data = JSON.parse(e.target.result);
         if(data && Array.isArray(data.events)){
-          stopPlayback();
-          isRecording = false; recording = null;
           recordingMemory = data;
-          status.textContent = `Imported ${data.events.length} events (${Math.round(data.duration||0)} ms)`;
-          playBtn.disabled = false; exportBtn.disabled = false;
-        } else alert('Invalid recording file.');
-      }catch(err){ alert('Failed to parse file: ' + err.message); }
+          playBtn.disabled = false;
+          exportBtn.disabled = false;
+          status.textContent = `Imported ${data.events.length} events`;
+        } else {
+          alert('Invalid recording file.');
+        }
+      } catch(err) { alert('Failed to parse file: ' + err.message); }
     };
     reader.readAsText(f);
     ev.target.value = '';
   });
   importBtn.addEventListener('click', ()=> importFile.click());
 
-  // --- Recording implementation ---
-  function startRecording(){
-    recording = { events: [], duration:0 };
-    isRecording = true;
-    recordStartTime = currentMs();
-    recordBtn.disabled = true;
-    stopRecBtn.disabled = false;
-    playBtn.disabled = true;
-    exportBtn.disabled = true;
-    status.textContent = 'Recording...';
-  }
-
-  function stopRecording(){
-    if(!isRecording) return;
-    isRecording = false;
-    recording.duration = Math.max(0, currentMs() - recordStartTime);
-    recordingMemory = recording;
-    recordBtn.disabled = false;
-    stopRecBtn.disabled = true;
-    playBtn.disabled = recordingMemory.events.length > 0 ? false : true;
-    exportBtn.disabled = recordingMemory.events.length > 0 ? false : true;
-    status.textContent = `Recorded ${Math.round(recording.duration)} ms`;
-  }
-
-  function pushEvent(ev){
-    if(!isRecording || !recording) return;
-    const t = Math.round(currentMs() - recordStartTime);
-    recording.events.push(Object.assign({ t }, ev));
-  }
-
-  // playback (same approach)
-  function playRecording(){
-    if(!recordingMemory || !recordingMemory.events || recordingMemory.events.length===0) return;
-    stopPlayback();
-    playback = { script: recordingMemory, startTime: currentMs(), playing: true, timerIds: [] };
-    setPlaybackUI(true);
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
-
-    const evs = recordingMemory.events;
-    let penState = null;
-    for(let i=0;i<evs.length;i++){
-      const ev = evs[i];
-      const id = setTimeout(() => {
-        if(!playback || !playback.playing) return;
-        if(ev.type === 'start'){
-          penState = { x: ev.x, y: ev.y, tool: ev.tool, color: ev.color, size: ev.size, opacity: ev.opacity };
-          applyStrokeSettings(ctx, penState.tool, penState.color, penState.size, penState.opacity);
-          ctx.beginPath(); ctx.moveTo(penState.x, penState.y); ctx.lineTo(penState.x+0.01, penState.y+0.01); ctx.stroke();
-        } else if(ev.type === 'move'){
-          if(!penState) return;
-          const prev = { x: penState.x, y: penState.y };
-          const curr = { x: ev.x, y: ev.y };
-          drawSegment(prev, curr, penState.tool, penState.color, penState.size, penState.opacity);
-          penState.x = curr.x; penState.y = curr.y;
-        } else if(ev.type === 'end'){
-          penState = null;
-        }
-        const progress = Math.min(1, (currentMs() - playback.startTime) / (playback.script.duration || 1));
-        playbar.style.width = (progress*100)+'%';
-        if(progress >= 1){
-          setTimeout(() => { stopPlayback(); status.textContent = 'Playback finished'; }, 20);
-        }
-      }, ev.t);
-      playback.timerIds.push(id);
-    }
-    status.textContent = 'Playing...';
-  }
-
-  function pausePlayback(){
-    if(!playback || !playback.playing) return;
-    playback.pausedAt = currentMs() - playback.startTime;
-    playback.playing = false;
-    playback.timerIds.forEach(id => clearTimeout(id));
-    playback.timerIds = [];
-    setPlaybackUI(false, true);
-    status.textContent = 'Paused';
-  }
-
-  function resumePlayback(){
-    if(!playback || playback.playing) return;
-    const script = playback.script;
-    const pausedAt = playback.pausedAt || 0;
-    playback.startTime = currentMs() - pausedAt;
-    playback.playing = true;
-    playback.timerIds = [];
-    for(let ev of script.events){
-      const when = ev.t - pausedAt;
-      if(when <= 0) continue;
-      const id = setTimeout(() => {
-        if(!playback || !playback.playing) return;
-        if(ev.type === 'start'){
-          applyStrokeSettings(ctx, ev.tool, ev.color, ev.size, ev.opacity);
-          ctx.beginPath(); ctx.moveTo(ev.x, ev.y); ctx.lineTo(ev.x+0.01, ev.y+0.01); ctx.stroke();
-        } else if(ev.type === 'move'){
-          applyStrokeSettings(ctx, ev.tool, ev.color, ev.size, ev.opacity);
-          ctx.beginPath(); ctx.moveTo(ev.x-0.5, ev.y-0.5); ctx.lineTo(ev.x, ev.y); ctx.stroke();
-        }
-        const progress = Math.min(1, (currentMs() - playback.startTime) / (playback.script.duration || 1));
-        playbar.style.width = (progress*100)+'%';
-        if(progress >= 1){
-          setTimeout(() => { stopPlayback(); status.textContent = 'Playback finished'; }, 20);
-        }
-      }, when);
-      playback.timerIds.push(id);
-    }
-    setPlaybackUI(true);
-    status.textContent = 'Playing...';
-  }
-
-  function stopPlayback(){
-    if(!playback){
-      playbar.style.width = '0%';
-      playBtn.disabled = recordingMemory ? false : true;
-      pauseBtn.disabled = true;
-      stopPlayBtn.disabled = true;
-      return;
-    }
-    playback.timerIds.forEach(id => clearTimeout(id));
-    playback = null;
-    playbar.style.width = '0%';
-    setPlaybackUI(false);
-    status.textContent = 'Ready';
-    saveSnapshot();
-  }
-
-  function setPlaybackUI(isPlaying, isPaused=false){
-    playBtn.disabled = isPlaying;
-    pauseBtn.disabled = !isPlaying && !isPaused;
-    stopPlayBtn.disabled = !isPlaying && !isPaused;
-    const disabled = !!isPlaying || isPaused;
-    penBtn.disabled = disabled; highlighterBtn.disabled = disabled; eraserBtn.disabled = disabled; textBtn.disabled = disabled;
-    colorInput.disabled = disabled; sizeInput.disabled = disabled; opacityInput.disabled = disabled;
-  }
-
-  playBtn.addEventListener('click', ()=> { if(!recordingMemory) { alert('No recording loaded. Record or import first.'); return; } playRecording(); });
-  pauseBtn.addEventListener('click', ()=> { if(playback && playback.playing) pausePlayback(); else if(playback && !playback.playing) resumePlayback(); });
-  stopPlayBtn.addEventListener('click', ()=> stopPlayback());
-
-  // laser pointer
+  // Laser
   let laserActive = false;
-  laserBtn.addEventListener('click', ()=>{
+  laserBtn.addEventListener('click', ()=> {
     laserActive = !laserActive;
     laserEl.style.display = laserActive ? 'block' : 'none';
     laserBtn.classList.toggle('active', laserActive);
     status.textContent = laserActive ? 'Laser on' : 'Laser off';
   });
-  function positionLaser(clientX, clientY){
-    const r = wrap.getBoundingClientRect();
-    laserEl.style.left = (clientX - r.left) + 'px';
-    laserEl.style.top = (clientY - r.top) + 'px';
-  }
-  wrap.addEventListener('pointermove', (e)=> { if(laserActive) positionLaser(e.clientX, e.clientY); });
+  wrap.addEventListener('pointermove', (e)=> {
+    if(laserActive){
+      const r = wrap.getBoundingClientRect();
+      laserEl.style.left = (e.clientX - r.left) + 'px';
+      laserEl.style.top = (e.clientY - r.top) + 'px';
+    }
+  });
 
-  // keyboard shortcuts
-  window.addEventListener('keydown', (e)=>{
+  // Keyboard shortcuts
+  window.addEventListener('keydown', (e) => {
     if(e.key === 'p') setTool('pen');
     if(e.key === 'h') setTool('highlighter');
     if(e.key === 'e') setTool('eraser');
@@ -642,108 +558,64 @@
     if((e.ctrlKey || e.metaKey) && e.key === 'p'){ e.preventDefault(); playBtn.click(); }
   });
 
-  // initial UI state
-  playBtn.disabled = true; pauseBtn.disabled = true; stopPlayBtn.disabled = true; exportBtn.disabled = true;
-
-  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  // -----------------------
-  // GUIDE: collapse/close/pin behavior (now bottom-right default)
-  // -----------------------
+  // Guide behavior: collapse/pin/remember state
   const GUIDE_KEY = 'whiteboard_guide_state_v1';
-  const guideEl = document.getElementById('howto');
-  const toggleBtn = document.getElementById('toggleGuide');
-  const closeBtn = document.getElementById('closeGuide');
-  const pinBtn = document.getElementById('pinGuide');
-
-  function loadGuideState(){
-    try{
-      const raw = localStorage.getItem(GUIDE_KEY);
-      if(!raw) return { open:true, pinned:false };
-      return JSON.parse(raw);
-    }catch(e){ return { open:true, pinned:false }; }
-  }
-  function saveGuideState(state){
-    try{ localStorage.setItem(GUIDE_KEY, JSON.stringify(state)); }catch(e){}
-  }
-  let guideState = loadGuideState();
-
-  function applyGuideState(){
-    if(!guideState.open) {
-      guideEl.classList.add('collapsed');
-      toggleBtn.textContent = '+';
+  function loadGuide(){ try{ const s = localStorage.getItem(GUIDE_KEY); return s ? JSON.parse(s) : { open:true, pinned:false, pos:null }; } catch(e){ return { open:true, pinned:false, pos:null }; } }
+  function saveGuide(state){ try{ localStorage.setItem(GUIDE_KEY, JSON.stringify(state)); } catch(e){} }
+  let guideState = loadGuide();
+  function applyGuide(){
+    if(!guideState.open){ guideEl.classList.add('collapsed'); toggleGuide.textContent = '+'; } else { guideEl.classList.remove('collapsed'); toggleGuide.textContent = '–'; }
+    pinGuide.textContent = guideState.pinned ? '📌 Pinned' : '📌 Pin';
+    if(guideState.pos && !guideState.pinned){
+      guideEl.style.position = 'fixed';
+      guideEl.style.left = guideState.pos.left;
+      guideEl.style.top = guideState.pos.top;
+      guideEl.style.bottom = '';
+      guideEl.style.right = '';
     } else {
-      guideEl.classList.remove('collapsed');
-      toggleBtn.textContent = '–';
+      guideEl.style.bottom = '12px';
+      guideEl.style.right = '12px';
     }
-    pinBtn.textContent = guideState.pinned ? '📌 Pinned' : '📌 Pin';
   }
-  applyGuideState();
-
-  toggleBtn.addEventListener('click', ()=>{
-    guideState.open = !guideState.open;
-    applyGuideState();
-    saveGuideState(guideState);
-  });
-
-  closeBtn.addEventListener('click', ()=>{
-    guideEl.style.display = 'none';
-    guideState.open = false;
-    saveGuideState(guideState);
-  });
-
-  pinBtn.addEventListener('click', ()=>{
-    guideState.pinned = !guideState.pinned;
-    applyGuideState();
-    saveGuideState(guideState);
-  });
+  applyGuide();
+  toggleGuide.addEventListener('click', ()=> { guideState.open = !guideState.open; applyGuide(); saveGuide(guideState); });
+  closeGuide.addEventListener('click', ()=> { guideEl.style.display = 'none'; guideState.open = false; saveGuide(guideState); });
+  pinGuide.addEventListener('click', ()=> { guideState.pinned = !guideState.pinned; applyGuide(); saveGuide(guideState); });
 
   // allow dragging guide when not pinned
   let draggingGuide = false, dragStart = null, guideOrig = null;
-  guideEl.addEventListener('pointerdown', (e)=>{
-    const target = e.target;
+  guideEl.addEventListener('pointerdown', (ev) => {
+    const target = ev.target;
     if(guideState.pinned) return;
-    if(target.closest('.controls') || target.closest('.btn') || target.closest('.pin')) return;
+    if(target.closest('.controls') || target.closest('button')) return;
     draggingGuide = true;
-    dragStart = { x: e.clientX, y: e.clientY };
+    dragStart = { x: ev.clientX, y: ev.clientY };
     const rect = guideEl.getBoundingClientRect();
     guideOrig = { left: rect.left, top: rect.top };
     guideEl.style.transition = 'none';
-    guideEl.setPointerCapture && guideEl.setPointerCapture(e.pointerId);
   });
-
-  window.addEventListener('pointermove', (e)=>{
+  window.addEventListener('pointermove', (ev) => {
     if(!draggingGuide) return;
-    const dx = e.clientX - dragStart.x;
-    const dy = e.clientY - dragStart.y;
+    const dx = ev.clientX - dragStart.x, dy = ev.clientY - dragStart.y;
     const left = Math.min(window.innerWidth - 40, Math.max(8, guideOrig.left + dx));
     const top = Math.min(window.innerHeight - 40, Math.max(8, guideOrig.top + dy));
     guideEl.style.position = 'fixed';
     guideEl.style.left = left + 'px';
     guideEl.style.top = top + 'px';
-    // remove bottom/right to allow free placement
     guideEl.style.bottom = '';
     guideEl.style.right = '';
   });
-
-  window.addEventListener('pointerup', (e)=>{
+  window.addEventListener('pointerup', (ev) => {
     if(!draggingGuide) return;
     draggingGuide = false;
-    guideEl.releasePointerCapture && guideEl.releasePointerCapture(e.pointerId);
     guideEl.style.transition = '';
     guideState.pos = { left: guideEl.style.left, top: guideEl.style.top };
-    saveGuideState(guideState);
+    saveGuide(guideState);
   });
 
-  // restore position if saved (and not pinned)
-  if(guideState.pos && !guideState.pinned){
-    guideEl.style.position = 'fixed';
-    guideEl.style.left = guideState.pos.left;
-    guideEl.style.top = guideState.pos.top;
-    // clear bottom/right defaults so saved coords take effect
-    guideEl.style.bottom = '';
-    guideEl.style.right = '';
-  }
+  // initial UI states
+  playBtn.disabled = true; pauseBtn.disabled = true; stopPlayBtn.disabled = true; exportBtn.disabled = true;
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
 
 })();
 </script>
