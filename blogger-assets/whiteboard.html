@@ -1,366 +1,815 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Champak Roy – Online Whiteboard</title>
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Champak Roy — Online Whiteboard (Enhanced)</title>
 <style>
   :root{
-    --blue:#4a74ff;
+    --blue:#3f6bff;
     --bg:#eef3ff;
     --panel:#ffffff;
-    --muted:#b5c7ff;
+    --muted:#c7d6ff;
+    --shadow: 0 6px 20px rgba(31,41,55,0.08);
   }
   *{box-sizing:border-box}
-  body {
-    margin: 0;
-    background: var(--bg);
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  html,body{height:100%;margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg)}
+  .center{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
   }
 
   .board-container {
-    width: 90%;
+    width: 95%;
     max-width:1200px;
-    height: 85vh;
+    height: 86vh;
     background: var(--panel);
     border: 3px solid var(--blue);
     border-radius: 14px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow);
     position: relative;
     overflow: hidden;
-  }
-
-  /* Responsive toolbar */
-  .toolbar {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    right: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    z-index: 20;
-  }
-
-  .tool-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.9);
-    padding: 8px 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    border: 1px solid var(--muted);
-  }
-
-  .tool-group.hidden { display: none; }
-
-  .tool-group label{font-size:14px; color:#2b2b2b}
-  .tool-group input[type="color"], .tool-group input[type="range"]{
-    cursor: pointer;
-  }
-
-  .toolbar button, .toolbar input, .toolbar select {
-    padding: 6px 10px;
-    font-size: 14px;
-    border-radius: 8px;
-    border: 1px solid var(--muted);
-    background: #f7faff;
-    cursor: pointer;
-  }
-
-  .toolbar button:hover{background:#e6f0ff}
-
-  /* Hamburger for small screens */
-  .hamburger{
-    display:none;
-    background: var(--panel);
-    border: 1px solid var(--muted);
-    padding: 8px;
-    border-radius: 8px;
-    cursor:pointer;
-  }
-
-  /* Dropdown menu when hamburger clicked */
-  .dropdown{
-    position: absolute;
-    top: 52px;
-    left: 12px;
-    right: 12px;
-    display:none;
-    gap:10px;
+    display:flex;
     flex-direction:column;
+  }
+
+  /* top toolbar */
+  .toolbar {
+    display:flex;
+    gap:10px;
+    align-items:center;
     padding:10px;
-    background: rgba(255,255,255,0.98);
+    z-index:50;
+  }
+  .tool-group{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    padding:8px;
+    background:rgba(255,255,255,0.95);
     border-radius:10px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-    z-index: 19;
     border:1px solid var(--muted);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+  .tool-group label{font-size:13px;color:#222;margin-right:6px}
+  .tool-btn{
+    border:0;background:transparent;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:14px;
+  }
+  .tool-btn.active{background:rgba(63,107,255,0.12);color:var(--blue);box-shadow: inset 0 -2px 0 rgba(63,107,255,0.08)}
+  input[type=color], input[type=range], select { cursor:pointer; }
+  .spacer{flex:1}
+
+  /* canvas area */
+  .canvas-wrap{
+    position:relative;
+    flex:1;
+    display:block;
+    background: #fff;
   }
 
-  .dropdown.show{display:flex}
-
-  /* Canvas fills container */
-  #board {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width:100%;
-    height:100%;
-    touch-action: none; /* prevent scrolling while drawing */
+  canvas#board {
+    position:absolute; left:0; top:0; width:100%; height:100%;
+    touch-action: none; /* prevent scroll while drawing */
+    display:block;
   }
 
-  /* Media queries: collapse toolbar into hamburger on narrow screens */
-  @media (max-width:700px){
-    .tool-group.desktop-only{display:none}
-    .hamburger{display:block}
-    .toolbar{top:10px; left:10px; right:10px}
+  /* text-overlay boxes (editable) */
+  .text-note {
+    position:absolute;
+    min-width:120px;
+    min-height:28px;
+    padding:6px 8px;
+    border-radius:6px;
+    border:1px dashed rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.92);
+    resize:both;
+    overflow:auto;
+    font-size:16px;
+    outline:none;
   }
 
-  /* Small tweaks for very small devices */
-  @media (max-width:380px){
-    .toolbar button, .toolbar input{font-size:13px; padding:6px}
+  /* mobile hamburger */
+  .hamburger{display:none}
+  .dropdown{
+    display:none;
+    position:absolute;
+    left:12px;
+    top:60px;
+    z-index:60;
+    background:rgba(255,255,255,0.98);
+    padding:10px;border-radius:10px;border:1px solid var(--muted);
+    box-shadow:0 8px 20px rgba(0,0,0,0.12);
+  }
+  .dropdown.show{display:block}
+
+  /* bottom quicktips */
+  .tips{
+    position:absolute; left:12px; bottom:12px; z-index:40;
+    background:rgba(255,255,255,0.92); padding:8px 10px; border-radius:10px; border:1px solid var(--muted);
+    font-size:13px;
+  }
+
+  @media (max-width:780px){
+    .desktop-only{display:none}
+    .hamburger{display:block;border:0;background:var(--panel);padding:8px;border-radius:8px;cursor:pointer}
+    .toolbar{padding:8px;gap:6px}
   }
 </style>
 </head>
-
 <body>
+<div class="center">
+  <div class="board-container" id="boardContainer">
 
-<div class="board-container">
+    <div class="toolbar" role="toolbar" aria-label="Whiteboard toolbar">
 
-  <div class="toolbar">
-    <!-- Left: main tools (desktop) -->
-    <div class="tool-group desktop-only" id="mainTools">
-      <label for="colorPicker">Color</label>
-      <input type="color" id="colorPicker" value="#000000">
+      <div class="tool-group desktop-only" id="mainTools">
+        <button class="tool-btn active" id="penBtn" title="Pen">✏️ Pen</button>
+        <button class="tool-btn" id="highlighterBtn" title="Highlighter">🖍️ Highlighter</button>
+        <button class="tool-btn" id="eraserBtn" title="Eraser">🧽 Eraser</button>
+        <button class="tool-btn" id="textBtn" title="Text">🅣 Text</button>
 
-      <label for="sizePicker">Size</label>
-      <input type="range" id="sizePicker" min="1" max="40" value="4">
+        <label for="color" style="margin-left:6px">Color</label>
+        <input type="color" id="color" value="#000000">
 
-      <button id="eraserBtn">Eraser</button>
-      <button id="clearBtn">Clear</button>
-      <button id="saveBtn">Download</button>
+        <label for="size" style="margin-left:6px">Size</label>
+        <input type="range" id="size" min="1" max="60" value="4">
+
+        <label for="opacity" style="margin-left:6px">Opacity</label>
+        <input type="range" id="opacity" min="0.1" max="1" step="0.05" value="1">
+
+        <button class="tool-btn" id="gridToggle" title="Toggle grid">▦ Grid</button>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="tool-group" id="rightTools">
+        <button class="tool-btn" id="undoBtn" title="Undo">↶ Undo</button>
+        <button class="tool-btn" id="redoBtn" title="Redo">↷ Redo</button>
+        <button class="tool-btn" id="clearBtn" title="Clear board">🗑 Clear</button>
+        <button class="tool-btn" id="saveBtn" title="Download PNG">⬇ Save</button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
+      </div>
     </div>
 
-    <!-- Right: hamburger (mobile) -->
-    <button class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
-
-    <!-- Extra quick-controls always visible -->
-    <div class="tool-group" id="quickTools">
-      <button id="undoBtn" title="Undo (session)">Undo</button>
-      <button id="redoBtn" title="Redo (session)">Redo</button>
+    <!-- mobile dropdown -->
+    <div class="dropdown" id="mobileMenu" aria-hidden="true">
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="tool-btn active" id="m_penBtn">Pen</button>
+        <button class="tool-btn" id="m_highlighterBtn">Highlighter</button>
+        <button class="tool-btn" id="m_eraserBtn">Eraser</button>
+        <button class="tool-btn" id="m_textBtn">Text</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <label>Color</label>
+        <input type="color" id="m_color" value="#000000">
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+        <label>Size</label>
+        <input type="range" id="m_size" min="1" max="60" value="4">
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+        <label>Opacity</label>
+        <input type="range" id="m_opacity" min="0.1" max="1" step="0.05" value="1">
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <button class="tool-btn" id="m_undo">Undo</button>
+        <button class="tool-btn" id="m_redo">Redo</button>
+        <button class="tool-btn" id="m_clear">Clear</button>
+        <button class="tool-btn" id="m_save">Save</button>
+      </div>
     </div>
+
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="board"></canvas>
+      <!-- grid overlay (drawn on canvas as well, toggled) -->
+    </div>
+
+    <div class="tips" id="tips">Tip: Use pen or highlighter. Text tool creates editable boxes. Draw with finger/pen on mobile.</div>
+
   </div>
-
-  <!-- Dropdown menu for small screens -->
-  <div class="dropdown" id="mobileMenu">
-    <div style="display:flex;gap:10px;align-items:center;">
-      <label style="min-width:50px">Color</label>
-      <input type="color" id="colorPickerMobile" value="#000000">
-    </div>
-
-    <div style="display:flex;gap:10px;align-items:center;">
-      <label style="min-width:50px">Size</label>
-      <input type="range" id="sizePickerMobile" min="1" max="40" value="4">
-    </div>
-
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button id="eraserBtnMobile">Eraser</button>
-      <button id="clearBtnMobile">Clear</button>
-      <button id="saveBtnMobile">Download</button>
-    </div>
-  </div>
-
-  <canvas id="board"></canvas>
-
 </div>
 
 <script>
-  // Canvas & container
-  const canvas = document.getElementById("board");
-  const container = document.querySelector(".board-container");
-  const ctx = canvas.getContext("2d");
+/* Enhanced Whiteboard Script
+   - Uses pointer events for consistent mouse/touch/pen support
+   - Pressure-aware where supported
+   - Smooth strokes using quadratic curves
+   - Eraser via destination-out
+   - Undo/Redo using dataURL snapshots
+   - Autosave to localStorage
+   - Text tool: add editable DIVs
+*/
 
-  function resizeCanvas(){
-    const rect = container.getBoundingClientRect();
-    // preserve drawing by using an offscreen copy when resizing
+(() => {
+  const canvas = document.getElementById('board');
+  const wrap = document.getElementById('canvasWrap');
+  const container = document.getElementById('boardContainer');
+  const ctx = canvas.getContext('2d', {alpha: false}); // opaque for better save results
+
+  // Controls
+  const penBtn = document.getElementById('penBtn');
+  const highlighterBtn = document.getElementById('highlighterBtn');
+  const eraserBtn = document.getElementById('eraserBtn');
+  const textBtn = document.getElementById('textBtn');
+
+  const colorInput = document.getElementById('color');
+  const sizeInput = document.getElementById('size');
+  const opacityInput = document.getElementById('opacity');
+  const gridToggle = document.getElementById('gridToggle');
+
+  const undoBtn = document.getElementById('undoBtn');
+  const redoBtn = document.getElementById('redoBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const saveBtn = document.getElementById('saveBtn');
+
+  // mobile menu controls (mirrors)
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const m_color = document.getElementById('m_color');
+  const m_size = document.getElementById('m_size');
+  const m_opacity = document.getElementById('m_opacity');
+  const m_penBtn = document.getElementById('m_penBtn');
+  const m_highlighterBtn = document.getElementById('m_highlighterBtn');
+  const m_eraserBtn = document.getElementById('m_eraserBtn');
+  const m_textBtn = document.getElementById('m_textBtn');
+  const m_undo = document.getElementById('m_undo');
+  const m_redo = document.getElementById('m_redo');
+  const m_clear = document.getElementById('m_clear');
+  const m_save = document.getElementById('m_save');
+
+  // state
+  let tool = 'pen'; // pen, highlighter, eraser, text
+  let color = colorInput.value;
+  let size = parseInt(sizeInput.value,10);
+  let opacity = parseFloat(opacityInput.value);
+  let drawing = false;
+  let lastPoint = null; // {x,y,pressure}
+  let pts = []; // smoothing points for current stroke
+  let gridOn = false;
+
+  // undo/redo using image snapshots (dataURLs)
+  let snapshots = [];
+  let snapIdx = -1;
+  const SNAP_LIMIT = 25;
+  const STORAGE_KEY = 'champak_whiteboard_v1';
+
+  // resize canvas to container size and preserve content
+  function resizeCanvas() {
+    const rect = wrap.getBoundingClientRect();
+    // create temp copy
     const temp = document.createElement('canvas');
-    temp.width = canvas.width || rect.width;
-    temp.height = canvas.height || rect.height;
+    temp.width = canvas.width || Math.max(800, Math.floor(rect.width));
+    temp.height = canvas.height || Math.max(400, Math.floor(rect.height));
     const tctx = temp.getContext('2d');
-    if(canvas.width) tctx.drawImage(canvas,0,0);
+    if(canvas.width && canvas.height) tctx.drawImage(canvas,0,0);
 
     canvas.width = Math.floor(rect.width);
     canvas.height = Math.floor(rect.height);
 
-    // restore previous drawing scaled to new size
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.drawImage(temp,0,0, temp.width, temp.height, 0,0, canvas.width, canvas.height);
+    // set background white
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // restore
+    ctx.drawImage(temp, 0,0, temp.width, temp.height, 0,0, canvas.width, canvas.height);
+
+    if(gridOn) drawGrid();
   }
+
+  // initialize
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
 
-  // Drawing state
-  let drawing = false;
-  let last = {x:0,y:0};
-  let color = document.getElementById('colorPicker').value;
-  let size = parseInt(document.getElementById('sizePicker').value,10);
-
-  // Mobile controls mirror
-  const colorMobile = document.getElementById('colorPickerMobile');
-  const sizeMobile = document.getElementById('sizePickerMobile');
-
-  // Sync mobile/desktop controls
-  function syncControlsFromDesktop(){
-    if(colorMobile) colorMobile.value = color;
-    if(sizeMobile) sizeMobile.value = size;
-  }
-  function syncControlsFromMobile(){
-    const c = colorMobile && colorMobile.value;
-    const s = sizeMobile && parseInt(sizeMobile.value,10);
-    if(c) color = c;
-    if(s) size = s;
-    document.getElementById('colorPicker').value = color;
-    document.getElementById('sizePicker').value = size;
-  }
-
-  // pointer helpers
-  function getPointerPos(ev){
-    // ev can be a MouseEvent or Touch
-    const rect = canvas.getBoundingClientRect();
-    let clientX = ev.clientX;
-    let clientY = ev.clientY;
-    // Touch objects also have clientX/clientY
-    if(typeof clientX === 'undefined' && ev.targetTouches && ev.targetTouches[0]){
-      clientX = ev.targetTouches[0].clientX; clientY = ev.targetTouches[0].clientY;
-    }
+  // drawing helpers
+  function getPosFromEvent(ev){
+    const r = canvas.getBoundingClientRect();
     return {
-      x: (clientX - rect.left),
-      y: (clientY - rect.top)
+      x: ev.clientX - r.left,
+      y: ev.clientY - r.top,
+      pressure: (ev.pressure === undefined) ? (ev.force || 0.5) : ev.pressure
     };
   }
 
-  function start(e){
-    // Accept either the original event (MouseEvent or TouchEvent) or a Touch/Mouse object.
-    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  // smoothing: push points and draw curve using quadratic
+  function drawSmoothLineSegment(context, points, options){
+    // points: array of {x,y,pressure}
+    if(points.length < 2) return;
+    context.save();
+    context.lineJoin = 'round';
+    context.lineCap = 'round';
 
-    // normalize to an object with clientX/clientY
-    let ev = e;
-    if (e && e.touches && e.touches[0]) ev = e.touches[0];
-    if (e && e.changedTouches && e.changedTouches[0]) ev = e.changedTouches[0];
+    context.beginPath();
+    // start at first point
+    context.moveTo(points[0].x, points[0].y);
 
-    drawing = true;
-    const p = getPointerPos(ev);
-    last.x = p.x; last.y = p.y;
-    ctx.beginPath();
-    ctx.moveTo(last.x, last.y);
+    for(let i=1;i<points.length-1;i++){
+      const cpx = (points[i].x + points[i+1].x) / 2;
+      const cpy = (points[i].y + points[i+1].y) / 2;
+      const w = options.lineWidth; // base
+      // optional: vary line width by pressure between points
+      const p = points[i].pressure || 0.5;
+      const lw = Math.max(1, w * (0.4 + p*0.9)); // conservative mapping
+
+      context.lineWidth = lw;
+      context.quadraticCurveTo(points[i].x, points[i].y, cpx, cpy);
+    }
+    context.stroke();
+    context.restore();
   }
 
-  function draw(e){
-    // normalize event
-    let ev = e;
-    if (e && e.touches && e.touches[0]) ev = e.touches[0];
-    if (e && e.changedTouches && e.changedTouches[0]) ev = e.changedTouches[0];
-
-    if(!drawing) return;
-    const p = getPointerPos(ev);
-    ctx.lineWidth = size;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = color;
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
-    last.x = p.x; last.y = p.y;
+  // begin stroke
+  function beginStroke(pt){
+    pts = [pt];
+    lastPoint = pt;
+    // configure ctx based on tool
+    if(tool === 'eraser'){
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+    } else if(tool === 'highlighter') {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = opacity;
+      // use color but lower alpha, and 'multiply' / 'lighter' not widely helpful
+      ctx.strokeStyle = color;
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = opacity;
+      ctx.strokeStyle = color;
+    }
   }
 
-  function stop(e){
-    // some browsers send a TouchEvent without preventDefault; safe to call if exists
-    if (e && typeof e.preventDefault === 'function') e.preventDefault();
-    if(drawing) ctx.closePath();
-    drawing = false;
+  function continueStroke(pt){
+    pts.push(pt);
+    // keep last ~6 points for smoothing
+    if(pts.length > 6) pts.shift();
+    drawSmooth(); // draws using current pts
+  }
+
+  function drawSmooth(){
+    if(pts.length < 2) return;
+    // draw on a temporary path to avoid jitter — but here we draw directly
+    const baseWidth = size;
+    drawSmoothLineSegment(ctx, pts, {lineWidth: baseWidth});
+  }
+
+  function endStroke(){
+    // finalize stroke and snapshot
+    pts = [];
+    lastPoint = null;
     saveSnapshot();
   }
 
-  // Events
-  canvas.addEventListener('mousedown', start);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stop);
-  canvas.addEventListener('mouseout', stop);
+  // pointer event handlers (unified for mouse/touch/pen)
+  function onPointerDown(e){
+    // only left button or touch/pen
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+    drawing = true;
+    const p = getPosFromEvent(e);
+    // pressure fallback
+    if(!p.pressure) p.pressure = (e.pointerType === 'pen' ? 0.7 : 0.5);
+    beginStroke(p);
+    // for immediate dot (click without move)
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(p.x+0.01, p.y+0.01);
+    ctx.stroke();
+    e.preventDefault();
+  }
 
-  // touch support (use full event so we can call preventDefault)
-  canvas.addEventListener('touchstart', (ev)=>{ start(ev); });
-  canvas.addEventListener('touchmove', (ev)=>{ draw(ev); });
-  canvas.addEventListener('touchend', (ev)=>{ stop(ev); });
+  function onPointerMove(e){
+    if(!drawing) return;
+    const p = getPosFromEvent(e);
+    if(!p.pressure) p.pressure = (e.pointerType === 'pen' ? 0.7 : 0.5);
+    continueStroke(p);
+    e.preventDefault();
+  }
 
-  // Controls wiring
-  document.getElementById('colorPicker').addEventListener('input', (e)=>{ color = e.target.value; syncControlsFromDesktop(); });
-  document.getElementById('sizePicker').addEventListener('input', (e)=>{ size = parseInt(e.target.value,10); syncControlsFromDesktop(); });
+  function onPointerUp(e){
+    if(!drawing) return;
+    drawing = false;
+    if (e.pointerId && canvas.releasePointerCapture) {
+      try{ canvas.releasePointerCapture(e.pointerId); }catch(_){}
+    }
+    endStroke();
+    e.preventDefault();
+  }
 
-  if(colorMobile){ colorMobile.addEventListener('input',(e)=>{ color = e.target.value; syncControlsFromMobile(); }); }
-  if(sizeMobile){ sizeMobile.addEventListener('input',(e)=>{ size = parseInt(e.target.value,10); syncControlsFromMobile(); }); }
+  // attach pointer events
+  canvas.addEventListener('pointerdown', onPointerDown, {passive:false});
+  canvas.addEventListener('pointermove', onPointerMove, {passive:false});
+  window.addEventListener('pointerup', onPointerUp, {passive:false});
 
-  // Eraser / Clear / Save (desktop)
-  document.getElementById('eraserBtn').addEventListener('click', ()=>{ color = '#ffffff'; syncControlsFromDesktop(); });
-  document.getElementById('clearBtn').addEventListener('click', ()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); saveSnapshot(); });
-  document.getElementById('saveBtn').addEventListener('click', ()=>{ const link = document.createElement('a'); link.download='whiteboard.png'; link.href = canvas.toDataURL(); link.click(); });
+  // toolbar logic
+  function setActiveTool(t){
+    tool = t;
+    // set button active states
+    [penBtn, highlighterBtn, eraserBtn, textBtn].forEach(btn => btn.classList.remove('active'));
+    if(t === 'pen') penBtn.classList.add('active');
+    if(t === 'highlighter') highlighterBtn.classList.add('active');
+    if(t === 'eraser') eraserBtn.classList.add('active');
+    if(t === 'text') textBtn.classList.add('active');
 
-  // Eraser / Clear / Save (mobile)
-  document.getElementById('eraserBtnMobile').addEventListener('click', ()=>{ color = '#ffffff'; syncControlsFromDesktop(); });
-  document.getElementById('clearBtnMobile').addEventListener('click', ()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); saveSnapshot(); });
-  document.getElementById('saveBtnMobile').addEventListener('click', ()=>{ const link = document.createElement('a'); link.download='whiteboard.png'; link.href = canvas.toDataURL(); link.click(); });
+    // also update mobile buttons if present
+    [m_penBtn, m_highlighterBtn, m_eraserBtn, m_textBtn].forEach(b => { if(b) b.classList.remove('active'); });
+    if(m_penBtn && t==='pen') m_penBtn.classList.add('active');
+    if(m_highlighterBtn && t==='highlighter') m_highlighterBtn.classList.add('active');
+    if(m_eraserBtn && t==='eraser') m_eraserBtn.classList.add('active');
+    if(m_textBtn && t==='text') m_textBtn.classList.add('active');
 
-  // Hamburger menu toggle
-  const hamburger = document.getElementById('hamburger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  hamburger.addEventListener('click', ()=>{ mobileMenu.classList.toggle('show'); });
+    // text tool toggles cursor
+    canvas.style.cursor = (t === 'text') ? 'text' : 'crosshair';
+  }
 
-  // Simple undo/redo using snapshots
-  let snapshots = [];
-  let snapIndex = -1;
+  penBtn.addEventListener('click', ()=> setActiveTool('pen'));
+  highlighterBtn.addEventListener('click', ()=> setActiveTool('highlighter'));
+  eraserBtn.addEventListener('click', ()=> setActiveTool('eraser'));
+  textBtn.addEventListener('click', ()=> setActiveTool('text'));
+
+  // mobile mirror actions
+  if(m_penBtn) m_penBtn.addEventListener('click', ()=> setActiveTool('pen'));
+  if(m_highlighterBtn) m_highlighterBtn.addEventListener('click', ()=> setActiveTool('highlighter'));
+  if(m_eraserBtn) m_eraserBtn.addEventListener('click', ()=> setActiveTool('eraser'));
+  if(m_textBtn) m_textBtn.addEventListener('click', ()=> setActiveTool('text'));
+
+  // color/size/opacity sync
+  colorInput.addEventListener('input', (e)=>{ color = e.target.value; if(m_color) m_color.value = color; });
+  if(m_color) m_color.addEventListener('input', (e)=>{ color = e.target.value; colorInput.value = color; });
+
+  sizeInput.addEventListener('input', (e)=>{ size = parseInt(e.target.value,10); if(m_size) m_size.value = size; });
+  if(m_size) m_size.addEventListener('input', (e)=>{ size = parseInt(e.target.value,10); sizeInput.value = size; });
+
+  opacityInput.addEventListener('input', (e)=>{ opacity = parseFloat(e.target.value); if(m_opacity) m_opacity.value = opacity; });
+  if(m_opacity) m_opacity.addEventListener('input', (e)=>{ opacity = parseFloat(e.target.value); opacityInput.value = opacity; });
+
+  // clear
+  function clearBoard(takeSnapshot = true){
+    ctx.save();
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#ffffff';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+    // remove text notes
+    document.querySelectorAll('.text-note').forEach(n => n.remove());
+    if(takeSnapshot) saveSnapshot();
+  }
+  clearBtn.addEventListener('click', ()=> { if(confirm('Clear the board? This cannot be undone past undo stack.')) clearBoard(true); });
+  if(m_clear) m_clear.addEventListener('click', ()=> { if(confirm('Clear the board?')) clearBoard(true); });
+
+  // undo/redo
   function saveSnapshot(){
-    // drop any redo states
-    snapshots = snapshots.slice(0, snapIndex+1);
-    // keep a copy of the canvas
-    snapshots.push(canvas.toDataURL());
-    snapIndex = snapshots.length -1;
-    // limit memory
-    if(snapshots.length>20) { snapshots.shift(); snapIndex = snapshots.length-1; }
+    try{
+      const dataURL = canvas.toDataURL('image/png');
+      // cut any redos
+      snapshots = snapshots.slice(0, snapIdx+1);
+      snapshots.push(dataURL);
+      // limit
+      if(snapshots.length > SNAP_LIMIT) snapshots.shift();
+      snapIdx = snapshots.length - 1;
+      updateUndoRedoUI();
+      // autosave to localStorage (store image + positions of any text boxes)
+      persistToStorage();
+    }catch(err){
+      console.warn('Snapshot failed', err);
+    }
   }
 
   function restoreSnapshot(index){
-    if(index<0 || index>=snapshots.length) return;
+    if(index < 0 || index >= snapshots.length) return;
     const img = new Image();
-    img.onload = ()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0,canvas.width,canvas.height); };
+    img.onload = ()=> {
+      ctx.save();
+      ctx.setTransform(1,0,0,1,0,0);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='#ffffff';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      ctx.restore();
+      updateUndoRedoUI();
+    };
     img.src = snapshots[index];
   }
 
-  document.getElementById('undoBtn').addEventListener('click', ()=>{
-    if(snapIndex>0){ snapIndex--; restoreSnapshot(snapIndex); }
+  function updateUndoRedoUI(){
+    undoBtn.disabled = !(snapIdx > 0);
+    redoBtn.disabled = !(snapIdx < snapshots.length - 1);
+    if(m_undo) m_undo.disabled = undoBtn.disabled;
+    if(m_redo) m_redo.disabled = redoBtn.disabled;
+  }
+
+  undoBtn.addEventListener('click', ()=>{ if(snapIdx>0){ snapIdx--; restoreSnapshot(snapIdx); }});
+  redoBtn.addEventListener('click', ()=>{ if(snapIdx < snapshots.length-1){ snapIdx++; restoreSnapshot(snapIdx); }});
+  if(m_undo) m_undo.addEventListener('click', ()=>{ if(snapIdx>0){ snapIdx--; restoreSnapshot(snapIdx); }});
+  if(m_redo) m_redo.addEventListener('click', ()=>{ if(snapIdx < snapshots.length-1){ snapIdx++; restoreSnapshot(snapIdx); }});
+
+  // save PNG
+  saveBtn.addEventListener('click', ()=> {
+    // flatten text nodes onto canvas temporarily
+    flattenTextNotesToCanvasThenDownload();
   });
-  document.getElementById('redoBtn').addEventListener('click', ()=>{
-    if(snapIndex < snapshots.length-1){ snapIndex++; restoreSnapshot(snapIndex); }
+  if(m_save) m_save.addEventListener('click', ()=> { flattenTextNotesToCanvasThenDownload(); });
+
+  function flattenTextNotesToCanvasThenDownload(){
+    // draw current text notes onto canvas copy and download
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = canvas.width;
+    exportCanvas.height = canvas.height;
+    const ex = exportCanvas.getContext('2d');
+    // white background
+    ex.fillStyle = '#ffffff'; ex.fillRect(0,0,exportCanvas.width,exportCanvas.height);
+    // draw current canvas
+    ex.drawImage(canvas, 0,0);
+    // draw text notes
+    const notes = document.querySelectorAll('.text-note');
+    notes.forEach(n => {
+      const rect = n.getBoundingClientRect();
+      const parentRect = wrap.getBoundingClientRect();
+      const x = rect.left - parentRect.left;
+      const y = rect.top - parentRect.top;
+      // simple text draw: preserve basic styles
+      ex.font = window.getComputedStyle(n).fontSize + ' ' + window.getComputedStyle(n).fontFamily;
+      ex.fillStyle = window.getComputedStyle(n).color || '#000';
+      // multi-line
+      const lines = n.innerText.split('\n');
+      const lineHeight = parseFloat(window.getComputedStyle(n).lineHeight) || (parseFloat(window.getComputedStyle(n).fontSize) * 1.2);
+      lines.forEach((line, idx) => {
+        ex.fillText(line, x + 6, y + 6 + (idx+1)*lineHeight);
+      });
+    });
+
+    const link = document.createElement('a');
+    link.download = 'whiteboard.png';
+    link.href = exportCanvas.toDataURL('image/png');
+    link.click();
+  }
+
+  // autosave & restore (canvas image + text notes list)
+  function persistToStorage(){
+    try{
+      const data = {
+        image: canvas.toDataURL('image/png'),
+        notes: Array.from(document.querySelectorAll('.text-note')).map(n=>{
+          const rect = n.getBoundingClientRect();
+          const parentRect = wrap.getBoundingClientRect();
+          return {
+            html: n.innerHTML,
+            left: rect.left - parentRect.left,
+            top: rect.top - parentRect.top,
+            width: rect.width,
+            height: rect.height,
+            styles: {
+              fontSize: window.getComputedStyle(n).fontSize,
+              color: window.getComputedStyle(n).color
+            }
+          };
+        })
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }catch(err){ console.warn('persist failed', err); }
+  }
+
+  function restoreFromStorage(){
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    try{
+      const data = JSON.parse(raw);
+      if(data.image){
+        const img = new Image();
+        img.onload = ()=> {
+          ctx.save();
+          ctx.setTransform(1,0,0,1,0,0);
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+          ctx.fillStyle='#ffffff';
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+          ctx.drawImage(img,0,0,canvas.width,canvas.height);
+          ctx.restore();
+          saveSnapshot();
+        };
+        img.src = data.image;
+      }
+      if(Array.isArray(data.notes)) {
+        data.notes.forEach(n => addTextNoteAt(n.left, n.top, n.html, n.width, n.height, n.styles));
+      }
+      return true;
+    }catch(err){
+      console.warn('restore failed', err);
+      return false;
+    }
+  }
+
+  // text tool logic: create editable div at click pos
+  function addTextNoteAt(x, y, html = '', w = 180, h = 40, styles = null){
+    const note = document.createElement('div');
+    note.className = 'text-note';
+    note.contentEditable = true;
+    note.innerHTML = html || 'Type here';
+    note.style.left = (x)+'px';
+    note.style.top = (y)+'px';
+    note.style.width = (w || 160) + 'px';
+    note.style.height = (h || 36) + 'px';
+    if(styles){
+      if(styles.fontSize) note.style.fontSize = styles.fontSize;
+      if(styles.color) note.style.color = styles.color;
+    }
+    // focus and allow dragging/resizing default via CSS resize
+    note.addEventListener('blur', () => { saveSnapshot(); persistToStorage(); });
+    wrap.appendChild(note);
+    // allow moving by dragging the note (simple)
+    let dragging = false, start = null, orig = null;
+    note.addEventListener('pointerdown', (ev) => {
+      ev.stopPropagation();
+      if(ev.button !== 0) return;
+      dragging = true;
+      start = {x:ev.clientX, y:ev.clientY};
+      const r = note.getBoundingClientRect();
+      const parentRect = wrap.getBoundingClientRect();
+      orig = {left: r.left - parentRect.left, top: r.top - parentRect.top};
+      note.style.touchAction = 'none';
+      note.setPointerCapture && note.setPointerCapture(ev.pointerId);
+    });
+    window.addEventListener('pointermove', (ev) => {
+      if(!dragging) return;
+      const dx = ev.clientX - start.x;
+      const dy = ev.clientY - start.y;
+      note.style.left = (orig.left + dx) + 'px';
+      note.style.top = (orig.top + dy) + 'px';
+    });
+    window.addEventListener('pointerup', (ev) => {
+      if(!dragging) return;
+      dragging = false;
+      note.style.touchAction = '';
+      saveSnapshot();
+      persistToStorage();
+    });
+    // double-click to remove
+    note.addEventListener('dblclick', (ev) => {
+      if(confirm('Delete this text box?')) { note.remove(); saveSnapshot(); persistToStorage(); }
+    });
+    note.focus();
+    return note;
+  }
+
+  // add text on canvas click when tool=text
+  wrap.addEventListener('pointerdown', (ev)=>{
+    if(tool !== 'text') return;
+    // ensure event target is canvas wrap (not a note)
+    if(ev.target !== wrap && ev.target !== canvas) return;
+    const r = wrap.getBoundingClientRect();
+    const x = ev.clientX - r.left;
+    const y = ev.clientY - r.top;
+    addTextNoteAt(x, y);
+    persistToStorage();
   });
 
-  // initialize first empty snapshot
-  saveSnapshot();
+  // grid toggle
+  gridToggle.addEventListener('click', ()=>{
+    gridOn = !gridOn;
+    gridToggle.classList.toggle('active', gridOn);
+    if(gridOn) drawGrid();
+    else restoreSnapshot(snapIdx); // re-render without grid (we draw grid separately)
+  });
 
-  // close mobile menu when clicking outside
+  function drawGrid(){
+    // draw grid on top of content using a temporary canvas overlay would be ideal,
+    // but to keep things simple we draw grid onto main canvas as light lines
+    restoreSnapshot(snapIdx); // draw current saved image first
+    ctx.save();
+    const gap = 25;
+    ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+    ctx.lineWidth = 1;
+    for(let x=0; x<canvas.width; x += gap){
+      ctx.beginPath();
+      ctx.moveTo(x + 0.5, 0);
+      ctx.lineTo(x + 0.5, canvas.height);
+      ctx.stroke();
+    }
+    for(let y=0; y<canvas.height; y += gap){
+      ctx.beginPath();
+      ctx.moveTo(0, y + 0.5);
+      ctx.lineTo(canvas.width, y + 0.5);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // hamburger menu toggle
+  hamburger.addEventListener('click', ()=> { mobileMenu.classList.toggle('show'); });
+
+  // mobile mirror actions
+  m_color && m_color.addEventListener('input', (e) => { color = e.target.value; colorInput.value = color; });
+  m_size && m_size.addEventListener('input', (e) => { size = parseInt(e.target.value,10); sizeInput.value = size; });
+  m_opacity && m_opacity.addEventListener('input', (e) => { opacity = parseFloat(e.target.value); opacityInput.value = opacity; });
+
+  // mobile control bodies trigger tool change
+  m_penBtn && m_penBtn.addEventListener('click', ()=> setActiveToolAndClose('pen'));
+  m_highlighterBtn && m_highlighterBtn.addEventListener('click', ()=> setActiveToolAndClose('highlighter'));
+  m_eraserBtn && m_eraserBtn.addEventListener('click', ()=> setActiveToolAndClose('eraser'));
+  m_textBtn && m_textBtn.addEventListener('click', ()=> setActiveToolAndClose('text'));
+
+  function setActiveToolAndClose(t){
+    setActiveTool(t);
+    mobileMenu.classList.remove('show');
+  }
+
+  // unify active tool setting so both mobile & desktop remain synced
+  function setActiveTool(t){
+    tool = t;
+    // update UI active classes
+    [penBtn, highlighterBtn, eraserBtn, textBtn].forEach(b => b && b.classList.remove('active'));
+    if(penBtn && t==='pen') penBtn.classList.add('active');
+    if(highlighterBtn && t==='highlighter') highlighterBtn.classList.add('active');
+    if(eraserBtn && t==='eraser') eraserBtn.classList.add('active');
+    if(textBtn && t==='text') textBtn.classList.add('active');
+
+    [m_penBtn, m_highlighterBtn, m_eraserBtn, m_textBtn].forEach(b => b && b.classList.remove('active'));
+    if(m_penBtn && t==='pen') m_penBtn.classList.add('active');
+    if(m_highlighterBtn && t==='highlighter') m_highlighterBtn.classList.add('active');
+    if(m_eraserBtn && t==='eraser') m_eraserBtn.classList.add('active');
+    if(m_textBtn && t==='text') m_textBtn.classList.add('active');
+
+    // cursor
+    canvas.style.cursor = (t==='text' ? 'text' : 'crosshair');
+    // change stroke style immediately
+    if(tool === 'eraser') {
+      ctx.globalCompositeOperation = 'destination-out';
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+    }
+  }
+
+  // initial tool
+  setActiveTool('pen');
+
+  // initialize first snapshot: blank whiteboard
+  function initBlankSnapshot(){
+    ctx.save();
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+    saveSnapshot();
+  }
+
+  // attempt to restore from storage; if none, blank snapshot
+  setTimeout(()=> {
+    const restored = restoreFromStorage();
+    if(!restored){
+      initBlankSnapshot();
+    }
+  }, 100);
+
+  // clicking outside mobile menu closes it
   document.addEventListener('click', (e)=>{
     if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
       mobileMenu.classList.remove('show');
     }
   });
 
-  // prevent page scrolling while drawing on mobile
-  document.body.addEventListener('touchstart', (e)=>{ if(e.target===canvas && typeof e.preventDefault === 'function') e.preventDefault(); }, {passive:false});
-  document.body.addEventListener('touchmove', (e)=>{ if(e.target===canvas && typeof e.preventDefault === 'function') e.preventDefault(); }, {passive:false});
+  // persist before unload
+  window.addEventListener('beforeunload', () => persistToStorage());
 
+  // keyboard shortcuts for teacher convenience
+  window.addEventListener('keydown', (e)=>{
+    if(e.ctrlKey || e.metaKey){
+      if(e.key === 'z') { e.preventDefault(); if(snapIdx > 0) { snapIdx--; restoreSnapshot(snapIdx); } }
+      if(e.key === 'y') { e.preventDefault(); if(snapIdx < snapshots.length-1) { snapIdx++; restoreSnapshot(snapIdx); } }
+    }
+    // quick tool switches
+    if(e.key === 'e') setActiveTool('eraser'); // e = eraser
+    if(e.key === 'p') setActiveTool('pen'); // p = pen
+    if(e.key === 'h') setActiveTool('highlighter'); // h = highlighter
+    if(e.key === 't') setActiveTool('text'); // t = text
+  });
+
+  // make sure draw settings are applied just before stroke
+  function applyStrokeSettings(){
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = opacity;
+    ctx.lineWidth = size;
+    if(tool === 'eraser') {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.globalAlpha = 1;
+    } else if(tool === 'highlighter'){
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = opacity;
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = opacity;
+    }
+  }
+
+  // ensure apply settings on pointerdown
+  canvas.addEventListener('pointerdown', (ev) => {
+    applyStrokeSettings();
+  });
+
+})(); // end module
 </script>
-
 </body>
 </html>
