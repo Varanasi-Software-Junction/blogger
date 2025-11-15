@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Champak Roy — Whiteboard (Text fix + Guide)</title>
+<title>Champak Roy — Whiteboard (Guide bottom-right)</title>
 <style>
   :root{--blue:#3f6bff;--bg:#eef3ff;--panel:#fff;--muted:#c7d6ff}
   *{box-sizing:border-box}
@@ -27,10 +27,10 @@
   .status{font-size:13px;color:#333;padding-left:8px}
   @media(max-width:760px){.desktop-only{display:none}}
 
-  /* GUIDE (top-right) */
+  /* GUIDE (bottom-right) */
   .guide {
     position: absolute;
-    top: 12px;
+    bottom: 12px;
     right: 12px;
     width: 320px;
     max-width: calc(100% - 28px);
@@ -69,7 +69,7 @@
   .guide .shortcut { display:inline-block; background:#f1f7ff; border:1px solid #e6efff; padding:2px 6px; border-radius:6px; font-weight:600; margin-right:6px; font-size:12px; }
   .guide .footer { padding:8px 10px; border-top:1px solid rgba(0,0,0,0.03); background: rgba(255,255,255,0.96); display:flex; justify-content:space-between; align-items:center; gap:8px; }
   .guide .pin { cursor:pointer; font-size:12px; padding:6px; border-radius:6px; background:transparent; border:1px solid rgba(0,0,0,0.04) }
-  .guide.collapsed { width:44px; height:44px; border-radius:50%; overflow:visible; padding:0; right:12px; top:12px; }
+  .guide.collapsed { width:44px; height:44px; border-radius:50%; overflow:visible; padding:0; right:12px; bottom:12px; }
   .guide.collapsed .head { display:flex; justify-content:center; align-items:center; padding:0; border-bottom:none; }
   .guide.collapsed .content, .guide.collapsed .footer { display:none; }
   .guide .help-title { font-size:13px; color:#0b2545; }
@@ -121,7 +121,7 @@
       <div id="laser" class="laser" style="background: rgba(255,0,0,0.55); display:none"></div>
     </div>
 
-    <!-- How to use guide (top-right) -->
+    <!-- How to use guide (bottom-right) -->
     <div id="howto" class="guide" role="region" aria-label="How to use whiteboard guide">
       <div class="head">
         <div>
@@ -185,11 +185,9 @@
 </div>
 
 <script>
-/* Fixed Text tool + existing features (record/play/laser/guide)
-   Key changes:
-   - When tool === 'text' a movable/resizable contentEditable DIV is created at the click position.
-   - Text notes are preserved on saveSnapshot and not disturbed by playback (playback draws on canvas).
-   - Double-click deletes a text note.
+/* Whiteboard with recording, laser pointer and HOW-TO guide (guide now bottom-right)
+   - Guide toggles/collapses and remembers state in localStorage
+   - Text tool creates editable boxes
 */
 
 (() => {
@@ -336,7 +334,6 @@
     // dragging
     let dragging = false, start = null, orig = null;
     note.addEventListener('pointerdown', (ev) => {
-      // if resizing (browser shows resize handle) pointerdown may be on resize; let that through
       if(ev.button && ev.button !== 0) return;
       ev.stopPropagation();
       dragging = true;
@@ -379,12 +376,10 @@
       const x = e.clientX - rp.left;
       const y = e.clientY - rp.top;
       addTextNoteAt(x, y, '', 220, 36, { fontSize: '16px', color: color });
-      // stop propagation to avoid any drawing behavior
       e.preventDefault();
       return;
     }
 
-    // normal drawing tools
     if(e.button && e.button !== 0) return;
     canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
     drawing = true;
@@ -483,7 +478,7 @@
   });
   importBtn.addEventListener('click', ()=> importFile.click());
 
-  // --- Recording implementation (as before) ---
+  // --- Recording implementation ---
   function startRecording(){
     recording = { events: [], duration:0 };
     isRecording = true;
@@ -653,7 +648,7 @@
   ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
 
   // -----------------------
-  // GUIDE: collapse/close/pin behavior
+  // GUIDE: collapse/close/pin behavior (now bottom-right default)
   // -----------------------
   const GUIDE_KEY = 'whiteboard_guide_state_v1';
   const guideEl = document.getElementById('howto');
@@ -672,6 +667,7 @@
     try{ localStorage.setItem(GUIDE_KEY, JSON.stringify(state)); }catch(e){}
   }
   let guideState = loadGuideState();
+
   function applyGuideState(){
     if(!guideState.open) {
       guideEl.classList.add('collapsed');
@@ -725,6 +721,9 @@
     guideEl.style.position = 'fixed';
     guideEl.style.left = left + 'px';
     guideEl.style.top = top + 'px';
+    // remove bottom/right to allow free placement
+    guideEl.style.bottom = '';
+    guideEl.style.right = '';
   });
 
   window.addEventListener('pointerup', (e)=>{
@@ -735,6 +734,16 @@
     guideState.pos = { left: guideEl.style.left, top: guideEl.style.top };
     saveGuideState(guideState);
   });
+
+  // restore position if saved (and not pinned)
+  if(guideState.pos && !guideState.pinned){
+    guideEl.style.position = 'fixed';
+    guideEl.style.left = guideState.pos.left;
+    guideEl.style.top = guideState.pos.top;
+    // clear bottom/right defaults so saved coords take effect
+    guideEl.style.bottom = '';
+    guideEl.style.right = '';
+  }
 
 })();
 </script>
