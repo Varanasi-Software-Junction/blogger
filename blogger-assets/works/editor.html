@@ -1,0 +1,486 @@
+
+<html lang="en">
+<head>
+  <meta charset="utf-8"></meta>
+  <meta content="width=device-width,initial-scale=1" name="viewport"></meta>
+  <title>Python Editor — Load from File + Persistent Snapshot (CRX)</title>
+<link href='https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css' rel='stylesheet'/>
+  <!-- ===== CRX STYLES (paste into crx_styles_v1.css if you want external) ===== -->
+   
+  <!-- ===== end CRX STYLES ===== -->
+   <link href='//fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i' media='all' rel='stylesheet' type='text/css'/>
+    <link href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'/>
+</head>
+<body>
+  
+  <img alt="Champak's implementation of Bubble Sort" class="crx_avatar floating-btn follow-btn desktop-btn" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEglwaii2_xBr47JtUxESk3iekPLl1TSI5B6RuwqNOs_8zk9iGlLqw3d_WprAhKKp3m9F1eO4XBh_JfU_jj6Ad759bHWsqU0evz1SdsG_XBJPc7nXmkbGHO2glvshLTd0fOaKlIGfEVHlEeltJcg2Azc70rVoswRtvH-QiohpHrAuuPEE1uwA9CToBM9foE/s16000/me.jpg" />
+  
+  <br /><br />
+  <div class="crx_wrap">
+    <header class="crx_header">
+      <h1>Python Editor — Persistent Snapshot + Load from File</h1>
+      <div class="crx_small">Autosave snapshot (code + output) to localStorage. Load/Save snapshots to file. Floating output available.</div>
+    </header>
+
+    <!-- OUTPUT -->
+    <div class="crx_card crx_output-card">
+      <div style="align-items: center; display: flex; justify-content: space-between;">
+        <strong>Output &amp; Logs</strong>
+        <div style="align-items: center; display: flex; gap: .5rem;">
+          <button class="crx_btn small" id="copyBtn">Copy</button>
+          <button class="crx_btn small secondary" id="popBtn" title="Pop out the output">Pop out</button>
+          <button class="crx_btn small" id="saveBtn" title="Save code + output to file">Save</button>
+          <label class="crx_btn small" for="loadFileInput" style="cursor: pointer; display: inline-block; margin-left: 4px;">
+            Load
+          </label>
+          <input accept="application/json" id="loadFileInput" style="display: none;" type="file" />
+        </div>
+      </div>
+
+      <pre style="font-size:32px !important;" class="crx_output" id="output">Output will appear here after running your code.</pre>
+      <div class="crx_small" style="margin-top: .6rem;">Loaded packages: <span id="loadedList">none</span></div>
+    </div>
+
+    <!-- EDITOR -->
+    <div class="crx_card crx_editor-card">
+      <div class="crx_editor-meta">
+        <div class="crx_small">Editor: <strong>Ace</strong> — language: python</div>
+        <div style="align-items: center; display: flex; gap: .6rem;">
+          <div class="crx_status" id="runStatus">Ready</div>
+          <div class="crx_small" id="timeInfo"></div>
+        </div>
+      </div>
+
+      <div  style="font-size:32px !important;" class="crx_editor" id="editor"></div>
+
+      <div class="crx_controls" style="margin-top: .6rem;">
+        <button class="crx_btn" id="runBtn">Run</button>
+        <button class="crx_btn secondary" id="clearBtn">Clear Output</button>
+        <button class="crx_btn small secondary" id="reloadPkgs">Reload packages</button>
+        <button class="crx_btn small" id="reloadBtn" title="Reload snapshot from localStorage">Reload</button>
+        <label style="color: var(--crx-muted); font-size: 13px; margin-left: auto;">
+          <input checked="" id="showResultValue" type="checkbox" /> show last expression
+        </label>
+      </div>
+
+      <div class="crx_small" style="margin-top: .6rem;">
+        Tip: Editor autosaves a snapshot ({code, output}) to localStorage. Use Save/Load buttons to exchange snapshots as files.
+      </div>
+    </div>
+  </div>
+
+  <!-- libs -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+
+  <script>
+  /*******************************
+   * Keys & helpers
+   *******************************/
+  const LOCAL_SNAPSHOT_KEY = 'pyedit_snapshot_local';
+  const LOCAL_KEY_FLOAT_PIN = 'pyedit_float_pin';
+  const SAVE_FILENAME_PREFIX = 'pyedit_snapshot_';
+  function timestampForFilename(){ const d=new Date(); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}${z(d.getMonth()+1)}${z(d.getDate())}_${z(d.getHours())}${z(d.getMinutes())}${z(d.getSeconds())}`; }
+
+  /*******************************
+   * Floating output UI (CRX-namespaced)
+   *******************************/
+  (function(){
+    const popBtn = document.getElementById('popBtn');
+    const outputEl = document.getElementById('output');
+    let floatEl = null;
+
+    function createFloat(){
+      const el = document.createElement('div'); el.className='crx_float-output'; el.setAttribute('role','dialog'); el.setAttribute('aria-label','Floating Output');
+      const header = document.createElement('div'); header.className='crx_float-header'; header.tabIndex = 0;
+      const title = document.createElement('div'); title.className='crx_float-title'; title.textContent='Output & Logs';
+      const ctrls = document.createElement('div'); ctrls.className='crx_float-controls';
+      const pinBtn = document.createElement('button'); pinBtn.className='crx_float-btn'; pinBtn.title='Pin (keep visible)'; pinBtn.innerHTML='📌';
+      const closeBtn = document.createElement('button'); closeBtn.className='crx_float-btn'; closeBtn.title='Close'; closeBtn.innerHTML='✖';
+      ctrls.appendChild(pinBtn); ctrls.appendChild(closeBtn); header.appendChild(title); header.appendChild(ctrls); el.appendChild(header);
+      const body = document.createElement('div'); body.className='crx_float-body'; body.textContent = outputEl.textContent || ''; el.appendChild(body);
+
+      closeBtn.addEventListener('click', destroyFloat);
+      pinBtn.addEventListener('click', (ev)=>{
+        ev.stopPropagation();
+        const pinned = (localStorage.getItem(LOCAL_KEY_FLOAT_PIN) === '1');
+        localStorage.setItem(LOCAL_KEY_FLOAT_PIN, pinned ? '0' : '1');
+      });
+
+      // Drag
+      let dragState = null;
+      header.addEventListener('mousedown', (e)=>{
+        dragState = {startX:e.clientX, startY:e.clientY, origLeft: el.offsetLeft, origTop: el.offsetTop};
+        document.addEventListener('mousemove', onDrag);
+        document.addEventListener('mouseup', stopDrag);
+      });
+      function onDrag(e){ if(!dragState) return; const dx = e.clientX - dragState.startX; const dy = e.clientY - dragState.startY; el.style.left = (dragState.origLeft + dx) + 'px'; el.style.top = (dragState.origTop + dy) + 'px'; el.style.right = 'auto'; }
+      function stopDrag(){ dragState = null; document.removeEventListener('mousemove', onDrag); document.removeEventListener('mouseup', stopDrag); }
+
+      // Keep body synced
+      const obs = new MutationObserver(()=>{ body.textContent = outputEl.textContent || ''; body.scrollTop = body.scrollHeight; });
+      obs.observe(outputEl, { characterData: true, subtree: true, childList: true });
+      el._observer = obs;
+
+      return el;
+    }
+
+    function showFloat(){
+      if(floatEl) return;
+      floatEl = createFloat();
+      document.body.appendChild(floatEl);
+    }
+    function destroyFloat(){
+      if(!floatEl) return;
+      try{ if(floatEl._observer) floatEl._observer.disconnect(); } catch(e){}
+      floatEl.remove(); floatEl = null;
+      localStorage.setItem(LOCAL_KEY_FLOAT_PIN, '0');
+    }
+    popBtn.addEventListener('click', ()=> { if(floatEl) destroyFloat(); else showFloat(); });
+
+    if(localStorage.getItem(LOCAL_KEY_FLOAT_PIN) === '1') { try{ showFloat(); } catch(e){} }
+    window.__pyedit_float = { open: showFloat, close: destroyFloat, isOpen: ()=> !!floatEl };
+  })();
+
+  /*******************************
+   * Editor + Pyodide + Loader
+   *******************************/
+  const editor = ace.edit("editor", { mode: "ace/mode/python", theme: "ace/theme/chrome", fontSize: "32px", wrap: true, showPrintMargin: false });
+  editor.renderer.setShowGutter(true);
+  editor.setOption("enableBasicAutocompletion", true);
+  const Range = (ace.require && ace.require("ace/range")) ? ace.require("ace/range").Range : null;
+
+  // UI refs
+  const runBtn = document.getElementById("runBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const outputEl = document.getElementById("output");
+  const runStatus = document.getElementById("runStatus");
+  const timeInfo = document.getElementById("timeInfo");
+  const copyBtn = document.getElementById("copyBtn");
+  const showResultValue = document.getElementById("showResultValue");
+  const loadedListEl = document.getElementById("loadedList");
+  const reloadPkgsBtn = document.getElementById("reloadPkgs");
+  const saveBtn = document.getElementById("saveBtn");
+  const loadFileInput = document.getElementById("loadFileInput");
+  const reloadBtn = document.getElementById("reloadBtn");
+
+  // pyodide
+  let pyodide = null, pyodideReady = null;
+  const loadedPackages = new Set();
+  const PACKAGE_MAP = {"numpy":"numpy","pandas":"pandas","matplotlib":"matplotlib","scipy":"scipy","sklearn":"scikit-learn","skimage":"scikit-image","networkx":"networkx","sympy":"sympy","xlrd":"xlrd","openpyxl":"openpyxl","pyyaml":"pyyaml","seaborn":"seaborn"};
+
+  function updateLoadedListUI(){ loadedListEl.textContent = loadedPackages.size ? Array.from(loadedPackages).join(", ") : "none"; }
+
+  async function ensurePyodide(){
+    if(pyodideReady) return pyodideReady;
+    runStatus.textContent = "Loading Python runtime...";
+    runStatus.classList.remove('ok','err'); runStatus.classList.add('crx_status');
+    pyodideReady = loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.23.4/full/" })
+      .then(p => { pyodide = p; runStatus.textContent = "Pyodide loaded."; runStatus.classList.remove('err'); runStatus.classList.add('ok'); runStatus.classList.add('crx_status'); return p; })
+      .catch(err => { runStatus.textContent = "Pyodide load failed"; runStatus.classList.remove('ok'); runStatus.classList.add('err'); runStatus.classList.add('crx_status'); throw err; });
+    return pyodideReady;
+  }
+
+  function withTimeout(promise, ms=30000, label="operation"){ return new Promise((res, rej) => { const t = setTimeout(()=> rej(new Error(`${label} timed out after ${ms/1000}s`)), ms); promise.then(v=>{ clearTimeout(t); res(v); }).catch(e=>{ clearTimeout(t); rej(e); }); }); }
+
+  function detectImports(code){
+    const imports = new Set();
+    const reImport = /^\s*import\s+(.+)$/gm;
+    const reFrom = /^\s*from\s+([A-Za-z0-9_.]+)\s+import\s+/gm;
+    let m;
+    while((m = reImport.exec(code)) !== null){
+      let rest = m[1];
+      rest.split(",").forEach(part => { part = part.trim().split(/\s+/)[0]; if(part) imports.add(part.split(".")[0]); });
+    }
+    while((m = reFrom.exec(code)) !== null){
+      const pkg = m[1].trim().split(".")[0];
+      if(pkg) imports.add(pkg);
+    }
+    return imports;
+  }
+
+  async function loadPackagesForCode(code){
+    const imports = detectImports(code);
+    const toLoad = [];
+    for(const pkg of imports){
+      if(!pkg || pkg === "builtins") continue;
+      if(loadedPackages.has(pkg)) continue;
+      toLoad.push(pkg);
+    }
+    if(toLoad.length === 0) return { success:true, loaded: [] };
+    await ensurePyodide();
+    const loadedNow = [];
+    for(const pkg of toLoad){
+      try {
+        const mapped = PACKAGE_MAP[pkg];
+        if(mapped){
+          runStatus.textContent = `Loading package: ${mapped} ...`;
+          runStatus.classList.remove('err','ok'); runStatus.classList.add('crx_status');
+          try {
+            await withTimeout(pyodide.loadPackage(mapped), 30000, `loadPackage(${mapped})`);
+            loadedPackages.add(pkg);
+            loadedNow.push(pkg);
+          } catch(e){
+            appendOutput(`loadPackage(${mapped}) failed: ${e.message || e}. Falling back to micropip.`);
+            try { await withTimeout(pyodide.runPythonAsync(`import micropip\nawait micropip.install("${pkg}")`), 30000, `micropip.install(${pkg})`); loadedPackages.add(pkg); loadedNow.push(pkg); }
+            catch(e2){ appendOutput(`micropip.install(${pkg}) failed: ${e2.message || e2}`); }
+          }
+        } else {
+          runStatus.textContent = `Installing ${pkg} via micropip...`;
+          runStatus.classList.remove('err','ok'); runStatus.classList.add('crx_status');
+          try { await withTimeout(pyodide.runPythonAsync(`import micropip\nawait micropip.install("${pkg}")`), 30000, `micropip.install(${pkg})`); loadedPackages.add(pkg); loadedNow.push(pkg); }
+          catch(e){ appendOutput(`micropip.install(${pkg}) failed: ${e.message || e}`); }
+        }
+      } catch(err){
+        appendOutput(`Unexpected error while loading ${pkg}: ${err && err.message ? err.message : err}`);
+      }
+    }
+    updateLoadedListUI();
+    if(loadedNow.length){ runStatus.textContent = `Loaded: ${loadedNow.join(", ")}`; runStatus.classList.remove('err'); runStatus.classList.add('ok'); runStatus.classList.add('crx_status'); }
+    else { runStatus.textContent = "No packages loaded (some installs may have failed)"; runStatus.classList.remove('ok'); runStatus.classList.add('crx_status'); }
+    return { success:true, loaded: loadedNow };
+  }
+
+  function appendOutput(text){
+    const time = (new Date()).toLocaleTimeString();
+    outputEl.textContent = outputEl.textContent.trim() ? (outputEl.textContent + "\n\n[" + time + "] " + text) : ("[" + time + "] " + text);
+    outputEl.scrollTop = outputEl.scrollHeight;
+    // also update saved snapshot in localStorage so output persists
+    scheduleLocalSnapshotSave();
+  }
+
+  function indentCode(code, spaces=4){ return code.split("\n").map(line => ' '.repeat(spaces) + line).join("\n"); }
+
+  async function runPythonFromEditor(){
+    clearErrorHighlight();
+    const code = editor.getValue();
+    runBtn.disabled = true; clearBtn.disabled = true; reloadPkgsBtn.disabled = true;
+    runStatus.textContent = "Resolving imports...";
+    runStatus.classList.remove('ok','err'); runStatus.classList.add('crx_status');
+    outputEl.textContent = ""; timeInfo.textContent = "";
+    appendOutput("Resolving imports for your code...");
+
+    try{
+      const loaderResult = await loadPackagesForCode(code);
+      if(loaderResult.loaded && loaderResult.loaded.length){ appendOutput(`Loaded packages: ${loaderResult.loaded.join(", ")}`); }
+      else { appendOutput("No packages were installed/loaded (either none required or installs failed)."); }
+    } catch(e){ appendOutput("Error while loading packages: " + (e && e.message ? e.message : e)); }
+
+    const showLast = showResultValue.checked;
+    const wrapper = `
+import sys, io, traceback
+_buf = io.StringIO()
+_old_out, _old_err = sys.stdout, sys.stderr
+sys.stdout, sys.stderr = _buf, _buf
+_result = None
+try:
+${indentCode(code, 4)}
+${ showLast ? '\n    try:\n        _result = _\n    except NameError:\n        pass\n' : '' }
+except Exception:
+    traceback.print_exc()
+finally:
+    sys.stdout, sys.stderr = _old_out, _old_err
+_out_text = _buf.getvalue()
+print("__PYOUTSEP__")
+print(_out_text)
+print("__PYRESSEP__")
+try:
+    _res_repr = repr(_result) if _result is not None else ""
+    print(_res_repr)
+except Exception:
+    print("")
+`;
+    try{
+      const t0 = performance.now();
+      runStatus.textContent = "Running code...";
+      runStatus.classList.remove('ok','err'); runStatus.classList.add('crx_status');
+      await withTimeout(pyodide.runPythonAsync(wrapper), 60000, "runPython");
+      const t1 = performance.now();
+
+      let out_text = "";
+      let res_repr = "";
+      try { const maybe_out = pyodide.globals.get("_out_text"); out_text = (maybe_out === undefined || maybe_out === null) ? "" : maybe_out.toString(); } catch(e){ out_text = ""; }
+      try { const maybe_res = pyodide.globals.get("_res_repr"); res_repr = (maybe_res === undefined || maybe_res === null) ? "" : maybe_res.toString(); } catch(e){ res_repr = ""; }
+
+      let display = out_text || "";
+      if(showLast && res_repr) display += (display ? "\n\n" : "") + "Result:\n" + res_repr;
+      if(!display.trim()) display = "(no output)";
+
+      outputEl.textContent = display;
+      runStatus.textContent = "Finished";
+      runStatus.classList.remove('err'); runStatus.classList.add('ok'); runStatus.classList.add('crx_status');
+      timeInfo.innerHTML = `⏱ ${(t1-t0).toFixed(2)} ms`;
+
+      // save output into snapshot
+      scheduleLocalSnapshotSave();
+
+      highlightTracebackLine(out_text);
+    } catch(err){
+      appendOutput("Execution error: " + (err && err.message ? err.message : String(err)));
+      runStatus.textContent = "Error during execution";
+      runStatus.classList.remove('ok'); runStatus.classList.add('err'); runStatus.classList.add('crx_status');
+    } finally {
+      runBtn.disabled = false; clearBtn.disabled = false; reloadPkgsBtn.disabled = false;
+    }
+  }
+
+  let currentErrorMarker = null;
+  function highlightTracebackLine(traceText){
+    clearErrorHighlight();
+    if(!traceText) return;
+    const m = traceText.match(/File "<string>", line (\d+)/);
+    if(m){
+      const row = parseInt(m[1],10) - 1;
+      if(Range){ try { currentErrorMarker = editor.session.addMarker(new Range(row,0,row,9999),"ace_error_line","fullLine"); } catch(e){} }
+      editor.scrollToLine(row, true, true, function(){});
+      runStatus.textContent = "Finished (traceback)";
+      runStatus.classList.remove('ok'); runStatus.classList.add('err'); runStatus.classList.add('crx_status');
+    }
+  }
+  function clearErrorHighlight(){ if(currentErrorMarker){ try{ editor.session.removeMarker(currentErrorMarker);}catch(e){} currentErrorMarker=null; } }
+
+  /*******************************
+   * Snapshot: autosave to localStorage (both code + output)
+   *******************************/
+  const AUTOSAVE_DELAY = 600;
+  let autosaveTimer = null;
+  function scheduleLocalSnapshotSave(){
+    if(autosaveTimer) clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(()=> {
+      try {
+        const snapshot = { code: editor.getValue(), output: outputEl.textContent || "" };
+        localStorage.setItem(LOCAL_SNAPSHOT_KEY, JSON.stringify(snapshot));
+        // small silent save
+      } catch(e){ console.warn("Snapshot save failed", e); }
+    }, AUTOSAVE_DELAY);
+  }
+
+  function loadSnapshotFromLocalStorage(){
+    try {
+      const raw = localStorage.getItem(LOCAL_SNAPSHOT_KEY);
+      if(!raw) return false;
+      const snap = JSON.parse(raw);
+      if(snap && typeof snap === 'object'){
+        if(typeof snap.code === 'string') editor.setValue(snap.code, -1);
+        if(typeof snap.output === 'string') outputEl.textContent = snap.output;
+        // keep UI in sync
+        appendOutput("Loaded snapshot from localStorage.");
+        return true;
+      }
+    } catch(e){ console.warn("Load snapshot failed", e); }
+    return false;
+  }
+
+  function clearLocalSnapshot(){
+    try { localStorage.removeItem(LOCAL_SNAPSHOT_KEY); } catch(e){}
+  }
+
+  /*******************************
+   * Save / Load file helpers
+   *******************************/
+  function saveSnapshotToFile(){
+    try{
+      const payload = { code: editor.getValue(), output: outputEl.textContent || "" };
+      const json = JSON.stringify(payload, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = SAVE_FILENAME_PREFIX + timestampForFilename() + '.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      appendOutput("Saved snapshot to file.");
+    } catch(e){
+      appendOutput("Save failed: " + (e && e.message ? e.message : e));
+    }
+  }
+
+  function handleLoadFile(file){
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        if(parsed && typeof parsed === 'object'){
+          if(typeof parsed.code === 'string') editor.setValue(parsed.code, -1);
+          if(typeof parsed.output === 'string') outputEl.textContent = parsed.output;
+          // save to localStorage snapshot
+          scheduleLocalSnapshotSave();
+          appendOutput("Loaded snapshot from file.");
+        } else appendOutput("Invalid snapshot file.");
+      } catch(e){
+        appendOutput("Failed to parse file: " + (e && e.message ? e.message : e));
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // wire the hidden file input
+  loadFileInput.addEventListener('change', (ev)=>{
+    const f = ev.target.files && ev.target.files[0];
+    if(f) handleLoadFile(f);
+    // clear the input so same file can be selected again later if needed
+    ev.target.value = '';
+  });
+
+  /*******************************
+   * UI events / wiring
+   *******************************/
+  // autosave when editor changes
+  editor.getSession().on('change', scheduleLocalSnapshotSave);
+
+  runBtn.addEventListener('click', async ()=> {
+    try { await ensurePyodide(); } catch(e){ appendOutput("Pyodide init failed: " + (e && e.message ? e.message : e)); return; }
+    runPythonFromEditor();
+  });
+
+  clearBtn.addEventListener('click', ()=> {
+    outputEl.textContent = "";
+    scheduleLocalSnapshotSave();
+    runStatus.textContent = "Ready";
+    runStatus.classList.remove('ok','err'); runStatus.classList.add('crx_status');
+    timeInfo.textContent = "";
+    clearErrorHighlight();
+  });
+
+  copyBtn.addEventListener('click', async ()=> {
+    try{ await navigator.clipboard.writeText(outputEl.textContent); copyBtn.textContent = "Copied!"; setTimeout(()=> copyBtn.textContent = "Copy", 1000); } catch(e){ copyBtn.textContent = "Copy failed"; setTimeout(()=> copyBtn.textContent = "Copy", 1000); }
+  });
+
+  saveBtn.addEventListener('click', saveSnapshotToFile);
+
+  reloadBtn.addEventListener('click', ()=> {
+    const ok = loadSnapshotFromLocalStorage();
+    if(!ok) appendOutput("No snapshot found in localStorage.");
+  });
+
+  reloadPkgsBtn.addEventListener('click', async ()=> {
+    await ensurePyodide();
+    runStatus.textContent = "Reloading packages...";
+    runStatus.classList.remove('ok','err'); runStatus.classList.add('crx_status');
+    await loadPackagesForCode(editor.getValue());
+  });
+
+  // keyboard shortcut: Ctrl/Cmd+S to save file
+  editor.commands.addCommand({ name: "save", bindKey: { win: "Ctrl-S", mac: "Command-S" }, exec: function() { saveSnapshotToFile(); } });
+  editor.commands.addCommand({ name: "run", bindKey: { win: "Ctrl-Enter", mac: "Command-Enter" }, exec: function() { runBtn.click(); } });
+
+  // load snapshot at startup (if present). If none, set starter code.
+  (function init(){
+    const loaded = loadSnapshotFromLocalStorage();
+    if(!loaded){
+      const starter = `print("Hello and welcome to our Python Editor ")`;
+      if(!editor.getValue().trim()) editor.setValue(starter, -1);
+    }
+    // Force Ace to recalc size (in case CSS loads late)
+    setTimeout(()=> { try { editor.resize(); editor.renderer.updateFull(); } catch(e){ console.warn("Editor resize failed", e); } }, 60);
+
+    // warm up pyodide in background
+    ensurePyodide().then(()=> updateLoadedListUI()).catch(e=> { appendOutput("Failed to initialize Pyodide: " + (e && e.message ? e.message : e)); });
+  })();
+  </script>
+</body>
+</html>
+<div class="separator" style="clear: both; text-align: center;"><iframe class="b-iframe-ws lTgB3 BLOG_object_iframe" frameborder="0" height="198px" jsaction="load:lzUY8e" src="/share-widget?w=poi&amp;u=https%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3DPython&amp;ved=1t%3A269313&amp;bbid=146130669343976599&amp;bpid=6858522237228230772" width="200px"></iframe></div><br />
