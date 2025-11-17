@@ -1,1 +1,233 @@
-pseudocode
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pseudocode Editor — Write & Export</title>
+<style>
+  :root{
+    --bg:#0f1724; --panel:#0b1220; --accent:#06b6d4; --muted:#94a3b8; --card:#071025;
+  }
+  html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+  body{background:linear-gradient(180deg,#071024 0%, #071427 60%); color:#e6eef8; display:flex;align-items:stretch}
+  .app{max-width:1100px;margin:auto;width:100%;padding:18px;box-sizing:border-box}
+
+  .topbar{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+  .brand{font-weight:700;font-size:18px;color:var(--accent)}
+  .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
+  button{background:#082033;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 10px;border-radius:8px;cursor:pointer}
+  button.primary{background:linear-gradient(90deg,var(--accent),#3b82f6);color:#042; font-weight:600}
+  input[type=file]{display:none}
+
+  .layout{display:grid;grid-template-columns:1fr 340px;gap:12px;min-height:70vh}
+
+  /* Editor panel */
+  .editor-card{background:linear-gradient(180deg,#041023 0%, #071427 100%);border-radius:10px;padding:10px;box-shadow:0 8px 30px rgba(2,6,23,0.5);display:flex;flex-direction:column;min-height:400px}
+  .editor-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .meta{color:var(--muted);font-size:13px}
+
+  .editor-wrap{display:flex;flex:1;overflow:hidden;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+  .gutter{width:54px;background:transparent;padding:12px 8px 12px 12px;color:#94a3b8;font-size:13px;line-height:1.5;user-select:none;overflow:hidden}
+  .gutter .ln{display:block;padding:0 6px}
+  textarea.code{flex:1;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;font-size:15px;line-height:1.5;color:#e6eef8;background:transparent;border:0;padding:12px 12px 12px 6px;resize:none;outline:none;min-height:300px}
+
+  /* Right side pane */
+  .right{background:#031423;border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.03)}
+  .section{margin-bottom:12px}
+  .label{color:var(--muted);font-size:13px;margin-bottom:6px}
+  .sample{background:#021426;padding:10px;border-radius:8px;color:#bcd;white-space:pre-wrap;font-family:ui-monospace,monospace}
+  .small{font-size:13px;color:var(--muted)}
+
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .hint{font-size:13px;color:var(--muted);margin-top:6px}
+
+  /* responsive */
+  @media (max-width:980px){.layout{grid-template-columns:1fr}.gutter{display:none}.right{order:2}}
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">Pseudocode Writer</div>
+      <div class="meta">— quick editor for algorithms and notes</div>
+      <div class="controls">
+        <label title="Open file"><input id="open-file" type="file" accept="text/plain"/></label>
+        <button id="btn-copy">Copy</button>
+        <button id="btn-download" class="primary">Download</button>
+        <button id="btn-clear">Clear</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="editor-card">
+        <div class="editor-head">
+          <div class="meta">Pseudocode</div>
+          <div style="margin-left:auto" class="small">Lines: <span id="line-count">1</span></div>
+        </div>
+
+        <div class="editor-wrap">
+          <div class="gutter" id="gutter"></div>
+          <textarea id="editor" class="code" spellcheck="false">// Example: Binary Search (1-based index)
+FUNCTION binary_search(A, n, target)
+    low <- 1
+    high <- n
+    WHILE low <= high DO
+        mid <- floor((low + high) / 2)
+        IF A[mid] == target THEN
+            RETURN mid
+        ELSE IF A[mid] < target THEN
+            low <- mid + 1
+        ELSE
+            high <- mid - 1
+        END IF
+    END WHILE
+    RETURN NOT_FOUND
+END FUNCTION
+</textarea>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="section">
+          <div class="label">Templates</div>
+          <div class="actions">
+            <button onclick="insertTemplate('loop')">Loop</button>
+            <button onclick="insertTemplate('if')">If/Else</button>
+            <button onclick="insertTemplate('function')">Function</button>
+            <button onclick="insertTemplate('bsearch')">Binary Search</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="label">Formatting</div>
+          <div class="actions">
+            <button id="btn-indent">Indent 2 spaces</button>
+            <button id="btn-unindent">Unindent</button>
+          </div>
+          <div class="hint">Use Tab to indent selected lines</div>
+        </div>
+
+        <div class="section">
+          <div class="label">Preview / Sample</div>
+          <div class="sample" id="preview"></div>
+        </div>
+
+        <div class="section">
+          <div class="label">Settings</div>
+          <div class="small">Font size: <input id="font-size" type="range" min="12" max="20" value="15"/></div>
+          <div style="height:10px"></div>
+          <div class="small">Show line numbers: <input id="toggle-ln" type="checkbox" checked/></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+const editor = document.getElementById('editor');
+const gutter = document.getElementById('gutter');
+const lineCount = document.getElementById('line-count');
+const preview = document.getElementById('preview');
+
+function updateGutter(){
+  const lines = editor.value.split('\n').length;
+  gutter.innerHTML = '';
+  for(let i=1;i<=lines;i++){
+    const el = document.createElement('div'); el.className='ln'; el.textContent = i; gutter.appendChild(el);
+  }
+  lineCount.textContent = lines;
+}
+
+editor.addEventListener('input', ()=>{ updateGutter(); renderPreview(); });
+window.addEventListener('load', ()=>{ updateGutter(); renderPreview(); });
+
+// Templates
+function insertTemplate(name){
+  const pos = editor.selectionStart || editor.value.length;
+  let tpl = '';
+  if(name==='loop') tpl = 'FOR i FROM 1 TO n DO\n    // body\nEND FOR\n';
+  if(name==='if') tpl = 'IF condition THEN\n    // true branch\nELSE\n    // false branch\nEND IF\n';
+  if(name==='function') tpl = 'FUNCTION name(params)\n    // body\nEND FUNCTION\n';
+  if(name==='bsearch') tpl = 'FUNCTION binary_search(A, n, target)\n    low <- 1\n    high <- n\n    WHILE low <= high DO\n        mid <- floor((low + high) / 2)\n        IF A[mid] == target THEN\n            RETURN mid\n        ELSE IF A[mid] < target THEN\n            low <- mid + 1\n        ELSE\n            high <- mid - 1\n        END IF\n    END WHILE\n    RETURN NOT_FOUND\nEND FUNCTION\n';
+  editor.setRangeText(tpl, editor.selectionStart, editor.selectionEnd, 'end');
+  editor.focus(); updateGutter(); renderPreview();
+}
+
+// Formatting
+document.getElementById('btn-indent').addEventListener('click', ()=>{ indentSelection(); });
+document.getElementById('btn-unindent').addEventListener('click', ()=>{ unindentSelection(); });
+
+function indentSelection(){
+  const start = editor.selectionStart, end = editor.selectionEnd;
+  const value = editor.value;
+  const before = value.slice(0,start);
+  const sel = value.slice(start,end);
+  const after = value.slice(end);
+  const indented = sel.split('\n').map(ln=> '  '+ln).join('\n');
+  editor.value = before + indented + after;
+  editor.selectionStart = start; editor.selectionEnd = start + indented.length;
+  updateGutter(); renderPreview();
+}
+function unindentSelection(){
+  const start = editor.selectionStart, end = editor.selectionEnd;
+  const value = editor.value;
+  const before = value.slice(0,start);
+  const sel = value.slice(start,end);
+  const after = value.slice(end);
+  const un = sel.split('\n').map(ln=> ln.startsWith('  ')? ln.slice(2): ln).join('\n');
+  editor.value = before + un + after;
+  editor.selectionStart = start; editor.selectionEnd = start + un.length;
+  updateGutter(); renderPreview();
+}
+
+// Tab handling
+editor.addEventListener('keydown', (e)=>{
+  if(e.key==='Tab'){
+    e.preventDefault();
+    const start = editor.selectionStart, end = editor.selectionEnd;
+    if(start!==end){
+      // indent lines
+      const val = editor.value; const before = val.slice(0,start); const sel = val.slice(start,end); const after = val.slice(end);
+      const ind = sel.split('\n').map(ln=>'  '+ln).join('\n');
+      editor.value = before + ind + after;
+      editor.selectionStart = start; editor.selectionEnd = start + ind.length;
+    } else {
+      editor.setRangeText('  ', start, end, 'end');
+      editor.selectionStart = editor.selectionEnd = start+2;
+    }
+    updateGutter(); renderPreview();
+  }
+});
+
+// Copy / Download / Clear / Open
+document.getElementById('btn-copy').addEventListener('click', async ()=>{
+  await navigator.clipboard.writeText(editor.value);
+  alert('Copied to clipboard');
+});
+
+document.getElementById('btn-download').addEventListener('click', ()=>{
+  const blob = new Blob([editor.value], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'pseudocode.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+});
+
+document.getElementById('btn-clear').addEventListener('click', ()=>{ if(confirm('Clear editor?')){ editor.value=''; updateGutter(); renderPreview(); }});
+
+document.getElementById('open-file').addEventListener('change', (e)=>{
+  const f = e.target.files[0]; if(!f) return; const reader = new FileReader(); reader.onload = ()=>{ editor.value = reader.result; updateGutter(); renderPreview(); }; reader.readAsText(f);
+});
+
+// Preview simple rendering (preserve indentation)
+function renderPreview(){ preview.textContent = editor.value; }
+
+// Settings
+document.getElementById('font-size').addEventListener('input', (e)=>{ editor.style.fontSize = e.target.value+'px'; });
+document.getElementById('toggle-ln').addEventListener('change', (e)=>{ gutter.style.display = e.target.checked? 'block':'none'; });
+
+// Initialize
+updateGutter(); renderPreview();
+</script>
+</body>
+</html>
+
+            
