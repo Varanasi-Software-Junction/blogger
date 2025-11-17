@@ -23,10 +23,17 @@
       grid-template-columns: 1fr 1fr 1fr;
       gap: 10px;
     }
-
-    .box {
+.topbox {
       border-radius: 8px;
       height: 200px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .box {
+      border-radius: 8px;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -84,7 +91,7 @@
 <div class="grid" id="layout">
 
   <!-- Row 1: Full-width box -->
-  <div class="box" id="box1" style="background:#ff6b6b;">
+  <div class="topbox" id="box1" style="background:#ff6b6b;">
     <div class="controls">
       <strong>Box 1</strong>
       <button class="full-btn" onclick="goFull('box1')">Fullscreen</button>
