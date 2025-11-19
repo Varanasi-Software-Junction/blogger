@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Combined Webcam Page</title>
+  <style>
+    body {
+      background-color: #e6f2ff; /* light blue theme */
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 30px;
+    }
+    #container {
+      display: inline-block;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 2px solid #3399ff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    video {
+      border: 3px solid #3399ff;
+      border-radius: 10px;
+      width: 320px;
+      height: 240px;
+      margin: 10px;
+    }
+    textarea {
+      width: 95%;
+      height: 120px;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #3399ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #267acc;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h2>Combined Local + Viewer Page</h2>
+    <div>
+      <video id="localVideo" autoplay playsinline muted></video>
+      <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+
+    <button id="startBtn">Start Camera & Generate Offer</button>
+    <textarea id="offer" placeholder="Offer code will appear here"></textarea>
+
+    <button id="connectBtn">Paste Offer & Generate Answer</button>
+    <textarea id="answer" placeholder="Answer code will appear here"></textarea>
+
+    <button id="applyAnswerBtn">Paste Answer & Apply</button>
+  </div>
+
+  <script>
+    let pc = new RTCPeerConnection();
+
+    // Show remote stream
+    pc.ontrack = event => {
+      document.getElementById('remoteVideo').srcObject = event.streams[0];
+    };
+
+    // Local role: start webcam and generate offer
+    document.getElementById('startBtn').onclick = async () => {
+      let stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      document.getElementById('localVideo').srcObject = stream;
+      stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+      let offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      document.getElementById('offer').value = JSON.stringify(offer);
+    };
+
+    // Viewer role: paste offer and generate answer
+    document.getElementById('connectBtn').onclick = async () => {
+      let offerText = document.getElementById('offer').value;
+      if (!offerText) {
+        alert("Please paste an offer code first!");
+        return;
+      }
+      let offer;
+      try {
+        offer = JSON.parse(offerText);
+      } catch (err) {
+        alert("Invalid offer JSON: " + err);
+        return;
+      }
+
+      await pc.setRemoteDescription(offer);
+      let answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      document.getElementById('answer').value = JSON.stringify(answer);
+    };
+
+    // Local role: apply answer from Viewer
+    document.getElementById('applyAnswerBtn').onclick = async () => {
+      let answerText = document.getElementById('answer').value;
+      if (!answerText) {
+        alert("Please paste an answer code first!");
+        return;
+      }
+      let answer;
+      try {
+        answer = JSON.parse(answerText);
+      } catch (err) {
+        alert("Invalid answer JSON: " + err);
+        return;
+      }
+      await pc.setRemoteDescription(answer);
+    };
+  </script>
+</body>
+</html>
