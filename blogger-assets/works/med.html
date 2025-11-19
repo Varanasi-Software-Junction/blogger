@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Medicine Scheduler — Programmers Picnic</title>
+  <style>
+    :root{
+      --saffron:#f6a024;
+      --saffron-dark:#d17b00;
+      --bg:#fff7ef;
+      --muted:#6b6b6b;
+      --card:#ffffff;
+      --accent:#0b5cff;
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:#222}
+    header{background:var(--saffron);padding:18px 20px;display:flex;align-items:center;gap:12px}
+    header img{width:44px;height:44px;border-radius:8px;object-fit:cover;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+    header h1{margin:0;font-size:20px;color:white}
+    .container{max-width:980px;margin:18px auto;padding:18px}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 6px 20px rgba(15,15,15,.06)}
+    label{display:block;font-size:13px;margin-top:10px;color:var(--muted)}
+    input[type=text], input[type=time], input[type=date], select, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #eee;font-size:14px}
+    .muted{color:var(--muted);font-size:13px}
+    .btn{display:inline-block;padding:10px 12px;border-radius:10px;border:none;background:var(--saffron-dark);color:white;font-weight:600;cursor:pointer}
+    .btn.secondary{background:transparent;border:1px solid #ddd;color:#333}
+    .times-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .pill{background:#f3f3f7;padding:8px 10px;border-radius:999px;font-size:13px}
+    .upcoming{display:flex;flex-direction:column;gap:10px}
+    .upcoming .item{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:10px;border:1px solid #f0f0f0}
+    .small{font-size:12px;color:var(--muted)}
+    .controls{display:flex;gap:8px;align-items:center;margin-top:12px}
+    .footer-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .export, .import{display:flex;gap:8px;align-items:center}
+    .danger{background:#ff6b6b}
+    @media (max-width:920px){
+      .grid{grid-template-columns:1fr;}
+      header h1{font-size:18px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="me.png" alt="brand">
+    <div>
+      <h1>Medicine Scheduler</h1>
+      <div class="small">Add medicines, set times, get browser reminders. Works offline (localStorage).</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="grid">
+      <section class="card">
+        <h2 style="margin:0 0 8px 0">Add medicine</h2>
+        <div class="muted">Use this form to schedule a medicine. You can add multiple times.</div>
+
+        <label>Medicine name</label>
+        <input id="name" type="text" placeholder="e.g. Paracetamol 500mg" />
+
+        <label>Dosage / Notes</label>
+        <input id="notes" type="text" placeholder="e.g. 1 tablet" />
+
+        <label>Start date</label>
+        <input id="startDate" type="date" />
+
+        <label>End date (optional)</label>
+        <input id="endDate" type="date" />
+
+        <label>Repeats</label>
+        <select id="repeat">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly (select days)</option>
+          <option value="once">Once only</option>
+        </select>
+
+        <div id="weekdays" style="display:none;margin-top:8px">
+          <label class="small">Weekdays</label>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+            <button type="button" class="pill" data-day="1">Mon</button>
+            <button type="button" class="pill" data-day="2">Tue</button>
+            <button type="button" class="pill" data-day="3">Wed</button>
+            <button type="button" class="pill" data-day="4">Thu</button>
+            <button type="button" class="pill" data-day="5">Fri</button>
+            <button type="button" class="pill" data-day="6">Sat</button>
+            <button type="button" class="pill" data-day="0">Sun</button>
+          </div>
+        </div>
+
+        <label style="margin-top:12px">Times (add one or more)</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="timeInput" type="time" />
+          <button id="addTime" class="btn" type="button">Add</button>
+        </div>
+        <div id="times" class="times-list" aria-live="polite" style="margin-top:10px"></div>
+
+        <div class="controls">
+          <button id="saveMed" class="btn">Save</button>
+          <button id="clearForm" class="btn secondary">Clear</button>
+        </div>
+
+        <hr style="margin:12px 0">
+        <div class="small">Tips: allow browser notifications when prompted. The scheduler checks every 20 seconds for due doses — keep the page open for reminders (you can keep it in a background tab).</div>
+      </section>
+
+      <aside>
+        <div class="card">
+          <h3 style="margin:0">Upcoming doses</h3>
+          <div class="small">Next doses across all medicines</div>
+          <div id="upcoming" class="upcoming" style="margin-top:12px;min-height:80px"></div>
+
+          <hr style="margin:12px 0">
+          <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+            <div class="small">Manage schedules</div>
+            <div class="footer-actions">
+              <button id="exportBtn" class="btn secondary">Export JSON</button>
+              <label class="btn secondary" style="padding:8px 10px;cursor:pointer">Import<input id="importFile" type="file" accept="application/json" style="display:none"></label>
+              <button id="clearAll" class="btn danger">Clear all</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4 style="margin:0">Settings</h4>
+          <div class="small" style="margin-top:8px">Notification options</div>
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+            <button id="notifyPerm" class="btn secondary">Enable Notifications</button>
+            <button id="testNotif" class="btn">Test</button>
+          </div>
+          <div class="small" style="margin-top:8px">Sound</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <select id="soundSelect">
+              <option value="chime">Chime</option>
+              <option value="beep">Beep</option>
+              <option value="none">None</option>
+            </select>
+            <button id="playSound" class="btn secondary">Play</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="card" style="margin-top:18px">
+      <h3 style="margin:0">All scheduled medicines</h3>
+      <div id="medList" style="margin-top:12px"></div>
+    </section>
+  </main>
+
+  <audio id="audio_chime" src="ring.mp3" preload="auto"></audio>
+  <audio id="audio_beep" src="ring.mp3" preload="auto"></audio>
+
+  <script>
+    // Simple medicine scheduler
+    const $ = id => document.getElementById(id);
+    const lsKey = 'medScheduler_v1';
+    let meds = [];
+
+    // UI refs
+    const nameEl = $('name');
+    const notesEl = $('notes');
+    const startDateEl = $('startDate');
+    const endDateEl = $('endDate');
+    const repeatEl = $('repeat');
+    const weekdaysEl = $('weekdays');
+    const timesEl = $('times');
+    const timeInput = $('timeInput');
+    const addTimeBtn = $('addTime');
+    const saveMedBtn = $('saveMed');
+    const upcomingEl = $('upcoming');
+    const medListEl = $('medList');
+    const exportBtn = $('exportBtn');
+    const importFile = $('importFile');
+    const clearAllBtn = $('clearAll');
+    const notifyPerm = $('notifyPerm');
+    const testNotif = $('testNotif');
+    const soundSelect = $('soundSelect');
+    const playSound = $('playSound');
+
+    // load
+    function load(){
+      try{meds = JSON.parse(localStorage.getItem(lsKey)) || []}catch(e){meds=[]}
+      renderAll();
+    }
+
+    function save(){
+      localStorage.setItem(lsKey, JSON.stringify(meds));
+      renderAll();
+    }
+
+    // times helper
+    function addTimeToList(t){
+      const el = document.createElement('div');
+      el.className='pill';
+      el.textContent = t;
+      el.dataset.time = t;
+      el.title='Click to remove';
+      el.style.cursor='pointer';
+      el.addEventListener('click', ()=>{el.remove()});
+      timesEl.appendChild(el);
+    }
+
+    addTimeBtn.addEventListener('click', ()=>{
+      if(!timeInput.value) return alert('Pick a time');
+      // normalize to HH:MM
+      addTimeToList(timeInput.value);
+      timeInput.value='';
+    });
+
+    // weekday toggles
+    document.querySelectorAll('#weekdays .pill').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        b.classList.toggle('selected');
+        b.style.background = b.classList.contains('selected')? 'var(--saffron)' : '';
+        b.style.color = b.classList.contains('selected')? '#fff' : '';
+      });
+    });
+
+    repeatEl.addEventListener('change', ()=>{
+      weekdaysEl.style.display = repeatEl.value==='weekly' ? 'block' : 'none';
+    });
+
+    // Save med
+    saveMedBtn.addEventListener('click', ()=>{
+      const name = nameEl.value.trim();
+      if(!name) return alert('Give medicine a name');
+      const times = Array.from(timesEl.children).map(x=>x.dataset.time);
+      if(times.length===0) return alert('Add at least one time');
+      const start = startDateEl.value || (new Date()).toISOString().slice(0,10);
+      const end = endDateEl.value || null;
+      const repeat = repeatEl.value;
+      const weekdays = repeat==='weekly' ? Array.from(document.querySelectorAll('#weekdays .selected')).map(x=>Number(x.dataset.day)) : null;
+      const notes = notesEl.value.trim();
+
+      const id = 'm_'+Date.now();
+      meds.push({id,name,notes,start,end,repeat,weekdays,times,log:[]});
+      save();
+      clearForm();
+      notify('Saved','Medicine saved: '+name);
+    });
+
+    function clearForm(){
+      nameEl.value='';notesEl.value='';startDateEl.value='';endDateEl.value='';timesEl.innerHTML='';document.querySelectorAll('#weekdays .pill').forEach(b=>{b.classList.remove('selected');b.style.background='';b.style.color='';});
+    }
+
+    document.getElementById('clearForm').addEventListener('click', clearForm);
+
+    function renderAll(){
+      // upcoming
+      upcomingEl.innerHTML='';
+      const upcoming = [];
+      meds.forEach(m=>{
+        const next = nextDoseForMed(m);
+        if(next) upcoming.push({med:m,next});
+      });
+      upcoming.sort((a,b)=>a.next - b.next);
+      upcoming.slice(0,10).forEach(u=>{
+        const div = document.createElement('div');
+        div.className='item';
+        const left = document.createElement('div');
+        left.innerHTML = `<strong>${u.med.name}</strong><div class="small">${u.med.notes||''}</div>`;
+        const right = document.createElement('div');
+        const when = new Date(u.next);
+        right.innerHTML = `<div style="text-align:right"><div><strong>${when.toLocaleString()}</strong></div><div class="small" id="cd_${u.med.id}">${timeUntil(when)}</div><div style="margin-top:8px"><button class="btn" data-id="${u.med.id}" data-time="${u.next}">Mark taken</button></div></div>`;
+        div.appendChild(left);div.appendChild(right);
+        upcomingEl.appendChild(div);
+      });
+
+      // med list
+      medListEl.innerHTML='';
+      meds.forEach(m=>{
+        const wrap = document.createElement('div');
+        wrap.className='item';
+        wrap.style.marginBottom='8px';
+        const left = document.createElement('div');
+        left.innerHTML = `<strong>${m.name}</strong><div class="small">${m.notes||''}</div><div class="small">Times: ${m.times.join(', ')}</div>`;
+        const right = document.createElement('div');
+        right.innerHTML = `<div style="display:flex;flex-direction:column;gap:6px;align-items:end"><div class="small">From ${m.start}${m.end? ' to '+m.end: ''} (${m.repeat})</div><div><button class="btn" data-edit="${m.id}">Edit</button> <button class="btn secondary" data-delete="${m.id}">Delete</button></div></div>`;
+        wrap.appendChild(left);wrap.appendChild(right);
+        medListEl.appendChild(wrap);
+      });
+
+      // attach handlers
+      document.querySelectorAll('#upcoming button').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const id = b.dataset.id; const time = Number(b.dataset.time);
+          markTaken(id,time);
+        });
+      });
+
+      document.querySelectorAll('[data-delete]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const id = b.dataset.delete;
+          if(confirm('Delete this medicine?')){
+            meds = meds.filter(x=>x.id!==id); save();
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-edit]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const id = b.dataset.edit; editMed(id);
+        });
+      });
+    }
+
+    function editMed(id){
+      const m = meds.find(x=>x.id===id); if(!m) return;
+      nameEl.value=m.name; notesEl.value=m.notes; startDateEl.value=m.start; endDateEl.value=m.end||''; repeatEl.value=m.repeat; repeatEl.dispatchEvent(new Event('change'));
+      timesEl.innerHTML=''; m.times.forEach(t=>addTimeToList(t));
+      if(m.repeat==='weekly' && m.weekdays){ document.querySelectorAll('#weekdays .pill').forEach(b=>{ b.classList.toggle('selected', m.weekdays.includes(Number(b.dataset.day))); b.style.background = b.classList.contains('selected')? 'var(--saffron)' : ''; b.style.color = b.classList.contains('selected')? '#fff' : ''; }); }
+      // remove old med on save to replace
+      meds = meds.filter(x=>x.id!==id); save();
+    }
+
+    function markTaken(id,time){
+      const m = meds.find(x=>x.id===id); if(!m) return;
+      m.log = m.log || [];
+      m.log.push({takenAt:Date.now(),scheduledFor:time});
+      save();
+      notify('Marked taken', m.name+' — '+(new Date(time)).toLocaleString());
+    }
+
+    function nextDoseForMed(m){
+      // return timestamp of next dose (or null)
+      const today = new Date();
+      const start = new Date(m.start + 'T00:00:00');
+      if(isNaN(start)) return null;
+      if(m.end){ const end = new Date(m.end + 'T23:59:59'); if(today> end) return null; }
+      // generate candidate dates for next 7-30 days depending on repeat
+      const horizonDays = 30;
+      for(let d=0; d<=horizonDays; d++){
+        const day = new Date(); day.setDate(today.getDate()+d);
+        const dateOnly = day.toISOString().slice(0,10);
+        if(new Date(dateOnly + 'T00:00:00') < start) continue;
+        if(m.end && new Date(dateOnly + 'T00:00:00') > new Date(m.end+'T23:59:59')) break;
+        // check repeat
+        if(m.repeat==='once'){
+          if(dateOnly !== m.start) continue;
+        }else if(m.repeat==='weekly'){
+          if(m.weekdays && m.weekdays.length>0){ if(!m.weekdays.includes(day.getDay())) continue; }
+        }
+        // for each time
+        for(const tm of m.times){
+          const [hh,mm] = tm.split(':').map(Number);
+          const cand = new Date(dateOnly + 'T' + (String(hh).padStart(2,'0')) + ':' + (String(mm).padStart(2,'0')) + ':00');
+          // if in future and not logged as taken for that scheduled time
+          if(cand.getTime() > Date.now()){
+            // check if already marked taken
+            const taken = (m.log||[]).some(l=>Math.abs(l.scheduledFor - cand.getTime())<60000); // within 1 min
+            if(!taken) return cand.getTime();
+          }
+        }
+      }
+      return null;
+    }
+
+    function timeUntil(d){
+      const diff = d - Date.now();
+      if(diff<=0) return 'Due now';
+      const mins = Math.floor(diff/60000); const hrs = Math.floor(mins/60); const days = Math.floor(hrs/24);
+      if(days>0) return days+' day(s)';
+      if(hrs>0) return hrs+' hr '+(mins%60)+' min';
+      return mins+' min';
+    }
+
+    // check loop
+    function checkDue(){
+      const now = Date.now();
+      meds.forEach(m=>{
+        m.times.forEach(tm=>{
+          // find today candidate
+          const today = new Date();
+          const dateOnly = today.toISOString().slice(0,10);
+          const [hh,mm] = tm.split(':').map(Number);
+          const cand = new Date(dateOnly + 'T' + String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0') + ':00');
+          // only if within next 30s and not taken
+          if(Math.abs(cand.getTime() - now) < 30000){
+            // scheduled today? check repeat and bounds
+            const start = new Date(m.start+'T00:00:00'); if(now < start.getTime()) return;
+            if(m.end){ const end = new Date(m.end+'T23:59:59'); if(now > end.getTime()) return; }
+            if(m.repeat==='weekly' && m.weekdays && m.weekdays.length>0){ if(!m.weekdays.includes(today.getDay())) return; }
+            if(m.repeat==='once' && dateOnly !== m.start) return;
+            // check if already logged
+            const already = (m.log||[]).some(l=>Math.abs(l.scheduledFor - cand.getTime())<60000);
+            if(!already){
+              // trigger notification
+              notify('Time to take: '+m.name, (m.notes?m.notes+' — ':'')+tm, {id:m.id,when:cand.getTime()});
+            }
+          }
+        });
+      });
+    }
+
+    // periodic update intervals
+    setInterval(()=>{
+      renderAll();
+    },15000);
+
+    // check due every 20s
+    setInterval(checkDue,20000);
+
+    // notification helpers
+    async function requestPermission(){
+      if(!('Notification' in window)) return alert('Notifications not supported by this browser');
+      const p = await Notification.requestPermission();
+      return p;
+    }
+
+    notifyPerm.addEventListener('click', async ()=>{
+      const p = await requestPermission();
+      alert('Notification permission: '+p);
+    });
+
+    testNotif.addEventListener('click', ()=>{
+      notify('Test reminder','This is a test notification');
+    });
+
+    function notify(title, body, data){
+      // play sound
+      if(soundSelect.value !== 'none') playSelectedSound();
+      // browser notification
+      if('Notification' in window && Notification.permission === 'granted'){
+        const n = new Notification(title, {body:data? (body+'\n\n'+new Date(data.when).toLocaleString()):body, tag: data? data.id: undefined});
+        n.onclick = ()=>window.focus();
+      }else{
+        // fallback: alert
+        console.log('Notify:',title,body);
+      }
+    }
+
+    function playSelectedSound(){
+        console.log("Playing");
+      const s = soundSelect.value;
+      console.log(s);
+      if(s==='none') return;
+      const audio = document.getElementById('audio_'+(s==='chime'?'chime':'beep'));
+      if(audio)
+      {
+        console.log("audio",audio);
+         audio.currentTime=0; audio.play().catch(()=>{});
+     }
+    }
+
+    playSound.addEventListener('click', playSelectedSound);
+
+    // export/import
+    exportBtn.addEventListener('click', ()=>{
+      const blob = new Blob([JSON.stringify(meds, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'med-schedule.json'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    importFile.addEventListener('change', ()=>{
+      const f = importFile.files[0]; if(!f) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        try{ const data = JSON.parse(reader.result); if(Array.isArray(data)){ meds = data; save(); alert('Imported'); } else alert('Invalid file'); }
+        catch(e){ alert('Failed to import'); }
+      };
+      reader.readAsText(f);
+    });
+
+    clearAllBtn.addEventListener('click', ()=>{
+      if(confirm('Clear all medicines and logs?')){ meds=[]; save(); }
+    });
+
+    // small utility: update countdowns in upcoming
+    setInterval(()=>{
+      document.querySelectorAll('[id^="cd_"]').forEach(el=>{
+        const id = el.id.replace('cd_','');
+        const m = meds.find(x=>x.id===id);
+        if(!m) return;
+        const n = nextDoseForMed(m);
+        el.textContent = n? timeUntil(new Date(n)) : '—';
+      });
+    },5000);
+
+    // initial load
+    load();
+
+    // accessibility: keyboard Enter on time input
+    timeInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ addTimeBtn.click(); } });
+
+    // small UX: clicking a time pill removes it
+    // (already added in addTimeToList)
+
+    // make sure there are default sounds if real audio not provided
+    // the data:audio placeholders are silent; you can replace with real URLs if you like.
+
+  </script>
+</body>
+</html>
