@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Local Webcam Offer</title>
+  <style>
+    body {
+      background-color: #e6f2ff; /* light blue theme */
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 40px;
+    }
+    #container {
+      display: inline-block;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 2px solid #3399ff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    video {
+      border: 3px solid #3399ff;
+      border-radius: 10px;
+      width: 480px;
+      height: 360px;
+      margin-bottom: 15px;
+    }
+    textarea {
+      width: 480px;
+      height: 120px;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #3399ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #267acc;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h2>Local Webcam Page</h2>
+    <video id="localVideo" autoplay playsinline></video><br>
+    <button id="startBtn">Start Camera & Generate Offer</button>
+    <textarea id="offer" placeholder="Offer code will appear here"></textarea>
+    <textarea id="answer" placeholder="Paste answer code here"></textarea>
+    <button id="applyAnswer">Apply Answer</button>
+  </div>
+
+  <script>
+    let pc = new RTCPeerConnection();
+
+    // Start webcam and generate offer
+    document.getElementById('startBtn').onclick = async () => {
+      let stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      document.getElementById('localVideo').srcObject = stream;
+      stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+      let offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      document.getElementById('offer').value = JSON.stringify(offer);
+    };
+
+    // Apply answer from Viewer Page
+    document.getElementById('applyAnswer').onclick = async () => {
+      let answer = JSON.parse(document.getElementById('answer').value);
+      await pc.setRemoteDescription(answer);
+    };
+  </script>
+</body>
+</html>

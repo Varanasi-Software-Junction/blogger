@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Remote Webcam Viewer</title>
+  <style>
+    body {
+      background-color: #e6f2ff; /* light blue theme */
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 40px;
+    }
+    #container {
+      display: inline-block;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 2px solid #3399ff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    video {
+      border: 3px solid #3399ff;
+      border-radius: 10px;
+      width: 480px;
+      height: 360px;
+      margin-bottom: 15px;
+    }
+    textarea {
+      width: 480px;
+      height: 120px;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #3399ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #267acc;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h2>Viewer Page</h2>
+    <video id="remoteVideo" autoplay playsinline></video><br>
+    <textarea id="offer" placeholder="Paste offer code here"></textarea>
+    <textarea id="answer" placeholder="Answer code will appear here"></textarea>
+    <button id="connect">Connect</button>
+  </div>
+
+  <script>
+    let pc = new RTCPeerConnection();
+
+    // Show remote stream
+    pc.ontrack = event => {
+      document.getElementById('remoteVideo').srcObject = event.streams[0];
+    };
+
+    document.getElementById('connect').onclick = async () => {
+      // 1. Take offer code from Local Page
+      let offer = JSON.parse(document.getElementById('offer').value);
+      await pc.setRemoteDescription(offer);
+
+      // 2. Create answer
+      let answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+
+      // 3. Show answer code for copy-paste back to Local Page
+      document.getElementById('answer').value = JSON.stringify(answer);
+    };
+  </script>
+</body>
+</html>
