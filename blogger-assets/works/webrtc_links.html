@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WebRTC Demo — Links</title>
+  <style>
+    body { font-family: Inter, system-ui, Arial, sans-serif; background: linear-gradient(180deg,#eef2ff,#ffffff); margin:0; padding:40px; color:#1b2a55; }
+    .wrap { max-width:900px; margin:0 auto; background:rgba(255,255,255,0.95); padding:22px; border-radius:12px; box-shadow:0 10px 30px rgba(27,42,85,0.08); }
+    h1 { margin-top:0; }
+    .links { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+    a.btn { display:inline-block; padding:12px 16px; border-radius:10px; text-decoration:none; background:#3399ff; color:#fff; font-weight:600; }
+    a.secondary { background:#eef6ff; color:#123; border:1px solid rgba(51,153,255,0.12); }
+    p.hint { color:#445; margin-top:14px; }
+    .card { padding:12px; border-radius:10px; background: #fff; border:1px solid rgba(0,0,0,0.04); }
+    pre { background:#f4f7ff; padding:10px; border-radius:8px; overflow:auto; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>WebRTC Pairing — Quick Links</h1>
+    <p class="hint">Use these links to open the Sender (remote phone) and Viewer (your laptop) pages. Open the sender on the remote device and the viewer on the machine where you want to watch.</p>
+
+    <div class="links card">
+      <!-- Links point to local file paths; your environment will convert them to accessible URLs -->
+      <a class="btn" href="/mnt/data/sender.html" target="_blank" rel="noopener">Open sender.html (remote)</a>
+      <a class="btn" href="/mnt/data/viewer.html" target="_blank" rel="noopener">Open viewer.html (viewer)</a>
+      <a class="btn secondary" href="/mnt/data/test.html" target="_blank" rel="noopener">Open test.html (uploaded file)</a>
+    </div>
+
+    <h3 style="margin-top:20px;">Quick instructions</h3>
+    <ol>
+      <li>Serve these files over <code>https</code> or open via <code>http://localhost</code> to allow camera access.</li>
+      <li>Open <strong>sender.html</strong> on the remote device (phone) and click <em>Start Camera</em> → <em>Create Offer</em>.</li>
+      <li>Open <strong>viewer.html</strong> on your laptop, paste the offer, click <em>Create Answer</em>, then paste the answer back into sender and accept.</li>
+    </ol>
+
+    <p class="hint">If you want, I can write sender.html and viewer.html into <code>/mnt/data/</code> now. They are not overwritten unless you ask.</p>
+
+    <h3>Files in /mnt/data</h3>
+    <pre>/mnt/data/sender.html
+/mnt/data/viewer.html
+/mnt/data/test.html
+/mnt/data/webrtc_links.html</pre>
+  </div>
+</body>
+</html>
