@@ -1,98 +1,237 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Programmer's Picnic — Iterative Binary Search</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programmer's Picnic — Iterative Binary Search</title>
 
-<style>
-  body {
-    margin: 0;
-    padding: 40px 20px;
-    background: linear-gradient(180deg, #eef2ff, #ffffff);
-    font-family: "Inter", system-ui, Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-  }
+  <style>
+    :root{
+      --accent:#3399ff;
+      --bg-gradient: linear-gradient(180deg, #eef2ff, #ffffff);
+      --card-bg: rgba(255,255,255,0.65);
+      --text-dark: #1b2a55;
+      --max-width: 1100px;
+      --radius: 14px;
+      --shadow: 0 14px 40px rgba(27,42,85,0.12);
+      --gap: 20px;
+      --container-padding: 22px;
+      font-family: Inter, system-ui, Arial, sans-serif;
+    }
 
-  .banner {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.55);
-    padding: 28px 20px;
-    border-radius: 18px;
-    font-size: 28px;
-    font-weight: 700;
-    text-align: center;
-    color: #1b2a55;
-    border: 1px solid rgba(255,255,255,0.45);
-    box-shadow: 0 14px 40px rgba(27,42,85,0.18);
-    width: 100%;
-    max-width: 900px;
-    letter-spacing: -0.5px;
-  }
-</style>
+    html,body{
+      height:100%;
+      margin:0;
+      background: var(--bg-gradient);
+      color:var(--text-dark);
+    }
 
+    .page {
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:40px 20px;
+      box-sizing:border-box;
+    }
+
+    /* outer card */
+    .card {
+      width:100%;
+      max-width:var(--max-width);
+      background:var(--card-bg);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius);
+      padding: var(--container-padding);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.6);
+      box-sizing: border-box;
+    }
+
+    /* grid that holds banner and webcam side-by-side on wide screens */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr;        /* stack by default */
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    /* breakpoint: side-by-side for larger viewports */
+    @media (min-width: 880px) {
+      .card-grid {
+        grid-template-columns: 1fr 1fr; /* two columns */
+        align-items: center;
+      }
+    }
+
+    /* Banner styles (left column on wide screens) */
+    .banner {
+      background: linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
+      border-radius: 10px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(27,42,85,0.06);
+      text-align: left;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      min-height: 220px;
+    }
+    .banner h1 {
+      margin: 0 0 8px 0;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: var(--text-dark);
+    }
+    .banner p {
+      margin: 0;
+      color: #3b4a6b;
+      line-height:1.5;
+    }
+
+    /* webcam column */
+    #webcamContainer {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+      padding:18px;
+      background: #fff;
+      border: 1px solid rgba(51,153,255,0.12);
+      border-radius:12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+    }
+
+    /* responsive video */
+    #webcam {
+      width:100%;
+      max-width:640px;
+      height:auto;
+      border-radius:10px;
+      border: 4px solid var(--accent);
+      display:block;
+      box-sizing:border-box;
+      background: #000;
+    }
+
+    .controls {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    button {
+      appearance:none;
+      border: none;
+      padding:10px 16px;
+      font-size:15px;
+      border-radius:8px;
+      cursor:pointer;
+      background:var(--accent);
+      color:#fff;
+    }
+    button.secondary {
+      background:#e6eefc;
+      color:var(--text-dark);
+      border:1px solid rgba(51,153,255,0.14);
+    }
+    button:disabled {
+      opacity:0.6;
+      cursor:not-allowed;
+    }
+
+    /* small screens */
+    @media (max-width:520px){
+      .banner h1 { font-size:20px; }
+      .card { padding:14px; }
+      button { width:100%; }
+      .card-grid { gap:14px; }
+    }
+
+    .hint { font-size:13px; color:#4a5568; margin-top:6px; text-align:center; }
+  </style>
 </head>
 <body>
+  <div class="page">
+    <div class="card" role="main" aria-label="Programmer's Picnic demo">
+      <div class="card-grid">
+        <!-- Left column: banner / description -->
+        <section class="banner" aria-labelledby="banner-heading">
+          <h1 id="banner-heading">Programmer's Picnic — Iterative Binary Search</h1>
+          <p>
+            A small demo UI: on wide screens the header and the webcam sit side-by-side.
+            On small screens they stack vertically. Use the Start/Stop controls to
+            activate or release the webcam (HTTPS or localhost required).
+          </p>
+        </section>
 
-  <div class="banner">
-    Programmer's Picnic — Iterative Binary Search
-  </div>
- 
-  <style>
-    body {
-      background-color: #e6f2ff; /* light blue theme */
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 50px;
-    }
-    #webcamContainer {
-      display: inline-block;
-      padding: 20px;
-      background-color: #ffffff;
-      border: 2px solid #3399ff;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    video {
-      border: 4px solid #3399ff;
-      border-radius: 10px;
-      width: 480px;
-      height: 360px;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #3399ff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #267acc;
-    }
-  </style>
+        <!-- Right column: webcam -->
+        <aside id="webcamContainer" aria-live="polite" aria-label="Webcam controls">
+          <h2 style="margin:0;">My Picnic Webcam</h2>
 
-  <div id="webcamContainer">
-    <h1>My Picnic Webcam</h1>
-    <video id="webcam" autoplay playsinline></video>
-    <br>
-    <button id="startBtn">Start Webcam</button>
+          <video id="webcam" autoplay playsinline muted></video>
+
+          <div class="controls" role="group" aria-label="Camera controls">
+            <button id="startBtn" type="button">Start Webcam</button>
+            <button id="stopBtn" class="secondary" type="button" disabled>Stop Webcam</button>
+          </div>
+
+          <div id="status" class="hint">Camera is not active. (Requires HTTPS or localhost)</div>
+        </aside>
+      </div>
+    </div>
   </div>
 
   <script>
     const video = document.getElementById('webcam');
     const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const status = document.getElementById('status');
 
-    startBtn.onclick = async () => {
+    let stream = null;
+
+    function setStatus(text, isError=false){
+      status.textContent = text;
+      status.style.color = isError ? '#b00020' : '';
+    }
+
+    async function startCamera(){
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        startBtn.disabled = true;
+        setStatus('Requesting camera permission...');
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
         video.srcObject = stream;
+        stopBtn.disabled = false;
+        setStatus('Camera active. Click Stop to release the camera.');
       } catch (err) {
-        alert("Error accessing webcam: " + err);
+        console.error('getUserMedia error', err);
+        setStatus('Error accessing webcam: ' + (err && err.message ? err.message : err), true);
+        startBtn.disabled = false;
       }
-    };
+    }
+
+    function stopCamera(){
+      if (!stream) return;
+      stream.getTracks().forEach(t => t.stop());
+      stream = null;
+      video.srcObject = null;
+      stopBtn.disabled = true;
+      startBtn.disabled = false;
+      setStatus('Camera stopped.');
+    }
+
+    startBtn.addEventListener('click', startCamera);
+    stopBtn.addEventListener('click', stopCamera);
+
+    window.addEventListener('beforeunload', () => {
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+      }
+    });
   </script>
- 
+</body>
 </html>
