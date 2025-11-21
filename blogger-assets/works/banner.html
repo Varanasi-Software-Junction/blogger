@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Programmer's Picnic — Iterative Binary Search</title>
+  <title>Programmer's Picnic — Remote + Local Webcam Layout</title>
 
   <style>
     :root{
       --accent:#3399ff;
       --bg-gradient: linear-gradient(180deg, #eef2ff, #ffffff);
-      --card-bg: rgba(255,255,255,0.65);
+      --card-bg: rgba(255,255,255,0.7);
       --text-dark: #1b2a55;
-      --max-width: 1100px;
+      --max-width: 1200px;
       --radius: 14px;
       --shadow: 0 14px 40px rgba(27,42,85,0.12);
-      --gap: 20px;
-      --container-padding: 22px;
+      --gap: 18px;
+      --container-padding: 20px;
       font-family: Inter, system-ui, Arial, sans-serif;
     }
 
@@ -29,13 +29,12 @@
     .page {
       min-height:100vh;
       display:flex;
-      align-items:flex-start;
+      align-items:start;
       justify-content:center;
-      padding:40px 20px;
+      padding:36px 18px;
       box-sizing:border-box;
     }
 
-    /* outer card */
     .card {
       width:100%;
       max-width:var(--max-width);
@@ -48,190 +47,223 @@
       box-sizing: border-box;
     }
 
-    /* grid that holds banner and webcam side-by-side on wide screens */
+    /* 3-column grid on wide screens: remote | banner | local */
     .card-grid {
       display: grid;
-      grid-template-columns: 1fr;        /* stack by default */
+      grid-template-columns: 1fr;
       gap: var(--gap);
       align-items: start;
     }
 
-    /* breakpoint: side-by-side for larger viewports */
-    @media (min-width: 880px) {
-      .card-grid {
-        grid-template-columns: 1fr 1fr; /* two columns */
-        align-items: center;
-      }
+    @media (min-width: 1000px) {
+      .card-grid { grid-template-columns: 1fr 1fr 1fr; align-items:center; }
     }
 
-    /* Banner styles (left column on wide screens) */
-    .banner {
-      background: linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
+    /* column cards */
+    .col {
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,255,0.85));
       border-radius: 10px;
-      padding: 22px;
-      box-shadow: 0 8px 24px rgba(27,42,85,0.06);
-      text-align: left;
+      padding:14px;
       display:flex;
       flex-direction:column;
-      justify-content:center;
-      min-height: 220px;
-    }
-    .banner h1 {
-      margin: 0 0 8px 0;
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.4px;
-      color: var(--text-dark);
-    }
-    .banner p {
-      margin: 0;
-      color: #3b4a6b;
-      line-height:1.5;
-    }
-
-    /* webcam column */
-    #webcamContainer {
-      display:flex;
-      flex-direction:column;
-      align-items:center;
       gap:12px;
-      padding:18px;
-      background: #fff;
-      border: 1px solid rgba(51,153,255,0.12);
-      border-radius:12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      align-items:center;
+      min-height: 160px;
+      box-shadow: 0 6px 18px rgba(15,30,60,0.04);
+      border:1px solid rgba(0,0,0,0.03);
     }
 
-    /* responsive video */
-    #webcam {
+    .col h3 { margin:0; font-size:18px; color:var(--text-dark); text-align:center; }
+    .col p { margin:0; color:#475569; text-align:center; font-size:13px; }
+
+    /* media elements */
+    .media {
       width:100%;
-      max-width:640px;
+      max-width:380px;
       height:auto;
       border-radius:10px;
-      border: 4px solid var(--accent);
+      border: 3px solid var(--accent);
+      background:#000;
       display:block;
       box-sizing:border-box;
-      background: #000;
     }
+
+    /* remote stream uses img (common for MJPEG) or video for modern streams */
+    #remoteStream { object-fit:cover; }
+
+    /* local webcam video */
+    #webcam { object-fit:cover; }
 
     .controls {
       display:flex;
-      gap:10px;
+      gap:8px;
       flex-wrap:wrap;
       justify-content:center;
     }
 
-    button {
-      appearance:none;
-      border: none;
-      padding:10px 16px;
-      font-size:15px;
+    button, input[type="text"]{
+      padding:8px 12px;
       border-radius:8px;
-      cursor:pointer;
+      border:1px solid rgba(0,0,0,0.06);
+      font-size:14px;
+    }
+    button {
       background:var(--accent);
-      color:#fff;
+      color:white;
+      border:none;
+      cursor:pointer;
     }
-    button.secondary {
-      background:#e6eefc;
-      color:var(--text-dark);
-      border:1px solid rgba(51,153,255,0.14);
-    }
-    button:disabled {
-      opacity:0.6;
-      cursor:not-allowed;
-    }
+    button.secondary { background:#eef6ff; color:var(--text-dark); border:1px solid rgba(51,153,255,0.12); }
+    button:disabled { opacity:0.6; cursor:not-allowed; }
 
-    /* small screens */
-    @media (max-width:520px){
-      .banner h1 { font-size:20px; }
-      .card { padding:14px; }
-      button { width:100%; }
-      .card-grid { gap:14px; }
-    }
+    .hint { font-size:13px; color:#4a5568; text-align:center; }
 
-    .hint { font-size:13px; color:#4a5568; margin-top:6px; text-align:center; }
+    @media (max-width:760px){
+      .media { max-width:100%; }
+      .col { padding:12px; }
+      .card { padding:12px; }
+    }
   </style>
 </head>
 <body>
   <div class="page">
-    <div class="card" role="main" aria-label="Programmer's Picnic demo">
+    <div class="card" role="main" aria-label="Programmer's Picnic remote + local webcam">
       <div class="card-grid">
-        <!-- Left column: banner / description -->
-        <section class="banner" aria-labelledby="banner-heading">
-          <h1 id="banner-heading">Programmer's Picnic — Iterative Binary Search</h1>
-          <p>
-            A small demo UI: on wide screens the header and the webcam sit side-by-side.
-            On small screens they stack vertically. Use the Start/Stop controls to
-            activate or release the webcam (HTTPS or localhost required).
-          </p>
-        </section>
+        <!-- Left: Remote camera -->
+        <section class="col" aria-labelledby="remote-heading" id="remoteCol">
+          <h3 id="remote-heading">Remote Camera (left)</h3>
+          <!-- remote stream: by default using a placeholder URL which you can replace -->
+          <!-- Placeholder remote URL set to the uploaded file path: /mnt/data/test.html -->
+          <img id="remoteStream" class="media" alt="Remote camera stream (placeholder)" src="/mnt/data/test.html" />
 
-        <!-- Right column: webcam -->
-        <aside id="webcamContainer" aria-live="polite" aria-label="Webcam controls">
-          <h2 style="margin:0;">My Picnic Webcam</h2>
-
-          <video id="webcam" autoplay playsinline muted></video>
-
-          <div class="controls" role="group" aria-label="Camera controls">
-            <button id="startBtn" type="button">Start Webcam</button>
-            <button id="stopBtn" class="secondary" type="button" disabled>Stop Webcam</button>
+          <div class="controls" role="group" aria-label="Remote controls">
+            <input id="remoteUrl" type="text" value="/mnt/data/test.html" aria-label="Remote camera URL" />
+            <button id="loadRemote" type="button" class="secondary">Load</button>
+            <button id="reloadRemote" type="button">Refresh</button>
           </div>
 
-          <div id="status" class="hint">Camera is not active. (Requires HTTPS or localhost)</div>
+          <p class="hint">Replace the URL above with your IP-camera MJPEG or image snapshot URL, or an HLS/v4l stream (if supported).</p>
+        </section>
+
+        <!-- Middle: Banner -->
+        <section class="col" aria-labelledby="banner-heading" id="bannerCol" style="min-height: 220px;">
+          <h3 id="banner-heading">Programmer's Picnic — Iterative Binary Search</h3>
+          <p>Layout: remote camera at the left end, banner in the center, local webcam to the right on wide screens. On small screens they stack vertically.</p>
+          <p style="font-size:13px; color:#475569;">Tip: If your remote camera provides MJPEG, use the direct MJPEG URL. For HLS or other streams, adapt the element (video + hls.js) accordingly.</p>
+        </section>
+
+        <!-- Right: Local webcam -->
+        <aside class="col" aria-labelledby="local-heading" id="localCol">
+          <h3 id="local-heading">Local Webcam (right)</h3>
+
+          <video id="webcam" class="media" autoplay playsinline muted></video>
+
+          <div class="controls" role="group" aria-label="Local camera controls">
+            <button id="startBtn" type="button">Start Webcam</button>
+            <button id="stopBtn" type="button" class="secondary" disabled>Stop Webcam</button>
+            <button id="snapshotBtn" type="button" class="secondary">Snapshot</button>
+          </div>
+
+          <canvas id="snapCanvas" style="display:none;"></canvas>
+          <div id="statusLocal" class="hint">Local camera is inactive. (Requires HTTPS / localhost)</div>
         </aside>
       </div>
     </div>
   </div>
 
   <script>
+    // ---------- Remote camera logic ----------
+    const remoteImg = document.getElementById('remoteStream');
+    const remoteUrlInput = document.getElementById('remoteUrl');
+    const loadRemoteBtn = document.getElementById('loadRemote');
+    const reloadRemoteBtn = document.getElementById('reloadRemote');
+
+    // Use the provided path as the initial URL (developer note)
+    const defaultRemoteUrl = remoteUrlInput.value || '/mnt/data/test.html';
+
+    function setRemoteUrl(url) {
+      // For image-based MJPEG or snapshot endpoints, using <img> works well.
+      // Append cache-buster when refreshing to avoid cached image.
+      remoteImg.src = url;
+    }
+
+    loadRemoteBtn.addEventListener('click', () => {
+      const url = remoteUrlInput.value.trim();
+      if (!url) return alert('Please enter a remote camera URL.');
+      setRemoteUrl(url);
+    });
+
+    reloadRemoteBtn.addEventListener('click', () => {
+      // add a timestamp to force-refresh
+      const base = remoteUrlInput.value.trim() || defaultRemoteUrl;
+      const sep = base.includes('?') ? '&' : '?';
+      setRemoteUrl(base + sep + 'cb=' + Date.now());
+    });
+
+    // ---------- Local webcam logic ----------
     const video = document.getElementById('webcam');
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
-    const status = document.getElementById('status');
+    const snapshotBtn = document.getElementById('snapshotBtn');
+    const snapCanvas = document.getElementById('snapCanvas');
+    const statusLocal = document.getElementById('statusLocal');
 
     let stream = null;
 
-    function setStatus(text, isError=false){
-      status.textContent = text;
-      status.style.color = isError ? '#b00020' : '';
+    function setStatusLocal(text, isError=false) {
+      statusLocal.textContent = text;
+      statusLocal.style.color = isError ? '#b00020' : '';
     }
 
-    async function startCamera(){
+    async function startCamera() {
       try {
         startBtn.disabled = true;
-        setStatus('Requesting camera permission...');
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 1280 }, height: { ideal: 720 } },
-          audio: false
-        });
+        setStatusLocal('Requesting camera permission...');
+        stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
         video.srcObject = stream;
         stopBtn.disabled = false;
-        setStatus('Camera active. Click Stop to release the camera.');
+        setStatusLocal('Local camera active.');
       } catch (err) {
         console.error('getUserMedia error', err);
-        setStatus('Error accessing webcam: ' + (err && err.message ? err.message : err), true);
+        setStatusLocal('Error accessing local webcam: ' + (err && err.message ? err.message : err), true);
         startBtn.disabled = false;
       }
     }
 
-    function stopCamera(){
+    function stopCamera() {
       if (!stream) return;
       stream.getTracks().forEach(t => t.stop());
       stream = null;
       video.srcObject = null;
       stopBtn.disabled = true;
       startBtn.disabled = false;
-      setStatus('Camera stopped.');
+      setStatusLocal('Local camera stopped.');
     }
+
+    snapshotBtn.addEventListener('click', () => {
+      if (!stream) return alert('Camera not active.');
+      const w = video.videoWidth || 640;
+      const h = video.videoHeight || 480;
+      snapCanvas.width = w;
+      snapCanvas.height = h;
+      const ctx = snapCanvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, w, h);
+      // open snapshot in new tab
+      snapCanvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      }, 'image/png');
+    });
 
     startBtn.addEventListener('click', startCamera);
     stopBtn.addEventListener('click', stopCamera);
 
     window.addEventListener('beforeunload', () => {
-      if (stream) {
-        stream.getTracks().forEach(t => t.stop());
-      }
+      if (stream) stream.getTracks().forEach(t => t.stop());
     });
+
+    // initialize remote img src
+    setRemoteUrl(defaultRemoteUrl);
   </script>
 </body>
 </html>

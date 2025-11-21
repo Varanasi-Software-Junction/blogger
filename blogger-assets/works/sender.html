@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>WebRTC Sender (remote phone)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Arial;margin:18px;background:#f7fbff;color:#0b2340}
+    .box{max-width:880px;margin:auto;padding:12px;background:#fff;border-radius:10px;box-shadow:0 6px 18px rgba(11,35,64,0.06)}
+    video{width:100%;max-width:420px;border-radius:8px;background:#000;border:3px solid #3399ff}
+    textarea{width:100%;height:140px;font-family:monospace}
+    button{padding:8px 12px;border-radius:8px;background:#3399ff;color:#fff;border:none;cursor:pointer}
+    .muted{background:#eef6ff;color:#123}
+    .hint{font-size:13px;color:#456}
+    a.filelink{display:inline-block;margin-top:8px;color:#0b5bd6}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Sender — Remote Camera</h2>
+    <p class="hint">Open this page on the remote device (phone). Allow camera permission when prompted.</p>
+
+    <video id="localVideo" autoplay playsinline muted></video>
+    <div style="margin-top:8px;">
+      <button id="startBtn">Start Camera</button>
+      <button id="createOfferBtn" class="muted" disabled>Create Offer</button>
+    </div>
+
+    <h3>Offer (copy → paste into viewer)</h3>
+    <textarea id="offerOut" placeholder="Offer will appear here after Create Offer" readonly></textarea>
+
+    <h3>Paste Answer from viewer here</h3>
+    <textarea id="answerIn" placeholder="Paste viewer's answer then click 'Accept Answer'"></textarea>
+    <div style="margin-top:8px;">
+      <button id="acceptAnswerBtn" class="muted">Accept Answer</button>
+    </div>
+
+    <p class="hint">Test file (your uploaded file path): <a class="filelink" href="/mnt/data/test.html" target="_blank">/mnt/data/test.html</a></p>
+
+    <hr>
+    <p class="hint">Manual signaling steps: 1) Start camera → 2) Create Offer → copy offer → paste into viewer → viewer creates answer → copy answer → paste here → Accept Answer.</p>
+  </div>
+
+<script>
+  const startBtn = document.getElementById('startBtn');
+  const createOfferBtn = document.getElementById('createOfferBtn');
+  const localVideo = document.getElementById('localVideo');
+  const offerOut = document.getElementById('offerOut');
+  const answerIn = document.getElementById('answerIn');
+  const acceptAnswerBtn = document.getElementById('acceptAnswerBtn');
+
+  let pc = null;
+  let localStream = null;
+
+  const cfg = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+
+  startBtn.onclick = async () => {
+    try {
+      startBtn.disabled = true;
+      localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      localVideo.srcObject = localStream;
+      createOfferBtn.disabled = false;
+    } catch (e) {
+      alert('Camera error: ' + (e && e.message));
+      startBtn.disabled = false;
+    }
+  };
+
+  createOfferBtn.onclick = async () => {
+    createOfferBtn.disabled = true;
+    pc = new RTCPeerConnection(cfg);
+
+    // add tracks
+    localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+
+    // (optional) log remote ICE candidates (viewer will set remote desc)
+    pc.onicecandidate = e => {
+      if (!e.candidate) {
+        // ICE gathering finished
+        // final localDescription contains ICE candidates inline
+        offerOut.value = JSON.stringify(pc.localDescription);
+      }
+    };
+
+    // create data channel (optional, unused but helpful)
+    const dc = pc.createDataChannel('chat');
+    dc.onopen = () => console.log('datachannel open');
+
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+
+    // wait until ICE complete — but the onicecandidate handler will set offerOut when done.
+    // as a fallback, set it now (some browsers include candidates later)
+    setTimeout(() => {
+      offerOut.value = JSON.stringify(pc.localDescription);
+    }, 800);
+  };
+
+  acceptAnswerBtn.onclick = async () => {
+    const txt = answerIn.value.trim();
+    if (!txt) return alert('Paste the answer JSON from the viewer here.');
+    const ans = JSON.parse(txt);
+    try {
+      await pc.setRemoteDescription(ans);
+      alert('Answer accepted — connection should establish shortly.');
+    } catch (e) {
+      alert('Failed to set remote description: ' + e);
+    }
+  };
+
+  // Stop camera on unload
+  window.addEventListener('beforeunload', () => {
+    if (localStream) localStream.getTracks().forEach(t => t.stop());
+    if (pc) pc.close();
+  });
+</script>
+</body>
+</html>

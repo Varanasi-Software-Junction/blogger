@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>WebRTC Viewer</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Arial;margin:18px;background:#fffbe9;color:#06223b}
+    .box{max-width:880px;margin:auto;padding:12px;background:#fff;border-radius:10px;box-shadow:0 6px 18px rgba(6,34,59,0.06)}
+    video{width:100%;max-width:640px;border-radius:8px;background:#000;border:3px solid #24a0ff}
+    textarea{width:100%;height:140px;font-family:monospace}
+    button{padding:8px 12px;border-radius:8px;background:#24a0ff;color:#fff;border:none;cursor:pointer}
+    .muted{background:#eef6ff;color:#123}
+    .hint{font-size:13px;color:#456}
+    a.filelink{display:inline-block;margin-top:8px;color:#0b5bd6}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Viewer — Receive Remote Camera</h2>
+
+    <h3>Paste Offer from Sender</h3>
+    <textarea id="offerIn" placeholder="Paste the offer JSON here"></textarea>
+    <div style="margin-top:8px;">
+      <button id="createAnswerBtn">Create Answer</button>
+    </div>
+
+    <h3>Answer (copy → paste back to sender)</h3>
+    <textarea id="answerOut" readonly placeholder="Answer will appear here"></textarea>
+
+    <h3>Remote video</h3>
+    <video id="remoteVideo" autoplay playsinline controls></video>
+
+    <p class="hint">Test file: <a class="filelink" href="/mnt/data/test.html" target="_blank">/mnt/data/test.html</a></p>
+
+    <hr>
+    <p class="hint">Steps: 1) Paste offer → Create Answer → copy answer → send back to sender. Viewer will show the remote camera.</p>
+  </div>
+
+<script>
+  const offerIn = document.getElementById('offerIn');
+  const createAnswerBtn = document.getElementById('createAnswerBtn');
+  const answerOut = document.getElementById('answerOut');
+  const remoteVideo = document.getElementById('remoteVideo');
+
+  let pc = null;
+  const cfg = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+
+  createAnswerBtn.onclick = async () => {
+    const txt = offerIn.value.trim();
+    if (!txt) return alert('Paste offer JSON from sender first.');
+    const offer = JSON.parse(txt);
+
+    pc = new RTCPeerConnection(cfg);
+
+    pc.ontrack = (ev) => {
+      // attach the first remote stream
+      remoteVideo.srcObject = ev.streams[0];
+    };
+
+    pc.onicecandidate = e => {
+      if (!e.candidate) {
+        // ICE gathering done — publish final answer
+        answerOut.value = JSON.stringify(pc.localDescription);
+      }
+    };
+
+    // set remote desc (sender's offer)
+    await pc.setRemoteDescription(offer);
+
+    // create answer
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+
+    // fallback in case ICE completes a bit later
+    setTimeout(() => {
+      answerOut.value = JSON.stringify(pc.localDescription);
+    }, 800);
+  };
+
+  // cleanup
+  window.addEventListener('beforeunload', () => {
+    if (pc) pc.close();
+  });
+</script>
+</body>
+</html>

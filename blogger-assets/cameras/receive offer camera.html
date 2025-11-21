@@ -1,77 +1,226 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Remote Webcam Viewer</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programmer's Picnic — Remote + Local Webcam</title>
+
+  <!-- HLS.js for .m3u8 streams -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
   <style>
-    body {
-      background-color: #e6f2ff; /* light blue theme */
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 40px;
+    :root{
+      --accent:#3399ff;
+      --bg-gradient: linear-gradient(180deg, #eef2ff, #ffffff);
+      --card-bg: rgba(255,255,255,0.7);
+      --text-dark: #1b2a55;
+      --max-width: 1200px;
+      --radius: 14px;
+      --shadow: 0 14px 40px rgba(27,42,85,0.12);
+      --gap: 18px;
+      --container-padding: 20px;
+      font-family: Inter, system-ui, Arial, sans-serif;
     }
-    #container {
-      display: inline-block;
-      padding: 20px;
-      background-color: #ffffff;
-      border: 2px solid #3399ff;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+    html,body{
+      height:100%;
+      margin:0;
+      background: var(--bg-gradient);
+      color:var(--text-dark);
     }
-    video {
-      border: 3px solid #3399ff;
+
+    .page {
+      min-height:100vh;
+      display:flex;
+      align-items:start;
+      justify-content:center;
+      padding:36px 18px;
+      box-sizing:border-box;
+    }
+
+    .card {
+      width:100%;
+      max-width:var(--max-width);
+      background:var(--card-bg);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius);
+      padding: var(--container-padding);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.6);
+      box-sizing: border-box;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    @media (min-width: 1000px) {
+      .card-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .col {
+      background: rgba(255,255,255,0.95);
       border-radius: 10px;
-      width: 480px;
-      height: 360px;
-      margin-bottom: 15px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+      box-shadow: 0 6px 18px rgba(15,30,60,0.04);
     }
-    textarea {
-      width: 480px;
-      height: 120px;
-      margin-top: 10px;
-      font-size: 12px;
+
+    .media {
+      width:100%;
+      max-width:380px;
+      border-radius:10px;
+      border: 3px solid var(--accent);
+      background:#000;
+    }
+
+    .controls {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    button, input[type="text"]{
+      padding:8px 12px;
+      border-radius:8px;
+      border:1px solid rgba(0,0,0,0.06);
+      font-size:14px;
     }
     button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #3399ff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      background:var(--accent);
+      color:white;
+      border:none;
+      cursor:pointer;
     }
-    button:hover {
-      background-color: #267acc;
-    }
+    button.secondary { background:#eef6ff; color:var(--text-dark); }
   </style>
 </head>
 <body>
-  <div id="container">
-    <h2>Viewer Page</h2>
-    <video id="remoteVideo" autoplay playsinline></video><br>
-    <textarea id="offer" placeholder="Paste offer code here"></textarea>
-    <textarea id="answer" placeholder="Answer code will appear here"></textarea>
-    <button id="connect">Connect</button>
+  <div class="page">
+    <div class="card">
+      <div class="card-grid">
+
+        <!-- LEFT: REMOTE CAMERA -->
+        <section class="col">
+          <h3>Remote Camera</h3>
+
+          <!-- Dynamic container for IMG/VIDEO -->
+          <div id="remoteContainer"></div>
+
+          <div class="controls">
+            <input id="remoteUrl" type="text" placeholder="Paste remote camera URL" />
+            <button id="loadBtn" class="secondary">Load</button>
+            <button id="refreshRemote">Refresh</button>
+          </div>
+
+          <p class="hint">Supports: JPG, MJPEG, PNG, and HLS (.m3u8)</p>
+        </section>
+
+        <!-- CENTER: BANNER -->
+        <section class="col">
+          <h3>Programmer's Picnic — Iterative Binary Search</h3>
+          <p>Paste your remote camera stream URL on the left.</p>
+        </section>
+
+        <!-- RIGHT: LOCAL CAMERA -->
+        <section class="col">
+          <h3>Local Webcam</h3>
+          <video id="webcam" class="media" autoplay playsinline muted></video>
+
+          <div class="controls">
+            <button id="startBtn">Start</button>
+            <button id="stopBtn" class="secondary" disabled>Stop</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
   </div>
 
   <script>
-    let pc = new RTCPeerConnection();
+    const remoteContainer = document.getElementById('remoteContainer');
+    const remoteUrlInput = document.getElementById('remoteUrl');
 
-    // Show remote stream
-    pc.ontrack = event => {
-      document.getElementById('remoteVideo').srcObject = event.streams[0];
+    function loadRemoteStream(url) {
+      remoteContainer.innerHTML = ""; // Clear old stream
+
+      if (!url) return alert("Please enter a URL");
+
+      // choose format
+      const lower = url.toLowerCase();
+
+      if (lower.endsWith(".m3u8")) {
+        // HLS VIDEO
+        const video = document.createElement("video");
+        video.className = "media";
+        video.autoplay = true;
+        video.muted = true;
+        video.playsInline = true;
+        remoteContainer.appendChild(video);
+
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(url);
+          hls.attachMedia(video);
+        } else {
+          video.src = url; // For Safari
+        }
+
+      } else {
+        // IMAGE / MJPEG
+        const img = document.createElement("img");
+        img.className = "media";
+        img.src = url;
+        img.alt = "Remote stream";
+        remoteContainer.appendChild(img);
+      }
+    }
+
+    // Load button
+    document.getElementById('loadBtn').onclick = () => {
+      loadRemoteStream(remoteUrlInput.value.trim());
     };
 
-    document.getElementById('connect').onclick = async () => {
-      // 1. Take offer code from Local Page
-      let offer = JSON.parse(document.getElementById('offer').value);
-      await pc.setRemoteDescription(offer);
+    // Refresh button
+    document.getElementById('refreshRemote').onclick = () => {
+      let base = remoteUrlInput.value.trim();
+      if (!base) return;
+      const sep = base.includes("?") ? "&" : "?";
+      loadRemoteStream(base + sep + "cb=" + Date.now());
+    };
 
-      // 2. Create answer
-      let answer = await pc.createAnswer();
-      await pc.setLocalDescription(answer);
+    // -------- LOCAL CAMERA ----------
+    const video = document.getElementById('webcam');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
 
-      // 3. Show answer code for copy-paste back to Local Page
-      document.getElementById('answer').value = JSON.stringify(answer);
+    let localStream = null;
+
+    startBtn.onclick = async () => {
+      try {
+        startBtn.disabled = true;
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = localStream;
+        stopBtn.disabled = false;
+      } catch (e) {
+        alert("Camera error: " + e.message);
+        startBtn.disabled = false;
+      }
+    };
+
+    stopBtn.onclick = () => {
+      if (!localStream) return;
+      localStream.getTracks().forEach(t => t.stop());
+      video.srcObject = null;
+      stopBtn.disabled = true;
+      startBtn.disabled = false;
     };
   </script>
 </body>
