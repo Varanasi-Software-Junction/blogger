@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmer's Picnic — Number To Words</title>
+    <meta
+        content="Learn With Champak — Binary Search (Iterative). Understand idea, pseudocode, Python implementation, dry-runs, complexity and quick MCQ."
+        name="description">
+    </meta>
+
+
+    <link href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css" rel="stylesheet">
+    </link>
+    <style>
+        table {
+            box-shadow: 3px 4px 45px green;
+            padding: 30px;
+        }
+
+        :root {
+            --accent: #f2a007;
+            --muted: #6b6b6b;
+            --card-bg: #fffdf8;
+        }
+
+        .pp-header {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, rgba(242, 160, 7, 0.10), rgba(255, 255, 255, 0.05));
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+            margin-bottom: 18px;
+        }
+
+        .pp-brand {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .pp-brand img {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            object-fit: cover;
+            transform: rotate(-6deg);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .pp-title {
+            font-family: "Playfair Display", serif;
+            font-size: 1.6rem;
+            margin: 0;
+            color: #222;
+        }
+
+        .pp-sub {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .pp-meta {
+            text-align: right;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin: 14px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 6px 18px rgba(242, 160, 7, 0.18);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #f0c37a;
+            color: #333;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            box-shadow: 0 6px 18px rgba(15, 15, 15, 0.02);
+        }
+
+        pre,
+        code {
+            background: wheat;
+            color: teal;
+            padding: 12px;
+            border-radius: 8px;
+            overflow: auto;
+            font-size: 25px;
+        }
+
+        .small {
+            font-size: 0.92rem;
+            color: var(--muted);
+        }
+    </style>
+
+
+
+
+
+    <style>
+        /* === Modern Radio Buttons (Saffron Theme) === */
+        input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            vertical-align: middle;
+            margin-right: 6px;
+            position: relative;
+            transition: all 0.2s ease-in-out;
+        }
+
+        input[type="radio"]:checked {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 4px rgba(242, 160, 7, 0.6);
+        }
+
+        input[type="radio"]:checked::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+        }
+
+        label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #222;
+            padding: 4px 6px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        label:hover {
+            background: rgba(242, 160, 7, 0.08);
+        }
+
+        .q {
+            margin-bottom: 12px;
+            padding: 10px;
+            border-left: 3px solid var(--accent);
+            border-radius: 6px;
+            background: #fffaf0;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Programmer's Picnic — Number To Words -->
+
+
+
+    <div class="pp-header">
+        <div class="pp-brand">
+            <img alt="Champak Roy / Brand"
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhL3RKHFUw1ar1iXadY5FuXkeTBr8NEV2VF5JEhyphenhyphenO95_snBRnh9NMZXA0_JZTrrqTyS8K2vHpw7MvtMERRT0oxH1_H0Mp_zVOhrLuJPwxJXTlqRLsXCKLZK3wCeFg7dFijwRnH7Rt0RvArWp2tVK42Kt6vCerztvlMSkHaeZwNsn7nzMxv1teWNMF59voc/s16000/Binary%20Search.jpg"
+                class="avatar" />
+            <div>
+                <h1 class="pp-title">Programmer's Picnic — Number To Words</h1>
+                <p class="pp-sub">Convert Numbers to Words</p>
+            </div>
+        </div>
+
+        <div class="pp-meta">
+            <div class="small">Self-study • Intermediate</div>
+            <div style="margin-top:6px;">
+                <strong style="font-size:1rem;">Date:</strong> <span class="small">[Replace with date]</span><br />
+                <strong style="font-size:1rem;">Time:</strong> <span class="small">[Replace with time &amp;
+                    timezone]</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-row">
+        <a class="btn" href="#materials">See Code</a>
+        <a class="btn btn-outline" href="#compare">Compare</a>
+        <a class="btn" href="#mcq-area2">Take Quiz</a>
+    </div>
+
+    <div class="card">
+        <h3>Quick idea</h3>
+        <p class="small">Convert Numbers to Words</p>
+        <ul>
+            <li> <strong>Examples:</strong></li>
+            <li>
+                <p> 1234: <strong> One Thousand Two Hundred Thirty Four</strong>.</p>
+            </li>
+            <li>
+                <p> 297 : <strong> Two Hundred Ninety Seven</strong>.</p>
+            </li>
+
+            <li>
+                <p> 2 : <strong> Two</strong>.</p>
+            </li>
+            <li>
+                <p> 19 : <strong> Nineteen</strong>.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card" id="materials">
+        <h3>How will we solve this problem?</h3>
+        <p>Let us start by writing down numbers up to 50</p>
+        <p>
+        <table width="100%" border="1">
+            <tr>
+                <th>0 to 9</th>
+                <th>10 to 19</th>
+                <th>20 to 29</th>
+                <th>30 to 39</th>
+                <th>40 to 49</th>
+            </tr>
+
+            <tr>
+                <td>
+                    <table width="100%" border=".5">
+
+                        <tr>
+                            <td>0</td>
+                            <td>Zero</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>One</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Two</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Three</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Four</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Five</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Six</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Seven</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Eight</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Nine</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table width="100%" border=".5">
+
+                        <tr>
+                            <td>10</td>
+                            <td>Ten</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>Eleven</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>Twelve</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>Thirteen</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>Fourteen</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>Fifteen</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>Sixteen</td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td>Seventeen</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>Eighteen</td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td>Nineteen</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table width="100%" border=".5">
+
+                        <tr>
+                            <td>20</td>
+                            <td>Twenty</td>
+                        </tr>
+                        <tr>
+                            <td>21</td>
+                            <td>Twenty One</td>
+                        </tr>
+                        <tr>
+                            <td>22</td>
+                            <td>Twenty Two</td>
+                        </tr>
+                        <tr>
+                            <td>23</td>
+                            <td>Twenty Three</td>
+                        </tr>
+                        <tr>
+                            <td>24</td>
+                            <td>Twenty Four</td>
+                        </tr>
+                        <tr>
+                            <td>25</td>
+                            <td>Twenty Five</td>
+                        </tr>
+                        <tr>
+                            <td>26</td>
+                            <td>Twenty Six</td>
+                        </tr>
+                        <tr>
+                            <td>27</td>
+                            <td>Twenty Seven</td>
+                        </tr>
+                        <tr>
+                            <td>28</td>
+                            <td>Twenty Eight</td>
+                        </tr>
+                        <tr>
+                            <td>29</td>
+                            <td>Twenty Nine</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table width="100%" border=".5">
+
+                        <tr>
+                            <td>30</td>
+                            <td>Thirty </td>
+                        </tr>
+                        <tr>
+                            <td>31</td>
+                            <td>Thirty One</td>
+                        </tr>
+                        <tr>
+                            <td>32</td>
+                            <td>Thirty Two</td>
+                        </tr>
+                        <tr>
+                            <td>33</td>
+                            <td>Thirty Three</td>
+                        </tr>
+                        <tr>
+                            <td>34</td>
+                            <td>Thirty Four</td>
+                        </tr>
+                        <tr>
+                            <td>35</td>
+                            <td>Thirty Five</td>
+                        </tr>
+                        <tr>
+                            <td>36</td>
+                            <td>Thirty Six</td>
+                        </tr>
+                        <tr>
+                            <td>37</td>
+                            <td>Thirty Seven</td>
+                        </tr>
+                        <tr>
+                            <td>38</td>
+                            <td>Thirty Eight</td>
+                        </tr>
+                        <tr>
+                            <td>39</td>
+                            <td>Thirty Nine</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table width="100%" border=".5">
+
+                        <tr>
+                            <td>40</td>
+                            <td>Forty </td>
+                        </tr>
+                        <tr>
+                            <td>41</td>
+                            <td>Forty One</td>
+                        </tr>
+                        <tr>
+                            <td>42</td>
+                            <td>Forty Two</td>
+                        </tr>
+                        <tr>
+                            <td>43</td>
+                            <td>Forty Three</td>
+                        </tr>
+                        <tr>
+                            <td>44</td>
+                            <td>Forty Four</td>
+                        </tr>
+                        <tr>
+                            <td>45</td>
+                            <td>Forty Five</td>
+                        </tr>
+                        <tr>
+                            <td>46</td>
+                            <td>Forty Six</td>
+                        </tr>
+                        <tr>
+                            <td>47</td>
+                            <td>Forty Seven</td>
+                        </tr>
+                        <tr>
+                            <td>48</td>
+                            <td>Forty Eight</td>
+                        </tr>
+                        <tr>
+                            <td>49</td>
+                            <td>Forty Nine</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        </p>
+        <div>
+            <h1 class="pp-title">I have written down the numbers from 0 to 49</h1>
+            <p class="pp-sub">What do we see?</p>
+            <p>The numbers from 0 to 9 are simply defined, or we can say that they have been given the names Zero to
+                Nine. Nothing to calculate. We will simply write them down.
+                so using Python we will write:
+                <code><pre>
+
+zerotonine=["Zero","One","Two","Three","Four", "Five","Six","Seven","Eight","Nine"]
+tens=["Ten","Twenty","Thirty","Forty","Fifty", "Sixty","Seventy","Eighty","Ninety"]
+eleventoninetoten=["Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"]
+
+                    </pre></code>
+            </p>
+        </div>
+        <pre class="code">
+def binary_search_iterative(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (right + left) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+  </pre>
+
+        <h3>Python — Recursive</h3>
+        <pre class="code">
+def binary_search_recursive(arr, target, left=0, right=None):
+    if right is None:
+        right = len(arr) - 1
+    if left > right:
+        return -1
+    mid = left + (right - left) // 2
+    if arr[mid] == target:
+        return mid
+    elif arr[mid] < target:
+        return binary_search_recursive(arr, target, mid + 1, right)
+    else:
+        return binary_search_recursive(arr, target, left, mid - 1)
+  </pre>
+
+        <p class="small">Both return the index if found or -1 if not.</p>
+    </div>
+
+    <div class="card">
+        <h3>Recursion: what changes?</h3>
+        <ul>
+            <li>Time: still <strong>O(log n)</strong>.</li>
+            <li>Space: recursive calls use call stack → <strong>O(log n)</strong> extra space proportional to recursion
+                depth.</li>
+            <li>Readability: recursion can look cleaner for divide-and-conquer solutions; iterative avoids stack
+                overhead.</li>
+            <li>Tail recursion: Python doesn't optimize tail calls — iterative is often preferred in Python for large
+                inputs.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Dry-run (recursive)</h3>
+        <p class="small">arr=[2,5,7,10,13,18], target=13</p>
+        <ol>
+            <li>call(0,5): mid=2 → arr[2]=7 &lt; 13 → recursive call(3,5)</li>
+            <li>call(3,5): mid=4 → arr[4]=13 → found → return 4</li>
+        </ol>
+    </div>
+
+    <div class="card" id="compare">
+        <h3>When to use which?</h3>
+        <ul>
+            <li>Use iterative when memory is a concern or input size is large.</li>
+            <li>Use recursive for clearer code if input sizes are moderate and recursion depth isn't dangerous.</li>
+            <li>In Python, iterative is generally safer for production because Python recursion depth is limited.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>MCQ — 5 (Iterative + Recursive)</h3>
+        <div id="mcq-area2">
+            <div class="q">
+                <p><strong>1.</strong> Recursive binary search extra space complexity?</p>
+                <label><input name="c1" type="radio" value="a"> O(1)</label><br>
+                <label><input name="c1" type="radio" value="b"> O(log n)</label><br>
+            </div>
+            <div class="q">
+                <p><strong>2.</strong> Both iterative and recursive binary search time complexity?</p>
+                <label><input name="c2" type="radio" value="a"> O(n)</label><br>
+                <label><input name="c2" type="radio" value="b"> O(log n)</label><br>
+            </div>
+            <div class="q">
+                <p><strong>3.</strong> Which one can cause recursion depth problems in Python?</p>
+                <label><input name="c3" type="radio" value="a"> Iterative</label><br>
+                <label><input name="c3" type="radio" value="b"> Recursive</label><br>
+            </div>
+            <div class="q">
+                <p><strong>4.</strong> For huge input lists, pick:</p>
+                <label><input name="c4" type="radio" value="a"> iterative</label><br>
+                <label><input name="c4" type="radio" value="b"> recursive</label><br>
+            </div>
+            <div class="q">
+                <p><strong>5.</strong> Both versions require <em>sorted</em> array?</p>
+                <label><input name="c5" type="radio" value="a"> Yes</label><br>
+                <label><input name="c5" type="radio" value="b"> No</label><br>
+            </div>
+
+            <button class="btn" onclick="scoreMCQ2()">Check Answers</button>
+            <div class="small" id="mcq-result2" style="margin-top:10px;"></div>
+        </div>
+    </div>
+
+    <script>
+        function scoreMCQ2() {
+            const answers = { c1: 'b', c2: 'b', c3: 'b', c4: 'a', c5: 'a' };
+            let score = 0;
+            for (let k in answers) {
+                const els = document.getElementsByName(k);
+                let chosen = null;
+                for (let i = 0; i < els.length; i++) { if (els[i].checked) { chosen = els[i].value; break; } }
+                if (chosen === answers[k]) score++;
+            }
+            const r = document.getElementById('mcq-result2');
+            r.innerHTML = 'You scored: <strong>' + score + '</strong> / 5. ';
+            if (score === 5) r.innerHTML += 'Excellent! ✅';
+            else if (score >= 3) r.innerHTML += 'Good — you understand the tradeoffs. 👍';
+            else r.innerHTML += 'Review recursive vs iterative notes and try again. 🙌';
+        }
+    </script>
+
+    <div class="card">
+        <h3>Small Exercises</h3>
+        <ol>
+            <li>Modify the recursive version to return the leftmost index when duplicates exist.</li>
+            <li>Measure runtime of iterative vs recursive on large arrays (timeit).</li>
+            <li>Implement binary search for descending-sorted arrays (reverse comparison).</li>
+        </ol>
+    </div>
+
+    <p class="small" style="margin-top:18px;">Prepared by <strong>Champak Roy</strong> — Programmer's Picnic series.</p>
+</body>
+
+</html>
