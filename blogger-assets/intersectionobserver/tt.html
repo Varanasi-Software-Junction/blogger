@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Width Random Animations</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: wheat;
+      font-family: sans-serif;
+    }
+
+    .main {
+      min-height: 200vh;
+    }
+
+    /* -------- FULL WIDTH SECTIONS -------- */
+    .section {
+      width: 100vw;        /* full screen width */
+      height: 100vh;       /* full screen height (optional, looks cinematic) */
+      background: #f0f0f0;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3em;
+
+      border-bottom: 4px solid #ccc;
+
+      /* Prevent overflow and preserve boundaries */
+      overflow: hidden;
+      position: relative;
+      contain: paint;
+      backface-visibility: hidden;
+      will-change: transform, opacity;
+      transform-origin: center center;
+    }
+
+    /* Visual flag */
+    .activated {
+      border-bottom-color: red;
+      outline: 4px ridge red;
+    }
+
+    /* -------------------------------------------------- */
+    /* 🔥 5 RANDOM animations — based on your template    */
+    /* -------------------------------------------------- */
+
+    @keyframes anim1 {
+      0% { transform: rotate(0deg) scale(1); opacity: 1; }
+      50% { transform: rotate(180deg) scale(0.8); opacity: 0.2; }
+      100% { transform: rotate(360deg) scale(1); opacity: 1; }
+    }
+
+    @keyframes anim2 {
+      0% { transform: translateX(0) scale(1); opacity: 1; }
+      50% { transform: translateX(40px) scale(0.9); opacity: 0.1; }
+      100% { transform: translateX(0) scale(1); opacity: 1; }
+    }
+
+    @keyframes anim3 {
+      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+      50% { transform: translateY(-35px) rotate(12deg) scale(0.9); opacity: 0.3; }
+      100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+    }
+
+    @keyframes anim4 {
+      0% { transform: rotate(0deg) scale(1); opacity: 1; }
+      50% { transform: rotate(-160deg) scale(0.85); opacity: 0.2; }
+      100% { transform: rotate(0deg) scale(1); opacity: 1; }
+    }
+
+    @keyframes anim5 {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      50% { transform: scale(0.7) rotate(25deg); opacity: 0.0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .anim1 { animation: anim1 1.8s ease-out forwards; }
+    .anim2 { animation: anim2 1.5s ease-out forwards; }
+    .anim3 { animation: anim3 1.6s ease-out forwards; }
+    .anim4 { animation: anim4 1.9s ease-out forwards; }
+    .anim5 { animation: anim5 1.7s ease-out forwards; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .anim1, .anim2, .anim3, .anim4, .anim5 {
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <div class="section">Section 1</div>
+    <div class="section">Section 2</div>
+    <div class="section">Section 3</div>
+    <div class="section">Section 4</div>
+    <div class="section">Section 5</div>
+
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll('.section');
+    const animList = ["anim1", "anim2", "anim3", "anim4", "anim5"];
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+
+          const el = entry.target;
+
+          // avoid retriggering
+          if (el.dataset.done === "1") {
+            obs.unobserve(el);
+            return;
+          }
+
+          el.dataset.done = "1"; // marked as completed
+          el.classList.add("activated");
+
+          // pick a random animation
+          const anim = animList[Math.floor(Math.random() * animList.length)];
+          el.classList.add(anim);
+
+          // stop observing (so animation never repeats)
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,567 @@
+<!-- =============================== -->
+<!--  PROGRAMMER'S PICNIC — BLOGGER  -->
+<!--  Reveal Animations with         -->
+<!--  Intersection Observer API      -->
+<!--  (Includes demo, saffron styles, -->
+<!--   and code copy buttons)         -->
+<!-- =============================== -->
+
+<div class="post-body entry-content" id="post-body">
+
+    <!-- Inline theme & demo styles -->
+    <style>
+        /* ---------- Programmer's Picnic Saffron Theme ---------- */
+        :root {
+            --pp-saffron: #f59e0b;
+            --pp-deep: #2b2f77;
+            --pp-bg: #fff8f0;
+            --pp-card: #fff;
+            --pp-muted: #6b6b6b;
+            --pp-radius: 12px;
+            --pp-gap: 16px;
+            --max-width: 900px;
+        }
+
+        #post-body {
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.05), #fff);
+            padding: 24px;
+            border-radius: 14px;
+            color: #1b1b1b;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            max-width: var(--max-width);
+            margin: 18px auto;
+            box-shadow: 0 8px 30px rgba(43, 47, 119, 0.06);
+        }
+
+        .pp-heading {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            font-size: 1.6rem;
+            margin: 0 0 8px 0;
+            color: var(--pp-deep);
+        }
+
+        .pp-heading::before {
+            content: "";
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--pp-saffron), #f97316);
+            box-shadow: 0 6px 18px rgba(249, 115, 22, 0.18);
+            display: inline-block;
+        }
+
+        .pp-intro {
+            color: var(--pp-muted);
+            margin-bottom: 14px;
+        }
+
+        /* Card blocks */
+        .pp-card {
+            background: var(--pp-card);
+            border-radius: var(--pp-radius);
+            padding: 14px;
+            margin: 12px 0;
+            box-shadow: 0 6px 18px rgba(43, 47, 119, 0.04);
+        }
+
+        h3 {
+            color: var(--pp-deep);
+            margin-top: 18px;
+        }
+
+        pre {
+            background: #0b1020;
+            color: #e6eef8;
+            padding: 12px;
+            border-radius: 8px;
+            overflow: auto;
+            font-size: 0.92rem;
+        }
+
+        pre .line-highlight {
+            opacity: .9;
+        }
+
+        code {
+            font-family: "Source Code Pro", monospace;
+            font-size: 0.95rem;
+        }
+
+        /* Layout for demo area */
+        .demo-area {
+            display: block;
+            padding: 12px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #fff, #fffaf0);
+            border: 1px solid rgba(43, 47, 119, 0.04);
+            margin: 12px 0 20px 0;
+        }
+
+        /* Reveal base */
+        .reveal {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: all .7s cubic-bezier(.2, .9, .2, 1);
+            will-change: transform, opacity;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Section-specific reveals */
+        .video-reveal {
+            transform: translateX(-30px);
+            transition: all .8s ease-out;
+        }
+
+        .video-reveal.visible {
+            transform: translateX(0);
+        }
+
+        .services-reveal {
+            transform: scale(.92);
+            transition: all .6s cubic-bezier(.2, .9, .2, 1);
+        }
+
+        .services-reveal.visible {
+            transform: scale(1);
+        }
+
+        .contact-reveal {
+            transform: translateY(26px);
+            transition: all .7s ease;
+        }
+
+        .contact-reveal.visible {
+            transform: translateY(0);
+        }
+
+        .footer-reveal {
+            transition: opacity .75s ease-out;
+        }
+
+        .footer-reveal.visible {
+            opacity: 1;
+        }
+
+        /* Demo visual styles */
+        .demo-spacer {
+            height: 30vh;
+        }
+
+        .demo-box {
+            padding: 18px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #fff, #fffaf7);
+            border: 1px solid rgba(43, 47, 119, 0.04);
+            margin: 12px 0;
+        }
+
+        .hero-video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        /* Code copy UI */
+        .code-wrap {
+            position: relative;
+            margin: 14px 0;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            background: var(--pp-deep);
+            color: #fff;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(43, 47, 119, 0.12);
+        }
+
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* small helpers */
+        .muted {
+            color: var(--pp-muted);
+            font-size: 0.96rem;
+        }
+
+        .small {
+            font-size: 0.9rem;
+            color: var(--pp-muted);
+        }
+
+        .pp-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            background: var(--pp-saffron);
+            border: none;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn.secondary {
+            background: transparent;
+            border: 1px solid rgba(43, 47, 119, 0.08);
+            color: var(--pp-deep);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width:640px) {
+            :root {
+                --max-width: 640px;
+            }
+
+            .pp-heading {
+                font-size: 1.25rem;
+            }
+
+            pre {
+                font-size: 0.82rem;
+            }
+
+            .copy-btn {
+                padding: 6px;
+                font-size: 0.78rem;
+            }
+        }
+    </style>
+
+    <!-- Header -->
+    <h2 class="pp-heading">✨ Revealing Elements with Intersection Observer</h2>
+    <p class="pp-intro">
+        Modern websites look magical when elements fade, slide, or pop into view as the user scrolls.
+        The Intersection Observer API does this efficiently — this post has a live demo, theme styles, and copyable code
+        snippets.
+    </p>
+
+    <!-- Core explanation card -->
+    <div class="pp-card">
+        <h3>📦 The Core Idea</h3>
+        <p class="muted">You tell the browser which elements to watch and it notifies you when they intersect with the
+            viewport. That notification is an <code>IntersectionObserverEntry</code>.</p>
+
+        <h3>🧩 Code (JS) — Observer Example</h3>
+
+        <div class="code-wrap">
+            <button class="copy-btn" data-target="obs-code">Copy</button>
+            <pre id="obs-code"><code class="language-js">
+// Create the observer
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(en) {
+    if (en.isIntersecting) {
+      console.log('visible:', en.target.id || en.target.className);
+      en.target.classList.add('visible');
+
+      // Uncomment to animate only once:
+      // obs.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.25 });
+
+// Attach observer to all .reveal elements
+document.querySelectorAll('.reveal').forEach(function(n) {
+  obs.observe(n);
+});
+      </code></pre>
+        </div>
+
+        <h3>🎨 Base CSS</h3>
+
+        <div class="code-wrap">
+            <button class="copy-btn" data-target="css-code">Copy</button>
+            <pre id="css-code"><code class="language-css">
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: all .7s cubic-bezier(.2, .9, .2, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+      </code></pre>
+        </div>
+
+    </div>
+
+    <!-- ========= LIVE DEMO ========= -->
+    <div class="demo-area pp-card">
+        <h3>⚡ Live Demo — scroll to reveal</h3>
+        <p class="small">This demo has multiple reveal types: video, services, contact, and footer. Scroll the post to
+            see each effect. (If you paste into Blogger, preview mode scroll will reveal.)</p>
+
+        <!-- Top spacer so demo can be scrolled into view on short pages -->
+        <div class="demo-spacer"></div>
+
+        <!-- Video section -->
+        <section id="demo-video" class="reveal video-reveal demo-box">
+            <h4>Video Reveal</h4>
+            <p class="muted">Autoplay muted hero video (replace src with your actual path).</p>
+            <video class="hero-video" autoplay muted loop playsinline>
+                <!-- Replace the src below with your own asset path if needed -->
+                <source src="assets/hero.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </section>
+
+        <!-- Services section -->
+        <section id="demo-services" class="reveal services-reveal demo-box">
+            <h4>Services Reveal</h4>
+            <p class="muted">Each card pops gently into place — ideal for service lists or feature grids.</p>
+            <div
+                style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-top:10px;">
+                <div style="padding:12px; border-radius:8px; background:#fff; border:1px solid rgba(43,47,119,0.04);">
+                    Service A</div>
+                <div style="padding:12px; border-radius:8px; background:#fff; border:1px solid rgba(43,47,119,0.04);">
+                    Service B</div>
+                <div style="padding:12px; border-radius:8px; background:#fff; border:1px solid rgba(43,47,119,0.04);">
+                    Service C</div>
+            </div>
+        </section>
+
+        <!-- Contact section -->
+        <section id="demo-contact" class="reveal contact-reveal demo-box">
+            <h4>Contact Reveal</h4>
+            <p class="muted">A friendly contact section that slides from the bottom.</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+                <button class="btn">Contact on WhatsApp</button>
+                <button class="btn secondary">Send Email</button>
+            </div>
+        </section>
+
+        <!-- Footer section -->
+        <footer id="demo-footer" class="reveal footer-reveal demo-box" style="opacity:0;">
+            <h4>Footer Reveal</h4>
+            <p class="muted">Footer content that fades in as it enters the viewport.</p>
+        </footer>
+
+        <div class="demo-spacer"></div>
+
+        <div class="pp-actions">
+            <button id="demo-reset" class="btn secondary">Reset demo (remove .visible)</button>
+            <button id="demo-unobserve" class="btn">Observe once (unobserve after first reveal)</button>
+        </div>
+    </div>
+
+    <!-- Additional instructions & advanced note -->
+    <div class="pp-card">
+        <h3>🔍 How this demo works</h3>
+        <p class="muted">A single IntersectionObserver instance watches all elements that have <code>.reveal</code>.
+            When an element becomes visible (threshold 0.25), the script adds <code>.visible</code>, which triggers the
+            CSS animation. Use <code>obs.unobserve(en.target)</code> if you want an element to animate only once.</p>
+
+        <h3>📦 Full JS (observer + copy-button handling + demo controls)</h3>
+
+        <div class="code-wrap">
+            <button class="copy-btn" data-target="full-js">Copy</button>
+            <pre id="full-js"><code class="language-js">
+// Intersection Observer (same as earlier, but connected to demo)
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(en) {
+    if (en.isIntersecting) {
+      en.target.classList.add('visible');
+      // If 'observe once' button was toggled, unobserve after adding
+      if (en.target.getAttribute('data-once') === 'true') {
+        obs.unobserve(en.target);
+      }
+    }
+  });
+}, { threshold: 0.25 });
+
+// Start observing all .reveal elements
+document.querySelectorAll('.reveal').forEach(function(n) {
+  obs.observe(n);
+});
+
+/* ---------- Demo controls ---------- */
+document.getElementById('demo-reset').addEventListener('click', function(){
+  document.querySelectorAll('.reveal').forEach(function(el){
+    el.classList.remove('visible');
+    el.removeAttribute('data-once');
+    // Re-observe everything
+    obs.observe(el);
+  });
+});
+
+document.getElementById('demo-unobserve').addEventListener('click', function(){
+  // mark all current reveals to be unobserved after first reveal
+  document.querySelectorAll('.reveal').forEach(function(el){
+    el.setAttribute('data-once', 'true');
+  });
+});
+
+/* ---------- Code copy buttons ---------- */
+Array.prototype.slice.call(document.querySelectorAll('.copy-btn')).forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var id = btn.getAttribute('data-target');
+    if (!id) return;
+    var pre = document.getElementById(id);
+    if (!pre) return;
+    // get plaintext code (not the button)
+    var codeText = pre.innerText;
+    // copy
+    try {
+      navigator.clipboard.writeText(codeText).then(function(){
+        var old = btn.innerText;
+        btn.innerText = 'Copied ✓';
+        setTimeout(function(){ btn.innerText = old; }, 1400);
+      }, function(){
+        // fallback
+        fallbackCopyTextToClipboard(codeText, btn);
+      });
+    } catch (e){
+      fallbackCopyTextToClipboard(codeText, btn);
+    }
+  });
+});
+
+// Fallback for older browsers
+function fallbackCopyTextToClipboard(text, btn) {
+  var textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  textArea.style.left = "-9999px";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    var successful = document.execCommand('copy');
+    var old = btn.innerText;
+    btn.innerText = successful ? 'Copied ✓' : 'Copy';
+    setTimeout(function(){ btn.innerText = old; }, 1400);
+  } catch (err) {
+    console.warn('Copy failed', err);
+  }
+  document.body.removeChild(textArea);
+}
+      </code></pre>
+        </div>
+
+        <p class="small">Tip: For single-run animations, call <code>obs.unobserve(el)</code> after the element becomes
+            visible (or use the demo 'Observe once' button).</p>
+    </div>
+
+    <!-- Closing -->
+    <div class="pp-card" style="text-align:center;">
+        <h3>🚀 You're all set</h3>
+        <p class="muted">Paste this post into Blogger and preview. Everything is inline and ready. If you want I can
+            also:</p>
+        <div class="pp-actions" style="justify-content:center;">
+            <button class="btn" onclick="alert('If you want additional tweaks, tell me what to change!')">Request
+                tweak</button>
+            <button class="btn secondary"
+                onclick="alert('Need code highlighting/Prism integration? I can add CDN links or inline minimal highlighter.')">Add
+                syntax highlight</button>
+        </div>
+    </div>
+
+    <!-- Inline script (observer + copy buttons + small helpers) -->
+    <script>
+        (function () {
+            /* Intersection Observer (same logic as shown in snippets) */
+            var obs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (en) {
+                    if (en.isIntersecting) {
+                        en.target.classList.add('visible');
+                        if (en.target.getAttribute('data-once') === 'true') {
+                            obs.unobserve(en.target);
+                        }
+                    }
+                });
+            }, { threshold: 0.25 });
+
+            // Observe all reveals
+            document.querySelectorAll('.reveal').forEach(function (n) {
+                obs.observe(n);
+            });
+
+            /* Demo control event listeners are included inside the copyable JS block above,
+               but we add listeners for buttons that might have been executed before script parsed. */
+            var resetBtn = document.getElementById('demo-reset');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function () {
+                    document.querySelectorAll('.reveal').forEach(function (el) {
+                        el.classList.remove('visible');
+                        el.removeAttribute('data-once');
+                        obs.observe(el);
+                    });
+                    // Scroll a little to re-trigger observation on some browsers
+                    window.scrollBy(0, 1);
+                    window.scrollBy(0, -1);
+                });
+            }
+            var onceBtn = document.getElementById('demo-unobserve');
+            if (onceBtn) {
+                onceBtn.addEventListener('click', function () {
+                    document.querySelectorAll('.reveal').forEach(function (el) {
+                        el.setAttribute('data-once', 'true');
+                    });
+                    alert('Marked current reveal elements to animate only once.');
+                });
+            }
+
+            /* Initialize copy buttons (also in copyable snippet) */
+            Array.prototype.slice.call(document.querySelectorAll('.copy-btn')).forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var id = btn.getAttribute('data-target');
+                    if (!id) return;
+                    var pre = document.getElementById(id);
+                    if (!pre) return;
+                    var codeText = pre.innerText;
+                    try {
+                        navigator.clipboard.writeText(codeText).then(function () {
+                            var old = btn.innerText;
+                            btn.innerText = 'Copied ✓';
+                            setTimeout(function () { btn.innerText = old; }, 1400);
+                        }, function () {
+                            fallback(pre, btn);
+                        });
+                    } catch (e) {
+                        fallback(pre, btn);
+                    }
+                });
+            });
+
+            function fallback(pre, btn) {
+                var text = pre.innerText;
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    var old = btn.innerText;
+                    btn.innerText = 'Copied ✓';
+                    setTimeout(function () { btn.innerText = old; }, 1400);
+                } catch (err) {
+                    console.warn('Copy fallback failed', err);
+                }
+                document.body.removeChild(ta);
+            }
+        })();
+    </script>
+
+</div>

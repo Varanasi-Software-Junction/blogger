@@ -1,99 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+swirl{0%{transform:rotate(0) translateX(0)}50%{transform:rotate(180deg) translateX(6px)}100%{transform:rotate(360deg)
+translateX(0)}}
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intersection Observer Example</title>
-    <style>
-        .main {
-            background-color: wheat;
-            font-family: sans-serif;
-            margin: 0;
-            /* padding: 200px; */
-            min-height: 200vh;
-            /* To enable scrolling */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intersection Observer Example</title>
+  <style>
+    .main {
+      background-color: wheat;
+      font-family: sans-serif;
+      margin: 0;
+      /* padding: 200px; */
+      min-height: 200vh;
+      /* To enable scrolling */
+    }
 
-        .section {
-            height: 400px;
-            background-color: #f0f0f0;
-            margin-top: 200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2em;
-            border: 2px solid #ccc;
-        }
+    .section {
+      height: 400px;
+      background-color: #f0f0f0;
+      margin-top: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      border: 2px solid #ccc;
+    }
 
 
-        .intersected {
-            border-style: ridge;
-            border-color: red;
-            animation-name: myanim;
-            animation-duration: 10s;
-            animation-iteration-count: 5;
-            animation-direction: alternate-reverse;
-        }
+    .intersected {
+      border-style: ridge;
+      border-color: red;
+      animation-name: myanim;
+      animation-duration: 10s;
+      animation-iteration-count: 5;
+      animation-direction: alternate-reverse;
+    }
 
-        @keyframes myanim {
-            0% {
-                width: 100%;
-                background-color: blue;
-            }
+    @keyframes myanim {
+      0% {
+        transform: scale(1);
+        box-shadow: 0px 0px 0px green;
+        transform: rotate(0) translateX(0);
+        opacity: 1;
+      }
 
-            50% {
-                background-color: yellow;
-                width: 50%;
-            }
+      50% {
+        transform: scale(0.8);
+        opacity: 0;
+        box-shadow: 50px 60px 70px orange;
+      }
 
-            100% {
-                background-color: lightblue;
-                width: 100%;
-            }
-        }
-    </style>
+      100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0px 0px 0px green;
+
+      }
+
+    }
+  </style>
 </head>
 
 <body>
-    <div class="main">
-        <h1>Intersection Observer Example</h1>
-        <p>Scroll down to see the target element change color when it enters the viewport.</p>
+  <div class="main">
+    <h1>Intersection Observer Example</h1>
+    <p>Scroll down to see the target element change color when it enters the viewport.</p>
 
-        <div class="section">Section 1</div>
-        <div class="section">Section 2</div>
-        <div class="section">
-            Section 3
-        </div>
-        <div class="section">Section 4</div>
-        <div class="section">Section 5</div>
+    <div class="section">Section 1
+
+
     </div>
-    <script>
-        const targetElements = document.getElementsByClassName("section");
+    <div class="section">Section 2</div>
+    <div class="section">
+      Section 3
+    </div>
+    <div class="section">Section 4</div>
+    <div class="section">Section 5</div>
+  </div>
+  <script>
+    const targetElements = document.getElementsByClassName("section");
 
-        const options = {
-            root: null, // defaults to the document's viewport
-            rootMargin: '0px',
-            threshold: 0.5 // callback fires when 50% of the target is visible
-        };
+    const options = {
+      root: null, // defaults to the document's viewport
+      rootMargin: '0px',
+      threshold: 0.5 // callback fires when 50% of the target is visible
+    };
 
-        const callback = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('intersected');
-                    console.log('Target element is now 50% or more visible!');
-                } else {
-                    entry.target.classList.remove('intersected');
-                    console.log('Target element is less than 50% visible!');
-                }
-            });
-        };
+    const callback = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('intersected');
+          console.log('Target element is now 50% or more visible!');
+        } else {
+          entry.target.classList.remove('intersected');
+          console.log('Target element is less than 50% visible!');
+        }
+      });
+    };
 
-        const observer = new IntersectionObserver(callback, options);
-        const n = targetElements.length;
-        for (let i = 0; i <= n - 1; i++)
-            observer.observe(targetElements[i]);
-    </script>
+    const observer = new IntersectionObserver(callback, options);
+    const n = targetElements.length;
+    for (let i = 0; i <= n - 1; i++)
+      observer.observe(targetElements[i]);
+  </script>
 </body>
 
 </html>

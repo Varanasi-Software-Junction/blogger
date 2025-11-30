@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Intersection Observer — Improved + 6 Video Layers</title>
+    <style>
+        :root {
+            --bg: #fff7ed;
+            --accent: #b7410e;
+            --muted: #666;
+            --card-bg: #fff;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+            color: #222;
+            background: var(--bg);
+        }
+
+        nav {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 18px;
+            background: linear-gradient(90deg, #fffaf0, #fff3e6);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04)
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 24px auto;
+            padding: 16px
+        }
+
+        /* ---------- hero with layered videos ---------- */
+        .multi-hero {
+            position: relative;
+            height: 62vh;
+            min-height: 420px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 28px;
+            background: linear-gradient(180deg, #111 0%, rgba(0, 0, 0, 0.15) 100%);
+        }
+
+        .multi-hero .layer {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .8s ease, transform 1.2s cubic-bezier(.2, .9, .2, 1);
+            will-change: opacity, transform;
+        }
+
+        .multi-hero .layer video {
+            width: 120%;
+            height: 120%;
+            object-fit: cover;
+            filter: brightness(.6) saturate(1.02);
+            transform-origin: center;
+        }
+
+        .multi-hero .layer.layer-0 {
+            z-index: 1;
+            transform: translateY(6vh) scale(0.98);
+        }
+
+        .multi-hero .layer.layer-1 {
+            z-index: 2;
+            transform: translateY(3vh) scale(0.99);
+        }
+
+        .multi-hero .layer.layer-2 {
+            z-index: 3;
+            transform: translateY(0vh) scale(1);
+        }
+
+        .multi-hero .layer.layer-3 {
+            z-index: 4;
+            transform: translateY(-3vh) scale(1.02);
+        }
+
+        .multi-hero .layer.layer-4 {
+            z-index: 5;
+            transform: translateY(-6vh) scale(1.04);
+        }
+
+        .multi-hero .layer.layer-5 {
+            z-index: 6;
+            transform: translateY(-9vh) scale(1.06);
+        }
+
+        /* when visible */
+        .multi-hero .layer.inview {
+            opacity: 1;
+            transform: translateY(0) scale(1.03);
+            transition-duration: 900ms
+        }
+
+        .hero-caption {
+            position: absolute;
+            z-index: 20;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero-caption h1 {
+            margin: 0 0 8px;
+            font-size: clamp(1.6rem, 4vw, 2.8rem);
+            line-height: 1.04
+        }
+
+        .hero-caption p {
+            margin: 0;
+            opacity: 0.95
+        }
+
+        /* ---------- content sections ---------- */
+        .sections {
+            display: grid;
+            gap: 24px;
+            margin-top: 18px;
+        }
+
+        .section {
+            min-height: 360px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            padding: 22px;
+            box-shadow: 0 12px 30px rgba(11, 11, 11, 0.04);
+            overflow: hidden;
+            position: relative;
+            transform-origin: center;
+        }
+
+        .row-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .card {
+            padding: 14px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #fff, #f9f9f9);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04)
+        }
+
+        /* ---------- animation classes (using transform only) ---------- */
+        .anim-zoom {
+            animation: zoomPulse 900ms cubic-bezier(.2, .9, .2, 1) both;
+        }
+
+        .anim-slide {
+            animation: slideUp 900ms cubic-bezier(.2, .9, .2, 1) both;
+        }
+
+        .anim-fade {
+            animation: fadeRise 900ms cubic-bezier(.2, .9, .2, 1) both;
+        }
+
+        .anim-rotate {
+            animation: rotateLift 1000ms cubic-bezier(.2, .9, .2, 1) both;
+        }
+
+        @keyframes zoomPulse {
+            0% {
+                transform: scale(.96);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.03);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            0% {
+                transform: translateY(18px) translateZ(0) scale(.995);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeRise {
+            0% {
+                transform: translateY(12px) scale(.998);
+                opacity: 0;
+            }
+
+            70% {
+                opacity: .6;
+                transform: translateY(6px) scale(1.002);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes rotateLift {
+            0% {
+                transform: translateY(12px) rotate(3deg) scale(.996);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* utility: visually mark intersected state (non-layout) */
+        .inview-outline {
+            outline: 2px solid rgba(183, 65, 14, 0.18);
+            box-shadow: 0 10px 30px rgba(183, 65, 14, 0.06)
+        }
+
+        /* footer */
+        footer {
+            padding: 28px 18px;
+            margin-top: 28px;
+            text-align: center;
+            color: var(--muted)
+        }
+
+        /* accessibility */
+        @media (prefers-reduced-motion: reduce) {
+
+            .anim-zoom,
+            .anim-slide,
+            .anim-fade,
+            .anim-rotate,
+            .multi-hero .layer {
+                animation: none !important;
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/mnt/data/index.html">Home</a>
+        <a href="/mnt/data/album.html">Album</a>
+        <a href="/mnt/data/services.html">Services</a>
+        <a href="/mnt/data/contact.html">Contact</a>
+    </nav>
+
+    <main>
+        <!-- Multi-layered hero using the same video source repeated 6 times.
+         Replace "assets/hero.mp4" with your real path if needed. -->
+        <section class="multi-hero" id="multi-hero" aria-label="Layered hero">
+            <!-- Each layer holds the same video — we animate layers independently. -->
+            <div class="layer layer-0" data-anim="anim-slide" data-delay="0">
+                <video muted loop playsinline preload="auto">
+                    <source src="assets/hero.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="layer layer-1" data-anim="anim-zoom" data-delay="100">
+                <video muted loop playsinline preload="auto">
+                    <source src="assets/hero.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="layer layer-2" data-anim="anim-fade" data-delay="200">
+                <video muted loop playsinline preload="auto">
+                    <source src="assets/hero.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="layer layer-3" data-anim="anim-rotate" data-delay="300">
+                <video muted loop playsinline preload="auto">
+                    <source src="assets/hero.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="layer layer-4" data-anim="anim-slide" data-delay="420">
+                <video muted loop playsinline preload="auto">
+                    <source src="assets/hero.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="layer layer-5" data-anim="anim-zoom" data-delay="540">
+                <video muted loop playsinline preload="auto">
+                    <source src="assets/hero.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="hero-caption">
+                <h1>Layered Video Hero</h1>
+                <p>Six alternating layers that animate when this section enters view — each layer restarts when
+                    re-entered.</p>
+            </div>
+        </section>
+
+        <div class="sections">
+            <section class="section" id="services" aria-label="Services">
+                <h2>Services</h2>
+                <p>Our service cards animate individually when they scroll into view (runs every time).</p>
+                <div class="row-cards">
+                    <div class="card" data-anim="anim-zoom">
+                        <h3>On-location Shoots</h3>
+                        <p>Varanasi, ghats, temples — cinematic coverage.</p>
+                    </div>
+                    <div class="card" data-anim="anim-slide">
+                        <h3>Editing & Color</h3>
+                        <p>Cinematic transitions, color grading and mixes.</p>
+                    </div>
+                    <div class="card" data-anim="anim-fade">
+                        <h3>Drone & Aerial</h3>
+                        <p>Licenced pilots, cinematic aerials.</p>
+                    </div>
+                    <div class="card" data-anim="anim-rotate">
+                        <h3>Documentaries</h3>
+                        <p>Research-led long-form storytelling.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="contact" aria-label="Contact">
+                <h2>Contact</h2>
+                <p>Contact block will animate on enter and restart on re-enter.</p>
+                <div style="margin-top:14px">
+                    <button class="card" data-anim="anim-slide" style="cursor:pointer">Message on WhatsApp</button>
+                </div>
+            </section>
+
+            <section class="section" id="footer-cta" aria-label="Footer CTA">
+                <h2>Footer Call-to-action</h2>
+                <p>Small call-to-action area — animate with a gentle fade/zoom.</p>
+            </section>
+        </div>
+    </main>
+
+    <footer id="page-footer">
+        <p>Based in Varanasi — demo page. Videos are repeated layers that animate on scroll.</p>
+    </footer>
+
+    <script>
+        (function () {
+            // Helper: iterate NodeList
+            function forEachNode(list, cb) { Array.prototype.forEach.call(list, cb); }
+
+            // Choose an animation class for an element (explicit, or fallback to random)
+            function animationFor(el) {
+                return el.getAttribute('data-anim') || el.dataset.anim || (['anim-zoom', 'anim-slide', 'anim-fade', 'anim-rotate'][Math.floor(Math.random() * 4)]);
+            }
+
+            // Restart CSS animation by removing & re-adding
+            // We prefer toggling a dedicated marker class 'inview' and use the data-anim class for the actual animation
+            function restartAnimation(el, animClass) {
+                // remove both to ensure clean reset
+                el.classList.remove('inview-outline');
+                el.classList.remove(animClass);
+
+                // Force a reflow so the browser forgets the animation state
+                // reading offsetWidth forces layout
+                void el.offsetWidth;
+
+                // add back - this starts the animation freshly
+                el.classList.add(animClass);
+                el.classList.add('inview-outline');
+            }
+
+            // Observer config
+            var ioOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.35 // fires when ~35% visible
+            };
+
+            // Observe each layer inside hero separately so they can animate with tiny offsets
+            var hero = document.getElementById('multi-hero');
+            var layers = hero ? Array.from(hero.querySelectorAll('.layer')) : [];
+
+            // Tile & card elements to animate individually
+            var animatedElements = Array.from(document.querySelectorAll('[data-anim]'));
+
+            // Combined observer to handle both hero layers and other sections/cards.
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    var el = entry.target;
+                    if (entry.isIntersecting && entry.intersectionRatio >= ioOptions.threshold) {
+                        // pick anim class
+                        var anim = animationFor(el);
+                        // if the element has data-delay attribute, apply a small timeout so layered effects can be staggered
+                        var delay = parseInt(el.getAttribute('data-delay') || el.dataset.delay || 0, 10);
+                        if (delay > 0) {
+                            // scheduled restart ensures each time it's freshly started when in view
+                            setTimeout(function () { restartAnimation(el, anim); }, delay);
+                        } else {
+                            restartAnimation(el, anim);
+                        }
+                        // If it's a video layer, ensure the video plays (muted)
+                        var vid = el.querySelector && el.querySelector('video');
+                        if (vid && vid.paused) {
+                            // try play (muted) - catch promise rejections silently
+                            try { vid.play().catch(() => { }); } catch (e) { }
+                        }
+                    } else {
+                        // leaving view: remove animation class so next enter will definitely restart
+                        var anim = animationFor(el);
+                        el.classList.remove(anim);
+                        el.classList.remove('inview-outline');
+                        // pause video layers when they leave to save CPU/bandwidth
+                        var vid = el.querySelector && el.querySelector('video');
+                        if (vid && !vid.paused) {
+                            try { vid.pause(); } catch (e) { }
+                        }
+                    }
+                });
+            }, ioOptions);
+
+            // Observe each animatable element (cards, hero layers, CTA blocks)
+            animatedElements.forEach(function (el) {
+                observer.observe(el);
+            });
+            layers.forEach(function (l) {
+                // also observe hero layers (they have data-anim)
+                if (!animatedElements.includes(l)) observer.observe(l);
+            });
+
+            // Additionally, observe big sections so the section container can get an animation (helpful for larger blocks)
+            var sections = Array.from(document.querySelectorAll('.section'));
+            sections.forEach(function (s) {
+                // give container a default animation if missing
+                if (!s.hasAttribute('data-anim')) s.setAttribute('data-anim', 'anim-fade');
+                observer.observe(s);
+            });
+
+            // Footer small animation (restart on re-entry)
+            var footer = document.getElementById('page-footer');
+            if (footer) {
+                footer.setAttribute('data-anim', 'anim-zoom');
+                observer.observe(footer);
+            }
+
+            // Accessibility: respect prefers-reduced-motion
+            var mm = window.matchMedia('(prefers-reduced-motion: reduce)');
+            if (mm.matches) {
+                // stop observing if user wants reduced motion
+                observer.disconnect();
+                // make everything visible immediately
+                var all = document.querySelectorAll('[data-anim], .layer');
+                forEachNode(all, function (a) { a.style.opacity = 1; a.style.transform = 'none'; });
+            }
+        })();
+    </script>
+
+</body>
+
+</html>
