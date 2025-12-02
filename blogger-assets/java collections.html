@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Collections – Baby Steps Lesson</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fff7e6;
+            font-family: system-ui, sans-serif;
+            color: #3a2a1a;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fffaf0;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #f3c26b;
+            box-shadow: 0 0 12px rgba(243, 179, 58, 0.2);
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #8b5a00;
+            font-weight: 700;
+        }
+
+        pre {
+            background: #fff3d4;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #f3b23a;
+            overflow-x: auto;
+        }
+
+        code {
+            font-size: 15px;
+        }
+
+        .card {
+            background: #fff3db;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 1px solid #f7c97a;
+        }
+
+        .tip {
+            background: #fff1c2;
+            padding: 12px;
+            border-left: 4px solid #ff9900;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #f2c98c;
+            padding: 10px;
+        }
+
+        .table th {
+            background: #ffe7b8;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Java Collections – Baby Steps (JDK 1.8)</h1>
+        <p><b>Welcome to Programmer’s Picnic!</b>
+            In this lesson, we take slow, easy baby steps into one of the most important parts of Java: <b>The
+                Collections Framework</b>.</p>
+
+        <hr>
+
+        <h2>🌱 What Are Collections?</h2>
+        <p>A <b>Collection</b> in Java is simply an object that can store multiple values.
+            In real life, think of collections like:</p>
+        <ul>
+            <li>A bag (stores items)</li>
+            <li>A list of names</li>
+            <li>A rack of books</li>
+        </ul>
+
+        <div class="tip"><b>Baby Step Rule:</b> Arrays are fixed size. Collections grow and shrink automatically!</div>
+
+        <hr>
+
+        <h2>🌼 The Main Root Interfaces</h2>
+
+        <table class="table">
+            <tr>
+                <th>Interface</th>
+                <th>What it Represents</th>
+            </tr>
+            <tr>
+                <td><b>List</b></td>
+                <td>Ordered collection → allows duplicates (e.g., ArrayList)</td>
+            </tr>
+            <tr>
+                <td><b>Set</b></td>
+                <td>No duplicates allowed (e.g., HashSet)</td>
+            </tr>
+            <tr>
+                <td><b>Queue</td>
+                <td>First-in-first-out operations (e.g., LinkedList)</td>
+            </tr>
+            <tr>
+                <td><b>Map</b></td>
+                <td>Stores key-value pairs (e.g., HashMap)</td>
+            </tr>
+        </table>
+
+        <hr>
+
+        <h2>🌸 Baby Step 1 — Using <code>ArrayList</code></h2>
+
+        <p><b>ArrayList</b> is the most common Java collection.</p>
+
+        <pre><code>import java.util.*;
+
+public class Demo {
+    public static void main(String[] args) {
+        ArrayList&amp;lt;String&amp;gt; names = new ArrayList<>();
+
+        names.add("Ram");
+        names.add("Shyam");
+        names.add("Geeta");
+
+        System.out.println(names);
+    }
+}
+</code></pre>
+
+        <div class="tip">ArrayList keeps elements in the order you add them.</div>
+
+        <hr>
+
+        <h2>🌸 Baby Step 2 — Looping Through a List</h2>
+
+        <h3>Enhanced For-Loop</h3>
+
+        <pre><code>for (String n : names) {
+    System.out.println(n);
+}
+</code></pre>
+
+        <h3>Java 1.8 forEach + Lambda</h3>
+
+        <pre><code>names.forEach(n -&gt; System.out.println(n));
+</code></pre>
+
+        <hr>
+
+        <h2>🌻 Baby Step 3 — Using <code>HashSet</code></h2>
+        <p>A <b>Set</b> removes duplicates automatically.</p>
+
+        <pre><code>HashSet&amp;lt;Integer&amp;gt; set = new HashSet<>();
+
+set.add(10);
+set.add(20);
+set.add(10);
+
+System.out.println(set); // duplicate 10 removed
+</code></pre>
+
+        <div class="card"><b>Important:</b>
+            HashSet does NOT guarantee order.</div>
+
+        <hr>
+
+        <h2>🌷 Baby Step 4 — Using <code>HashMap</code></h2>
+
+        <p>A map stores <b>key → value</b> pairs.</p>
+
+        <pre><code>HashMap&amp;lt;String, Integer&amp;gt; marks = new HashMap<>();
+
+marks.put("Math", 95);
+marks.put("English", 88);
+
+System.out.println(marks.get("Math"));
+</code></pre>
+
+        <div class="tip">Keys must be unique. Values may repeat.</div>
+
+        <hr>
+
+        <h2>🌼 Baby Step 5 — Iterating a Map</h2>
+
+        <pre><code>for (Map.Entry&amp;lt;String, Integer&amp;gt; e : marks.entrySet()) {
+    System.out.println(e.getKey() + ": " + e.getValue());
+}
+</code></pre>
+
+        <h3>Java 8 forEach (Lambda)</h3>
+
+        <pre><code>marks.forEach((k, v) -&gt; 
+    System.out.println(k + " = " + v)
+);
+</code></pre>
+
+        <hr>
+
+        <h2>🍃 Baby Step 6 — When to Use What?</h2>
+
+        <table class="table">
+            <tr>
+                <th>Use This</th>
+                <th>When You Need</th>
+            </tr>
+            <tr>
+                <td><b>ArrayList</b></td>
+                <td>Order maintained, duplicates allowed</td>
+            </tr>
+            <tr>
+                <td><b>LinkedList</b></td>
+                <td>Fast insert/delete</td>
+            </tr>
+            <tr>
+                <td><b>HashSet</b></td>
+                <td>No duplicates</td>
+            </tr>
+            <tr>
+                <td><b>TreeSet</b></td>
+                <td>Sorted elements</td>
+            </tr>
+            <tr>
+                <td><b>HashMap</b></td>
+                <td>Key-value lookup</td>
+            </tr>
+            <tr>
+                <td><b>LinkedHashMap</b></td>
+                <td>Map + maintains insertion order</td>
+            </tr>
+        </table>
+
+        <hr>
+
+        <h2>🎯 Mini Quiz</h2>
+
+        <div class="card">
+            <b>1.</b> Which collection maintains order and allows duplicates?
+            <br>✔ ArrayList
+            <br><br>
+
+            <b>2.</b> Which collection removes duplicates?
+            <br>✔ HashSet
+            <br><br>
+
+            <b>3.</b> Which one stores key-value pairs?
+            <br>✔ HashMap
+        </div>
+
+        <hr>
+
+        <h2>🌟 Final Note</h2>
+        <p>Mastering collections is the biggest stepping stone before streams, lambdas, and functional programming in
+            Java 1.8.</p>
+
+        <p>Keep practicing — your foundation will become unshakeable.</p>
+
+    </div>
+</body>
+
+</html>
