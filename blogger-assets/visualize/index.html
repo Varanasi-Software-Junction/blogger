@@ -383,6 +383,17 @@
             opacity: 0.75;
         }
 
+        /* Division group boxes */
+        .div-group-box {
+            border: 1px dashed #f1c574;
+            border-radius: 8px;
+            padding: 2px 4px;
+            display: inline-flex;
+            gap: 2px;
+            margin-right: 4px;
+            background: #fffdf7;
+        }
+
         @media (max-width: 600px) {
             .controls {
                 flex-direction: column;
@@ -488,7 +499,7 @@
     <div class="wrapper">
         <header>
             <h1>🪨 Pebble Math Visualizer</h1>
-            <p>Visualizing arithmetic, factorials, permutations, combinations, and powers using pebbles.</p>
+            <p>Visualizing arithmetic, factorials, permutations, combinations, powers, and division using pebbles.</p>
         </header>
 
         <div class="card">
@@ -510,6 +521,7 @@
                 <button class="tab-btn active" data-tab="add"><span class="emoji">➕</span> Addition</button>
                 <button class="tab-btn" data-tab="sub"><span class="emoji">➖</span> Subtraction</button>
                 <button class="tab-btn" data-tab="mul"><span class="emoji">✖️</span> Multiplication</button>
+                <button class="tab-btn" data-tab="div"><span class="emoji">➗</span> Division &amp; Remainder</button>
                 <button class="tab-btn" data-tab="fact"><span class="emoji">!</span> Factorial</button>
                 <button class="tab-btn" data-tab="perm"><span class="emoji">🔀</span> Permutations</button>
                 <button class="tab-btn" data-tab="comb"><span class="emoji">🎯</span> Combinations</button>
@@ -567,7 +579,27 @@
                 <div class="visual-area" id="vis-mul"></div>
             </div>
 
-            <!-- FACTORIAL (collapsible stages, as we built earlier) -->
+            <!-- DIVISION & REMAINDER -->
+            <div class="tab-content" id="tab-div">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="div-a">a (total pebbles)</label>
+                        <input type="number" id="div-a" min="0" max="60" value="14" />
+                    </div>
+                    <div class="control-group">
+                        <label for="div-b">b (pebbles in each group)</label>
+                        <input type="number" id="div-b" min="0" max="20" value="3" />
+                    </div>
+                    <button class="btn-primary" id="btn-div">Visualize ÷</button>
+                </div>
+                <div class="hint">
+                    Division = making equal groups. a ÷ b = number of full groups (quotient) + leftover pebbles
+                    (remainder).
+                </div>
+                <div class="visual-area" id="vis-div"></div>
+            </div>
+
+            <!-- FACTORIAL -->
             <div class="tab-content" id="tab-fact">
                 <div class="controls">
                     <div class="control-group">
@@ -583,7 +615,7 @@
                 <div class="visual-area" id="vis-fact"></div>
             </div>
 
-            <!-- PERMUTATIONS – insertion method (non-collapsible) -->
+            <!-- PERMUTATIONS -->
             <div class="tab-content" id="tab-perm">
                 <div class="controls">
                     <div class="control-group">
@@ -599,7 +631,7 @@
                 <div class="visual-area" id="vis-perm"></div>
             </div>
 
-            <!-- COMBINATIONS – upgraded (C1) -->
+            <!-- COMBINATIONS -->
             <div class="tab-content" id="tab-comb">
                 <div class="controls">
                     <div class="control-group">
@@ -619,7 +651,7 @@
                 <div class="visual-area" id="vis-comb"></div>
             </div>
 
-            <!-- POWERS – upgraded (P1 + small tree T2) -->
+            <!-- POWERS -->
             <div class="tab-content" id="tab-pow">
                 <div class="controls">
                     <div class="control-group">
@@ -642,7 +674,12 @@
     </div>
 
     <script>
-        /* helpers */
+        /* global settings for combinations and powers */
+        const COMB_MAX_FULL_N = 7;
+        const COMB_MAX_SAMPLE = 10;
+        const POW_SEQ_LIMIT_FULL = 40;
+        const POW_SEQ_SAMPLE_LIMIT = 12;
+
         function factorial(n) {
             if (n < 0) return NaN;
             let res = 1;
@@ -716,6 +753,7 @@
             add: document.getElementById("tab-add"),
             sub: document.getElementById("tab-sub"),
             mul: document.getElementById("tab-mul"),
+            div: document.getElementById("tab-div"),
             fact: document.getElementById("tab-fact"),
             perm: document.getElementById("tab-perm"),
             comb: document.getElementById("tab-comb"),
@@ -831,7 +869,71 @@
             animatePebbles(container);
         });
 
-        /* Factorial – full stages with collapsible blocks (same as previous version) */
+        /* Division & Remainder */
+        document.getElementById("btn-div").addEventListener("click", () => {
+            const a = parseInt(document.getElementById("div-a").value, 10) || 0;
+            const b = parseInt(document.getElementById("div-b").value, 10) || 0;
+            const container = document.getElementById("vis-div");
+            clearNode(container);
+
+            const rowAll = createRow("all a pebbles");
+            for (let i = 1; i <= a; i++) {
+                rowAll.pile.appendChild(createPebble("", i));
+            }
+            container.appendChild(rowAll.row);
+
+            if (b === 0) {
+                const expl0 = document.createElement("div");
+                expl0.className = "explanation";
+                expl0.textContent =
+                    "Division by zero is undefined.\n" +
+                    "We can group pebbles only when each group has a non-zero size.";
+                container.appendChild(expl0);
+                animatePebbles(container);
+                return;
+            }
+
+            const q = Math.floor(a / b);
+            const r = a % b;
+
+            if (q > 0) {
+                const groupsRow = createRow("full groups");
+                for (let g = 0; g < q; g++) {
+                    const groupBox = document.createElement("div");
+                    groupBox.className = "div-group-box";
+                    for (let j = 0; j < b; j++) {
+                        const idx = g * b + j + 1;
+                        groupBox.appendChild(createPebble("", idx));
+                    }
+                    groupsRow.pile.appendChild(groupBox);
+                }
+                container.appendChild(groupsRow.row);
+            }
+
+            const qRow = createRow("quotient q");
+            for (let i = 0; i < q; i++) {
+                qRow.pile.appendChild(createPebble("pebble-result highlight", "Q"));
+            }
+            container.appendChild(qRow.row);
+
+            const rRow = createRow("remainder r");
+            for (let i = q * b + 1; i <= a; i++) {
+                rRow.pile.appendChild(createPebble("pebble-muted", i));
+            }
+            container.appendChild(rRow.row);
+
+            const expl = document.createElement("div");
+            expl.className = "explanation";
+            expl.textContent =
+                `${a} ÷ ${b} = ${q} remainder ${r}\n` +
+                `We make ${q} full groups of ${b} pebbles, and ${r} pebble(s) are left over.\n` +
+                `This matches the formula: ${a} = ${b} × ${q} + ${r}.`;
+            container.appendChild(expl);
+
+            animatePebbles(container);
+        });
+
+        /* Factorial – full stages with collapsible blocks */
         document.getElementById("btn-fact").addEventListener("click", () => {
             const nInput = parseInt(document.getElementById("fact-n").value, 10) || 0;
             const container = document.getElementById("vis-fact");
@@ -893,7 +995,6 @@
                     const togglePebble = createPebble("pebble-muted", "");
                     togglePebble.style.width = "16px";
                     togglePebble.style.height = "16px";
-                    togglePebble.classList.add("toggle-pebble");
 
                     const headerText = document.createElement("div");
                     headerText.className = "header-text";
@@ -972,7 +1073,7 @@
             animatePebbles(container);
         });
 
-        /* Permutations – insertion method (non-collapsible) */
+        /* Permutations – insertion method */
         document.getElementById("btn-perm").addEventListener("click", () => {
             const nInput = parseInt(document.getElementById("perm-n").value, 10) || 0;
             const container = document.getElementById("vis-perm");
@@ -1067,7 +1168,7 @@
             animatePebbles(container);
         });
 
-        /* Combinations – upgraded (C1: full list for small n) */
+        /* Combinations */
         document.getElementById("btn-comb").addEventListener("click", () => {
             const n = parseInt(document.getElementById("comb-n").value, 10) || 0;
             const k = parseInt(document.getElementById("comb-k").value, 10) || 0;
@@ -1103,9 +1204,6 @@
             listWrapper.className = "combo-list";
             container.appendChild(listWrapper);
 
-            /* generate all combinations when n ≤ 7, otherwise sample */
-            const maxFullN = 7;
-            const maxSample = 10;
             let combos = [];
 
             function backtrack(start, chosen) {
@@ -1123,18 +1221,17 @@
             if (k === 0) {
                 combos = [[]];
             } else if (k <= n) {
-                if (n <= maxFullN) {
+                if (n <= COMB_MAX_FULL_N) {
                     backtrack(1, []);
                 } else {
-                    /* for big n, generate but stop early after maxSample */
                     function backtrackLimited(start, chosen) {
-                        if (combos.length >= maxSample) return;
+                        if (combos.length >= COMB_MAX_SAMPLE) return;
                         if (chosen.length === k) {
                             combos.push(chosen.slice());
                             return;
                         }
                         for (let i = start; i <= n; i++) {
-                            if (combos.length >= maxSample) break;
+                            if (combos.length >= COMB_MAX_SAMPLE) break;
                             chosen.push(i);
                             backtrackLimited(i + 1, chosen);
                             chosen.pop();
@@ -1168,7 +1265,7 @@
                 listWrapper.appendChild(cRow);
             });
 
-            if (n > maxFullN) {
+            if (n > COMB_MAX_FULL_N) {
                 const dots = document.createElement("div");
                 dots.style.fontSize = "1.1rem";
                 dots.style.margin = "4px 0";
@@ -1180,15 +1277,15 @@
             expl.className = "explanation";
             expl.textContent =
                 `Total number of ways to choose ${k} from ${n} is C(${n}, ${k}) = ${cVal}.\n` +
-                (n <= maxFullN
+                (n <= COMB_MAX_FULL_N
                     ? "All combinations are shown above as gold groups."
-                    : `We show the first ${Math.min(maxSample, combos.length)} combinations above as examples.`);
+                    : `We show the first ${Math.min(COMB_MAX_SAMPLE, combos.length)} combinations above as examples.`);
             container.appendChild(expl);
 
             animatePebbles(container);
         });
 
-        /* Powers – upgraded (P1 + small tree T2) */
+        /* Powers */
         document.getElementById("btn-pow").addEventListener("click", () => {
             const a = parseInt(document.getElementById("pow-a").value, 10) || 0;
             const b = parseInt(document.getElementById("pow-b").value, 10) || 0;
@@ -1199,7 +1296,6 @@
 
             const total = Math.pow(a, b);
 
-            /* Position boxes with choices inside */
             const row = document.createElement("div");
             row.className = "row";
             const label = document.createElement("div");
@@ -1238,20 +1334,17 @@
             row.appendChild(positionsWrapper);
             container.appendChild(row);
 
-            /* Sequences listing */
             const seqTitle = document.createElement("div");
             seqTitle.style.fontWeight = "600";
             seqTitle.style.margin = "8px 0 4px";
             seqTitle.textContent = "Example sequences (each is one outcome):";
             container.appendChild(seqTitle);
 
-            const seqLimitFull = 40;
-            const seqSampleLimit = 12;
-            const showAll = total <= seqLimitFull;
-            const maxToShow = showAll ? total : seqSampleLimit;
-
             const seqWrapper = document.createElement("div");
             container.appendChild(seqWrapper);
+
+            const showAll = total <= POW_SEQ_LIMIT_FULL;
+            const maxToShow = showAll ? total : POW_SEQ_SAMPLE_LIMIT;
 
             if (b === 0) {
                 const seqRow = document.createElement("div");
@@ -1296,7 +1389,6 @@
                 }
 
                 if (a === 0) {
-                    // no choices at each step
                     const seqRow = document.createElement("div");
                     seqRow.className = "row";
                     const rLabel = document.createElement("div");
@@ -1309,7 +1401,7 @@
                 }
             }
 
-            if (!showAll && total > seqSampleLimit) {
+            if (!showAll && total > POW_SEQ_SAMPLE_LIMIT) {
                 const dots = document.createElement("div");
                 dots.style.fontSize = "1.1rem";
                 dots.style.margin = "4px 0";
@@ -1317,7 +1409,6 @@
                 container.appendChild(dots);
             }
 
-            /* Small tree for a ≤ 3 and b ≤ 3 */
             if (a > 0 && b > 0 && a <= 3 && b <= 3) {
                 const tree = document.createElement("div");
                 tree.className = "power-tree";
@@ -1330,7 +1421,6 @@
                 const levels = document.createElement("div");
                 levels.className = "power-tree-levels";
 
-                // Level 0 (root)
                 const level0 = document.createElement("div");
                 level0.className = "power-tree-level-row";
                 const l0Label = document.createElement("div");
@@ -1343,7 +1433,6 @@
                 level0.appendChild(l0Nodes);
                 levels.appendChild(level0);
 
-                // Level 1: first choices
                 const level1 = document.createElement("div");
                 level1.className = "power-tree-level-row";
                 const l1Label = document.createElement("div");
@@ -1418,9 +1507,9 @@
                 expl.textContent =
                     `At each of the ${b} positions, we have ${a} choices.\n` +
                     `Total sequences = a^b = ${a}^${b} = ${total}.\n\n` +
-                    (total <= 40
+                    (total <= POW_SEQ_LIMIT_FULL
                         ? "We listed all sequences above."
-                        : `We listed the first ${Math.min(seqSampleLimit, total)} sequences above as examples.`);
+                        : `We listed the first ${Math.min(POW_SEQ_SAMPLE_LIMIT, total)} sequences above as examples.`);
             }
 
             container.appendChild(expl);
@@ -1431,6 +1520,7 @@
         document.getElementById("btn-add").click();
         document.getElementById("btn-sub").click();
         document.getElementById("btn-mul").click();
+        document.getElementById("btn-div").click();
         document.getElementById("btn-fact").click();
         document.getElementById("btn-perm").click();
         document.getElementById("btn-comb").click();
