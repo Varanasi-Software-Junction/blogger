@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programmer's Picnic — Memories Gallery</title>
+    <title>Programmer's Picnic — Magical Memories Gallery</title>
 
     <style>
         body {
@@ -12,6 +12,7 @@
             padding: 0;
             background: #fff7e6;
             font-family: "Segoe UI", system-ui, sans-serif;
+            overflow-x: hidden;
         }
 
         /* Background of overlay */
@@ -20,48 +21,122 @@
                     #fff2d2,
                     #ffddaa,
                     #ffc577);
+            overflow: hidden;
         }
 
-        /* Floating heart particles */
-        .heart {
+        /* === SPARKLE SNOWFALL === */
+        .sparkle {
             position: absolute;
-            color: rgba(255, 80, 120, 0.45);
-            font-size: 24px;
-            animation: floatUp 4s ease-in infinite;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: sparkleFall 6s linear infinite;
             pointer-events: none;
         }
 
-        @keyframes floatUp {
-            from {
-                transform: translateY(20px) scale(0.8);
+        @keyframes sparkleFall {
+            0% {
+                transform: translateY(0px) scale(1);
                 opacity: 1;
             }
 
-            to {
-                transform: translateY(-90px) scale(1.2);
+            100% {
+                transform: translateY(120vh) scale(0.2);
                 opacity: 0;
             }
         }
 
-        /* Caption (ALT-TEXT) animations */
+        /* === Cinematic Glow Pulse === */
+        #glowCircle {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 180, 90, 0.5), transparent 70%);
+            border-radius: 50%;
+            animation: glowPulse 4s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* === POLAROID FRAME EFFECT === */
+        .polaroid {
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 35px 80px rgba(120, 60, 10, 0.5);
+            transform: rotate(-1deg);
+            animation: floatPolaroid 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatPolaroid {
+            0% {
+                transform: translateY(0px) rotate(-1deg);
+            }
+
+            100% {
+                transform: translateY(-12px) rotate(1deg);
+            }
+        }
+
+        /* === Light Rays === */
+        #lightRays {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: conic-gradient(from 0deg,
+                    rgba(255, 190, 80, 0.18),
+                    transparent,
+                    rgba(255, 190, 80, 0.15),
+                    transparent);
+            animation: rotateRays 25s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes rotateRays {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* === Caption (ALT text) === */
         .caption {
             position: absolute;
-            bottom: 12%;
+            bottom: 9%;
             width: 100%;
             text-align: center;
-            font-size: 32px;
+            font-size: 34px;
             font-weight: 600;
-            color: #6b3000;
+            color: #5a2600;
+            text-shadow: 0px 3px 16px rgba(255, 240, 200, 0.9);
             opacity: 0;
             animation: captionFade 2s ease forwards;
-            text-shadow: 0px 2px 10px rgba(255, 240, 210, 0.9);
-            font-family: "Trebuchet MS", sans-serif;
         }
 
         @keyframes captionFade {
             0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(24px);
             }
 
             60% {
@@ -74,13 +149,84 @@
             }
         }
 
-        /* 3D flip animations */
+        /* === QUOTE TEXT === */
+        #quoteBox {
+            position: absolute;
+            top: 12%;
+            width: 100%;
+            text-align: center;
+            font-size: 30px;
+            color: #7b3600;
+            opacity: 0;
+            text-shadow: 0px 4px 10px rgba(255, 230, 180, 0.8);
+            pointer-events: none;
+        }
+
+        @keyframes quoteFade {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            30% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            70% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+
+        /* === Curtain Reveal === */
+        #curtain {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(#ffe2b7, #ffc180);
+            transform: translateY(-100%);
+            animation: curtainReveal 1.2s ease forwards;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes curtainReveal {
+            0% {
+                transform: translateY(0%);
+            }
+
+            100% {
+                transform: translateY(-120%);
+            }
+        }
+
+        /* === Ken Burns Zoom === */
+        .kenburns {
+            animation: zoomSlide 8s ease forwards;
+        }
+
+        @keyframes zoomSlide {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.08);
+            }
+        }
+
+        /* 3D Flip Animations (unchanged) */
         .animX {
-            animation: flipX 1.4s ease forwards;
+            animation: flipX 1.2s ease forwards;
         }
 
         .animY {
-            animation: flipY 1.4s ease forwards;
+            animation: flipY 1.2s ease forwards;
         }
 
         @keyframes flipX {
@@ -115,19 +261,19 @@
             }
         }
 
-        /* Moving PROGRAMMER’S PICNIC banner */
+        /* Banner floating */
         #pp-banner {
             position: fixed;
             top: 10%;
             left: 10%;
             padding: 12px 26px;
-            font-size: 40px;
+            font-size: 44px;
             font-weight: bold;
             color: #5a2800;
             background: linear-gradient(90deg, #ffd79b, #ffbc62, #ffd79b);
             border-radius: 40px;
-            box-shadow: 0 0 20px rgba(255, 150, 50, 0.4);
-            animation: bannerMove 12s linear infinite alternate,
+            box-shadow: 0 0 30px rgba(255, 140, 40, 0.4);
+            animation: bannerMove 16s linear infinite alternate,
                 bannerGlow 3s ease-in-out infinite alternate;
             z-index: 1000000;
             pointer-events: none;
@@ -139,15 +285,15 @@
             }
 
             25% {
-                transform: translate(40vw, 5vh);
+                transform: translate(40vw, 3vh);
             }
 
             50% {
-                transform: translate(20vw, 20vh);
+                transform: translate(20vw, 18vh);
             }
 
             75% {
-                transform: translate(-10vw, 10vh);
+                transform: translate(-12vw, 12vh);
             }
 
             100% {
@@ -157,11 +303,11 @@
 
         @keyframes bannerGlow {
             0% {
-                box-shadow: 0 0 10px rgba(255, 120, 40, 0.3);
+                box-shadow: 0 0 12px rgba(255, 140, 40, 0.3);
             }
 
             100% {
-                box-shadow: 0 0 32px rgba(255, 120, 40, 0.7);
+                box-shadow: 0 0 40px rgba(255, 140, 40, 0.7);
             }
         }
     </style>
@@ -169,31 +315,31 @@
 
 <body>
 
-    <!-- Moving banner -->
-    <div id="pp-banner">Programmer’s Picnic 🌼</div>
+    <!-- Floating magical banner -->
+    <div id="pp-banner">Programmer’s Picnic ✨🌼</div>
 
-    <!-- IMAGES with alt text for captions -->
-    <img src="Picnic/0.jpg" alt="A beautiful Programmer's Picnic moment">
-    <img src="Picnic/1.jpg" alt="Friends learning together">
-    <img src="Picnic/2.jpg" alt="Smiling faces at the workshop">
-    <img src="Picnic/3.jpg" alt="Happy coding time">
-    <img src="Picnic/4.jpg" alt="Memories from the picnic">
-    <img src="Picnic/5.jpg" alt="Teamwork and laughter">
-    <img src="Picnic/6.jpg" alt="Joyful Programmer's Picnic">
-    <img src="Picnic/7.jpg" alt="Group photo — unforgettable day">
-    <img src="Picnic/8.jpg" alt="Another warm picnic moment">
-    <img src="Picnic/9.jpg" alt="Friends enjoying the event">
-    <img src="Picnic/10.jpg" alt="Captured happiness">
-    <img src="Picnic/11.jpg" alt="Warm and joyful picnic memory">
-    <img src="Picnic/12.jpg" alt="Energy and excitement!">
-    <img src="Picnic/13.jpg" alt="Smiling bright under the sky">
-    <img src="Picnic/14.jpg" alt="A perfect Programmer's Picnic">
-    <img src="Picnic/15.jpg" alt="Coding, fun, and sunshine">
-    <img src="Picnic/16.jpg" alt="Happy friends together">
-    <img src="Picnic/17.jpg" alt="Picnic fun continues">
-    <img src="Picnic/18.jpg" alt="Joyful gathering">
-    <img src="Picnic/19.jpg" alt="Warm moments captured">
-    <img src="Picnic/20.jpg" alt="A day to remember">
+    <!-- Your images with ALT captions -->
+    <img src="Picnic/0.jpg" alt="Cherished Programmer's Picnic memory">
+    <img src="Picnic/1.jpg" alt="Learning together with joy">
+    <img src="Picnic/2.jpg" alt="Smiles that light up the day">
+    <img src="Picnic/3.jpg" alt="A moment of pure friendship">
+    <img src="Picnic/4.jpg" alt="Warm sunshine and laughter">
+    <img src="Picnic/5.jpg" alt="Happy coding family">
+    <img src="Picnic/6.jpg" alt="Together we grow">
+    <img src="Picnic/7.jpg" alt="A day full of energy and love">
+    <img src="Picnic/8.jpg" alt="Priceless moments captured">
+    <img src="Picnic/9.jpg" alt="Together under the open sky">
+    <img src="Picnic/10.jpg" alt="Happiness shared is happiness doubled">
+    <img src="Picnic/11.jpg" alt="Golden memories of friendship">
+    <img src="Picnic/12.jpg" alt="When learning becomes joy">
+    <img src="Picnic/13.jpg" alt="Laughter all around">
+    <img src="Picnic/14.jpg" alt="So many stories in one picture">
+    <img src="Picnic/15.jpg" alt="Clouds, coding and companionship">
+    <img src="Picnic/16.jpg" alt="Bright smiles, bright minds">
+    <img src="Picnic/17.jpg" alt="Cherished forever">
+    <img src="Picnic/18.jpg" alt="Friends and sunshine">
+    <img src="Picnic/19.jpg" alt="Joyful hearts together">
+    <img src="Picnic/20.jpg" alt="Magical day to remember">
 
     <script>
         (function () {
@@ -201,7 +347,7 @@
             const imgs = Array.from(document.querySelectorAll("img"));
             if (!imgs.length) return;
 
-            /* === GALLERY OVERLAY === */
+            /* === Build magical overlay === */
             const overlay = document.createElement("div");
             overlay.id = "pp-gallery-overlay";
             overlay.style.cssText = `
@@ -211,105 +357,147 @@
         justify-content: center;
         align-items: center;
         z-index: 999999;
-        overflow: hidden;
     `;
 
-            /* Floating hearts */
-            setInterval(() => {
-                const h = document.createElement("div");
-                h.className = "heart";
-                h.innerHTML = "❤";
-                h.style.left = Math.random() * window.innerWidth + "px";
-                h.style.top = (window.innerHeight - 100) + "px";
-                overlay.appendChild(h);
-                setTimeout(() => h.remove(), 4000);
-            }, 1000);
+            /* Glow circle */
+            const glow = document.createElement("div");
+            glow.id = "glowCircle";
 
-            /* Main slide image */
+            /* Light rays */
+            const rays = document.createElement("div");
+            rays.id = "lightRays";
+
+            /* Polaroid wrapper */
+            const polaroid = document.createElement("div");
+            polaroid.className = "polaroid";
+
+            /* Slide image */
             const slideImg = document.createElement("img");
             slideImg.style.cssText = `
         max-width: 92%;
         max-height: 82%;
-        border-radius: 22px;
-        box-shadow: 0 30px 80px rgba(180, 90, 10, 0.35);
-        transition: opacity 0.5s ease;
+        border-radius: 18px;
         opacity: 0;
+        transition: opacity 1s;
     `;
 
-            /* Caption (ALT text) */
+            polaroid.appendChild(slideImg);
+
+            /* Caption */
             const caption = document.createElement("div");
             caption.className = "caption";
-            caption.innerText = "";
 
-            overlay.appendChild(slideImg);
+            /* Quote Box */
+            const quoteBox = document.createElement("div");
+            quoteBox.id = "quoteBox";
+
+            overlay.appendChild(rays);
+            overlay.appendChild(glow);
+            overlay.appendChild(polaroid);
             overlay.appendChild(caption);
+            overlay.appendChild(quoteBox);
 
-            /* Navigation */
-            function button(css) {
+            document.body.appendChild(overlay);
+
+            /* Floating sparkles generator */
+            setInterval(() => {
+                const s = document.createElement("div");
+                s.className = "sparkle";
+                s.style.left = Math.random() * innerWidth + "px";
+                s.style.top = -20 + "px";
+                overlay.appendChild(s);
+                setTimeout(() => s.remove(), 6000);
+            }, 200);
+
+            /* Magical quotes */
+            const quotes = [
+                "✨ Every smile tells a story.",
+                "🌼 Moments that stay forever.",
+                "💛 Together is the best place to be.",
+                "🌿 Joy grows when shared.",
+                "📸 One click, a thousand memories.",
+                "🌞 Warm hearts, bright minds.",
+                "💫 The magic of togetherness."
+            ];
+
+            function showRandomQuote() {
+                quoteBox.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteBox.style.animation = "none";
+                void quoteBox.offsetWidth;
+                quoteBox.style.animation = "quoteFade 5s ease";
+            }
+
+            /* Navigation buttons */
+            function btn(css) {
                 const b = document.createElement("div");
                 b.style.cssText = `
             ${css}
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 54px;
-            font-weight: bold;
+            font-size: 60px;
             color: white;
             cursor: pointer;
-            padding: 16px;
-            user-select: none;
+            padding: 20px;
             text-shadow: 0px 3px 10px rgba(0,0,0,0.4);
         `;
                 return b;
             }
 
-            const prevBtn = button("left: 30px;");
-            prevBtn.innerHTML = "❮";
-            const nextBtn = button("right: 30px;");
+            const nextBtn = btn("right: 30px;");
             nextBtn.innerHTML = "❯";
+
+            const prevBtn = btn("left: 30px;");
+            prevBtn.innerHTML = "❮";
 
             const closeBtn = document.createElement("div");
             closeBtn.innerHTML = "×";
             closeBtn.style.cssText = `
         position: absolute;
-        top: 25px;
-        right: 35px;
-        font-size: 70px;
+        top: 20px;
+        right: 30px;
+        font-size: 88px;
         color: white;
         cursor: pointer;
-        text-shadow: 0px 3px 10px rgba(0,0,0,0.4);
     `;
 
-            overlay.appendChild(prevBtn);
             overlay.appendChild(nextBtn);
+            overlay.appendChild(prevBtn);
             overlay.appendChild(closeBtn);
 
-            document.body.appendChild(overlay);
-
-            /* === LOGIC === */
             let currentIndex = 0;
-            let autoPlayInterval = null;
+            let autoPlay = null;
 
+            /* === MAGIC SLIDE SHOW FUNCTION === */
             function showSlide(i) {
                 if (i < 0) i = imgs.length - 1;
                 if (i >= imgs.length) i = 0;
                 currentIndex = i;
 
-                slideImg.classList.remove("animX", "animY");
                 slideImg.style.opacity = 0;
-
                 caption.style.opacity = 0;
+
+                /* Curtain reveal */
+                const curtain = document.createElement("div");
+                curtain.id = "curtain";
+                overlay.appendChild(curtain);
+                setTimeout(() => curtain.remove(), 1200);
 
                 setTimeout(() => {
                     slideImg.src = imgs[i].src;
+                    slideImg.classList.remove("kenburns", "animX", "animY");
+                    slideImg.classList.add("kenburns");
+                    slideImg.classList.add(Math.random() < 0.5 ? "animX" : "animY");
+
                     caption.innerText = imgs[i].alt || "";
                     caption.style.animation = "none";
                     void caption.offsetWidth;
-                    caption.style.animation = "captionFade 2s ease forwards";
+                    caption.style.animation = "captionFade 2s forwards";
+
+                    showRandomQuote();
 
                     slideImg.style.opacity = 1;
-                    slideImg.classList.add(Math.random() < 0.5 ? "animX" : "animY");
-                }, 120);
+                }, 300);
             }
 
             function openGallery(i) {
@@ -328,11 +516,11 @@
 
             function startAutoPlay() {
                 stopAutoPlay();
-                autoPlayInterval = setInterval(nextSlide, 5000);
+                autoPlay = setInterval(nextSlide, 6500);
             }
 
             function stopAutoPlay() {
-                if (autoPlayInterval) clearInterval(autoPlayInterval);
+                if (autoPlay) clearInterval(autoPlay);
             }
 
             imgs.forEach((img, i) => {
@@ -353,7 +541,7 @@
                 if (e.key === "Escape") closeGallery();
             });
 
-            /* Auto Start after 15 seconds */
+            /* Auto Start */
             setTimeout(() => {
                 if (overlay.style.display === "none") openGallery(0);
             }, 15000);
