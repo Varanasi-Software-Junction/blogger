@@ -1,998 +1,1441 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Pebble Math Visualizer – Insertion Permutations (Saffron)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>Pebble Math Visualizer – Saffron Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    :root {
-      --bg-light: #fff7e0;
-      --bg-card: #fffaf0;
-      --accent: #f4a623;
-      --accent-dark: #c87608;
-      --text-main: #3b2a1a;
+    <style>
+        :root {
+            --bg-light: #fff7e0;
+            --bg-card: #fffaf0;
+            --accent: #f4a623;
+            --accent-dark: #c87608;
+            --text-main: #3b2a1a;
 
-      --pebble-a: #f9d38b;       /* A pile / normal pebble */
-      --pebble-b: #ffad60;       /* B pile */
-      --pebble-result: #ffb347;  /* Result / selected */
-      --pebble-muted: #e0e0e0;   /* Slots / removed / not chosen */
-    }
+            --pebble-a: #f9d38b;
+            /* normal pebble */
+            --pebble-result: #ffb347;
+            /* highlighted / selected */
+            --pebble-muted: #e0e0e0;
+            /* slot / removed */
+        }
 
-    * {
-      box-sizing: border-box;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #ffe9b0 0%, #fff7e0 45%, #ffffff 100%);
-      color: var(--text-main);
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #ffe9b0 0%, #fff7e0 45%, #ffffff 100%);
+            color: var(--text-main);
+        }
 
-    .wrapper {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 16px 40px;
-    }
+        .wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
 
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-      animation: headerFade 0.8s ease-out;
-    }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: headerFade 0.8s ease-out;
+        }
 
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      letter-spacing: 0.03em;
-    }
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            letter-spacing: 0.03em;
+        }
 
-    header p {
-      margin: 8px 0 0;
-      font-size: 0.95rem;
-      opacity: 0.85;
-    }
+        header p {
+            margin: 8px 0 0;
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
 
-    .card {
-      background: var(--bg-card);
-      border-radius: 16px;
-      border: 1px solid #f6c76d;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-      padding: 16px;
-      animation: cardRise 0.6s ease-out;
-    }
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid #f6c76d;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            animation: cardRise 0.6s ease-out;
+        }
 
-    /* Tabs */
-    .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
-      justify-content: center;
-    }
+        /* Tabs */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: center;
+        }
 
-    .tab-btn {
-      border: 1px solid #f4c56e;
-      background: #fff4da;
-      border-radius: 999px;
-      padding: 6px 14px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-    }
+        .tab-btn {
+            border: 1px solid #f4c56e;
+            background: #fff4da;
+            border-radius: 999px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+        }
 
-    .tab-btn span.emoji {
-      font-size: 1rem;
-    }
+        .tab-btn span.emoji {
+            font-size: 1rem;
+        }
 
-    .tab-btn.active {
-      background: linear-gradient(135deg, #ffc857, #ff9f1c);
-      color: #3b240b;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-      transform: translateY(-1px);
-      font-weight: 600;
-    }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ffc857, #ff9f1c);
+            color: #3b240b;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+            transform: translateY(-1px);
+            font-weight: 600;
+        }
 
-    .tab-btn:hover {
-      transform: translateY(-1px);
-    }
+        .tab-btn:hover {
+            transform: translateY(-1px);
+        }
 
-    .tab-content {
-      display: none;
-      margin-top: 4px;
-      animation: tabFade 0.35s ease-out;
-    }
+        .tab-content {
+            display: none;
+            margin-top: 4px;
+            animation: tabFade 0.35s ease-out;
+        }
 
-    .tab-content.active {
-      display: block;
-    }
+        .tab-content.active {
+            display: block;
+        }
 
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: flex-end;
-      margin-bottom: 12px;
-      font-size: 0.9rem;
-    }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: flex-end;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
 
-    .control-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
 
-    .control-group label {
-      font-size: 0.8rem;
-      opacity: 0.85;
-    }
+        .control-group label {
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
 
-    .control-group input {
-      padding: 6px 8px;
-      border-radius: 8px;
-      border: 1px solid #e0b35e;
-      min-width: 80px;
-      font-size: 0.9rem;
-      transition: box-shadow 0.2s, border-color 0.2s, transform 0.1s;
-    }
+        .control-group input {
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: 1px solid #e0b35e;
+            min-width: 80px;
+            font-size: 0.9rem;
+            transition: box-shadow 0.2s, border-color 0.2s, transform 0.1s;
+        }
 
-    .control-group input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(244, 166, 35, 0.25);
-      transform: translateY(-1px);
-    }
+        .control-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(244, 166, 35, 0.25);
+            transform: translateY(-1px);
+        }
 
-    .btn-primary {
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-      color: white;
-      font-weight: 600;
-      font-size: 0.9rem;
-      box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2);
-      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
-    }
+        .btn-primary {
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2);
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+        }
 
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
 
-    .btn-primary:active {
-      transform: translateY(1px) scale(0.98);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
-    }
+        .btn-primary:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+        }
 
-    .hint {
-      font-size: 0.8rem;
-      opacity: 0.8;
-      margin-top: 4px;
-    }
+        .hint {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
 
-    .visual-area {
-      min-height: 180px;
-      border-radius: 12px;
-      border: 1px dashed #f1c574;
-      padding: 12px;
-      margin-top: 8px;
-      background: #fffdf7;
-      overflow-x: auto;
-      position: relative;
-    }
+        .visual-area {
+            min-height: 180px;
+            border-radius: 12px;
+            border: 1px dashed #f1c574;
+            padding: 12px;
+            margin-top: 8px;
+            background: #fffdf7;
+            overflow-x: auto;
+            position: relative;
+        }
 
-    .visual-area::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      border-radius: inherit;
-      box-shadow: 0 0 0 0 rgba(244, 166, 35, 0);
-      transition: box-shadow 0.3s ease-out;
-    }
+        .visual-area::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            box-shadow: 0 0 0 0 rgba(244, 166, 35, 0);
+            transition: box-shadow 0.3s ease-out;
+        }
 
-    .visual-area.visual-flash::before {
-      box-shadow: 0 0 0 6px rgba(244, 166, 35, 0.18);
-    }
+        .visual-area.visual-flash::before {
+            box-shadow: 0 0 0 6px rgba(244, 166, 35, 0.18);
+        }
 
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 8px;
-      align-items: center;
-    }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
 
-    .row-label {
-      font-size: 0.8rem;
-      opacity: 0.8;
-      margin-right: 6px;
-      min-width: 60px;
-    }
+        .row-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-right: 6px;
+            min-width: 60px;
+        }
 
-    .pile {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
+        .pile {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
 
-    .pebble {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--pebble-a); /* default */
-      border: 1px solid #c58a27;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-      transform-origin: center bottom;
-      transition: transform 0.15s ease-out;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.6rem;
-      font-weight: 600;
-      color: #5b3a10;
-    }
+        .pebble {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--pebble-a);
+            border: 1px solid #c58a27;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            transform-origin: center bottom;
+            transition: transform 0.15s ease-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #5b3a10;
+        }
 
-    .pebble-a {
-      background: var(--pebble-a);
-    }
+        .pebble-result {
+            background: var(--pebble-result);
+        }
 
-    .pebble-b {
-      background: var(--pebble-b);
-    }
+        .pebble-muted {
+            background: var(--pebble-muted);
+            border-color: #b0b0b0;
+            box-shadow: none;
+            color: #888;
+        }
 
-    .pebble-result {
-      background: var(--pebble-result);
-    }
+        .pebble:hover {
+            transform: translateY(-1px) scale(1.05);
+        }
 
-    .pebble-muted {
-      background: var(--pebble-muted);
-      border-color: #b0b0b0;
-      box-shadow: none;
-      color: #888;
-    }
+        .explanation {
+            margin-top: 6px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            border-top: 1px dashed #f1c574;
+            padding-top: 6px;
+            white-space: pre-line;
+            animation: textFade 0.4s ease-out;
+        }
 
-    .pebble:hover {
-      transform: translateY(-1px) scale(1.05);
-    }
+        .separator {
+            border-top: 1px dashed #f1c574;
+            margin: 4px 0;
+        }
 
-    .explanation {
-      margin-top: 6px;
-      font-size: 0.85rem;
-      line-height: 1.4;
-      border-top: 1px dashed #f1c574;
-      padding-top: 6px;
-      animation: textFade 0.4s ease-out;
-    }
+        /* Collapsible blocks for factorial stages */
+        .collapsible {
+            border: 1px dashed #f1c574;
+            border-radius: 8px;
+            padding: 6px 8px;
+            margin: 4px 0 6px;
+            background: #fffdf7;
+        }
 
-    @media (max-width: 600px) {
-      .controls {
-        flex-direction: column;
-        align-items: stretch;
-      }
+        .collapsible-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
 
-      .control-group input {
-        width: 100%;
-      }
-    }
+        .collapsible-header .header-text {
+            font-weight: 600;
+        }
 
-    /* === Animations === */
+        .collapsible-content {
+            margin-top: 4px;
+            display: none;
+        }
 
-    @keyframes popPebble {
-      0% {
-        transform: scale(0.2) translateY(10px);
-        opacity: 0;
-      }
-      60% {
-        transform: scale(1.08) translateY(0);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
+        .mini-pile {
+            display: inline-flex;
+            gap: 4px;
+            align-items: center;
+        }
 
-    @keyframes pulseHighlight {
-      0% {
-        box-shadow: 0 0 0 0 rgba(244, 166, 35, 0.5);
-      }
-      70% {
-        box-shadow: 0 0 0 10px rgba(244, 166, 35, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(244, 166, 35, 0);
-      }
-    }
+        /* Combinations list wrapper */
+        .combo-list {
+            margin-top: 6px;
+        }
 
-    @keyframes headerFade {
-      0% {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .combo-row {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 4px;
+            align-items: center;
+        }
 
-    @keyframes cardRise {
-      0% {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .combo-index {
+            font-size: 0.75rem;
+            opacity: 0.75;
+            min-width: 26px;
+            text-align: right;
+        }
 
-    @keyframes tabFade {
-      0% {
-        opacity: 0;
-        transform: translateY(4px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        /* Powers tree */
+        .power-tree {
+            margin-top: 6px;
+            border-radius: 8px;
+            border: 1px dashed #f1c574;
+            padding: 6px;
+            background: #fffdf7;
+        }
 
-    @keyframes textFade {
-      0% {
-        opacity: 0;
-        transform: translateY(4px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .power-tree-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
 
-    .animate-pop {
-      animation: popPebble 0.35s ease-out forwards;
-    }
+        .power-tree-levels {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.8rem;
+        }
 
-    .animate-pulse-once {
-      animation: pulseHighlight 0.7s ease-out 1;
-    }
+        .power-tree-level-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
 
-    .pebble.highlight {
-      /* highlight uses animation only */
-    }
-  </style>
+        .power-tree-label {
+            min-width: 52px;
+            opacity: 0.75;
+        }
+
+        .power-tree-nodes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .power-tree-columns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .power-tree-column {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+            min-width: 50px;
+        }
+
+        .power-tree-column-label {
+            font-size: 0.75rem;
+            opacity: 0.75;
+        }
+
+        @media (max-width: 600px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .control-group input {
+                width: 100%;
+            }
+        }
+
+        /* Animations */
+        @keyframes popPebble {
+            0% {
+                transform: scale(0.2) translateY(10px);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.08) translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulseHighlight {
+            0% {
+                box-shadow: 0 0 0 0 rgba(244, 166, 35, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(244, 166, 35, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(244, 166, 35, 0);
+            }
+        }
+
+        @keyframes headerFade {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardRise {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes tabFade {
+            0% {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes textFade {
+            0% {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-pop {
+            animation: popPebble 0.35s ease-out forwards;
+        }
+
+        .animate-pulse-once {
+            animation: pulseHighlight 0.7s ease-out 1;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="wrapper">
-    <header>
-      <h1>🪨 Pebble Math Visualizer</h1>
-      <p>See addition, subtraction, multiplication, factorial, permutations, combinations, and powers as pebbles.</p>
-    </header>
+    <div class="wrapper">
+        <header>
+            <h1>🪨 Pebble Math Visualizer</h1>
+            <p>Visualizing arithmetic, factorials, permutations, combinations, and powers using pebbles.</p>
+        </header>
 
-    <div class="card">
-      <!-- Legend -->
-      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:12px;font-size:0.8rem;">
-        <span style="display:inline-flex;align-items:center;gap:4px;">
-          <span class="pebble pebble-a" style="width:14px;height:14px;">&nbsp;</span> normal pebble
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:4px;">
-          <span class="pebble pebble-result" style="width:14px;height:14px;">&nbsp;</span> new / highlighted
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:4px;">
-          <span class="pebble pebble-muted" style="width:14px;height:14px;">&nbsp;</span> empty slot / removed
-        </span>
-      </div>
+        <div class="card">
+            <!-- Legend -->
+            <div
+                style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:12px;font-size:0.8rem;">
+                <span style="display:inline-flex;align-items:center;gap:4px;">
+                    <span class="pebble" style="width:14px;height:14px;"></span> normal pebble
+                </span>
+                <span style="display:inline-flex;align-items:center;gap:4px;">
+                    <span class="pebble pebble-result" style="width:14px;height:14px;"></span> highlighted / selected
+                </span>
+                <span style="display:inline-flex;align-items:center;gap:4px;">
+                    <span class="pebble pebble-muted" style="width:14px;height:14px;"></span> empty slot / removed
+                </span>
+            </div>
 
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="add">
-          <span class="emoji">➕</span> Addition
-        </button>
-        <button class="tab-btn" data-tab="sub">
-          <span class="emoji">➖</span> Subtraction
-        </button>
-        <button class="tab-btn" data-tab="mul">
-          <span class="emoji">✖️</span> Multiplication
-        </button>
-        <button class="tab-btn" data-tab="fact">
-          <span class="emoji">!</span> Factorial
-        </button>
-        <button class="tab-btn" data-tab="perm">
-          <span class="emoji">🔀</span> Permutations (Insertion)
-        </button>
-        <button class="tab-btn" data-tab="comb">
-          <span class="emoji">🎯</span> Combinations
-        </button>
-        <button class="tab-btn" data-tab="pow">
-          <span class="emoji">🌿</span> Powers
-        </button>
-      </div>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="add"><span class="emoji">➕</span> Addition</button>
+                <button class="tab-btn" data-tab="sub"><span class="emoji">➖</span> Subtraction</button>
+                <button class="tab-btn" data-tab="mul"><span class="emoji">✖️</span> Multiplication</button>
+                <button class="tab-btn" data-tab="fact"><span class="emoji">!</span> Factorial</button>
+                <button class="tab-btn" data-tab="perm"><span class="emoji">🔀</span> Permutations</button>
+                <button class="tab-btn" data-tab="comb"><span class="emoji">🎯</span> Combinations</button>
+                <button class="tab-btn" data-tab="pow"><span class="emoji">🌿</span> Powers</button>
+            </div>
 
-      <!-- ADDITION -->
-      <div class="tab-content active" id="tab-add">
-        <div class="controls">
-          <div class="control-group">
-            <label for="add-a">a (first pile)</label>
-            <input type="number" id="add-a" min="0" max="30" value="3" />
-          </div>
-          <div class="control-group">
-            <label for="add-b">b (second pile)</label>
-            <input type="number" id="add-b" min="0" max="30" value="4" />
-          </div>
-          <button class="btn-primary" id="btn-add">Visualize ➕</button>
+            <!-- ADDITION -->
+            <div class="tab-content active" id="tab-add">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="add-a">a (first pile)</label>
+                        <input type="number" id="add-a" min="0" max="30" value="3" />
+                    </div>
+                    <div class="control-group">
+                        <label for="add-b">b (second pile)</label>
+                        <input type="number" id="add-b" min="0" max="30" value="4" />
+                    </div>
+                    <button class="btn-primary" id="btn-add">Visualize ➕</button>
+                </div>
+                <div class="hint">Addition = putting two piles together.</div>
+                <div class="visual-area" id="vis-add"></div>
+            </div>
+
+            <!-- SUBTRACTION -->
+            <div class="tab-content" id="tab-sub">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="sub-a">a (starting pile)</label>
+                        <input type="number" id="sub-a" min="0" max="30" value="7" />
+                    </div>
+                    <div class="control-group">
+                        <label for="sub-b">b (remove this many)</label>
+                        <input type="number" id="sub-b" min="0" max="30" value="3" />
+                    </div>
+                    <button class="btn-primary" id="btn-sub">Visualize ➖</button>
+                </div>
+                <div class="hint">Subtraction = start with a pile of a and grey out b removed pebbles.</div>
+                <div class="visual-area" id="vis-sub"></div>
+            </div>
+
+            <!-- MULTIPLICATION -->
+            <div class="tab-content" id="tab-mul">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="mul-a">a (pebbles per row)</label>
+                        <input type="number" id="mul-a" min="0" max="15" value="4" />
+                    </div>
+                    <div class="control-group">
+                        <label for="mul-b">b (number of rows)</label>
+                        <input type="number" id="mul-b" min="0" max="15" value="3" />
+                    </div>
+                    <button class="btn-primary" id="btn-mul">Visualize ✖️</button>
+                </div>
+                <div class="hint">Multiplication a × b = b rows of a pebbles.</div>
+                <div class="visual-area" id="vis-mul"></div>
+            </div>
+
+            <!-- FACTORIAL (collapsible stages, as we built earlier) -->
+            <div class="tab-content" id="tab-fact">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="fact-n">n (distinct pebbles)</label>
+                        <input type="number" id="fact-n" min="0" max="8" value="4" />
+                    </div>
+                    <button class="btn-primary" id="btn-fact">Build factorial stages</button>
+                </div>
+                <div class="hint">
+                    k! = number of ways to order k distinct pebbles. We build 1!, 2!, 3!, 4! step-by-step by inserting
+                    the new pebble into all slots.
+                </div>
+                <div class="visual-area" id="vis-fact"></div>
+            </div>
+
+            <!-- PERMUTATIONS – insertion method (non-collapsible) -->
+            <div class="tab-content" id="tab-perm">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="perm-n">n (distinct pebbles)</label>
+                        <input type="number" id="perm-n" min="0" max="8" value="3" />
+                    </div>
+                    <button class="btn-primary" id="btn-perm">Show permutations via insertion</button>
+                </div>
+                <div class="hint">
+                    At stage k, insert pebble k into every slot of the (k−1)! permutations. For n ≤ 4 we can show all
+                    permutations.
+                </div>
+                <div class="visual-area" id="vis-perm"></div>
+            </div>
+
+            <!-- COMBINATIONS – upgraded (C1) -->
+            <div class="tab-content" id="tab-comb">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="comb-n">n (total pebbles)</label>
+                        <input type="number" id="comb-n" min="0" max="15" value="5" />
+                    </div>
+                    <div class="control-group">
+                        <label for="comb-k">k (selected pebbles)</label>
+                        <input type="number" id="comb-k" min="0" max="15" value="3" />
+                    </div>
+                    <button class="btn-primary" id="btn-comb">Visualize C(n, k)</button>
+                </div>
+                <div class="hint">
+                    Combinations = choose k pebbles out of n. We list all combinations for small n (n ≤ 7), each as a
+                    row of gold pebbles.
+                </div>
+                <div class="visual-area" id="vis-comb"></div>
+            </div>
+
+            <!-- POWERS – upgraded (P1 + small tree T2) -->
+            <div class="tab-content" id="tab-pow">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="pow-a">a (choices each step)</label>
+                        <input type="number" id="pow-a" min="0" max="8" value="3" />
+                    </div>
+                    <div class="control-group">
+                        <label for="pow-b">b (steps / positions)</label>
+                        <input type="number" id="pow-b" min="0" max="8" value="2" />
+                    </div>
+                    <button class="btn-primary" id="btn-pow">Visualize a^b</button>
+                </div>
+                <div class="hint">
+                    a^b = number of length-b sequences where each step has a choices. We show position boxes, example
+                    sequences, and a small tree when a ≤ 3 and b ≤ 3.
+                </div>
+                <div class="visual-area" id="vis-pow"></div>
+            </div>
         </div>
-        <div class="hint">Addition = putting the two piles together.</div>
-        <div class="visual-area" id="vis-add"></div>
-      </div>
-
-      <!-- SUBTRACTION -->
-      <div class="tab-content" id="tab-sub">
-        <div class="controls">
-          <div class="control-group">
-            <label for="sub-a">a (starting pile)</label>
-            <input type="number" id="sub-a" min="0" max="30" value="7" />
-          </div>
-          <div class="control-group">
-            <label for="sub-b">b (remove this many)</label>
-            <input type="number" id="sub-b" min="0" max="30" value="3" />
-          </div>
-          <button class="btn-primary" id="btn-sub">Visualize ➖</button>
-        </div>
-        <div class="hint">Subtraction = start with a pile of a and grey out b removed pebbles.</div>
-        <div class="visual-area" id="vis-sub"></div>
-      </div>
-
-      <!-- MULTIPLICATION -->
-      <div class="tab-content" id="tab-mul">
-        <div class="controls">
-          <div class="control-group">
-            <label for="mul-a">a (pebbles per row)</label>
-            <input type="number" id="mul-a" min="0" max="15" value="4" />
-          </div>
-          <div class="control-group">
-            <label for="mul-b">b (number of rows)</label>
-            <input type="number" id="mul-b" min="0" max="15" value="3" />
-          </div>
-          <button class="btn-primary" id="btn-mul">Visualize ✖️</button>
-        </div>
-        <div class="hint">Multiplication a × b = b rows of a pebbles.</div>
-        <div class="visual-area" id="vis-mul"></div>
-      </div>
-
-      <!-- FACTORIAL -->
-      <div class="tab-content" id="tab-fact">
-        <div class="controls">
-          <div class="control-group">
-            <label for="fact-n">n (distinct pebbles)</label>
-            <input type="number" id="fact-n" min="0" max="8" value="4" />
-          </div>
-          <button class="btn-primary" id="btn-fact">Visualize n!</button>
-        </div>
-        <div class="hint">Factorial n! = n × (n − 1) × … × 1 → number of permutations of n distinct pebbles.</div>
-        <div class="visual-area" id="vis-fact"></div>
-      </div>
-
-      <!-- PERMUTATIONS (INSERTION METHOD) -->
-      <div class="tab-content" id="tab-perm">
-        <div class="controls">
-          <div class="control-group">
-            <label for="perm-n">n (distinct pebbles)</label>
-            <input type="number" id="perm-n" min="0" max="8" value="4" />
-          </div>
-          <button class="btn-primary" id="btn-perm">Build permutations step-by-step</button>
-        </div>
-        <div class="hint">
-          We build permutations by inserting the new pebble into all possible slots.
-          For n ≤ 4 we show all stages. For n &gt; 4 we show stages up to 4, then explain n!.
-        </div>
-        <div class="visual-area" id="vis-perm"></div>
-      </div>
-
-      <!-- COMBINATIONS -->
-      <div class="tab-content" id="tab-comb">
-        <div class="controls">
-          <div class="control-group">
-            <label for="comb-n">n (total pebbles)</label>
-            <input type="number" id="comb-n" min="0" max="15" value="5" />
-          </div>
-          <div class="control-group">
-            <label for="comb-k">k (selected pebbles)</label>
-            <input type="number" id="comb-k" min="0" max="15" value="3" />
-          </div>
-          <button class="btn-primary" id="btn-comb">Visualize C(n, k)</button>
-        </div>
-        <div class="hint">Combinations = choose k pebbles out of n (order doesn’t matter).</div>
-        <div class="visual-area" id="vis-comb"></div>
-      </div>
-
-      <!-- POWERS -->
-      <div class="tab-content" id="tab-pow">
-        <div class="controls">
-          <div class="control-group">
-            <label for="pow-a">a (choices each time)</label>
-            <input type="number" id="pow-a" min="0" max="8" value="3" />
-          </div>
-          <div class="control-group">
-            <label for="pow-b">b (steps / positions)</label>
-            <input type="number" id="pow-b" min="0" max="8" value="2" />
-          </div>
-          <button class="btn-primary" id="btn-pow">Visualize a^b</button>
-        </div>
-        <div class="hint">a^b = ways to pick 1 of a options at each of b positions.</div>
-        <div class="visual-area" id="vis-pow"></div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    // helpers
-    function factorial(n) {
-      if (n < 0) return NaN;
-      let res = 1;
-      for (let i = 2; i <= n; i++) res *= i;
-      return res;
-    }
-
-    function combinations(n, k) {
-      if (k < 0 || n < 0 || k > n) return 0;
-      k = Math.min(k, n - k);
-      let num = 1;
-      let den = 1;
-      for (let i = 1; i <= k; i++) {
-        num *= n - (k - i);
-        den *= i;
-      }
-      return num / den;
-    }
-
-    function clearNode(node) {
-      while (node.firstChild) node.removeChild(node.firstChild);
-    }
-
-    function createPebble(className, labelText) {
-      const p = document.createElement("div");
-      p.className = "pebble" + (className ? " " + className : "");
-      if (labelText !== undefined && labelText !== null) {
-        p.textContent = labelText;
-      } else {
-        p.textContent = "";
-      }
-      return p;
-    }
-
-    function createRow(labelText) {
-      const row = document.createElement("div");
-      row.className = "row";
-
-      if (labelText !== undefined && labelText !== null && labelText !== "") {
-        const label = document.createElement("div");
-        label.className = "row-label";
-        label.textContent = labelText;
-        row.appendChild(label);
-      }
-
-      const pile = document.createElement("div");
-      pile.className = "pile";
-      row.appendChild(pile);
-
-      return { row, pile };
-    }
-
-    // animate pebbles
-    function animatePebbles(container) {
-      container.classList.remove("visual-flash");
-      void container.offsetWidth;
-      container.classList.add("visual-flash");
-      setTimeout(() => container.classList.remove("visual-flash"), 300);
-
-      const pebbles = container.querySelectorAll(".pebble");
-      pebbles.forEach((p, i) => {
-        p.classList.remove("animate-pop");
-        p.classList.remove("animate-pulse-once");
-        void p.offsetWidth;
-        p.style.animationDelay = (i * 30) + "ms";
-        p.classList.add("animate-pop");
-
-        if (p.classList.contains("highlight")) {
-          p.classList.add("animate-pulse-once");
-          p.addEventListener(
-            "animationend",
-            () => p.classList.remove("animate-pulse-once"),
-            { once: true }
-          );
+    <script>
+        /* helpers */
+        function factorial(n) {
+            if (n < 0) return NaN;
+            let res = 1;
+            for (let i = 2; i <= n; i++) res *= i;
+            return res;
         }
-      });
-    }
 
-    // TABS
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const tabContents = {
-      add: document.getElementById("tab-add"),
-      sub: document.getElementById("tab-sub"),
-      mul: document.getElementById("tab-mul"),
-      fact: document.getElementById("tab-fact"),
-      perm: document.getElementById("tab-perm"),
-      comb: document.getElementById("tab-comb"),
-      pow: document.getElementById("tab-pow"),
-    };
-
-    tabButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const target = btn.getAttribute("data-tab");
-        tabButtons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        Object.keys(tabContents).forEach((key) => {
-          tabContents[key].classList.toggle("active", key === target);
-        });
-      });
-    });
-
-    // ADDITION
-    document.getElementById("btn-add").addEventListener("click", () => {
-      const a = parseInt(document.getElementById("add-a").value, 10) || 0;
-      const b = parseInt(document.getElementById("add-b").value, 10) || 0;
-      const container = document.getElementById("vis-add");
-      clearNode(container);
-
-      const rowA = createRow("a pile");
-      for (let i = 0; i < a; i++) {
-        rowA.pile.appendChild(createPebble("pebble-a", "A"));
-      }
-
-      const rowB = createRow("b pile");
-      for (let i = 0; i < b; i++) {
-        rowB.pile.appendChild(createPebble("pebble-b", "B"));
-      }
-
-      const rowTotal = createRow("a + b");
-      for (let i = 0; i < a + b; i++) {
-        if (i < a) {
-          rowTotal.pile.appendChild(createPebble("pebble-a highlight", "A"));
-        } else {
-          rowTotal.pile.appendChild(createPebble("pebble-b highlight", "B"));
+        function combinationsCount(n, k) {
+            if (k < 0 || n < 0 || k > n) return 0;
+            k = Math.min(k, n - k);
+            let num = 1, den = 1;
+            for (let i = 1; i <= k; i++) {
+                num *= n - (k - i);
+                den *= i;
+            }
+            return num / den;
         }
-      }
 
-      container.appendChild(rowA.row);
-      container.appendChild(rowB.row);
-
-      const separator = document.createElement("div");
-      separator.style.borderTop = "1px dashed #f1c574";
-      separator.style.margin = "4px 0";
-      container.appendChild(separator);
-
-      container.appendChild(rowTotal.row);
-
-      const expl = document.createElement("div");
-      expl.className = "explanation";
-      expl.textContent = `We join the two piles: ${a} (A) + ${b} (B) = ${a + b} pebbles.`;
-      container.appendChild(expl);
-
-      animatePebbles(container);
-    });
-
-    // SUBTRACTION
-    document.getElementById("btn-sub").addEventListener("click", () => {
-      const a = parseInt(document.getElementById("sub-a").value, 10) || 0;
-      const b = parseInt(document.getElementById("sub-b").value, 10) || 0;
-      const container = document.getElementById("vis-sub");
-      clearNode(container);
-
-      const startRow = createRow("start (a)");
-      for (let i = 0; i < a; i++) {
-        startRow.pile.appendChild(createPebble("pebble-a", "A"));
-      }
-
-      const afterRow = createRow("after removing b");
-      const remaining = Math.max(a - b, 0);
-      for (let i = 0; i < a; i++) {
-        if (i < remaining) {
-          afterRow.pile.appendChild(createPebble("pebble-a highlight", "A"));
-        } else {
-          afterRow.pile.appendChild(createPebble("pebble-muted", ""));
+        function clearNode(node) {
+            while (node.firstChild) node.removeChild(node.firstChild);
         }
-      }
 
-      container.appendChild(startRow.row);
-      container.appendChild(afterRow.row);
-
-      const expl = document.createElement("div");
-      expl.className = "explanation";
-      if (b <= a) {
-        expl.textContent = `We remove ${b} pebbles from a pile of ${a}. Remaining pebbles: ${a} − ${b} = ${a - b}.`;
-      } else {
-        expl.textContent = `We tried to remove ${b} from ${a}. Visually only ${a} exist, but in arithmetic this is ${a} − ${b} = ${a - b}.`;
-      }
-      container.appendChild(expl);
-
-      animatePebbles(container);
-    });
-
-    // MULTIPLICATION
-    document.getElementById("btn-mul").addEventListener("click", () => {
-      const a = parseInt(document.getElementById("mul-a").value, 10) || 0;
-      const b = parseInt(document.getElementById("mul-b").value, 10) || 0;
-      const container = document.getElementById("vis-mul");
-      clearNode(container);
-
-      const gridWrapper = document.createElement("div");
-      const grid = document.createElement("div");
-      gridWrapper.appendChild(grid);
-
-      for (let rowIndex = 0; rowIndex < b; rowIndex++) {
-        const row = createRow("");
-        for (let colIndex = 0; colIndex < a; colIndex++) {
-          row.pile.appendChild(createPebble("pebble-a", ""));
+        function createPebble(className, labelText) {
+            const p = document.createElement("div");
+            p.className = "pebble" + (className ? " " + className : "");
+            p.textContent = labelText ?? "";
+            return p;
         }
-        container.appendChild(row.row);
-      }
 
-      const expl = document.createElement("div");
-      expl.className = "explanation";
-      expl.textContent = `We create ${b} rows of ${a} pebbles each. Total pebbles = a × b = ${a} × ${b} = ${a * b}.`;
-      container.appendChild(expl);
+        function createRow(labelText) {
+            const row = document.createElement("div");
+            row.className = "row";
 
-      animatePebbles(container);
-    });
+            if (labelText !== undefined && labelText !== null && labelText !== "") {
+                const label = document.createElement("div");
+                label.className = "row-label";
+                label.textContent = labelText;
+                row.appendChild(label);
+            }
 
-    // FACTORIAL
-    document.getElementById("btn-fact").addEventListener("click", () => {
-      const n = parseInt(document.getElementById("fact-n").value, 10) || 0;
-      const container = document.getElementById("vis-fact");
-      clearNode(container);
+            const pile = document.createElement("div");
+            pile.className = "pile";
+            row.appendChild(pile);
+            return { row, pile };
+        }
 
-      const baseRow = createRow("n pebbles");
-      for (let i = 0; i < n; i++) {
-        baseRow.pile.appendChild(createPebble("pebble-a highlight", i + 1));
-      }
-      container.appendChild(baseRow.row);
+        function animatePebbles(container) {
+            container.classList.remove("visual-flash");
+            void container.offsetWidth;
+            container.classList.add("visual-flash");
+            setTimeout(() => container.classList.remove("visual-flash"), 300);
 
-      const factVal = factorial(n);
-      const expl = document.createElement("div");
-      expl.className = "explanation";
-
-      if (n === 0) {
-        expl.textContent = "0! = 1 → exactly one way to arrange nothing.";
-      } else {
-        const parts = [];
-        for (let i = n; i >= 1; i--) parts.push(i);
-        expl.textContent =
-          `${n}! = ${parts.join(" × ")} = ${factVal}. This is also the number of different orders (permutations) of these ${n} pebbles.`;
-      }
-
-      container.appendChild(expl);
-      animatePebbles(container);
-    });
-
-    // PERMUTATIONS – INSERTION METHOD (your visualization)
-    document.getElementById("btn-perm").addEventListener("click", () => {
-      const nInput = parseInt(document.getElementById("perm-n").value, 10) || 0;
-      const container = document.getElementById("vis-perm");
-      clearNode(container);
-
-      if (nInput < 0) return;
-
-      const n = Math.max(0, nInput);
-      const maxStage = Math.min(n, 4);  // show full stages only up to 4
-
-      const title = document.createElement("div");
-      title.style.marginBottom = "6px";
-      title.style.fontWeight = "600";
-      title.textContent = "Build permutations by inserting the new pebble into all slots:";
-      container.appendChild(title);
-
-      if (n === 0) {
-        const expl0 = document.createElement("div");
-        expl0.className = "explanation";
-        expl0.textContent = "For n = 0, there is exactly one permutation: the empty arrangement. So 0! = 1.";
-        container.appendChild(expl0);
-        animatePebbles(container);
-        return;
-      }
-
-      // Stage 1 – start with [1]
-      let stagePerms = [[1]];
-
-      // Show Stage 1
-      const stage1Title = document.createElement("div");
-      stage1Title.style.margin = "4px 0";
-      stage1Title.style.fontWeight = "600";
-      stage1Title.textContent = "Stage 1: permutations of {1}";
-      container.appendChild(stage1Title);
-
-      const st1Row = createRow("");
-      st1Row.pile.appendChild(createPebble("pebble-a highlight", 1));
-      container.appendChild(st1Row.row);
-
-      // Build further stages up to maxStage
-      for (let k = 2; k <= maxStage; k++) {
-        const stageTitle = document.createElement("div");
-        stageTitle.style.margin = "8px 0 4px";
-        stageTitle.style.fontWeight = "600";
-        stageTitle.textContent = `Stage ${k}: insert pebble ${k} into permutations of {1…${k - 1}}`;
-        container.appendChild(stageTitle);
-
-        const newPerms = [];
-
-        stagePerms.forEach((perm, idx) => {
-          // Show current permutation (from previous stage)
-          const prevRow = createRow(`from #${idx + 1}`);
-          perm.forEach(v => {
-            prevRow.pile.appendChild(createPebble("pebble-a", v));
-          });
-          container.appendChild(prevRow.row);
-
-          // Show slots: S3 style – grey pebbles (muted) around and between
-          const slotRow = createRow("slots");
-          // first slot
-          slotRow.pile.appendChild(createPebble("pebble-muted", ""));
-          for (let i = 0; i < perm.length; i++) {
-            slotRow.pile.appendChild(createPebble("pebble-a", perm[i]));
-            slotRow.pile.appendChild(createPebble("pebble-muted", ""));
-          }
-          container.appendChild(slotRow.row);
-
-          // Now show all insertions of k into each slot
-          for (let pos = 0; pos <= perm.length; pos++) {
-            const newArr = perm.slice(0, pos).concat([k], perm.slice(pos));
-            newPerms.push(newArr);
-
-            const insRow = createRow("");
-            newArr.forEach(v => {
-              const cls = (v === k) ? "pebble-result highlight" : "pebble-a";
-              insRow.pile.appendChild(createPebble(cls, v));
+            const pebbles = container.querySelectorAll(".pebble");
+            pebbles.forEach((p, i) => {
+                p.classList.remove("animate-pop", "animate-pulse-once");
+                void p.offsetWidth;
+                p.style.animationDelay = (i * 25) + "ms";
+                p.classList.add("animate-pop");
+                if (p.classList.contains("highlight")) {
+                    p.classList.add("animate-pulse-once");
+                    p.addEventListener("animationend", () => {
+                        p.classList.remove("animate-pulse-once");
+                    }, { once: true });
+                }
             });
-            container.appendChild(insRow.row);
-          }
+        }
 
-          // small separator line
-          const sep = document.createElement("div");
-          sep.style.borderTop = "1px dashed #f1c574";
-          sep.style.margin = "4px 0 6px";
-          container.appendChild(sep);
+        /* Tabs */
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const tabContents = {
+            add: document.getElementById("tab-add"),
+            sub: document.getElementById("tab-sub"),
+            mul: document.getElementById("tab-mul"),
+            fact: document.getElementById("tab-fact"),
+            perm: document.getElementById("tab-perm"),
+            comb: document.getElementById("tab-comb"),
+            pow: document.getElementById("tab-pow"),
+        };
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const target = btn.getAttribute("data-tab");
+                tabButtons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                Object.keys(tabContents).forEach(key => {
+                    tabContents[key].classList.toggle("active", key === target);
+                });
+            });
         });
 
-        stagePerms = newPerms;
-      }
+        /* Addition */
+        document.getElementById("btn-add").addEventListener("click", () => {
+            const a = parseInt(document.getElementById("add-a").value, 10) || 0;
+            const b = parseInt(document.getElementById("add-b").value, 10) || 0;
+            const container = document.getElementById("vis-add");
+            clearNode(container);
 
-      const factVal = factorial(n);
-      const expl = document.createElement("div");
-      expl.className = "explanation";
+            const rowA = createRow("a pile");
+            for (let i = 0; i < a; i++) {
+                rowA.pile.appendChild(createPebble("", "A"));
+            }
 
-      if (n <= 4) {
-        expl.textContent =
-          `We built all permutations up to n = ${n} using the insertion method. ` +
-          `At each stage k, pebble k is inserted into every possible slot of the previous permutations. ` +
-          `Total permutations for n = ${n} is ${n}! = ${factVal}.`;
-      } else {
-        expl.textContent =
-          `We illustrated the insertion method up to n = 4. For your chosen n = ${n}, ` +
-          `the same process continues, and the total number of permutations is ${n}! = ${factVal}.`;
-      }
+            const rowB = createRow("b pile");
+            for (let i = 0; i < b; i++) {
+                rowB.pile.appendChild(createPebble("", "B"));
+            }
 
-      container.appendChild(expl);
-      animatePebbles(container);
-    });
+            const rowTotal = createRow("a + b");
+            for (let i = 0; i < a + b; i++) {
+                const label = (i < a) ? "A" : "B";
+                rowTotal.pile.appendChild(createPebble("pebble-result highlight", label));
+            }
 
-    // COMBINATIONS
-    document.getElementById("btn-comb").addEventListener("click", () => {
-      const n = parseInt(document.getElementById("comb-n").value, 10) || 0;
-      const k = parseInt(document.getElementById("comb-k").value, 10) || 0;
-      const container = document.getElementById("vis-comb");
-      clearNode(container);
+            container.appendChild(rowA.row);
+            container.appendChild(rowB.row);
+            const sep = document.createElement("div");
+            sep.className = "separator";
+            container.appendChild(sep);
+            container.appendChild(rowTotal.row);
 
-      const rowAll = createRow("all n pebbles");
-      for (let i = 0; i < n; i++) {
-        rowAll.pile.appendChild(createPebble("pebble-a", i + 1));
-      }
+            const expl = document.createElement("div");
+            expl.className = "explanation";
+            expl.textContent = `We join the two piles: ${a} (A) + ${b} (B) = ${a + b} pebbles.`;
+            container.appendChild(expl);
 
-      const rowChosen = createRow("one choice of k");
-      for (let i = 0; i < n; i++) {
-        if (i < k) {
-          rowChosen.pile.appendChild(createPebble("pebble-result highlight", i + 1));
-        } else {
-          rowChosen.pile.appendChild(createPebble("pebble-muted", ""));
-        }
-      }
+            animatePebbles(container);
+        });
 
-      container.appendChild(rowAll.row);
-      container.appendChild(rowChosen.row);
+        /* Subtraction */
+        document.getElementById("btn-sub").addEventListener("click", () => {
+            const a = parseInt(document.getElementById("sub-a").value, 10) || 0;
+            const b = parseInt(document.getElementById("sub-b").value, 10) || 0;
+            const container = document.getElementById("vis-sub");
+            clearNode(container);
 
-      const cVal = combinations(n, k);
-      const expl = document.createElement("div");
-      expl.className = "explanation";
+            const startRow = createRow("start (a)");
+            for (let i = 0; i < a; i++) {
+                startRow.pile.appendChild(createPebble("", "A"));
+            }
 
-      if (k > n) {
-        expl.textContent = `We cannot choose ${k} pebbles from only ${n}. So C(${n}, ${k}) = 0.`;
-      } else {
-        expl.textContent =
-          `We have ${n} labeled pebbles and we choose ${k} of them. ` +
-          `Each different gold group of ${k} pebbles would be a combination. ` +
-          `Total number of such groups is C(${n}, ${k}) = ${cVal}.`;
-      }
+            const afterRow = createRow("after removing b");
+            const remaining = Math.max(a - b, 0);
+            for (let i = 0; i < a; i++) {
+                if (i < remaining) {
+                    afterRow.pile.appendChild(createPebble("highlight", "A"));
+                } else {
+                    afterRow.pile.appendChild(createPebble("pebble-muted", ""));
+                }
+            }
 
-      container.appendChild(expl);
-      animatePebbles(container);
-    });
+            container.appendChild(startRow.row);
+            container.appendChild(afterRow.row);
 
-    // POWERS
-    document.getElementById("btn-pow").addEventListener("click", () => {
-      const a = parseInt(document.getElementById("pow-a").value, 10) || 0;
-      const b = parseInt(document.getElementById("pow-b").value, 10) || 0;
-      const container = document.getElementById("vis-pow");
-      clearNode(container);
+            const expl = document.createElement("div");
+            expl.className = "explanation";
+            if (b <= a) {
+                expl.textContent = `We remove ${b} pebbles from a pile of ${a}. Remaining: ${a} − ${b} = ${a - b}.`;
+            } else {
+                expl.textContent = `We tried to remove ${b} from only ${a}. Visually only ${a} exist, but in arithmetic: ${a} − ${b} = ${a - b}.`;
+            }
+            container.appendChild(expl);
 
-      const row = document.createElement("div");
-      row.className = "row";
+            animatePebbles(container);
+        });
 
-      const label = document.createElement("div");
-      label.className = "row-label";
-      label.textContent = "b positions";
-      row.appendChild(label);
+        /* Multiplication */
+        document.getElementById("btn-mul").addEventListener("click", () => {
+            const a = parseInt(document.getElementById("mul-a").value, 10) || 0;
+            const b = parseInt(document.getElementById("mul-b").value, 10) || 0;
+            const container = document.getElementById("vis-mul");
+            clearNode(container);
 
-      const positionsWrapper = document.createElement("div");
-      positionsWrapper.style.display = "flex";
-      positionsWrapper.style.flexWrap = "wrap";
-      positionsWrapper.style.gap = "10px";
+            for (let r = 0; r < b; r++) {
+                const row = createRow("");
+                for (let c = 0; c < a; c++) {
+                    row.pile.appendChild(createPebble("", ""));
+                }
+                container.appendChild(row.row);
+            }
 
-      for (let pos = 0; pos < b; pos++) {
-        const positionBox = document.createElement("div");
-        positionBox.style.border = "1px dashed #f1c574";
-        positionBox.style.borderRadius = "8px";
-        positionBox.style.padding = "4px 6px";
-        positionBox.style.minWidth = "64px";
-        positionBox.style.background = "#fffdf7";
+            const expl = document.createElement("div");
+            expl.className = "explanation";
+            expl.textContent = `We create ${b} rows of ${a} pebbles each. Total pebbles = a × b = ${a} × ${b} = ${a * b}.`;
+            container.appendChild(expl);
 
-        const posLabel = document.createElement("div");
-        posLabel.style.fontSize = "0.75rem";
-        posLabel.style.opacity = "0.8";
-        posLabel.textContent = `position ${pos + 1}`;
-        positionBox.appendChild(posLabel);
+            animatePebbles(container);
+        });
 
-        const pile = document.createElement("div");
-        pile.className = "pile";
-        for (let i = 0; i < a; i++) {
-          pile.appendChild(createPebble("pebble-a", i + 1));
-        }
-        positionBox.appendChild(pile);
+        /* Factorial – full stages with collapsible blocks (same as previous version) */
+        document.getElementById("btn-fact").addEventListener("click", () => {
+            const nInput = parseInt(document.getElementById("fact-n").value, 10) || 0;
+            const container = document.getElementById("vis-fact");
+            clearNode(container);
 
-        positionsWrapper.appendChild(positionBox);
-      }
+            if (nInput < 0) return;
+            const n = Math.max(0, nInput);
+            const maxStage = Math.min(n, 4);
 
-      row.appendChild(positionsWrapper);
-      container.appendChild(row);
+            const title = document.createElement("div");
+            title.style.fontWeight = "600";
+            title.style.marginBottom = "6px";
+            title.textContent = "Build factorial step-by-step: k! = (k−1)! × k";
+            container.appendChild(title);
 
-      const value = Math.pow(a, b);
-      const expl = document.createElement("div");
-      expl.className = "explanation";
+            if (n === 0) {
+                const expl0 = document.createElement("div");
+                expl0.className = "explanation";
+                expl0.textContent = "For n = 0, by definition 0! = 1. There is one way to arrange nothing.";
+                container.appendChild(expl0);
+                animatePebbles(container);
+                return;
+            }
 
-      if (a === 0 && b === 0) {
-        expl.textContent =
-          "0^0 is a special case in mathematics. Visually, no positions and no choices give an empty situation.";
-      } else {
-        expl.textContent =
-          `At each of the ${b} positions, we have ${a} choices. ` +
-          `Total possible sequences = a^b = ${a}^${b} = ${value}.`;
-      }
+            let stagePerms = [[1]];
 
-      container.appendChild(expl);
-      animatePebbles(container);
-    });
+            const stage1Title = document.createElement("div");
+            stage1Title.style.margin = "4px 0";
+            stage1Title.style.fontWeight = "600";
+            stage1Title.textContent = "Stage 1: 1! = 1";
+            container.appendChild(stage1Title);
 
-    // initialize defaults
-    document.getElementById("btn-add").click();
-    document.getElementById("btn-sub").click();
-    document.getElementById("btn-mul").click();
-    document.getElementById("btn-fact").click();
-    document.getElementById("btn-perm").click();
-    document.getElementById("btn-comb").click();
-    document.getElementById("btn-pow").click();
-  </script>
+            const st1Row = createRow("permutations of {1}");
+            st1Row.pile.appendChild(createPebble("pebble-result highlight", 1));
+            container.appendChild(st1Row.row);
+
+            for (let k = 2; k <= maxStage; k++) {
+                const stageTitle = document.createElement("div");
+                stageTitle.style.margin = "8px 0 4px";
+                stageTitle.style.fontWeight = "600";
+                stageTitle.textContent = `Stage ${k}: ${k}! = ${k - 1}! × ${k}`;
+                container.appendChild(stageTitle);
+
+                const stageInfo = document.createElement("div");
+                stageInfo.style.fontSize = "0.8rem";
+                stageInfo.style.opacity = "0.8";
+                stageInfo.textContent = `Take every permutation of {1…${k - 1}} and insert pebble ${k} into all possible slots.`;
+                container.appendChild(stageInfo);
+
+                const newPerms = [];
+
+                stagePerms.forEach((perm, idx) => {
+                    const group = document.createElement("div");
+                    group.className = "collapsible";
+
+                    const header = document.createElement("div");
+                    header.className = "collapsible-header";
+
+                    const togglePebble = createPebble("pebble-muted", "");
+                    togglePebble.style.width = "16px";
+                    togglePebble.style.height = "16px";
+                    togglePebble.classList.add("toggle-pebble");
+
+                    const headerText = document.createElement("div");
+                    headerText.className = "header-text";
+                    headerText.textContent = `From permutation #${idx + 1}:`;
+
+                    const miniPile = document.createElement("div");
+                    miniPile.className = "mini-pile";
+                    perm.forEach(v => {
+                        miniPile.appendChild(createPebble("", v));
+                    });
+
+                    header.appendChild(togglePebble);
+                    header.appendChild(headerText);
+                    header.appendChild(miniPile);
+
+                    const content = document.createElement("div");
+                    content.className = "collapsible-content";
+
+                    const slotRow = createRow("slots");
+                    slotRow.pile.appendChild(createPebble("pebble-muted", ""));
+                    for (let i = 0; i < perm.length; i++) {
+                        slotRow.pile.appendChild(createPebble("", perm[i]));
+                        slotRow.pile.appendChild(createPebble("pebble-muted", ""));
+                    }
+                    content.appendChild(slotRow.row);
+
+                    for (let pos = 0; pos <= perm.length; pos++) {
+                        const newArr = perm.slice(0, pos).concat([k], perm.slice(pos));
+                        newPerms.push(newArr);
+
+                        const insRow = createRow("");
+                        newArr.forEach(v => {
+                            const cls = (v === k) ? "pebble-result highlight" : "";
+                            insRow.pile.appendChild(createPebble(cls, v));
+                        });
+                        content.appendChild(insRow.row);
+                    }
+
+                    const innerSep = document.createElement("div");
+                    innerSep.className = "separator";
+                    content.appendChild(innerSep);
+
+                    group.appendChild(header);
+                    group.appendChild(content);
+                    container.appendChild(group);
+
+                    header.addEventListener("click", () => {
+                        const isOpen = content.style.display === "block";
+                        content.style.display = isOpen ? "none" : "block";
+                        togglePebble.classList.toggle("pebble-muted", isOpen);
+                        togglePebble.classList.toggle("pebble-result", !isOpen);
+                    });
+                });
+
+                stagePerms = newPerms;
+            }
+
+            const factVal = factorial(n);
+            const expl = document.createElement("div");
+            expl.className = "explanation";
+
+            if (n <= 4) {
+                expl.textContent =
+                    `We built all stages up to n = ${n}.\n` +
+                    `At each stage k, we take all permutations of {1…k−1} and insert k into every slot.\n` +
+                    `This multiplies the count by k each time: 1!, 2!, 3!, 4!, …\n\n` +
+                    `For your n = ${n}, the total number of permutations is n! = ${n}! = ${factVal}.`;
+            } else {
+                expl.textContent =
+                    `We visualized the construction up to 4!.\n` +
+                    `For larger n, the same process continues: each stage multiplies by k.\n\n` +
+                    `For your n = ${n}, n! = ${factVal} permutations in total.`;
+            }
+
+            container.appendChild(expl);
+            animatePebbles(container);
+        });
+
+        /* Permutations – insertion method (non-collapsible) */
+        document.getElementById("btn-perm").addEventListener("click", () => {
+            const nInput = parseInt(document.getElementById("perm-n").value, 10) || 0;
+            const container = document.getElementById("vis-perm");
+            clearNode(container);
+
+            if (nInput < 0) return;
+            const n = Math.max(0, nInput);
+
+            const title = document.createElement("div");
+            title.style.fontWeight = "600";
+            title.style.marginBottom = "6px";
+            title.textContent = "Permutations via insertion: start from {1} and grow.";
+            container.appendChild(title);
+
+            if (n === 0) {
+                const expl0 = document.createElement("div");
+                expl0.className = "explanation";
+                expl0.textContent = "For n = 0, there is exactly 1 permutation: the empty arrangement. So 0! = 1.";
+                container.appendChild(expl0);
+                animatePebbles(container);
+                return;
+            }
+
+            let stagePerms = [[1]];
+            const st1Title = document.createElement("div");
+            st1Title.style.fontWeight = "600";
+            st1Title.style.margin = "4px 0";
+            st1Title.textContent = "Stage 1: permutations of {1}";
+            container.appendChild(st1Title);
+
+            const st1Row = createRow("");
+            st1Row.pile.appendChild(createPebble("pebble-result highlight", 1));
+            container.appendChild(st1Row.row);
+
+            const maxStage = Math.min(n, 4);
+
+            for (let k = 2; k <= maxStage; k++) {
+                const stageTitle = document.createElement("div");
+                stageTitle.style.margin = "8px 0 4px";
+                stageTitle.style.fontWeight = "600";
+                stageTitle.textContent = `Stage ${k}: permutations of {1…${k}}`;
+                container.appendChild(stageTitle);
+
+                const newPerms = [];
+
+                stagePerms.forEach(perm => {
+                    const baseRow = createRow("from");
+                    perm.forEach(v => baseRow.pile.appendChild(createPebble("", v)));
+                    container.appendChild(baseRow.row);
+
+                    const slotRow = createRow("slots");
+                    slotRow.pile.appendChild(createPebble("pebble-muted", ""));
+                    for (let i = 0; i < perm.length; i++) {
+                        slotRow.pile.appendChild(createPebble("", perm[i]));
+                        slotRow.pile.appendChild(createPebble("pebble-muted", ""));
+                    }
+                    container.appendChild(slotRow.row);
+
+                    for (let pos = 0; pos <= perm.length; pos++) {
+                        const newArr = perm.slice(0, pos).concat([k], perm.slice(pos));
+                        newPerms.push(newArr);
+
+                        const insRow = createRow("");
+                        newArr.forEach(v => {
+                            const cls = (v === k) ? "pebble-result highlight" : "";
+                            insRow.pile.appendChild(createPebble(cls, v));
+                        });
+                        container.appendChild(insRow.row);
+                    }
+
+                    const sep = document.createElement("div");
+                    sep.className = "separator";
+                    container.appendChild(sep);
+                });
+
+                stagePerms = newPerms;
+            }
+
+            const factVal = factorial(n);
+            const expl = document.createElement("div");
+            expl.className = "explanation";
+            if (n <= 4) {
+                expl.textContent =
+                    `We showed all permutations up to n = ${n} using insertion.\n` +
+                    `Total permutations for n = ${n} is n! = ${n}! = ${factVal}.`;
+            } else {
+                expl.textContent =
+                    `We illustrated the insertion idea up to 4.\nFor your n = ${n}, the total permutations are n! = ${n}! = ${factVal}.`;
+            }
+            container.appendChild(expl);
+
+            animatePebbles(container);
+        });
+
+        /* Combinations – upgraded (C1: full list for small n) */
+        document.getElementById("btn-comb").addEventListener("click", () => {
+            const n = parseInt(document.getElementById("comb-n").value, 10) || 0;
+            const k = parseInt(document.getElementById("comb-k").value, 10) || 0;
+            const container = document.getElementById("vis-comb");
+            clearNode(container);
+
+            const rowAll = createRow("all n pebbles");
+            for (let i = 0; i < n; i++) {
+                rowAll.pile.appendChild(createPebble("", i + 1));
+            }
+            container.appendChild(rowAll.row);
+
+            const cVal = combinationsCount(n, k);
+
+            if (k < 0 || n < 0 || k > n) {
+                const explBad = document.createElement("div");
+                explBad.className = "explanation";
+                explBad.textContent = `We cannot choose ${k} pebbles from ${n}. So C(${n}, ${k}) = 0.`;
+                container.appendChild(explBad);
+                animatePebbles(container);
+                return;
+            }
+
+            const intro = document.createElement("div");
+            intro.style.fontSize = "0.8rem";
+            intro.style.opacity = "0.8";
+            intro.textContent =
+                `Each combination is one group of ${k} pebbles out of ${n}. ` +
+                `Order does not matter – {1,4,5} is the same group as {4,1,5}.`;
+            container.appendChild(intro);
+
+            const listWrapper = document.createElement("div");
+            listWrapper.className = "combo-list";
+            container.appendChild(listWrapper);
+
+            /* generate all combinations when n ≤ 7, otherwise sample */
+            const maxFullN = 7;
+            const maxSample = 10;
+            let combos = [];
+
+            function backtrack(start, chosen) {
+                if (chosen.length === k) {
+                    combos.push(chosen.slice());
+                    return;
+                }
+                for (let i = start; i <= n; i++) {
+                    chosen.push(i);
+                    backtrack(i + 1, chosen);
+                    chosen.pop();
+                }
+            }
+
+            if (k === 0) {
+                combos = [[]];
+            } else if (k <= n) {
+                if (n <= maxFullN) {
+                    backtrack(1, []);
+                } else {
+                    /* for big n, generate but stop early after maxSample */
+                    function backtrackLimited(start, chosen) {
+                        if (combos.length >= maxSample) return;
+                        if (chosen.length === k) {
+                            combos.push(chosen.slice());
+                            return;
+                        }
+                        for (let i = start; i <= n; i++) {
+                            if (combos.length >= maxSample) break;
+                            chosen.push(i);
+                            backtrackLimited(i + 1, chosen);
+                            chosen.pop();
+                        }
+                    }
+                    backtrackLimited(1, []);
+                }
+            }
+
+            combos.forEach((comb, idx) => {
+                const cRow = document.createElement("div");
+                cRow.className = "combo-row";
+
+                const idxLabel = document.createElement("div");
+                idxLabel.className = "combo-index";
+                idxLabel.textContent = idx + 1 + ".";
+                cRow.appendChild(idxLabel);
+
+                const pebblesWrap = document.createElement("div");
+                pebblesWrap.className = "pile";
+
+                for (let i = 1; i <= n; i++) {
+                    if (comb.includes(i)) {
+                        pebblesWrap.appendChild(createPebble("pebble-result highlight", i));
+                    } else {
+                        pebblesWrap.appendChild(createPebble("", ""));
+                    }
+                }
+
+                cRow.appendChild(pebblesWrap);
+                listWrapper.appendChild(cRow);
+            });
+
+            if (n > maxFullN) {
+                const dots = document.createElement("div");
+                dots.style.fontSize = "1.1rem";
+                dots.style.margin = "4px 0";
+                dots.textContent = "...";
+                listWrapper.appendChild(dots);
+            }
+
+            const expl = document.createElement("div");
+            expl.className = "explanation";
+            expl.textContent =
+                `Total number of ways to choose ${k} from ${n} is C(${n}, ${k}) = ${cVal}.\n` +
+                (n <= maxFullN
+                    ? "All combinations are shown above as gold groups."
+                    : `We show the first ${Math.min(maxSample, combos.length)} combinations above as examples.`);
+            container.appendChild(expl);
+
+            animatePebbles(container);
+        });
+
+        /* Powers – upgraded (P1 + small tree T2) */
+        document.getElementById("btn-pow").addEventListener("click", () => {
+            const a = parseInt(document.getElementById("pow-a").value, 10) || 0;
+            const b = parseInt(document.getElementById("pow-b").value, 10) || 0;
+            const container = document.getElementById("vis-pow");
+            clearNode(container);
+
+            if (a < 0 || b < 0) return;
+
+            const total = Math.pow(a, b);
+
+            /* Position boxes with choices inside */
+            const row = document.createElement("div");
+            row.className = "row";
+            const label = document.createElement("div");
+            label.className = "row-label";
+            label.textContent = "positions";
+            row.appendChild(label);
+
+            const positionsWrapper = document.createElement("div");
+            positionsWrapper.style.display = "flex";
+            positionsWrapper.style.flexWrap = "wrap";
+            positionsWrapper.style.gap = "10px";
+
+            for (let pos = 0; pos < b; pos++) {
+                const box = document.createElement("div");
+                box.style.border = "1px dashed #f1c574";
+                box.style.borderRadius = "8px";
+                box.style.padding = "4px 6px";
+                box.style.minWidth = "72px";
+                box.style.background = "#fffdf7";
+
+                const posLabel = document.createElement("div");
+                posLabel.style.fontSize = "0.75rem";
+                posLabel.style.opacity = "0.8";
+                posLabel.textContent = `pos ${pos + 1}`;
+                box.appendChild(posLabel);
+
+                const pile = document.createElement("div");
+                pile.className = "pile";
+                for (let i = 0; i < a; i++) {
+                    pile.appendChild(createPebble("", i + 1));
+                }
+                box.appendChild(pile);
+                positionsWrapper.appendChild(box);
+            }
+
+            row.appendChild(positionsWrapper);
+            container.appendChild(row);
+
+            /* Sequences listing */
+            const seqTitle = document.createElement("div");
+            seqTitle.style.fontWeight = "600";
+            seqTitle.style.margin = "8px 0 4px";
+            seqTitle.textContent = "Example sequences (each is one outcome):";
+            container.appendChild(seqTitle);
+
+            const seqLimitFull = 40;
+            const seqSampleLimit = 12;
+            const showAll = total <= seqLimitFull;
+            const maxToShow = showAll ? total : seqSampleLimit;
+
+            const seqWrapper = document.createElement("div");
+            container.appendChild(seqWrapper);
+
+            if (b === 0) {
+                const seqRow = document.createElement("div");
+                seqRow.className = "row";
+                const rLabel = document.createElement("div");
+                rLabel.className = "row-label";
+                rLabel.textContent = "#1";
+                seqRow.appendChild(rLabel);
+
+                const pile = document.createElement("div");
+                pile.className = "pile";
+                seqRow.appendChild(pile);
+                seqWrapper.appendChild(seqRow);
+            } else {
+                let count = 0;
+                function backtrack(position, seq) {
+                    if (count >= maxToShow) return;
+                    if (position === b) {
+                        count++;
+                        const seqRow = document.createElement("div");
+                        seqRow.className = "row";
+                        const rLabel = document.createElement("div");
+                        rLabel.className = "row-label";
+                        rLabel.textContent = "#" + count;
+                        seqRow.appendChild(rLabel);
+
+                        const pile = document.createElement("div");
+                        pile.className = "pile";
+                        seq.forEach(v => {
+                            pile.appendChild(createPebble("pebble-result highlight", v));
+                        });
+                        seqRow.appendChild(pile);
+                        seqWrapper.appendChild(seqRow);
+                        return;
+                    }
+                    for (let choice = 1; choice <= a; choice++) {
+                        if (count >= maxToShow) break;
+                        seq.push(choice);
+                        backtrack(position + 1, seq);
+                        seq.pop();
+                    }
+                }
+
+                if (a === 0) {
+                    // no choices at each step
+                    const seqRow = document.createElement("div");
+                    seqRow.className = "row";
+                    const rLabel = document.createElement("div");
+                    rLabel.className = "row-label";
+                    rLabel.textContent = "(no sequences)";
+                    seqRow.appendChild(rLabel);
+                    seqWrapper.appendChild(seqRow);
+                } else {
+                    backtrack(0, []);
+                }
+            }
+
+            if (!showAll && total > seqSampleLimit) {
+                const dots = document.createElement("div");
+                dots.style.fontSize = "1.1rem";
+                dots.style.margin = "4px 0";
+                dots.textContent = "...";
+                container.appendChild(dots);
+            }
+
+            /* Small tree for a ≤ 3 and b ≤ 3 */
+            if (a > 0 && b > 0 && a <= 3 && b <= 3) {
+                const tree = document.createElement("div");
+                tree.className = "power-tree";
+
+                const tTitle = document.createElement("div");
+                tTitle.className = "power-tree-title";
+                tTitle.textContent = "Tree view (branching choices):";
+                tree.appendChild(tTitle);
+
+                const levels = document.createElement("div");
+                levels.className = "power-tree-levels";
+
+                // Level 0 (root)
+                const level0 = document.createElement("div");
+                level0.className = "power-tree-level-row";
+                const l0Label = document.createElement("div");
+                l0Label.className = "power-tree-label";
+                l0Label.textContent = "start";
+                level0.appendChild(l0Label);
+                const l0Nodes = document.createElement("div");
+                l0Nodes.className = "power-tree-nodes";
+                l0Nodes.appendChild(createPebble("pebble-muted", ""));
+                level0.appendChild(l0Nodes);
+                levels.appendChild(level0);
+
+                // Level 1: first choices
+                const level1 = document.createElement("div");
+                level1.className = "power-tree-level-row";
+                const l1Label = document.createElement("div");
+                l1Label.className = "power-tree-label";
+                l1Label.textContent = "step 1";
+                level1.appendChild(l1Label);
+                const l1Nodes = document.createElement("div");
+                l1Nodes.className = "power-tree-nodes";
+                for (let c = 1; c <= a; c++) {
+                    l1Nodes.appendChild(createPebble("pebble-result", c));
+                }
+                level1.appendChild(l1Nodes);
+                levels.appendChild(level1);
+
+                if (b >= 2) {
+                    const level2 = document.createElement("div");
+                    level2.className = "power-tree-level-row";
+                    const l2Label = document.createElement("div");
+                    l2Label.className = "power-tree-label";
+                    l2Label.textContent = "step 2";
+                    level2.appendChild(l2Label);
+
+                    const columns = document.createElement("div");
+                    columns.className = "power-tree-columns";
+
+                    for (let first = 1; first <= a; first++) {
+                        const col = document.createElement("div");
+                        col.className = "power-tree-column";
+
+                        const parentPebble = createPebble("pebble-result", first);
+                        col.appendChild(parentPebble);
+
+                        const childRow = document.createElement("div");
+                        childRow.className = "pile";
+                        for (let second = 1; second <= a; second++) {
+                            childRow.appendChild(createPebble("", second));
+                        }
+                        col.appendChild(childRow);
+
+                        const colLabel = document.createElement("div");
+                        colLabel.className = "power-tree-column-label";
+                        colLabel.textContent = `start with ${first}`;
+                        col.appendChild(colLabel);
+
+                        columns.appendChild(col);
+                    }
+
+                    level2.appendChild(columns);
+                    levels.appendChild(level2);
+                }
+
+                tree.appendChild(levels);
+                container.appendChild(tree);
+            }
+
+            const expl = document.createElement("div");
+            expl.className = "explanation";
+
+            if (a === 0 && b === 0) {
+                expl.textContent =
+                    "0^0 is a special case in mathematics. Different contexts treat it differently.\n" +
+                    "Visually, there are no positions and no choices – an empty situation.";
+            } else if (b === 0) {
+                expl.textContent =
+                    "Any non-zero number to the power 0 is 1.\n" +
+                    "Visually: a^0 = 1 means there is exactly one empty sequence of length 0.";
+            } else if (a === 0) {
+                expl.textContent =
+                    "0^b (with b > 0) means zero choices at each of b positions.\n" +
+                    "There are no possible sequences, so 0^b = 0.";
+            } else {
+                expl.textContent =
+                    `At each of the ${b} positions, we have ${a} choices.\n` +
+                    `Total sequences = a^b = ${a}^${b} = ${total}.\n\n` +
+                    (total <= 40
+                        ? "We listed all sequences above."
+                        : `We listed the first ${Math.min(seqSampleLimit, total)} sequences above as examples.`);
+            }
+
+            container.appendChild(expl);
+            animatePebbles(container);
+        });
+
+        /* Initialize defaults */
+        document.getElementById("btn-add").click();
+        document.getElementById("btn-sub").click();
+        document.getElementById("btn-mul").click();
+        document.getElementById("btn-fact").click();
+        document.getElementById("btn-perm").click();
+        document.getElementById("btn-comb").click();
+        document.getElementById("btn-pow").click();
+    </script>
 </body>
+
 </html>
