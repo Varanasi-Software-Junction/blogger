@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pebble Math Visualizer – Animated Saffron Edition</title>
+  <title>Pebble Math Visualizer – Insertion Permutations (Saffron)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
@@ -12,10 +12,11 @@
       --accent: #f4a623;
       --accent-dark: #c87608;
       --text-main: #3b2a1a;
-      --pebble: #f9d38b;
-      --pebble-border: #c58a27;
-      --pebble-highlight: #ffb347;
-      --pebble-muted: #e0e0e0;
+
+      --pebble-a: #f9d38b;       /* A pile / normal pebble */
+      --pebble-b: #ffad60;       /* B pile */
+      --pebble-result: #ffb347;  /* Result / selected */
+      --pebble-muted: #e0e0e0;   /* Slots / removed / not chosen */
     }
 
     * {
@@ -226,36 +227,40 @@
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      background: var(--pebble);
-      border: 1px solid var(--pebble-border);
+      background: var(--pebble-a); /* default */
+      border: 1px solid #c58a27;
       box-shadow: 0 1px 2px rgba(0,0,0,0.2);
       transform-origin: center bottom;
       transition: transform 0.15s ease-out;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: #5b3a10;
     }
 
-    .pebble.highlight {
-      background: var(--pebble-highlight);
+    .pebble-a {
+      background: var(--pebble-a);
     }
 
-    .pebble.muted {
+    .pebble-b {
+      background: var(--pebble-b);
+    }
+
+    .pebble-result {
+      background: var(--pebble-result);
+    }
+
+    .pebble-muted {
       background: var(--pebble-muted);
       border-color: #b0b0b0;
       box-shadow: none;
+      color: #888;
     }
 
     .pebble:hover {
       transform: translateY(-1px) scale(1.05);
-    }
-
-    .grid {
-      display: inline-grid;
-      grid-auto-rows: auto;
-      gap: 4px;
-    }
-
-    .grid-row {
-      display: flex;
-      gap: 4px;
     }
 
     .explanation {
@@ -358,16 +363,33 @@
     .animate-pulse-once {
       animation: pulseHighlight 0.7s ease-out 1;
     }
+
+    .pebble.highlight {
+      /* highlight uses animation only */
+    }
   </style>
 </head>
 <body>
   <div class="wrapper">
     <header>
       <h1>🪨 Pebble Math Visualizer</h1>
-      <p>See addition, subtraction, multiplication, factorial, combinations, and powers as pebbles.</p>
+      <p>See addition, subtraction, multiplication, factorial, permutations, combinations, and powers as pebbles.</p>
     </header>
 
     <div class="card">
+      <!-- Legend -->
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:12px;font-size:0.8rem;">
+        <span style="display:inline-flex;align-items:center;gap:4px;">
+          <span class="pebble pebble-a" style="width:14px;height:14px;">&nbsp;</span> normal pebble
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:4px;">
+          <span class="pebble pebble-result" style="width:14px;height:14px;">&nbsp;</span> new / highlighted
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:4px;">
+          <span class="pebble pebble-muted" style="width:14px;height:14px;">&nbsp;</span> empty slot / removed
+        </span>
+      </div>
+
       <div class="tabs">
         <button class="tab-btn active" data-tab="add">
           <span class="emoji">➕</span> Addition
@@ -379,7 +401,10 @@
           <span class="emoji">✖️</span> Multiplication
         </button>
         <button class="tab-btn" data-tab="fact">
-          <span class="emoji">!</span> Factorial / Permutations
+          <span class="emoji">!</span> Factorial
+        </button>
+        <button class="tab-btn" data-tab="perm">
+          <span class="emoji">🔀</span> Permutations (Insertion)
         </button>
         <button class="tab-btn" data-tab="comb">
           <span class="emoji">🎯</span> Combinations
@@ -419,7 +444,7 @@
           </div>
           <button class="btn-primary" id="btn-sub">Visualize ➖</button>
         </div>
-        <div class="hint">Subtraction = start with a pile of a and remove b pebbles.</div>
+        <div class="hint">Subtraction = start with a pile of a and grey out b removed pebbles.</div>
         <div class="visual-area" id="vis-sub"></div>
       </div>
 
@@ -436,7 +461,7 @@
           </div>
           <button class="btn-primary" id="btn-mul">Visualize ✖️</button>
         </div>
-        <div class="hint">Multiplication a × b = b rows of a pebbles (an area).</div>
+        <div class="hint">Multiplication a × b = b rows of a pebbles.</div>
         <div class="visual-area" id="vis-mul"></div>
       </div>
 
@@ -447,10 +472,26 @@
             <label for="fact-n">n (distinct pebbles)</label>
             <input type="number" id="fact-n" min="0" max="8" value="4" />
           </div>
-          <button class="btn-primary" id="btn-fact">Visualize n! </button>
+          <button class="btn-primary" id="btn-fact">Visualize n!</button>
         </div>
-        <div class="hint">Factorial n! = number of all possible orders of n distinct pebbles.</div>
+        <div class="hint">Factorial n! = n × (n − 1) × … × 1 → number of permutations of n distinct pebbles.</div>
         <div class="visual-area" id="vis-fact"></div>
+      </div>
+
+      <!-- PERMUTATIONS (INSERTION METHOD) -->
+      <div class="tab-content" id="tab-perm">
+        <div class="controls">
+          <div class="control-group">
+            <label for="perm-n">n (distinct pebbles)</label>
+            <input type="number" id="perm-n" min="0" max="8" value="4" />
+          </div>
+          <button class="btn-primary" id="btn-perm">Build permutations step-by-step</button>
+        </div>
+        <div class="hint">
+          We build permutations by inserting the new pebble into all possible slots.
+          For n ≤ 4 we show all stages. For n &gt; 4 we show stages up to 4, then explain n!.
+        </div>
+        <div class="visual-area" id="vis-perm"></div>
       </div>
 
       <!-- COMBINATIONS -->
@@ -466,7 +507,7 @@
           </div>
           <button class="btn-primary" id="btn-comb">Visualize C(n, k)</button>
         </div>
-        <div class="hint">Combinations = choose k pebbles out of n, order does not matter.</div>
+        <div class="hint">Combinations = choose k pebbles out of n (order doesn’t matter).</div>
         <div class="visual-area" id="vis-comb"></div>
       </div>
 
@@ -483,14 +524,14 @@
           </div>
           <button class="btn-primary" id="btn-pow">Visualize a^b</button>
         </div>
-        <div class="hint">a^b = number of ways to choose 1 pebble at each of b positions, with a choices each time.</div>
+        <div class="hint">a^b = ways to pick 1 of a options at each of b positions.</div>
         <div class="visual-area" id="vis-pow"></div>
       </div>
     </div>
   </div>
 
   <script>
-    // Small helper: factorial and combinations
+    // helpers
     function factorial(n) {
       if (n < 0) return NaN;
       let res = 1;
@@ -500,7 +541,7 @@
 
     function combinations(n, k) {
       if (k < 0 || n < 0 || k > n) return 0;
-      k = Math.min(k, n - k); // symmetry
+      k = Math.min(k, n - k);
       let num = 1;
       let den = 1;
       for (let i = 1; i <= k; i++) {
@@ -514,9 +555,14 @@
       while (node.firstChild) node.removeChild(node.firstChild);
     }
 
-    function createPebble(className) {
+    function createPebble(className, labelText) {
       const p = document.createElement("div");
       p.className = "pebble" + (className ? " " + className : "");
+      if (labelText !== undefined && labelText !== null) {
+        p.textContent = labelText;
+      } else {
+        p.textContent = "";
+      }
       return p;
     }
 
@@ -524,7 +570,7 @@
       const row = document.createElement("div");
       row.className = "row";
 
-      if (labelText) {
+      if (labelText !== undefined && labelText !== null && labelText !== "") {
         const label = document.createElement("div");
         label.className = "row-label";
         label.textContent = labelText;
@@ -538,20 +584,18 @@
       return { row, pile };
     }
 
-    // Animate all pebbles in a container
+    // animate pebbles
     function animatePebbles(container) {
-      // flash border
       container.classList.remove("visual-flash");
-      void container.offsetWidth; // reflow
+      void container.offsetWidth;
       container.classList.add("visual-flash");
       setTimeout(() => container.classList.remove("visual-flash"), 300);
 
       const pebbles = container.querySelectorAll(".pebble");
       pebbles.forEach((p, i) => {
-        // reset animation
         p.classList.remove("animate-pop");
         p.classList.remove("animate-pulse-once");
-        void p.offsetWidth; // reflow to restart animation
+        void p.offsetWidth;
         p.style.animationDelay = (i * 30) + "ms";
         p.classList.add("animate-pop");
 
@@ -573,6 +617,7 @@
       sub: document.getElementById("tab-sub"),
       mul: document.getElementById("tab-mul"),
       fact: document.getElementById("tab-fact"),
+      perm: document.getElementById("tab-perm"),
       comb: document.getElementById("tab-comb"),
       pow: document.getElementById("tab-pow"),
     };
@@ -597,17 +642,21 @@
 
       const rowA = createRow("a pile");
       for (let i = 0; i < a; i++) {
-        rowA.pile.appendChild(createPebble());
+        rowA.pile.appendChild(createPebble("pebble-a", "A"));
       }
 
       const rowB = createRow("b pile");
       for (let i = 0; i < b; i++) {
-        rowB.pile.appendChild(createPebble());
+        rowB.pile.appendChild(createPebble("pebble-b", "B"));
       }
 
       const rowTotal = createRow("a + b");
       for (let i = 0; i < a + b; i++) {
-        rowTotal.pile.appendChild(createPebble("highlight"));
+        if (i < a) {
+          rowTotal.pile.appendChild(createPebble("pebble-a highlight", "A"));
+        } else {
+          rowTotal.pile.appendChild(createPebble("pebble-b highlight", "B"));
+        }
       }
 
       container.appendChild(rowA.row);
@@ -622,7 +671,7 @@
 
       const expl = document.createElement("div");
       expl.className = "explanation";
-      expl.textContent = `We simply join the two piles: ${a} + ${b} = ${a + b}.`;
+      expl.textContent = `We join the two piles: ${a} (A) + ${b} (B) = ${a + b} pebbles.`;
       container.appendChild(expl);
 
       animatePebbles(container);
@@ -637,16 +686,16 @@
 
       const startRow = createRow("start (a)");
       for (let i = 0; i < a; i++) {
-        startRow.pile.appendChild(createPebble());
+        startRow.pile.appendChild(createPebble("pebble-a", "A"));
       }
 
       const afterRow = createRow("after removing b");
       const remaining = Math.max(a - b, 0);
       for (let i = 0; i < a; i++) {
         if (i < remaining) {
-          afterRow.pile.appendChild(createPebble("highlight"));
-        } else if (i < a) {
-          afterRow.pile.appendChild(createPebble("muted"));
+          afterRow.pile.appendChild(createPebble("pebble-a highlight", "A"));
+        } else {
+          afterRow.pile.appendChild(createPebble("pebble-muted", ""));
         }
       }
 
@@ -656,9 +705,9 @@
       const expl = document.createElement("div");
       expl.className = "explanation";
       if (b <= a) {
-        expl.textContent = `We remove ${b} pebbles from a pile of ${a}. The remaining pebbles are ${a} − ${b} = ${a - b}.`;
+        expl.textContent = `We remove ${b} pebbles from a pile of ${a}. Remaining pebbles: ${a} − ${b} = ${a - b}.`;
       } else {
-        expl.textContent = `We tried to remove ${b} pebbles from a pile of ${a}, which is more than available. In usual arithmetic, this gives a negative result (${a} − ${b} = ${a - b}). Visually only ${a} pebbles exist.`;
+        expl.textContent = `We tried to remove ${b} from ${a}. Visually only ${a} exist, but in arithmetic this is ${a} − ${b} = ${a - b}.`;
       }
       container.appendChild(expl);
 
@@ -674,23 +723,19 @@
 
       const gridWrapper = document.createElement("div");
       const grid = document.createElement("div");
-      grid.className = "grid";
       gridWrapper.appendChild(grid);
 
       for (let rowIndex = 0; rowIndex < b; rowIndex++) {
-        const row = document.createElement("div");
-        row.className = "grid-row";
+        const row = createRow("");
         for (let colIndex = 0; colIndex < a; colIndex++) {
-          row.appendChild(createPebble());
+          row.pile.appendChild(createPebble("pebble-a", ""));
         }
-        grid.appendChild(row);
+        container.appendChild(row.row);
       }
-
-      container.appendChild(gridWrapper);
 
       const expl = document.createElement("div");
       expl.className = "explanation";
-      expl.textContent = `We create ${b} rows of ${a} pebbles each. Counting all pebbles gives a × b = ${a} × ${b} = ${a * b}.`;
+      expl.textContent = `We create ${b} rows of ${a} pebbles each. Total pebbles = a × b = ${a} × ${b} = ${a * b}.`;
       container.appendChild(expl);
 
       animatePebbles(container);
@@ -702,12 +747,10 @@
       const container = document.getElementById("vis-fact");
       clearNode(container);
 
-      const baseRow = createRow("distinct pebbles");
+      const baseRow = createRow("n pebbles");
       for (let i = 0; i < n; i++) {
-        const p = createPebble("highlight");
-        baseRow.pile.appendChild(p);
+        baseRow.pile.appendChild(createPebble("pebble-a highlight", i + 1));
       }
-
       container.appendChild(baseRow.row);
 
       const factVal = factorial(n);
@@ -715,15 +758,125 @@
       expl.className = "explanation";
 
       if (n === 0) {
-        expl.textContent = "By definition, 0! = 1. There is exactly one way to arrange nothing.";
+        expl.textContent = "0! = 1 → exactly one way to arrange nothing.";
+      } else {
+        const parts = [];
+        for (let i = n; i >= 1; i--) parts.push(i);
+        expl.textContent =
+          `${n}! = ${parts.join(" × ")} = ${factVal}. This is also the number of different orders (permutations) of these ${n} pebbles.`;
+      }
+
+      container.appendChild(expl);
+      animatePebbles(container);
+    });
+
+    // PERMUTATIONS – INSERTION METHOD (your visualization)
+    document.getElementById("btn-perm").addEventListener("click", () => {
+      const nInput = parseInt(document.getElementById("perm-n").value, 10) || 0;
+      const container = document.getElementById("vis-perm");
+      clearNode(container);
+
+      if (nInput < 0) return;
+
+      const n = Math.max(0, nInput);
+      const maxStage = Math.min(n, 4);  // show full stages only up to 4
+
+      const title = document.createElement("div");
+      title.style.marginBottom = "6px";
+      title.style.fontWeight = "600";
+      title.textContent = "Build permutations by inserting the new pebble into all slots:";
+      container.appendChild(title);
+
+      if (n === 0) {
+        const expl0 = document.createElement("div");
+        expl0.className = "explanation";
+        expl0.textContent = "For n = 0, there is exactly one permutation: the empty arrangement. So 0! = 1.";
+        container.appendChild(expl0);
+        animatePebbles(container);
+        return;
+      }
+
+      // Stage 1 – start with [1]
+      let stagePerms = [[1]];
+
+      // Show Stage 1
+      const stage1Title = document.createElement("div");
+      stage1Title.style.margin = "4px 0";
+      stage1Title.style.fontWeight = "600";
+      stage1Title.textContent = "Stage 1: permutations of {1}";
+      container.appendChild(stage1Title);
+
+      const st1Row = createRow("");
+      st1Row.pile.appendChild(createPebble("pebble-a highlight", 1));
+      container.appendChild(st1Row.row);
+
+      // Build further stages up to maxStage
+      for (let k = 2; k <= maxStage; k++) {
+        const stageTitle = document.createElement("div");
+        stageTitle.style.margin = "8px 0 4px";
+        stageTitle.style.fontWeight = "600";
+        stageTitle.textContent = `Stage ${k}: insert pebble ${k} into permutations of {1…${k - 1}}`;
+        container.appendChild(stageTitle);
+
+        const newPerms = [];
+
+        stagePerms.forEach((perm, idx) => {
+          // Show current permutation (from previous stage)
+          const prevRow = createRow(`from #${idx + 1}`);
+          perm.forEach(v => {
+            prevRow.pile.appendChild(createPebble("pebble-a", v));
+          });
+          container.appendChild(prevRow.row);
+
+          // Show slots: S3 style – grey pebbles (muted) around and between
+          const slotRow = createRow("slots");
+          // first slot
+          slotRow.pile.appendChild(createPebble("pebble-muted", ""));
+          for (let i = 0; i < perm.length; i++) {
+            slotRow.pile.appendChild(createPebble("pebble-a", perm[i]));
+            slotRow.pile.appendChild(createPebble("pebble-muted", ""));
+          }
+          container.appendChild(slotRow.row);
+
+          // Now show all insertions of k into each slot
+          for (let pos = 0; pos <= perm.length; pos++) {
+            const newArr = perm.slice(0, pos).concat([k], perm.slice(pos));
+            newPerms.push(newArr);
+
+            const insRow = createRow("");
+            newArr.forEach(v => {
+              const cls = (v === k) ? "pebble-result highlight" : "pebble-a";
+              insRow.pile.appendChild(createPebble(cls, v));
+            });
+            container.appendChild(insRow.row);
+          }
+
+          // small separator line
+          const sep = document.createElement("div");
+          sep.style.borderTop = "1px dashed #f1c574";
+          sep.style.margin = "4px 0 6px";
+          container.appendChild(sep);
+        });
+
+        stagePerms = newPerms;
+      }
+
+      const factVal = factorial(n);
+      const expl = document.createElement("div");
+      expl.className = "explanation";
+
+      if (n <= 4) {
+        expl.textContent =
+          `We built all permutations up to n = ${n} using the insertion method. ` +
+          `At each stage k, pebble k is inserted into every possible slot of the previous permutations. ` +
+          `Total permutations for n = ${n} is ${n}! = ${factVal}.`;
       } else {
         expl.textContent =
-          `We have ${n} distinct pebbles. We can arrange them in different orders (permutations). ` +
-          `The total number of possible orders is n! = ${n}! = ${factVal}. ` +
-          "We don't draw every arrangement (it grows very fast), but each different ordering is one possible line of these pebbles.";
+          `We illustrated the insertion method up to n = 4. For your chosen n = ${n}, ` +
+          `the same process continues, and the total number of permutations is ${n}! = ${factVal}.`;
       }
-      container.appendChild(expl);
 
+      container.appendChild(expl);
       animatePebbles(container);
     });
 
@@ -736,15 +889,15 @@
 
       const rowAll = createRow("all n pebbles");
       for (let i = 0; i < n; i++) {
-        rowAll.pile.appendChild(createPebble());
+        rowAll.pile.appendChild(createPebble("pebble-a", i + 1));
       }
 
       const rowChosen = createRow("one choice of k");
       for (let i = 0; i < n; i++) {
         if (i < k) {
-          rowChosen.pile.appendChild(createPebble("highlight")); // chosen
+          rowChosen.pile.appendChild(createPebble("pebble-result highlight", i + 1));
         } else {
-          rowChosen.pile.appendChild(createPebble("muted")); // not chosen
+          rowChosen.pile.appendChild(createPebble("pebble-muted", ""));
         }
       }
 
@@ -756,16 +909,15 @@
       expl.className = "explanation";
 
       if (k > n) {
-        expl.textContent = `We cannot choose ${k} pebbles from a pile of only ${n}. So C(${n}, ${k}) = 0.`;
+        expl.textContent = `We cannot choose ${k} pebbles from only ${n}. So C(${n}, ${k}) = 0.`;
       } else {
         expl.textContent =
-          `We have ${n} pebbles and we choose ${k} of them. ` +
-          `Each different group of ${k} pebbles is a combination. ` +
-          `The total number of such groups is C(n, k) = C(${n}, ${k}) = ${cVal}.`;
+          `We have ${n} labeled pebbles and we choose ${k} of them. ` +
+          `Each different gold group of ${k} pebbles would be a combination. ` +
+          `Total number of such groups is C(${n}, ${k}) = ${cVal}.`;
       }
 
       container.appendChild(expl);
-
       animatePebbles(container);
     });
 
@@ -806,7 +958,7 @@
         const pile = document.createElement("div");
         pile.className = "pile";
         for (let i = 0; i < a; i++) {
-          pile.appendChild(createPebble());
+          pile.appendChild(createPebble("pebble-a", i + 1));
         }
         positionBox.appendChild(pile);
 
@@ -822,23 +974,23 @@
 
       if (a === 0 && b === 0) {
         expl.textContent =
-          "0^0 is a special case in mathematics – in many contexts we leave it undefined. Visually, no positions and no choices is an empty situation.";
+          "0^0 is a special case in mathematics. Visually, no positions and no choices give an empty situation.";
       } else {
         expl.textContent =
-          `At each of the ${b} positions, we have ${a} possible pebbles to choose from. ` +
-          `All possible sequences of choices give a total of a^b = ${a}^${b} = ${value} different outcomes.`;
+          `At each of the ${b} positions, we have ${a} choices. ` +
+          `Total possible sequences = a^b = ${a}^${b} = ${value}.`;
       }
 
       container.appendChild(expl);
-
       animatePebbles(container);
     });
 
-    // Initialize default views once
+    // initialize defaults
     document.getElementById("btn-add").click();
     document.getElementById("btn-sub").click();
     document.getElementById("btn-mul").click();
     document.getElementById("btn-fact").click();
+    document.getElementById("btn-perm").click();
     document.getElementById("btn-comb").click();
     document.getElementById("btn-pow").click();
   </script>
