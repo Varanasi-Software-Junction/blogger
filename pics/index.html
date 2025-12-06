@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programmer's Picnic — Magical Memories Gallery</title>
+    <title>Programmer's Picnic — Magical Memories</title>
 
     <style>
         body {
@@ -15,7 +15,72 @@
             overflow-x: hidden;
         }
 
-        /* Background of overlay */
+        /* =============================
+       START SCREEN
+    ============================= */
+        #startScreen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, #fff4d9, #ffd89c, #ffbd63);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 999999999;
+            animation: fadeIn 1.2s ease;
+        }
+
+        #startTitle {
+            font-size: 50px;
+            text-align: center;
+            color: #6a2f00;
+            font-weight: bold;
+            text-shadow: 0px 4px 18px rgba(255, 200, 150, 0.6);
+            animation: floatTitle 2.8s ease-in-out infinite alternate;
+        }
+
+        #startHint {
+            margin-top: 40px;
+            font-size: 28px;
+            color: #8a3b00;
+            opacity: 0.7;
+            animation: pulseHint 1.8s ease-in-out infinite;
+        }
+
+        @keyframes floatTitle {
+            0% {
+                transform: translateY(0px);
+            }
+
+            100% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulseHint {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.08);
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+        }
+
+        /* =============================
+       OVERLAY BACKGROUND
+    ============================= */
         #pp-gallery-overlay {
             background: radial-gradient(circle at top,
                     #fff2d2,
@@ -24,7 +89,9 @@
             overflow: hidden;
         }
 
-        /* === SPARKLE SNOWFALL === */
+        /* =============================
+       SPARKLE SNOWFALL
+    ============================= */
         .sparkle {
             position: absolute;
             width: 6px;
@@ -48,7 +115,59 @@
             }
         }
 
-        /* === Cinematic Glow Pulse === */
+        /* =============================
+       HEART PARTICLES
+    ============================= */
+        .heart {
+            position: absolute;
+            color: rgba(255, 80, 120, 0.45);
+            font-size: 24px;
+            animation: floatUp 4s ease-in infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translateY(20px) scale(0.8);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(-90px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* =============================
+       LIGHT RAYS
+    ============================= */
+        #lightRays {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: conic-gradient(from 0deg,
+                    rgba(255, 190, 80, 0.18),
+                    transparent,
+                    rgba(255, 190, 80, 0.15),
+                    transparent);
+            animation: rotateRays 25s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes rotateRays {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =============================
+       GLOW PULSE
+    ============================= */
         #glowCircle {
             position: absolute;
             width: 600px;
@@ -74,13 +193,14 @@
             }
         }
 
-        /* === POLAROID FRAME EFFECT === */
+        /* =============================
+       POLAROID FRAME FLOAT
+    ============================= */
         .polaroid {
-            padding: 20px;
+            padding: 18px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 35px 80px rgba(120, 60, 10, 0.5);
-            transform: rotate(-1deg);
+            border-radius: 16px;
+            box-shadow: 0 35px 80px rgba(120, 60, 10, 0.45);
             animation: floatPolaroid 6s ease-in-out infinite alternate;
         }
 
@@ -94,32 +214,9 @@
             }
         }
 
-        /* === Light Rays === */
-        #lightRays {
-            position: absolute;
-            width: 150%;
-            height: 150%;
-            background: conic-gradient(from 0deg,
-                    rgba(255, 190, 80, 0.18),
-                    transparent,
-                    rgba(255, 190, 80, 0.15),
-                    transparent);
-            animation: rotateRays 25s linear infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes rotateRays {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* === Caption (ALT text) === */
+        /* =============================
+       CAPTION ANIMATION
+    ============================= */
         .caption {
             position: absolute;
             bottom: 9%;
@@ -149,13 +246,15 @@
             }
         }
 
-        /* === QUOTE TEXT === */
+        /* =============================
+       QUOTES
+    ============================= */
         #quoteBox {
             position: absolute;
             top: 12%;
             width: 100%;
             text-align: center;
-            font-size: 30px;
+            font-size: 32px;
             color: #7b3600;
             opacity: 0;
             text-shadow: 0px 4px 10px rgba(255, 230, 180, 0.8);
@@ -183,13 +282,15 @@
             }
         }
 
-        /* === Curtain Reveal === */
+        /* =============================
+       CURTAIN REVEAL
+    ============================= */
         #curtain {
             position: absolute;
             width: 100%;
             height: 100%;
             background: linear-gradient(#ffe2b7, #ffc180);
-            transform: translateY(-100%);
+            transform: translateY(0);
             animation: curtainReveal 1.2s ease forwards;
             z-index: 5;
             pointer-events: none;
@@ -205,7 +306,9 @@
             }
         }
 
-        /* === Ken Burns Zoom === */
+        /* =============================
+       KEN BURNS ZOOM
+    ============================= */
         .kenburns {
             animation: zoomSlide 8s ease forwards;
         }
@@ -220,7 +323,9 @@
             }
         }
 
-        /* 3D Flip Animations (unchanged) */
+        /* =============================
+       3D FLIPS
+    ============================= */
         .animX {
             animation: flipX 1.2s ease forwards;
         }
@@ -261,7 +366,9 @@
             }
         }
 
-        /* Banner floating */
+        /* =============================
+       FLOATING BANNER
+    ============================= */
         #pp-banner {
             position: fixed;
             top: 10%;
@@ -272,7 +379,7 @@
             color: #5a2800;
             background: linear-gradient(90deg, #ffd79b, #ffbc62, #ffd79b);
             border-radius: 40px;
-            box-shadow: 0 0 30px rgba(255, 140, 40, 0.4);
+            box-shadow: 0 0 30px rgba(255, 140, 40, 0.35);
             animation: bannerMove 16s linear infinite alternate,
                 bannerGlow 3s ease-in-out infinite alternate;
             z-index: 1000000;
@@ -285,11 +392,11 @@
             }
 
             25% {
-                transform: translate(40vw, 3vh);
+                transform: translate(28vw, 4vh);
             }
 
             50% {
-                transform: translate(20vw, 18vh);
+                transform: translate(14vw, 18vh);
             }
 
             75% {
@@ -315,10 +422,16 @@
 
 <body>
 
-    <!-- Floating magical banner -->
+    <!-- ✨ START SCREEN -->
+    <div id="startScreen">
+        <div id="startTitle">🌼 Programmer’s Picnic 🌼<br>Magical Memories</div>
+        <div id="startHint">Tap to Begin</div>
+    </div>
+
+    <!-- ✨ FLOATING BANNER -->
     <div id="pp-banner">Programmer’s Picnic ✨🌼</div>
 
-    <!-- Your images with ALT captions -->
+    <!-- ✨ YOUR IMAGES WITH ALT CAPTIONS -->
     <img src="Picnic/0.jpg" alt="Cherished Programmer's Picnic memory">
     <img src="Picnic/1.jpg" alt="Learning together with joy">
     <img src="Picnic/2.jpg" alt="Smiles that light up the day">
@@ -342,12 +455,34 @@
     <img src="Picnic/20.jpg" alt="Magical day to remember">
 
     <script>
+
+        /* =============================
+           START SCREEN INTERACTION
+        ============================= */
+        let startTimeout = null;
+
+        function startSlideshowNow() {
+            const s = document.getElementById("startScreen");
+            s.style.animation = "fadeOut 1s forwards";
+            setTimeout(() => s.style.display = "none", 900);
+            startGalleryFromBeginning();
+        }
+
+        document.getElementById("startScreen").addEventListener("click", startSlideshowNow);
+
+        /* Auto-start after 8s */
+        startTimeout = setTimeout(startSlideshowNow, 8000);
+
+
+        /* =============================
+           MAIN GALLERY SCRIPT
+        ============================= */
         (function () {
 
-            const imgs = Array.from(document.querySelectorAll("img"));
+            const imgs = Array.from(document.querySelectorAll("img")).slice(1);
             if (!imgs.length) return;
 
-            /* === Build magical overlay === */
+            /* Build magical overlay */
             const overlay = document.createElement("div");
             overlay.id = "pp-gallery-overlay";
             overlay.style.cssText = `
@@ -357,13 +492,13 @@
         justify-content: center;
         align-items: center;
         z-index: 999999;
+        overflow: hidden;
     `;
 
-            /* Glow circle */
+            /* Glow + Rays */
             const glow = document.createElement("div");
             glow.id = "glowCircle";
 
-            /* Light rays */
             const rays = document.createElement("div");
             rays.id = "lightRays";
 
@@ -371,23 +506,22 @@
             const polaroid = document.createElement("div");
             polaroid.className = "polaroid";
 
-            /* Slide image */
+            /* Main image */
             const slideImg = document.createElement("img");
             slideImg.style.cssText = `
-        max-width: 92%;
-        max-height: 82%;
-        border-radius: 18px;
+        max-width: 90%;
+        max-height: 80%;
+        border-radius: 16px;
         opacity: 0;
         transition: opacity 1s;
     `;
-
             polaroid.appendChild(slideImg);
 
             /* Caption */
             const caption = document.createElement("div");
             caption.className = "caption";
 
-            /* Quote Box */
+            /* Quotes */
             const quoteBox = document.createElement("div");
             quoteBox.id = "quoteBox";
 
@@ -396,10 +530,9 @@
             overlay.appendChild(polaroid);
             overlay.appendChild(caption);
             overlay.appendChild(quoteBox);
-
             document.body.appendChild(overlay);
 
-            /* Floating sparkles generator */
+            /* Sparkles */
             setInterval(() => {
                 const s = document.createElement("div");
                 s.className = "sparkle";
@@ -409,7 +542,7 @@
                 setTimeout(() => s.remove(), 6000);
             }, 200);
 
-            /* Magical quotes */
+            /* Quotes */
             const quotes = [
                 "✨ Every smile tells a story.",
                 "🌼 Moments that stay forever.",
@@ -439,7 +572,7 @@
             color: white;
             cursor: pointer;
             padding: 20px;
-            text-shadow: 0px 3px 10px rgba(0,0,0,0.4);
+            text-shadow: 0 3px 10px rgba(0,0,0,0.4);
         `;
                 return b;
             }
@@ -465,17 +598,14 @@
             overlay.appendChild(prevBtn);
             overlay.appendChild(closeBtn);
 
+            /* SLIDESHOW LOGIC */
             let currentIndex = 0;
             let autoPlay = null;
 
-            /* === MAGIC SLIDE SHOW FUNCTION === */
             function showSlide(i) {
                 if (i < 0) i = imgs.length - 1;
                 if (i >= imgs.length) i = 0;
                 currentIndex = i;
-
-                slideImg.style.opacity = 0;
-                caption.style.opacity = 0;
 
                 /* Curtain reveal */
                 const curtain = document.createElement("div");
@@ -483,8 +613,12 @@
                 overlay.appendChild(curtain);
                 setTimeout(() => curtain.remove(), 1200);
 
+                slideImg.style.opacity = 0;
+                caption.style.opacity = 0;
+
                 setTimeout(() => {
                     slideImg.src = imgs[i].src;
+
                     slideImg.classList.remove("kenburns", "animX", "animY");
                     slideImg.classList.add("kenburns");
                     slideImg.classList.add(Math.random() < 0.5 ? "animX" : "animY");
@@ -495,7 +629,6 @@
                     caption.style.animation = "captionFade 2s forwards";
 
                     showRandomQuote();
-
                     slideImg.style.opacity = 1;
                 }, 300);
             }
@@ -541,10 +674,10 @@
                 if (e.key === "Escape") closeGallery();
             });
 
-            /* Auto Start */
-            setTimeout(() => {
-                if (overlay.style.display === "none") openGallery(0);
-            }, 15000);
+            /* Start function exposed */
+            window.startGalleryFromBeginning = function () {
+                openGallery(0);
+            };
 
         })();
     </script>
