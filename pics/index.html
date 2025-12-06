@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programmer's Picnic — Ultra Magic++ Memories</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Programmer’s Picnic — Ultra Magic GOD MODE</title>
 
     <style>
         body {
@@ -12,36 +12,36 @@
             padding: 0;
             background: #fff7e6;
             font-family: "Segoe UI", system-ui, sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* =============================
-       ULTRA MAGIC++ START SCREEN
-    ============================= */
+        /* -----------------------------------------------------------
+       🌼 START SCREEN (Divine Saffron Aesthetic)
+    ----------------------------------------------------------- */
         #startScreen {
             position: fixed;
             inset: 0;
-            background: linear-gradient(180deg, #fff4d9, #ffcf90, #ffb357);
+            background: linear-gradient(180deg, #fff3d0, #ffd393, #ffbb54);
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            z-index: 99999999999;
+            z-index: 999999999;
+            animation: fadeIn 1.3s ease;
             cursor: pointer;
-            animation: fadeIn 1.2s ease;
         }
 
         #startTitle {
             font-size: 54px;
             text-align: center;
-            color: #6a2f00;
+            color: #6e3300;
             font-weight: bold;
-            text-shadow: 0px 4px 18px rgba(255, 200, 150, 0.6);
+            text-shadow: 0px 4px 18px rgba(255, 200, 130, 0.8);
             animation: floatTitle 2.8s ease-in-out infinite alternate;
         }
 
         #startHint {
-            margin-top: 30px;
+            margin-top: 25px;
             font-size: 28px;
             color: #8a3b00;
             opacity: 0.7;
@@ -54,7 +54,7 @@
             }
 
             100% {
-                transform: translateY(-10px);
+                transform: translateY(-12px);
             }
         }
 
@@ -68,206 +68,167 @@
 
             50% {
                 opacity: 1;
-                transform: scale(1.1);
+                transform: scale(1.12);
             }
         }
 
         @keyframes fadeOut {
             to {
                 opacity: 0;
-                transform: scale(1.1);
+                transform: scale(1.08);
             }
         }
 
-        /* =============================
-       HIDDEN IMAGES
-    ============================= */
+        /* -----------------------------------------------------------
+       🌼 FLOATING MUSIC BUTTON
+    ----------------------------------------------------------- */
+        #musicBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 200, 120, 0.92);
+            padding: 12px 20px;
+            border-radius: 32px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 160, 60, 0.8);
+            z-index: 9999999;
+            user-select: none;
+        }
+
+        #musicBtn:hover {
+            transform: scale(1.1);
+        }
+
+        /* -----------------------------------------------------------
+       🌼 IMAGE STORAGE (INVISIBLE)
+    ----------------------------------------------------------- */
         #picnic-images {
             display: none;
         }
 
-        /* =============================
-       FIREFLIES
-    ============================= */
-        .firefly {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: radial-gradient(circle, #fff, transparent);
-            border-radius: 50%;
-            animation: fly 6s linear infinite;
-            opacity: 0.8;
-            pointer-events: none;
-        }
-
-        @keyframes fly {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            50% {
-                transform: translate(40px, -80px) scale(1.4);
-            }
-
-            100% {
-                transform: translate(-20px, -160px) scale(1);
-            }
-        }
-
-        /* =============================
-       BOKEH LIGHTS
-    ============================= */
-        .bokeh {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, rgba(255, 200, 120, 0.4), transparent);
-            border-radius: 50%;
-            filter: blur(8px);
-            animation: drift 12s infinite ease-in-out;
-            pointer-events: none;
-        }
-
-        @keyframes drift {
-            0% {
-                transform: translate(0px, 0px) scale(1);
-                opacity: 0.3;
-            }
-
-            50% {
-                transform: translate(40px, -30px) scale(1.4);
-                opacity: 0.6;
-            }
-
-            100% {
-                transform: translate(-20px, 20px) scale(1);
-                opacity: 0.3;
-            }
-        }
-
-        /* =============================
-       SAKURA PETALS
-    ============================= */
-        .petal {
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            background: pink;
-            border-radius: 60% 40% 60% 40%;
-            opacity: 0.8;
-            animation: fall 7s linear infinite;
-            filter: blur(0.5px);
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-50px) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(110vh) rotate(360deg) scale(0.6);
-                opacity: 0;
-            }
-        }
-
-        /* =============================
-       MAIN OVERLAY
-    ============================= */
+        /* -----------------------------------------------------------
+       🌼 MAIN OVERLAY FOR SLIDESHOW
+    ----------------------------------------------------------- */
         #pp-gallery-overlay {
-            background: radial-gradient(circle at top, #fff2d2, #ffddaa, #ffc577);
+            position: fixed;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
+            z-index: 999998;
+            background: transparent;
         }
 
-        /* =============================
-       PAGE FLIP (NEW!)
-    ============================= */
-        .pageFlip {
-            animation: pageFlip 1.3s ease forwards;
+        /* -----------------------------------------------------------
+       🌼 AURORA BACKGROUND (DIVINE SAFFRON WAVES)
+    ----------------------------------------------------------- */
+        #aurora {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 210, 120, 0.5), transparent 60%),
+                radial-gradient(circle at 70% 60%, rgba(255, 155, 60, 0.45), transparent 70%),
+                radial-gradient(circle at 50% 50%, rgba(255, 220, 160, 0.6), transparent 80%);
+            animation: auroraFlow 12s ease-in-out infinite alternate;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        @keyframes pageFlip {
+        @keyframes auroraFlow {
             0% {
-                transform: perspective(800px) rotateY(-90deg);
-                opacity: 0;
+                transform: scale(1.0) translate(0, 0);
+                opacity: 0.7;
             }
 
-            60% {
-                transform: perspective(800px) rotateY(20deg);
+            100% {
+                transform: scale(1.25) translate(20px, -30px);
                 opacity: 1;
             }
+        }
 
-            100% {
-                transform: perspective(800px) rotateY(0deg);
+        /* -----------------------------------------------------------
+       🌼 GOD RAYS BACKGROUND
+    ----------------------------------------------------------- */
+        #godRays {
+            position: absolute;
+            width: 240%;
+            height: 240%;
+            background: conic-gradient(from 0deg,
+                    rgba(255, 190, 80, 0.32),
+                    transparent,
+                    rgba(255, 160, 40, 0.25),
+                    transparent);
+            animation: godRayRotate 28s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes godRayRotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
             }
         }
 
-        /* =============================
-       KEN BURNS ZOOM
-    ============================= */
-        .kenburns {
-            animation: zoomSlide 8s ease forwards;
-        }
-
-        @keyframes zoomSlide {
-            0% {
-                transform: scale(1);
-            }
-
-            100% {
-                transform: scale(1.1);
-            }
-        }
-
-        /* =============================
-       POLAROID FLOAT
-    ============================= */
+        /* -----------------------------------------------------------
+       🌼 POLAROID FRAME FOR IMAGE
+    ----------------------------------------------------------- */
         .polaroid {
             padding: 18px;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 35px 80px rgba(120, 60, 10, 0.45);
-            animation: floatPolaroid 6s ease-in-out infinite alternate;
+            border-radius: 18px;
+            box-shadow: 0 35px 80px rgba(120, 60, 10, 0.42);
+            animation: floatFrame 6s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 5;
         }
 
-        @keyframes floatPolaroid {
+        @keyframes floatFrame {
             0% {
                 transform: translateY(0px) rotate(-1deg);
             }
 
             100% {
-                transform: translateY(-14px) rotate(2deg);
+                transform: translateY(-12px) rotate(2deg);
             }
         }
 
-        /* =============================
-       BORDER GLOW
-    ============================= */
-        .borderGlow {
-            box-shadow: 0 0 40px rgba(255, 200, 150, 0.8);
-            transition: box-shadow 1.2s ease;
+        /* -----------------------------------------------------------
+       🌼 MAIN IMAGE
+    ----------------------------------------------------------- */
+        #slideImg {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 14px;
+            opacity: 0;
+            transition: opacity 1s;
+            z-index: 10;
         }
 
-        /* =============================
-       CAPTION
-    ============================= */
+        /* -----------------------------------------------------------
+       🌼 CAPTION TEXT
+    ----------------------------------------------------------- */
         .caption {
             position: absolute;
             bottom: 8%;
             width: 100%;
             text-align: center;
-            font-size: 34px;
+            font-size: 36px;
             font-weight: bold;
             color: #5a2600;
-            text-shadow: 0px 3px 16px rgba(255, 240, 200, 0.9);
             opacity: 0;
+            text-shadow: 0 4px 14px rgba(255, 240, 200, 0.9);
             animation: captionFade 2s ease forwards;
         }
 
         @keyframes captionFade {
             0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(24px);
             }
 
             70% {
@@ -280,25 +241,25 @@
             }
         }
 
-        /* =============================
-       QUOTES
-    ============================= */
+        /* -----------------------------------------------------------
+       🌼 QUOTE TEXT
+    ----------------------------------------------------------- */
         #quoteBox {
             position: absolute;
             top: 12%;
             width: 100%;
             text-align: center;
             font-size: 32px;
-            color: #7b3600;
+            color: #8a4b00;
             opacity: 0;
-            text-shadow: 0px 4px 10px rgba(255, 230, 180, 0.8);
+            text-shadow: 0px 4px 12px rgba(255, 230, 180, 0.9);
             pointer-events: none;
         }
 
         @keyframes quoteFade {
             0% {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-12px);
             }
 
             30% {
@@ -312,50 +273,110 @@
 
             100% {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(12px);
             }
         }
 
-        /* =============================
-       MUSIC BUTTON
-    ============================= */
-        #musicBtn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 200, 120, 0.9);
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 99999999999;
-            box-shadow: 0 0 18px rgba(255, 180, 80, 0.8);
-            transition: transform 0.2s ease;
+        /* -----------------------------------------------------------
+       🌼 RIPPLE EFFECT ON TAP
+    ----------------------------------------------------------- */
+        .ripple {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 190, 60, 0.8);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: rippleAnim 1s ease-out forwards;
+            pointer-events: none;
+            z-index: 999999;
         }
 
-        #musicBtn:hover {
-            transform: scale(1.1);
+        @keyframes rippleAnim {
+            to {
+                width: 220px;
+                height: 220px;
+                opacity: 0;
+            }
+        }
+
+        /* -----------------------------------------------------------
+       🌼 MEMORY ORB (GOD MODE SPIRIT BALL)
+    ----------------------------------------------------------- */
+        #memoryOrb {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle, rgba(255, 220, 160, 0.9), rgba(255, 160, 60, 0.4), transparent);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(255, 180, 90, 0.7);
+            pointer-events: none;
+            z-index: 4;
+            opacity: 0.85;
+            animation: orbFloat 14s ease-in-out infinite alternate;
+        }
+
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(120px, -150px);
+            }
+        }
+
+        /* -----------------------------------------------------------
+       🌼 PROGRESS BAR (Memory Timeline)
+    ----------------------------------------------------------- */
+        #progressBarContainer {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 6px;
+            background: rgba(255, 200, 120, 0.4);
+            border-radius: 4px;
+            z-index: 9999999;
+            display: none;
+        }
+
+        #progressBar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffb347, #ff9234);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        /* -----------------------------------------------------------
+       🌼 PETAL, FIREFLY, BOKEH CONTAINERS
+    ----------------------------------------------------------- */
+        #petalLayer,
+        #fireflyLayer,
+        #bokehLayer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- =============================
-     START SCREEN
-============================= -->
+    <!-- 🌼 Start Screen -->
     <div id="startScreen">
-        <div id="startTitle">🌼 Programmer’s Picnic 🌼<br>Ultra Magic++ Memories</div>
+        <div id="startTitle">🌼 Programmer’s Picnic 🌼<br>Ultra Magic GOD MODE</div>
         <div id="startHint">Tap to Begin</div>
     </div>
 
+    <!-- 🎵 Music Button -->
     <div id="musicBtn">🎵 Music</div>
 
-    <!-- =============================
-     HIDDEN IMAGE STORAGE
-============================= -->
+    <!-- 🌼 Hidden Images -->
     <div id="picnic-images">
-
         <img src="Picnic/0.jpg" alt="Cherished Programmer's Picnic memory">
         <img src="Picnic/1.jpg" alt="Learning together with joy">
         <img src="Picnic/2.jpg" alt="Smiles that light up the day">
@@ -377,266 +398,36 @@
         <img src="Picnic/18.jpg" alt="Friends and sunshine">
         <img src="Picnic/19.jpg" alt="Joyful hearts together">
         <img src="Picnic/20.jpg" alt="Magical day to remember">
+    </div>
+
+    <!-- 🌼 Main Slideshow Overlay -->
+    <div id="pp-gallery-overlay">
+
+        <div id="aurora"></div>
+        <div id="godRays"></div>
+
+        <div id="petalLayer"></div>
+        <div id="fireflyLayer"></div>
+        <div id="bokehLayer"></div>
+
+        <div id="memoryOrb"></div>
+
+        <div class="polaroid">
+            <img id="slideImg" src="" alt="">
+        </div>
+
+        <div id="quoteBox"></div>
+        <div class="caption" id="captionBox"></div>
 
     </div>
 
-    <!-- =============================
-     BACKGROUND MUSIC
-============================= -->
-    <audio id="bgMusic" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6b93ef0e48.mp3" type="audio/mpeg">
-    </audio>
+    <!-- 🌼 Progress Bar -->
+    <div id="progressBarContainer">
+        <div id="progressBar"></div>
+    </div>
 
-    <script>
-
-        /* =============================
-           START SCREEN LOGIC
-        ============================= */
-        let startTimeout;
-
-        function startSlideshowNow() {
-            const s = document.getElementById("startScreen");
-            s.style.animation = "fadeOut 1s forwards";
-            setTimeout(() => s.remove(), 950);
-            startGalleryFromBeginning();
-        }
-
-        document.getElementById("startScreen").addEventListener("click", startSlideshowNow);
-        startTimeout = setTimeout(startSlideshowNow, 8000);
-
-        /* =============================
-           MUSIC CONTROL
-        ============================= */
-        const musicBtn = document.getElementById("musicBtn");
-        const bgMusic = document.getElementById("bgMusic");
-        let musicPlaying = false;
-
-        musicBtn.onclick = () => {
-            if (musicPlaying) {
-                bgMusic.pause();
-                musicBtn.textContent = "🎵 Music";
-            } else {
-                bgMusic.volume = 0.5;
-                bgMusic.play();
-                musicBtn.textContent = "⏸ Pause";
-            }
-            musicPlaying = !musicPlaying;
-        };
-
-        /* =============================
-           MAIN SLIDESHOW LOGIC
-        ============================= */
-        (function () {
-
-            const imgs = Array.from(document.querySelectorAll("#picnic-images img"));
-            if (!imgs.length) return;
-
-            /* Build overlay */
-            const overlay = document.createElement("div");
-            overlay.id = "pp-gallery-overlay";
-            overlay.style.cssText = `
-        position: fixed;
-        inset: 0;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 999998;
-        overflow: hidden;
-    `;
-
-            /* Effects elements */
-            const glow = document.createElement("div");
-            glow.id = "glowCircle";
-
-            const rays = document.createElement("div");
-            rays.id = "lightRays";
-
-            const polaroid = document.createElement("div");
-            polaroid.className = "polaroid borderGlow";
-
-            const slideImg = document.createElement("img");
-            slideImg.style.cssText = `
-        max-width: 90%;
-        max-height: 80%;
-        border-radius: 16px;
-        opacity: 0;
-        transition: opacity 1s;
-    `;
-            polaroid.appendChild(slideImg);
-
-            const caption = document.createElement("div");
-            caption.className = "caption";
-
-            const quoteBox = document.createElement("div");
-            quoteBox.id = "quoteBox";
-
-            overlay.appendChild(rays);
-            overlay.appendChild(glow);
-            overlay.appendChild(polaroid);
-            overlay.appendChild(caption);
-            overlay.appendChild(quoteBox);
-            document.body.appendChild(overlay);
-
-            /* Generate petals */
-            setInterval(() => {
-                const p = document.createElement("div");
-                p.className = "petal";
-                p.style.left = Math.random() * innerWidth + "px";
-                overlay.appendChild(p);
-                setTimeout(() => p.remove(), 7000);
-            }, 300);
-
-            /* Fireflies */
-            setInterval(() => {
-                const f = document.createElement("div");
-                f.className = "firefly";
-                f.style.left = Math.random() * innerWidth + "px";
-                f.style.top = Math.random() * innerHeight + "px";
-                overlay.appendChild(f);
-                setTimeout(() => f.remove(), 6000);
-            }, 900);
-
-            /* Bokeh lights */
-            setInterval(() => {
-                const b = document.createElement("div");
-                b.className = "bokeh";
-                b.style.left = Math.random() * innerWidth + "px";
-                b.style.top = Math.random() * innerHeight + "px";
-                overlay.appendChild(b);
-                setTimeout(() => b.remove(), 12000);
-            }, 800);
-
-            /* Quotes */
-            const quotes = [
-                "✨ Every smile tells a story.",
-                "🌼 Moments that stay forever.",
-                "💛 Together is the best place to be.",
-                "🌿 Joy grows when shared.",
-                "📸 One click, a thousand memories.",
-                "🌞 Warm hearts, bright minds.",
-                "💫 The magic of togetherness."
-            ];
-
-            function showRandomQuote() {
-                quoteBox.innerText = quotes[Math.floor(Math.random() * quotes.length)];
-                quoteBox.style.animation = "none";
-                void quoteBox.offsetWidth;
-                quoteBox.style.animation = "quoteFade 5s ease";
-            }
-
-            /* Navigation buttons */
-            function createButton(cssText, symbol) {
-                const b = document.createElement("div");
-                b.style.cssText = `
-            ${cssText}
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 60px;
-            color: white;
-            cursor: pointer;
-            padding: 20px;
-            user-select: none;
-            text-shadow: 0px 3px 10px rgba(0,0,0,0.4);
-            z-index: 99999999;
-        `;
-                b.innerHTML = symbol;
-                return b;
-            }
-
-            const nextBtn = createButton("right: 30px;", "❯");
-            const prevBtn = createButton("left: 30px;", "❮");
-
-            const closeBtn = document.createElement("div");
-            closeBtn.innerHTML = "×";
-            closeBtn.style.cssText = `
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        font-size: 90px;
-        color: white;
-        cursor: pointer;
-        z-index: 99999999;
-    `;
-
-            overlay.appendChild(nextBtn);
-            overlay.appendChild(prevBtn);
-            overlay.appendChild(closeBtn);
-
-            /* Slideshow logic */
-            let currentIndex = 0;
-            let autoPlay;
-
-            function showSlide(i) {
-                if (i < 0) i = imgs.length - 1;
-                if (i >= imgs.length) i = 0;
-                currentIndex = i;
-
-                slideImg.style.opacity = 0;
-                caption.style.opacity = 0;
-
-                const curtain = document.createElement("div");
-                curtain.id = "curtain";
-                overlay.appendChild(curtain);
-                setTimeout(() => curtain.remove(), 1200);
-
-                setTimeout(() => {
-                    slideImg.src = imgs[i].src;
-
-                    slideImg.className = "kenburns pageFlip borderGlow";
-
-                    caption.innerText = imgs[i].alt;
-                    caption.style.animation = "captionFade 2s forwards";
-
-                    showRandomQuote();
-
-                    slideImg.style.opacity = 1;
-                }, 300);
-            }
-
-            function openGallery(i) {
-                overlay.style.display = "flex";
-                showSlide(i);
-                startAutoPlay();
-
-                if (!musicPlaying) {
-                    bgMusic.volume = 0.5;
-                    bgMusic.play();
-                    musicBtn.textContent = "⏸ Pause";
-                    musicPlaying = true;
-                }
-            }
-
-            function closeGallery() {
-                overlay.style.display = "none";
-                stopAutoPlay();
-                bgMusic.pause();
-                musicPlaying = false;
-                musicBtn.textContent = "🎵 Music";
-            }
-
-            function nextSlide() { showSlide(currentIndex + 1); }
-            function prevSlide() { showSlide(currentIndex - 1); }
-
-            function startAutoPlay() {
-                stopAutoPlay();
-                autoPlay = setInterval(nextSlide, 6500);
-            }
-
-            function stopAutoPlay() {
-                if (autoPlay) clearInterval(autoPlay);
-            }
-
-            nextBtn.onclick = nextSlide;
-            prevBtn.onclick = prevSlide;
-            closeBtn.onclick = closeGallery;
-
-            window.startGalleryFromBeginning = function () {
-                openGallery(0);
-            };
-
-        })();
-    </script>
+    <!-- 🌼 GOD MODE SCRIPT COMES IN PART 2 -->
+    <script src="godMode.js"></script>
 
 </body>
 
