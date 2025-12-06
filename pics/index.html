@@ -4,72 +4,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programmer's Picnic</title>
+    <title>Programmer's Picnic — Memories Gallery</title>
+
     <style>
-        .img {
-            /* display: none; */
-            /* width: 100px;
-            height: 100px; */
-
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fff7e6;
+            font-family: "Segoe UI", system-ui, sans-serif;
         }
 
-        .animX {
-            animation-duration: 5s;
-            animation-name: ax;
-            animation-iteration-count: 1;
-            animation-direction: alternate-reverse;
+        /* Warm, charming glow overlay background */
+        #pp-gallery-overlay {
+            background: radial-gradient(circle at top,
+                    #fff2d2,
+                    #ffddaa,
+                    #ffc577);
         }
 
-        @keyframes ax {
-            0% {
-                opacity: 0;
-                transform: rotatex(0deg);
-            }
+        /* Heart particle animation */
+        .heart {
+            position: absolute;
+            color: rgba(255, 80, 120, 0.5);
+            font-size: 24px;
+            animation: floatUp 4s ease-in infinite;
+            pointer-events: none;
+        }
 
-            50% {
+        @keyframes floatUp {
+            from {
+                transform: translateY(20px) scale(0.8);
                 opacity: 1;
-                transform: rotatex(180deg);
             }
 
-            100% {
+            to {
+                transform: translateY(-80px) scale(1.2);
                 opacity: 0;
-                transform: rotatex(360deg);
             }
-
         }
 
-
+        /* 3D animations */
+        .animX {
+            animation: flipX 1.4s ease forwards;
+        }
 
         .animY {
-            animation-duration: 5s;
-            animation-name: ay;
-            animation-iteration-count: 1;
-            animation-direction: alternate-reverse;
+            animation: flipY 1.4s ease forwards;
         }
 
-        @keyframes ay {
+        @keyframes flipX {
             0% {
                 opacity: 0;
-                transform: rotatey(0deg);
+                transform: perspective(900px) rotateX(90deg);
             }
 
             50% {
                 opacity: 1;
-                transform: rotatey(180deg);
+                transform: perspective(900px) rotateX(0deg);
             }
 
             100% {
+                opacity: 1;
+                transform: perspective(900px) rotateX(0deg);
+            }
+        }
+
+        @keyframes flipY {
+            0% {
                 opacity: 0;
-                transform: rotatey(360deg);
+                transform: perspective(900px) rotateY(90deg);
             }
 
+            50% {
+                opacity: 1;
+                transform: perspective(900px) rotateY(0deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: perspective(900px) rotateY(0deg);
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <img alt="Programmer's Picnic" src="Picnic/0.jpg">
+    <!-- Images (unchanged) -->
+    <img src="Picnic/0.jpg">
     <img src="Picnic/1.jpg">
     <img src="Picnic/2.jpg">
     <img src="Picnic/3.jpg">
@@ -80,7 +102,6 @@
     <img src="Picnic/8.jpg">
     <img src="Picnic/9.jpg">
     <img src="Picnic/10.jpg">
-
     <img src="Picnic/11.jpg">
     <img src="Picnic/12.jpg">
     <img src="Picnic/13.jpg">
@@ -91,178 +112,157 @@
     <img src="Picnic/18.jpg">
     <img src="Picnic/19.jpg">
     <img src="Picnic/20.jpg">
-    
+
     <script>
+        (function () {
 
-/*  FABULOUS IMAGE SHOW – Programmer's Picnic Edition
- *  Now with AUTO START after 15 seconds!
- */
+            const imgs = Array.from(document.querySelectorAll("img"));
+            if (!imgs.length) return;
 
-(function () {
-
-    // Collect all images
-    const imgs = Array.from(document.querySelectorAll("img"));
-    console.log(imgs);
-
-    if (imgs.length === 0) return;
-
-    // Create overlay container
-    const overlay = document.createElement("div");
-    overlay.id = "pp-gallery-overlay";
-    overlay.style.cssText = `
+            /* Build warm gallery overlay */
+            const overlay = document.createElement("div");
+            overlay.id = "pp-gallery-overlay";
+            overlay.style.cssText = `
         position: fixed;
         inset: 0;
-        background-color:lightblue;
         display: none;
         justify-content: center;
         align-items: center;
         z-index: 999999;
-        /* backdrop-filter: blur(8px);*/
-          box-shadow: 0 40px 100px rgba(27, 80, 8, 0.38);;
+        overflow: hidden;
     `;
 
-    // Create image display box
-    const slideImg = document.createElement("img");
-    slideImg.id = "pp-slide-img";
-    slideImg.style.cssText = `
-    box-shadow: 10px 20px 350px red;
-        max-width: 90%;
-        max-height: 80%;
-        border-radius: 16px;
-        box-shadow: 0 40px 100px rgba(27, 80, 8, 0.38);;
+            /* Create floating hearts */
+            setInterval(() => {
+                const h = document.createElement("div");
+                h.className = "heart";
+                h.innerHTML = "❤";
+                h.style.left = Math.random() * window.innerWidth + "px";
+                h.style.top = (window.innerHeight - 100) + "px";
+                overlay.appendChild(h);
+                setTimeout(() => h.remove(), 4000);
+            }, 900);
+
+            /* Main displayed image */
+            const slideImg = document.createElement("img");
+            slideImg.style.cssText = `
+        max-width: 92%;
+        max-height: 82%;
+        border-radius: 22px;
+        box-shadow: 0 30px 80px rgba(180, 90, 10, 0.35);
+        transition: opacity 0.5s ease;
         opacity: 0;
-        transition: opacity 0.6s ease-in-out;
     `;
+            overlay.appendChild(slideImg);
 
-    // Navigation buttons
-    const btnStyle = `
+            /* Navigation buttons */
+            function btn(css) {
+                const b = document.createElement("div");
+                b.style.cssText = `
+            ${css}
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 54px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            padding: 16px;
+            user-select: none;
+            text-shadow: 0px 3px 10px rgba(0,0,0,0.4);
+        `;
+                return b;
+            }
+
+            const prevBtn = btn("left: 30px;");
+            prevBtn.innerHTML = "❮";
+            const nextBtn = btn("right: 30px;");
+            nextBtn.innerHTML = "❯";
+
+            const closeBtn = document.createElement("div");
+            closeBtn.innerHTML = "×";
+            closeBtn.style.cssText = `
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 42px;
+        top: 25px;
+        right: 35px;
+        font-size: 70px;
         color: white;
         cursor: pointer;
-        padding: 20px;
-        user-select: none;
-        transition: 0.3s;
+        text-shadow: 0px 3px 10px rgba(0,0,0,0.4);
     `;
 
-    const prevBtn = document.createElement("div");
-    prevBtn.innerHTML = "&#10094;";
-    prevBtn.style.cssText = btnStyle + "left: 30px;";
+            overlay.appendChild(prevBtn);
+            overlay.appendChild(nextBtn);
+            overlay.appendChild(closeBtn);
+            document.body.appendChild(overlay);
 
-    const nextBtn = document.createElement("div");
-    nextBtn.innerHTML = "&#10095;";
-    nextBtn.style.cssText = btnStyle + "right: 30px;";
+            let currentIndex = 0;
+            let autoPlayInterval = null;
 
-    const closeBtn = document.createElement("div");
-    closeBtn.innerHTML = "&times;";
-    closeBtn.style.cssText = `
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        font-size: 50px;
-        color: white;
-        cursor: pointer;
-        user-select: none;
-    `;
+            function showSlide(i) {
+                if (i < 0) i = imgs.length - 1;
+                if (i >= imgs.length) i = 0;
+                currentIndex = i;
 
-    overlay.appendChild(slideImg);
-    overlay.appendChild(prevBtn);
-    overlay.appendChild(nextBtn);
-    overlay.appendChild(closeBtn);
-    document.body.appendChild(overlay);
+                slideImg.classList.remove("animX", "animY");
+                slideImg.style.opacity = 0;
 
-    let currentIndex = 0;
-    let autoPlayInterval = null;
+                setTimeout(() => {
+                    slideImg.src = imgs[currentIndex].src;
+                    slideImg.style.opacity = 1;
+                    slideImg.classList.add(Math.random() < 0.5 ? "animX" : "animY");
+                }, 100);
+            }
 
-    function showSlide(index) {
-        // imgs.forEach(myFunction)
+            function openGallery(i) {
+                overlay.style.display = "flex";
+                showSlide(i);
+                startAutoPlay();
+            }
 
-        // function myFunction(item, index, arr) {
-        //     imgs[index].classList.remove("slideFabulous");
-        // }
-        if (index < 0) index = imgs.length - 1;
-        if (index >= imgs.length) index = 0;
-        currentIndex = index;
-        slideImg.classList.remove("animX");
-        slideImg.classList.remove("animY");
-        // slideImg.style.opacity = 0;
+            function closeGallery() {
+                overlay.style.display = "none";
+                stopAutoPlay();
+            }
 
-        setTimeout(() => {
-            slideImg.src = imgs[currentIndex].src;
-            slideImg.style.opacity = 1;
-            console.log(Math.random());
-            // slideImg.classList.add("img");
-            if (Math.random() < 0.5)
-                slideImg.classList.add("animX");
-            else
-                slideImg.classList.add("animY");
-        }, 20);
-    }
+            function nextSlide() { showSlide(currentIndex + 1); }
+            function prevSlide() { showSlide(currentIndex - 1); }
 
-    function openGallery(index) {
-        overlay.style.display = "flex";
-        showSlide(index);
-        startAutoPlay();
-    }
+            function startAutoPlay() {
+                stopAutoPlay();
+                autoPlayInterval = setInterval(nextSlide, 5000);
+            }
 
-    function closeGallery() {
-        overlay.style.display = "none";
-        stopAutoPlay();
-    }
+            function stopAutoPlay() {
+                if (autoPlayInterval) clearInterval(autoPlayInterval);
+            }
 
-    function nextSlide() {
-        showSlide(currentIndex + 1);
-    }
+            imgs.forEach((img, i) => {
+                img.style.cursor = "zoom-in";
+                img.style.borderRadius = "10px";
+                img.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+                img.addEventListener("click", () => openGallery(i));
+            });
 
-    function prevSlide() {
-        showSlide(currentIndex - 1);
-    }
+            nextBtn.onclick = nextSlide;
+            prevBtn.onclick = prevSlide;
+            closeBtn.onclick = closeGallery;
 
-    // Auto-play every 4 seconds
-    function startAutoPlay() {
-        stopAutoPlay();
-        autoPlayInterval = setInterval(nextSlide, 5000);
-    }
+            document.addEventListener("keydown", (e) => {
+                if (overlay.style.display !== "flex") return;
+                if (e.key === "ArrowRight") nextSlide();
+                if (e.key === "ArrowLeft") prevSlide();
+                if (e.key === "Escape") closeGallery();
+            });
 
-    function stopAutoPlay() {
-        if (autoPlayInterval) clearInterval(autoPlayInterval);
-    }
+            /* Auto start after 15 seconds */
+            setTimeout(() => {
+                if (overlay.style.display === "none") openGallery(0);
+            }, 15000);
 
-    // Click any image to open gallery
-    imgs.forEach((img, idx) => {
-        img.style.cursor = "zoom-in";
-        img.addEventListener("click", () => openGallery(idx));
-    });
-
-    // Button events
-    nextBtn.onclick = nextSlide;
-    prevBtn.onclick = prevSlide;
-    closeBtn.onclick = closeGallery;
-
-    // Keyboard controls
-    document.addEventListener("keydown", (e) => {
-        if (overlay.style.display === "flex") {
-            if (e.key === "ArrowRight") nextSlide();
-            if (e.key === "ArrowLeft") prevSlide();
-            if (e.key === "Escape") closeGallery();
-        }
-    });
-
-    // ⭐ AUTO START SLIDESHOW AFTER 15 SECONDS
-    setTimeout(() => {
-        if (overlay.style.display === "none") {
-            openGallery(0);  // Start from first image
-        }
-    }, 3000);
-
-})();
-
-
-
-
+        })();
     </script>
+
 </body>
 
 </html>
