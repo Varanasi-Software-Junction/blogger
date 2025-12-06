@@ -1,91 +1,45 @@
-/*  FABULOUS IMAGE SHOW – ULTIMATE EDITION (All 5 Features)
- *  -------------------------------------------------------
- *  Enhancements included:
- *  1. Zoom animation
- *  2. Captions (from ALT or filename)
- *  3. Randomized slideshow order
- *  4. Background music (looped, soft)
- *  5. Slide progress bar
- *  + Auto-start after 15 seconds
+/*  FABULOUS IMAGE SHOW – Programmer's Picnic Edition
+ *  Now with AUTO START after 15 seconds!
  */
 
 (function () {
 
     // Collect all images
-    let imgs = Array.from(document.querySelectorAll("img"));
+    const imgs = Array.from(document.querySelectorAll("img"));
+    console.log(imgs);
+
     if (imgs.length === 0) return;
 
-    // RANDOMIZE order
-    imgs = imgs.sort(() => Math.random() - 0.5);
-
-    // Create overlay
+    // Create overlay container
     const overlay = document.createElement("div");
     overlay.id = "pp-gallery-overlay";
     overlay.style.cssText = `
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.9);
+        background-color:lightblue;
         display: none;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
         z-index: 999999;
-        backdrop-filter: blur(8px);
+        /* backdrop-filter: blur(8px);*/
+          box-shadow: 0 40px 100px rgba(27, 80, 8, 0.38);;
     `;
 
-    // Background music
-    const music = new Audio(
-        "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Kevin_MacLeod/Calming/KEVIN_MACLEOD_-_CALMING.mp3"
-    );
-    music.loop = true;
-    music.volume = 0.35;
-
-    // Main image with zoom animation
+    // Create image display box
     const slideImg = document.createElement("img");
     slideImg.id = "pp-slide-img";
     slideImg.style.cssText = `
+    box-shadow: 10px 20px 350px red;
         max-width: 90%;
-        max-height: 75%;
+        max-height: 80%;
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        box-shadow: 0 40px 100px rgba(27, 80, 8, 0.38);;
         opacity: 0;
-        transform: scale(0.9);
-        transition: opacity 0.6s ease, transform 0.8s ease;
+        transition: opacity 0.6s ease-in-out;
     `;
-
-    // Caption box
-    const caption = document.createElement("div");
-    caption.style.cssText = `
-        margin-top: 15px;
-        color: #ffd;
-        font-size: 22px;
-        font-family: system-ui, sans-serif;
-        text-shadow: 0 0 10px black;
-    `;
-
-    // Progress bar container
-    const progressBox = document.createElement("div");
-    progressBox.style.cssText = `
-        width: 80%;
-        height: 6px;
-        background: rgba(255,255,255,0.2);
-        border-radius: 4px;
-        margin-top: 18px;
-        overflow: hidden;
-    `;
-
-    // Actual progress bar
-    const progressFill = document.createElement("div");
-    progressFill.style.cssText = `
-        width: 0%;
-        height: 100%;
-        background: #ffca28;
-        transition: width 4s linear;
-    `;
-    progressBox.appendChild(progressFill);
 
     // Navigation buttons
-    const navBtn = `
+    const btnStyle = `
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -94,17 +48,16 @@
         cursor: pointer;
         padding: 20px;
         user-select: none;
-        text-shadow: 0 0 8px black;
         transition: 0.3s;
     `;
 
     const prevBtn = document.createElement("div");
     prevBtn.innerHTML = "&#10094;";
-    prevBtn.style.cssText = navBtn + "left: 30px;";
+    prevBtn.style.cssText = btnStyle + "left: 30px;";
 
     const nextBtn = document.createElement("div");
     nextBtn.innerHTML = "&#10095;";
-    nextBtn.style.cssText = navBtn + "right: 30px;";
+    nextBtn.style.cssText = btnStyle + "right: 30px;";
 
     const closeBtn = document.createElement("div");
     closeBtn.innerHTML = "&times;";
@@ -112,15 +65,13 @@
         position: absolute;
         top: 20px;
         right: 30px;
-        font-size: 48px;
+        font-size: 50px;
         color: white;
         cursor: pointer;
         user-select: none;
     `;
 
     overlay.appendChild(slideImg);
-    overlay.appendChild(caption);
-    overlay.appendChild(progressBox);
     overlay.appendChild(prevBtn);
     overlay.appendChild(nextBtn);
     overlay.appendChild(closeBtn);
@@ -129,38 +80,33 @@
     let currentIndex = 0;
     let autoPlayInterval = null;
 
-    function getCaptionText(img) {
-        if (img.alt && img.alt.trim() !== "") return img.alt.trim();
-        try {
-            return img.src.split("/").pop();
-        } catch {
-            return "Image";
-        }
-    }
-
     function showSlide(index) {
+        // imgs.forEach(myFunction)
+
+        // function myFunction(item, index, arr) {
+        //     imgs[index].classList.remove("slideFabulous");
+        // }
         if (index < 0) index = imgs.length - 1;
         if (index >= imgs.length) index = 0;
         currentIndex = index;
-
-        slideImg.style.opacity = 0;
-        slideImg.style.transform = "scale(0.9)";
-        progressFill.style.width = "0%";
+        slideImg.classList.remove("animX");
+        slideImg.classList.remove("animY");
+        // slideImg.style.opacity = 0;
 
         setTimeout(() => {
             slideImg.src = imgs[currentIndex].src;
-            caption.textContent = getCaptionText(imgs[currentIndex]);
-
             slideImg.style.opacity = 1;
-            slideImg.style.transform = "scale(1)";
-
-            progressFill.style.width = "100%";
-        }, 100);
+            console.log(Math.random());
+            // slideImg.classList.add("img");
+            if (Math.random() < 0.5)
+                slideImg.classList.add("animX");
+            else
+                slideImg.classList.add("animY");
+        }, 20);
     }
 
     function openGallery(index) {
         overlay.style.display = "flex";
-        music.play().catch(() => {}); // avoid autoplay block
         showSlide(index);
         startAutoPlay();
     }
@@ -168,16 +114,20 @@
     function closeGallery() {
         overlay.style.display = "none";
         stopAutoPlay();
-        music.pause();
     }
 
-    function nextSlide() { showSlide(currentIndex + 1); }
-    function prevSlide() { showSlide(currentIndex - 1); }
+    function nextSlide() {
+        showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentIndex - 1);
+    }
 
     // Auto-play every 4 seconds
     function startAutoPlay() {
         stopAutoPlay();
-        autoPlayInterval = setInterval(nextSlide, 4000);
+        autoPlayInterval = setInterval(nextSlide, 5000);
     }
 
     function stopAutoPlay() {
@@ -190,12 +140,12 @@
         img.addEventListener("click", () => openGallery(idx));
     });
 
-    // Buttons
+    // Button events
     nextBtn.onclick = nextSlide;
     prevBtn.onclick = prevSlide;
     closeBtn.onclick = closeGallery;
 
-    // Keyboard support
+    // Keyboard controls
     document.addEventListener("keydown", (e) => {
         if (overlay.style.display === "flex") {
             if (e.key === "ArrowRight") nextSlide();
@@ -204,11 +154,11 @@
         }
     });
 
-    // ★ AUTO-START AFTER 15 SECONDS
+    // ⭐ AUTO START SLIDESHOW AFTER 15 SECONDS
     setTimeout(() => {
         if (overlay.style.display === "none") {
-            openGallery(0);
+            openGallery(0);  // Start from first image
         }
-    }, 15000);
+    }, 3000);
 
 })();

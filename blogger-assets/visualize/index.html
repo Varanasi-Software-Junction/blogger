@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pebble Math Visualizer – Animated Saffron Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-light: #fff7e0;
+      --bg-card: #fffaf0;
+      --accent: #f4a623;
+      --accent-dark: #c87608;
+      --text-main: #3b2a1a;
+      --pebble: #f9d38b;
+      --pebble-border: #c58a27;
+      --pebble-highlight: #ffb347;
+      --pebble-muted: #e0e0e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #ffe9b0 0%, #fff7e0 45%, #ffffff 100%);
+      color: var(--text-main);
+    }
+
+    .wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      animation: headerFade 0.8s ease-out;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: 0.03em;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid #f6c76d;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      padding: 16px;
+      animation: cardRise 0.6s ease-out;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      justify-content: center;
+    }
+
+    .tab-btn {
+      border: 1px solid #f4c56e;
+      background: #fff4da;
+      border-radius: 999px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+
+    .tab-btn span.emoji {
+      font-size: 1rem;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #ffc857, #ff9f1c);
+      color: #3b240b;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+      transform: translateY(-1px);
+      font-weight: 600;
+    }
+
+    .tab-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .tab-content {
+      display: none;
+      margin-top: 4px;
+      animation: tabFade 0.35s ease-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .control-group label {
+      font-size: 0.8rem;
+      opacity: 0.85;
+    }
+
+    .control-group input {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #e0b35e;
+      min-width: 80px;
+      font-size: 0.9rem;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.1s;
+    }
+
+    .control-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(244, 166, 35, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2);
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .visual-area {
+      min-height: 180px;
+      border-radius: 12px;
+      border: 1px dashed #f1c574;
+      padding: 12px;
+      margin-top: 8px;
+      background: #fffdf7;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .visual-area::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow: 0 0 0 0 rgba(244, 166, 35, 0);
+      transition: box-shadow 0.3s ease-out;
+    }
+
+    .visual-area.visual-flash::before {
+      box-shadow: 0 0 0 6px rgba(244, 166, 35, 0.18);
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    .row-label {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      margin-right: 6px;
+      min-width: 60px;
+    }
+
+    .pile {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .pebble {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--pebble);
+      border: 1px solid var(--pebble-border);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      transform-origin: center bottom;
+      transition: transform 0.15s ease-out;
+    }
+
+    .pebble.highlight {
+      background: var(--pebble-highlight);
+    }
+
+    .pebble.muted {
+      background: var(--pebble-muted);
+      border-color: #b0b0b0;
+      box-shadow: none;
+    }
+
+    .pebble:hover {
+      transform: translateY(-1px) scale(1.05);
+    }
+
+    .grid {
+      display: inline-grid;
+      grid-auto-rows: auto;
+      gap: 4px;
+    }
+
+    .grid-row {
+      display: flex;
+      gap: 4px;
+    }
+
+    .explanation {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      border-top: 1px dashed #f1c574;
+      padding-top: 6px;
+      animation: textFade 0.4s ease-out;
+    }
+
+    @media (max-width: 600px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .control-group input {
+        width: 100%;
+      }
+    }
+
+    /* === Animations === */
+
+    @keyframes popPebble {
+      0% {
+        transform: scale(0.2) translateY(10px);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.08) translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulseHighlight {
+      0% {
+        box-shadow: 0 0 0 0 rgba(244, 166, 35, 0.5);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(244, 166, 35, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(244, 166, 35, 0);
+      }
+    }
+
+    @keyframes headerFade {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes cardRise {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes tabFade {
+      0% {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes textFade {
+      0% {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-pop {
+      animation: popPebble 0.35s ease-out forwards;
+    }
+
+    .animate-pulse-once {
+      animation: pulseHighlight 0.7s ease-out 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>🪨 Pebble Math Visualizer</h1>
+      <p>See addition, subtraction, multiplication, factorial, combinations, and powers as pebbles.</p>
+    </header>
+
+    <div class="card">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="add">
+          <span class="emoji">➕</span> Addition
+        </button>
+        <button class="tab-btn" data-tab="sub">
+          <span class="emoji">➖</span> Subtraction
+        </button>
+        <button class="tab-btn" data-tab="mul">
+          <span class="emoji">✖️</span> Multiplication
+        </button>
+        <button class="tab-btn" data-tab="fact">
+          <span class="emoji">!</span> Factorial / Permutations
+        </button>
+        <button class="tab-btn" data-tab="comb">
+          <span class="emoji">🎯</span> Combinations
+        </button>
+        <button class="tab-btn" data-tab="pow">
+          <span class="emoji">🌿</span> Powers
+        </button>
+      </div>
+
+      <!-- ADDITION -->
+      <div class="tab-content active" id="tab-add">
+        <div class="controls">
+          <div class="control-group">
+            <label for="add-a">a (first pile)</label>
+            <input type="number" id="add-a" min="0" max="30" value="3" />
+          </div>
+          <div class="control-group">
+            <label for="add-b">b (second pile)</label>
+            <input type="number" id="add-b" min="0" max="30" value="4" />
+          </div>
+          <button class="btn-primary" id="btn-add">Visualize ➕</button>
+        </div>
+        <div class="hint">Addition = putting the two piles together.</div>
+        <div class="visual-area" id="vis-add"></div>
+      </div>
+
+      <!-- SUBTRACTION -->
+      <div class="tab-content" id="tab-sub">
+        <div class="controls">
+          <div class="control-group">
+            <label for="sub-a">a (starting pile)</label>
+            <input type="number" id="sub-a" min="0" max="30" value="7" />
+          </div>
+          <div class="control-group">
+            <label for="sub-b">b (remove this many)</label>
+            <input type="number" id="sub-b" min="0" max="30" value="3" />
+          </div>
+          <button class="btn-primary" id="btn-sub">Visualize ➖</button>
+        </div>
+        <div class="hint">Subtraction = start with a pile of a and remove b pebbles.</div>
+        <div class="visual-area" id="vis-sub"></div>
+      </div>
+
+      <!-- MULTIPLICATION -->
+      <div class="tab-content" id="tab-mul">
+        <div class="controls">
+          <div class="control-group">
+            <label for="mul-a">a (pebbles per row)</label>
+            <input type="number" id="mul-a" min="0" max="15" value="4" />
+          </div>
+          <div class="control-group">
+            <label for="mul-b">b (number of rows)</label>
+            <input type="number" id="mul-b" min="0" max="15" value="3" />
+          </div>
+          <button class="btn-primary" id="btn-mul">Visualize ✖️</button>
+        </div>
+        <div class="hint">Multiplication a × b = b rows of a pebbles (an area).</div>
+        <div class="visual-area" id="vis-mul"></div>
+      </div>
+
+      <!-- FACTORIAL -->
+      <div class="tab-content" id="tab-fact">
+        <div class="controls">
+          <div class="control-group">
+            <label for="fact-n">n (distinct pebbles)</label>
+            <input type="number" id="fact-n" min="0" max="8" value="4" />
+          </div>
+          <button class="btn-primary" id="btn-fact">Visualize n! </button>
+        </div>
+        <div class="hint">Factorial n! = number of all possible orders of n distinct pebbles.</div>
+        <div class="visual-area" id="vis-fact"></div>
+      </div>
+
+      <!-- COMBINATIONS -->
+      <div class="tab-content" id="tab-comb">
+        <div class="controls">
+          <div class="control-group">
+            <label for="comb-n">n (total pebbles)</label>
+            <input type="number" id="comb-n" min="0" max="15" value="5" />
+          </div>
+          <div class="control-group">
+            <label for="comb-k">k (selected pebbles)</label>
+            <input type="number" id="comb-k" min="0" max="15" value="3" />
+          </div>
+          <button class="btn-primary" id="btn-comb">Visualize C(n, k)</button>
+        </div>
+        <div class="hint">Combinations = choose k pebbles out of n, order does not matter.</div>
+        <div class="visual-area" id="vis-comb"></div>
+      </div>
+
+      <!-- POWERS -->
+      <div class="tab-content" id="tab-pow">
+        <div class="controls">
+          <div class="control-group">
+            <label for="pow-a">a (choices each time)</label>
+            <input type="number" id="pow-a" min="0" max="8" value="3" />
+          </div>
+          <div class="control-group">
+            <label for="pow-b">b (steps / positions)</label>
+            <input type="number" id="pow-b" min="0" max="8" value="2" />
+          </div>
+          <button class="btn-primary" id="btn-pow">Visualize a^b</button>
+        </div>
+        <div class="hint">a^b = number of ways to choose 1 pebble at each of b positions, with a choices each time.</div>
+        <div class="visual-area" id="vis-pow"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Small helper: factorial and combinations
+    function factorial(n) {
+      if (n < 0) return NaN;
+      let res = 1;
+      for (let i = 2; i <= n; i++) res *= i;
+      return res;
+    }
+
+    function combinations(n, k) {
+      if (k < 0 || n < 0 || k > n) return 0;
+      k = Math.min(k, n - k); // symmetry
+      let num = 1;
+      let den = 1;
+      for (let i = 1; i <= k; i++) {
+        num *= n - (k - i);
+        den *= i;
+      }
+      return num / den;
+    }
+
+    function clearNode(node) {
+      while (node.firstChild) node.removeChild(node.firstChild);
+    }
+
+    function createPebble(className) {
+      const p = document.createElement("div");
+      p.className = "pebble" + (className ? " " + className : "");
+      return p;
+    }
+
+    function createRow(labelText) {
+      const row = document.createElement("div");
+      row.className = "row";
+
+      if (labelText) {
+        const label = document.createElement("div");
+        label.className = "row-label";
+        label.textContent = labelText;
+        row.appendChild(label);
+      }
+
+      const pile = document.createElement("div");
+      pile.className = "pile";
+      row.appendChild(pile);
+
+      return { row, pile };
+    }
+
+    // Animate all pebbles in a container
+    function animatePebbles(container) {
+      // flash border
+      container.classList.remove("visual-flash");
+      void container.offsetWidth; // reflow
+      container.classList.add("visual-flash");
+      setTimeout(() => container.classList.remove("visual-flash"), 300);
+
+      const pebbles = container.querySelectorAll(".pebble");
+      pebbles.forEach((p, i) => {
+        // reset animation
+        p.classList.remove("animate-pop");
+        p.classList.remove("animate-pulse-once");
+        void p.offsetWidth; // reflow to restart animation
+        p.style.animationDelay = (i * 30) + "ms";
+        p.classList.add("animate-pop");
+
+        if (p.classList.contains("highlight")) {
+          p.classList.add("animate-pulse-once");
+          p.addEventListener(
+            "animationend",
+            () => p.classList.remove("animate-pulse-once"),
+            { once: true }
+          );
+        }
+      });
+    }
+
+    // TABS
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = {
+      add: document.getElementById("tab-add"),
+      sub: document.getElementById("tab-sub"),
+      mul: document.getElementById("tab-mul"),
+      fact: document.getElementById("tab-fact"),
+      comb: document.getElementById("tab-comb"),
+      pow: document.getElementById("tab-pow"),
+    };
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-tab");
+        tabButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        Object.keys(tabContents).forEach((key) => {
+          tabContents[key].classList.toggle("active", key === target);
+        });
+      });
+    });
+
+    // ADDITION
+    document.getElementById("btn-add").addEventListener("click", () => {
+      const a = parseInt(document.getElementById("add-a").value, 10) || 0;
+      const b = parseInt(document.getElementById("add-b").value, 10) || 0;
+      const container = document.getElementById("vis-add");
+      clearNode(container);
+
+      const rowA = createRow("a pile");
+      for (let i = 0; i < a; i++) {
+        rowA.pile.appendChild(createPebble());
+      }
+
+      const rowB = createRow("b pile");
+      for (let i = 0; i < b; i++) {
+        rowB.pile.appendChild(createPebble());
+      }
+
+      const rowTotal = createRow("a + b");
+      for (let i = 0; i < a + b; i++) {
+        rowTotal.pile.appendChild(createPebble("highlight"));
+      }
+
+      container.appendChild(rowA.row);
+      container.appendChild(rowB.row);
+
+      const separator = document.createElement("div");
+      separator.style.borderTop = "1px dashed #f1c574";
+      separator.style.margin = "4px 0";
+      container.appendChild(separator);
+
+      container.appendChild(rowTotal.row);
+
+      const expl = document.createElement("div");
+      expl.className = "explanation";
+      expl.textContent = `We simply join the two piles: ${a} + ${b} = ${a + b}.`;
+      container.appendChild(expl);
+
+      animatePebbles(container);
+    });
+
+    // SUBTRACTION
+    document.getElementById("btn-sub").addEventListener("click", () => {
+      const a = parseInt(document.getElementById("sub-a").value, 10) || 0;
+      const b = parseInt(document.getElementById("sub-b").value, 10) || 0;
+      const container = document.getElementById("vis-sub");
+      clearNode(container);
+
+      const startRow = createRow("start (a)");
+      for (let i = 0; i < a; i++) {
+        startRow.pile.appendChild(createPebble());
+      }
+
+      const afterRow = createRow("after removing b");
+      const remaining = Math.max(a - b, 0);
+      for (let i = 0; i < a; i++) {
+        if (i < remaining) {
+          afterRow.pile.appendChild(createPebble("highlight"));
+        } else if (i < a) {
+          afterRow.pile.appendChild(createPebble("muted"));
+        }
+      }
+
+      container.appendChild(startRow.row);
+      container.appendChild(afterRow.row);
+
+      const expl = document.createElement("div");
+      expl.className = "explanation";
+      if (b <= a) {
+        expl.textContent = `We remove ${b} pebbles from a pile of ${a}. The remaining pebbles are ${a} − ${b} = ${a - b}.`;
+      } else {
+        expl.textContent = `We tried to remove ${b} pebbles from a pile of ${a}, which is more than available. In usual arithmetic, this gives a negative result (${a} − ${b} = ${a - b}). Visually only ${a} pebbles exist.`;
+      }
+      container.appendChild(expl);
+
+      animatePebbles(container);
+    });
+
+    // MULTIPLICATION
+    document.getElementById("btn-mul").addEventListener("click", () => {
+      const a = parseInt(document.getElementById("mul-a").value, 10) || 0;
+      const b = parseInt(document.getElementById("mul-b").value, 10) || 0;
+      const container = document.getElementById("vis-mul");
+      clearNode(container);
+
+      const gridWrapper = document.createElement("div");
+      const grid = document.createElement("div");
+      grid.className = "grid";
+      gridWrapper.appendChild(grid);
+
+      for (let rowIndex = 0; rowIndex < b; rowIndex++) {
+        const row = document.createElement("div");
+        row.className = "grid-row";
+        for (let colIndex = 0; colIndex < a; colIndex++) {
+          row.appendChild(createPebble());
+        }
+        grid.appendChild(row);
+      }
+
+      container.appendChild(gridWrapper);
+
+      const expl = document.createElement("div");
+      expl.className = "explanation";
+      expl.textContent = `We create ${b} rows of ${a} pebbles each. Counting all pebbles gives a × b = ${a} × ${b} = ${a * b}.`;
+      container.appendChild(expl);
+
+      animatePebbles(container);
+    });
+
+    // FACTORIAL
+    document.getElementById("btn-fact").addEventListener("click", () => {
+      const n = parseInt(document.getElementById("fact-n").value, 10) || 0;
+      const container = document.getElementById("vis-fact");
+      clearNode(container);
+
+      const baseRow = createRow("distinct pebbles");
+      for (let i = 0; i < n; i++) {
+        const p = createPebble("highlight");
+        baseRow.pile.appendChild(p);
+      }
+
+      container.appendChild(baseRow.row);
+
+      const factVal = factorial(n);
+      const expl = document.createElement("div");
+      expl.className = "explanation";
+
+      if (n === 0) {
+        expl.textContent = "By definition, 0! = 1. There is exactly one way to arrange nothing.";
+      } else {
+        expl.textContent =
+          `We have ${n} distinct pebbles. We can arrange them in different orders (permutations). ` +
+          `The total number of possible orders is n! = ${n}! = ${factVal}. ` +
+          "We don't draw every arrangement (it grows very fast), but each different ordering is one possible line of these pebbles.";
+      }
+      container.appendChild(expl);
+
+      animatePebbles(container);
+    });
+
+    // COMBINATIONS
+    document.getElementById("btn-comb").addEventListener("click", () => {
+      const n = parseInt(document.getElementById("comb-n").value, 10) || 0;
+      const k = parseInt(document.getElementById("comb-k").value, 10) || 0;
+      const container = document.getElementById("vis-comb");
+      clearNode(container);
+
+      const rowAll = createRow("all n pebbles");
+      for (let i = 0; i < n; i++) {
+        rowAll.pile.appendChild(createPebble());
+      }
+
+      const rowChosen = createRow("one choice of k");
+      for (let i = 0; i < n; i++) {
+        if (i < k) {
+          rowChosen.pile.appendChild(createPebble("highlight")); // chosen
+        } else {
+          rowChosen.pile.appendChild(createPebble("muted")); // not chosen
+        }
+      }
+
+      container.appendChild(rowAll.row);
+      container.appendChild(rowChosen.row);
+
+      const cVal = combinations(n, k);
+      const expl = document.createElement("div");
+      expl.className = "explanation";
+
+      if (k > n) {
+        expl.textContent = `We cannot choose ${k} pebbles from a pile of only ${n}. So C(${n}, ${k}) = 0.`;
+      } else {
+        expl.textContent =
+          `We have ${n} pebbles and we choose ${k} of them. ` +
+          `Each different group of ${k} pebbles is a combination. ` +
+          `The total number of such groups is C(n, k) = C(${n}, ${k}) = ${cVal}.`;
+      }
+
+      container.appendChild(expl);
+
+      animatePebbles(container);
+    });
+
+    // POWERS
+    document.getElementById("btn-pow").addEventListener("click", () => {
+      const a = parseInt(document.getElementById("pow-a").value, 10) || 0;
+      const b = parseInt(document.getElementById("pow-b").value, 10) || 0;
+      const container = document.getElementById("vis-pow");
+      clearNode(container);
+
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const label = document.createElement("div");
+      label.className = "row-label";
+      label.textContent = "b positions";
+      row.appendChild(label);
+
+      const positionsWrapper = document.createElement("div");
+      positionsWrapper.style.display = "flex";
+      positionsWrapper.style.flexWrap = "wrap";
+      positionsWrapper.style.gap = "10px";
+
+      for (let pos = 0; pos < b; pos++) {
+        const positionBox = document.createElement("div");
+        positionBox.style.border = "1px dashed #f1c574";
+        positionBox.style.borderRadius = "8px";
+        positionBox.style.padding = "4px 6px";
+        positionBox.style.minWidth = "64px";
+        positionBox.style.background = "#fffdf7";
+
+        const posLabel = document.createElement("div");
+        posLabel.style.fontSize = "0.75rem";
+        posLabel.style.opacity = "0.8";
+        posLabel.textContent = `position ${pos + 1}`;
+        positionBox.appendChild(posLabel);
+
+        const pile = document.createElement("div");
+        pile.className = "pile";
+        for (let i = 0; i < a; i++) {
+          pile.appendChild(createPebble());
+        }
+        positionBox.appendChild(pile);
+
+        positionsWrapper.appendChild(positionBox);
+      }
+
+      row.appendChild(positionsWrapper);
+      container.appendChild(row);
+
+      const value = Math.pow(a, b);
+      const expl = document.createElement("div");
+      expl.className = "explanation";
+
+      if (a === 0 && b === 0) {
+        expl.textContent =
+          "0^0 is a special case in mathematics – in many contexts we leave it undefined. Visually, no positions and no choices is an empty situation.";
+      } else {
+        expl.textContent =
+          `At each of the ${b} positions, we have ${a} possible pebbles to choose from. ` +
+          `All possible sequences of choices give a total of a^b = ${a}^${b} = ${value} different outcomes.`;
+      }
+
+      container.appendChild(expl);
+
+      animatePebbles(container);
+    });
+
+    // Initialize default views once
+    document.getElementById("btn-add").click();
+    document.getElementById("btn-sub").click();
+    document.getElementById("btn-mul").click();
+    document.getElementById("btn-fact").click();
+    document.getElementById("btn-comb").click();
+    document.getElementById("btn-pow").click();
+  </script>
+</body>
+</html>
