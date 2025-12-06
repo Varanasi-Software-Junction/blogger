@@ -14,7 +14,7 @@
             font-family: "Segoe UI", system-ui, sans-serif;
         }
 
-        /* Warm, charming glow overlay background */
+        /* Background of overlay */
         #pp-gallery-overlay {
             background: radial-gradient(circle at top,
                     #fff2d2,
@@ -22,10 +22,10 @@
                     #ffc577);
         }
 
-        /* Heart particle animation */
+        /* Floating heart particles */
         .heart {
             position: absolute;
-            color: rgba(255, 80, 120, 0.5);
+            color: rgba(255, 80, 120, 0.45);
             font-size: 24px;
             animation: floatUp 4s ease-in infinite;
             pointer-events: none;
@@ -38,12 +38,43 @@
             }
 
             to {
-                transform: translateY(-80px) scale(1.2);
+                transform: translateY(-90px) scale(1.2);
                 opacity: 0;
             }
         }
 
-        /* 3D animations */
+        /* Caption (ALT-TEXT) animations */
+        .caption {
+            position: absolute;
+            bottom: 12%;
+            width: 100%;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 600;
+            color: #6b3000;
+            opacity: 0;
+            animation: captionFade 2s ease forwards;
+            text-shadow: 0px 2px 10px rgba(255, 240, 210, 0.9);
+            font-family: "Trebuchet MS", sans-serif;
+        }
+
+        @keyframes captionFade {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            60% {
+                opacity: 1;
+                transform: translateY(0px);
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* 3D flip animations */
         .animX {
             animation: flipX 1.4s ease forwards;
         }
@@ -65,7 +96,6 @@
 
             100% {
                 opacity: 1;
-                transform: perspective(900px) rotateX(0deg);
             }
         }
 
@@ -82,7 +112,56 @@
 
             100% {
                 opacity: 1;
-                transform: perspective(900px) rotateY(0deg);
+            }
+        }
+
+        /* Moving PROGRAMMER’S PICNIC banner */
+        #pp-banner {
+            position: fixed;
+            top: 10%;
+            left: 10%;
+            padding: 12px 26px;
+            font-size: 40px;
+            font-weight: bold;
+            color: #5a2800;
+            background: linear-gradient(90deg, #ffd79b, #ffbc62, #ffd79b);
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(255, 150, 50, 0.4);
+            animation: bannerMove 12s linear infinite alternate,
+                bannerGlow 3s ease-in-out infinite alternate;
+            z-index: 1000000;
+            pointer-events: none;
+        }
+
+        @keyframes bannerMove {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(40vw, 5vh);
+            }
+
+            50% {
+                transform: translate(20vw, 20vh);
+            }
+
+            75% {
+                transform: translate(-10vw, 10vh);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        @keyframes bannerGlow {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 120, 40, 0.3);
+            }
+
+            100% {
+                box-shadow: 0 0 32px rgba(255, 120, 40, 0.7);
             }
         }
     </style>
@@ -90,28 +169,31 @@
 
 <body>
 
-    <!-- Images (unchanged) -->
-    <img src="Picnic/0.jpg">
-    <img src="Picnic/1.jpg">
-    <img src="Picnic/2.jpg">
-    <img src="Picnic/3.jpg">
-    <img src="Picnic/4.jpg">
-    <img src="Picnic/5.jpg">
-    <img src="Picnic/6.jpg">
-    <img src="Picnic/7.jpg">
-    <img src="Picnic/8.jpg">
-    <img src="Picnic/9.jpg">
-    <img src="Picnic/10.jpg">
-    <img src="Picnic/11.jpg">
-    <img src="Picnic/12.jpg">
-    <img src="Picnic/13.jpg">
-    <img src="Picnic/14.jpg">
-    <img src="Picnic/15.jpg">
-    <img src="Picnic/16.jpg">
-    <img src="Picnic/17.jpg">
-    <img src="Picnic/18.jpg">
-    <img src="Picnic/19.jpg">
-    <img src="Picnic/20.jpg">
+    <!-- Moving banner -->
+    <div id="pp-banner">Programmer’s Picnic 🌼</div>
+
+    <!-- IMAGES with alt text for captions -->
+    <img src="Picnic/0.jpg" alt="A beautiful Programmer's Picnic moment">
+    <img src="Picnic/1.jpg" alt="Friends learning together">
+    <img src="Picnic/2.jpg" alt="Smiling faces at the workshop">
+    <img src="Picnic/3.jpg" alt="Happy coding time">
+    <img src="Picnic/4.jpg" alt="Memories from the picnic">
+    <img src="Picnic/5.jpg" alt="Teamwork and laughter">
+    <img src="Picnic/6.jpg" alt="Joyful Programmer's Picnic">
+    <img src="Picnic/7.jpg" alt="Group photo — unforgettable day">
+    <img src="Picnic/8.jpg" alt="Another warm picnic moment">
+    <img src="Picnic/9.jpg" alt="Friends enjoying the event">
+    <img src="Picnic/10.jpg" alt="Captured happiness">
+    <img src="Picnic/11.jpg" alt="Warm and joyful picnic memory">
+    <img src="Picnic/12.jpg" alt="Energy and excitement!">
+    <img src="Picnic/13.jpg" alt="Smiling bright under the sky">
+    <img src="Picnic/14.jpg" alt="A perfect Programmer's Picnic">
+    <img src="Picnic/15.jpg" alt="Coding, fun, and sunshine">
+    <img src="Picnic/16.jpg" alt="Happy friends together">
+    <img src="Picnic/17.jpg" alt="Picnic fun continues">
+    <img src="Picnic/18.jpg" alt="Joyful gathering">
+    <img src="Picnic/19.jpg" alt="Warm moments captured">
+    <img src="Picnic/20.jpg" alt="A day to remember">
 
     <script>
         (function () {
@@ -119,7 +201,7 @@
             const imgs = Array.from(document.querySelectorAll("img"));
             if (!imgs.length) return;
 
-            /* Build warm gallery overlay */
+            /* === GALLERY OVERLAY === */
             const overlay = document.createElement("div");
             overlay.id = "pp-gallery-overlay";
             overlay.style.cssText = `
@@ -132,7 +214,7 @@
         overflow: hidden;
     `;
 
-            /* Create floating hearts */
+            /* Floating hearts */
             setInterval(() => {
                 const h = document.createElement("div");
                 h.className = "heart";
@@ -141,9 +223,9 @@
                 h.style.top = (window.innerHeight - 100) + "px";
                 overlay.appendChild(h);
                 setTimeout(() => h.remove(), 4000);
-            }, 900);
+            }, 1000);
 
-            /* Main displayed image */
+            /* Main slide image */
             const slideImg = document.createElement("img");
             slideImg.style.cssText = `
         max-width: 92%;
@@ -153,10 +235,17 @@
         transition: opacity 0.5s ease;
         opacity: 0;
     `;
-            overlay.appendChild(slideImg);
 
-            /* Navigation buttons */
-            function btn(css) {
+            /* Caption (ALT text) */
+            const caption = document.createElement("div");
+            caption.className = "caption";
+            caption.innerText = "";
+
+            overlay.appendChild(slideImg);
+            overlay.appendChild(caption);
+
+            /* Navigation */
+            function button(css) {
                 const b = document.createElement("div");
                 b.style.cssText = `
             ${css}
@@ -174,9 +263,9 @@
                 return b;
             }
 
-            const prevBtn = btn("left: 30px;");
+            const prevBtn = button("left: 30px;");
             prevBtn.innerHTML = "❮";
-            const nextBtn = btn("right: 30px;");
+            const nextBtn = button("right: 30px;");
             nextBtn.innerHTML = "❯";
 
             const closeBtn = document.createElement("div");
@@ -194,8 +283,10 @@
             overlay.appendChild(prevBtn);
             overlay.appendChild(nextBtn);
             overlay.appendChild(closeBtn);
+
             document.body.appendChild(overlay);
 
+            /* === LOGIC === */
             let currentIndex = 0;
             let autoPlayInterval = null;
 
@@ -207,11 +298,18 @@
                 slideImg.classList.remove("animX", "animY");
                 slideImg.style.opacity = 0;
 
+                caption.style.opacity = 0;
+
                 setTimeout(() => {
-                    slideImg.src = imgs[currentIndex].src;
+                    slideImg.src = imgs[i].src;
+                    caption.innerText = imgs[i].alt || "";
+                    caption.style.animation = "none";
+                    void caption.offsetWidth;
+                    caption.style.animation = "captionFade 2s ease forwards";
+
                     slideImg.style.opacity = 1;
                     slideImg.classList.add(Math.random() < 0.5 ? "animX" : "animY");
-                }, 100);
+                }, 120);
             }
 
             function openGallery(i) {
@@ -255,7 +353,7 @@
                 if (e.key === "Escape") closeGallery();
             });
 
-            /* Auto start after 15 seconds */
+            /* Auto Start after 15 seconds */
             setTimeout(() => {
                 if (overlay.style.display === "none") openGallery(0);
             }, 15000);
