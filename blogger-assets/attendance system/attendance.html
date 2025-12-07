@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Directional Face Counter – L/R Split</title>
+<title>Directional Face Counter – Full Crossing</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.9.0/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.0.7/dist/blazeface.min.js"></script>
@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<h2>People Directional Counter (Left → Right / Right → Left)</h2>
+<h2>People Direction Counter (Full Line Crossing)</h2>
 
 <button onclick="startDetector()">Start</button>
 <button onclick="stopDetector()">Stop</button>
@@ -33,18 +33,24 @@
 <script>
 let model, video, stream, running = false;
 
-// Track face movement
-let lastFaceX = null;
+// NEW: state tracking for full crossing
+let lastZone = "middle";
 
-// Two counters
+// Counters
 let leftToRightCount = 0;
 let rightToLeftCount = 0;
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-// Vertical dividing line
 const centerX = canvas.width / 2;
+const deadZone = 30;  // region where we do NOT count
+
+function getZone(x) {
+    if (x < centerX - deadZone) return "left";
+    if (x > centerX + deadZone) return "right";
+    return "middle";
+}
 
 async function startDetector() {
     if (running) return;
@@ -64,17 +70,14 @@ function stopDetector() {
     running = false;
     if (stream) stream.getTracks().forEach(t => t.stop());
     ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // Reset memory
-    lastFaceX = null;
 }
 
 async function loop() {
     if (!running) return;
 
-    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Draw vertical red divider
+    // Red vertical line
     ctx.strokeStyle = "red";
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -86,35 +89,29 @@ async function loop() {
 
     if (predictions.length > 0) {
         const p = predictions[0];
-
         const [x, y] = p.topLeft;
         const [x2, y2] = p.bottomRight;
 
-        // center X of face
         const faceX = (x + x2) / 2;
 
-        // Draw face box
+        // Draw box
         ctx.strokeStyle = "#ff9800";
         ctx.lineWidth = 3;
         ctx.strokeRect(x, y, x2 - x, y2 - y);
 
-        // ---------------------------
-        //      DIRECTION LOGIC
-        // ---------------------------
-        if (lastFaceX !== null) {
+        // Determine zone
+        const currentZone = getZone(faceX);
 
-            // LEFT → RIGHT crossing
-            if (lastFaceX < centerX && faceX > centerX) {
-                leftToRightCount++;
-            }
-
-            // RIGHT → LEFT crossing
-            if (lastFaceX > centerX && faceX < centerX) {
-                rightToLeftCount++;
-            }
+        // Full crossing logic
+        if (lastZone === "left" && currentZone === "right") {
+            leftToRightCount++;
         }
 
-        lastFaceX = faceX;
+        if (lastZone === "right" && currentZone === "left") {
+            rightToLeftCount++;
+        }
+
+        lastZone = currentZone;
     }
 
     // Update UI
