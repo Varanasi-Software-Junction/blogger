@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Directional Face Counter – Left/Right</title>
+<title>Directional Face Counter – L/R Split</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.9.0/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.0.7/dist/blazeface.min.js"></script>
@@ -10,12 +10,13 @@
 <style>
     body { background:#fff4d0; font-family:sans-serif; text-align:center; padding:20px; }
     #canvas { border:3px solid #c68a00; border-radius:12px; margin-top:20px; }
-    button { padding:10px 20px; font-size:18px; margin:10px; }
+    button { padding:10px 20px; font-size:18px; margin:10px; background:#ffa726; border:none; border-radius:8px; }
+    #counts { margin-top:20px; font-size:22px; font-weight:bold; }
 </style>
 </head>
 <body>
 
-<h2>Directional Face Counter (Left / Right Crossing)</h2>
+<h2>People Directional Counter (Left → Right / Right → Left)</h2>
 
 <button onclick="startDetector()">Start</button>
 <button onclick="stopDetector()">Stop</button>
@@ -24,19 +25,25 @@
 
 <canvas id="canvas" width="640" height="480"></canvas>
 
-<h2 id="countText">People Count: 0</h2>
+<div id="counts">
+    Left → Right: <span id="lrCount">0</span><br>
+    Right → Left: <span id="rlCount">0</span>
+</div>
 
 <script>
 let model, video, stream, running = false;
-let personCount = 0;
 
-// Track previous X position of the face
+// Track face movement
 let lastFaceX = null;
+
+// Two counters
+let leftToRightCount = 0;
+let rightToLeftCount = 0;
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-// Vertical center line
+// Vertical dividing line
 const centerX = canvas.width / 2;
 
 async function startDetector() {
@@ -57,7 +64,9 @@ function stopDetector() {
     running = false;
     if (stream) stream.getTracks().forEach(t => t.stop());
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    document.getElementById("countText").innerText = "People Count: 0";
+
+    // Reset memory
+    lastFaceX = null;
 }
 
 async function loop() {
@@ -65,7 +74,7 @@ async function loop() {
 
     ctx.drawImage(video,0,0,canvas.width,canvas.height);
 
-    // Draw vertical red center line
+    // Draw vertical red divider
     ctx.strokeStyle = "red";
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -76,37 +85,41 @@ async function loop() {
     const predictions = await model.estimateFaces(video, false);
 
     if (predictions.length > 0) {
-        const p = predictions[0];  // track only first face
+        const p = predictions[0];
 
         const [x, y] = p.topLeft;
         const [x2, y2] = p.bottomRight;
-        const faceX = (x + x2) / 2;  // center X of face
 
-        // Draw box
+        // center X of face
+        const faceX = (x + x2) / 2;
+
+        // Draw face box
         ctx.strokeStyle = "#ff9800";
         ctx.lineWidth = 3;
         ctx.strokeRect(x, y, x2 - x, y2 - y);
 
-        // Direction detection (left-right crossing)
+        // ---------------------------
+        //      DIRECTION LOGIC
+        // ---------------------------
         if (lastFaceX !== null) {
 
-            // Moving LEFT → RIGHT across the center line
+            // LEFT → RIGHT crossing
             if (lastFaceX < centerX && faceX > centerX) {
-                personCount++;
+                leftToRightCount++;
             }
 
-            // Moving RIGHT → LEFT across the center line
+            // RIGHT → LEFT crossing
             if (lastFaceX > centerX && faceX < centerX) {
-                personCount--;
-                if (personCount < 0) personCount = 0;
+                rightToLeftCount++;
             }
         }
 
         lastFaceX = faceX;
     }
 
-    document.getElementById("countText").innerText =
-        "People Count: " + personCount;
+    // Update UI
+    document.getElementById("lrCount").innerText = leftToRightCount;
+    document.getElementById("rlCount").innerText = rightToLeftCount;
 
     requestAnimationFrame(loop);
 }
