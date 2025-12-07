@@ -2,129 +2,114 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Face Attendance – TensorFlow.js BlazeFace</title>
+<title>Directional Face Counter – Left/Right</title>
 
-<!-- TensorFlow.js -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.9.0/dist/tf.min.js"></script>
-
-<!-- BlazeFace model -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.0.7/dist/blazeface.min.js"></script>
 
 <style>
-    body {
-        background: #fff4d0;
-        font-family: system-ui, sans-serif;
-        text-align: center;
-        padding: 20px;
-        color: #4b2e00;
-    }
-    #canvas {
-        border: 4px solid #d49800;
-        border-radius: 14px;
-        margin-top: 20px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-    }
-    button {
-        font-size: 18px;
-        padding: 12px 26px;
-        margin: 10px;
-        border-radius: 10px;
-        background: #ffa726;
-        color: #4b2e00;
-        font-weight: bold;
-        border: none;
-        cursor: pointer;
-    }
-    #count {
-        margin-top: 20px;
-        font-size: 28px;
-        font-weight: bold;
-        background: #ffe5b1;
-        display: inline-block;
-        padding: 10px 40px;
-        border-radius: 10px;
-        border: 2px solid #c78500;
-    }
+    body { background:#fff4d0; font-family:sans-serif; text-align:center; padding:20px; }
+    #canvas { border:3px solid #c68a00; border-radius:12px; margin-top:20px; }
+    button { padding:10px 20px; font-size:18px; margin:10px; }
 </style>
 </head>
-
 <body>
 
-<h2>Face Attendance (TensorFlow.js BlazeFace)</h2>
+<h2>Directional Face Counter (Left / Right Crossing)</h2>
 
-<button id="startBtn">Start Detector</button>
-<button id="stopBtn">Stop Detector</button>
+<button onclick="startDetector()">Start</button>
+<button onclick="stopDetector()">Stop</button>
 
 <br>
 
 <canvas id="canvas" width="640" height="480"></canvas>
-<div id="count">Faces Detected: 0</div>
+
+<h2 id="countText">People Count: 0</h2>
 
 <script>
-let model = null;
-let running = false;
-let video = null;
-let stream = null;
+let model, video, stream, running = false;
+let personCount = 0;
+
+// Track previous X position of the face
+let lastFaceX = null;
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-// -------------------- START DETECTOR --------------------
+// Vertical center line
+const centerX = canvas.width / 2;
+
 async function startDetector() {
     if (running) return;
     running = true;
 
-    if (!model) {
-        model = await blazeface.load();
-    }
+    if (!model) model = await blazeface.load();
 
     video = document.createElement("video");
-    stream = await navigator.mediaDevices.getUserMedia({ video: true });
-
+    stream = await navigator.mediaDevices.getUserMedia({ video:true });
     video.srcObject = stream;
     await video.play();
 
-    detectLoop();
+    requestAnimationFrame(loop);
 }
 
-// -------------------- STOP DETECTOR --------------------
 function stopDetector() {
     running = false;
-    if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-    }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.getElementById("count").innerText = "Faces Detected: 0";
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    document.getElementById("countText").innerText = "People Count: 0";
 }
 
-// -------------------- DETECTION LOOP --------------------
-async function detectLoop() {
+async function loop() {
     if (!running) return;
 
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+
+    // Draw vertical red center line
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(centerX, 0);
+    ctx.lineTo(centerX, canvas.height);
+    ctx.stroke();
 
     const predictions = await model.estimateFaces(video, false);
 
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "#ff9800";
+    if (predictions.length > 0) {
+        const p = predictions[0];  // track only first face
 
-    predictions.forEach(pred => {
-        const [x, y] = pred.topLeft;
-        const [x2, y2] = pred.bottomRight;
+        const [x, y] = p.topLeft;
+        const [x2, y2] = p.bottomRight;
+        const faceX = (x + x2) / 2;  // center X of face
 
+        // Draw box
+        ctx.strokeStyle = "#ff9800";
+        ctx.lineWidth = 3;
         ctx.strokeRect(x, y, x2 - x, y2 - y);
-    });
 
-    document.getElementById("count").innerText =
-        "Faces Detected: " + predictions.length;
+        // Direction detection (left-right crossing)
+        if (lastFaceX !== null) {
 
-    requestAnimationFrame(detectLoop);
+            // Moving LEFT → RIGHT across the center line
+            if (lastFaceX < centerX && faceX > centerX) {
+                personCount++;
+            }
+
+            // Moving RIGHT → LEFT across the center line
+            if (lastFaceX > centerX && faceX < centerX) {
+                personCount--;
+                if (personCount < 0) personCount = 0;
+            }
+        }
+
+        lastFaceX = faceX;
+    }
+
+    document.getElementById("countText").innerText =
+        "People Count: " + personCount;
+
+    requestAnimationFrame(loop);
 }
-
-// Buttons
-document.getElementById("startBtn").onclick = startDetector;
-document.getElementById("stopBtn").onclick = stopDetector;
-
 </script>
 
 </body>
