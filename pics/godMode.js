@@ -1,68 +1,116 @@
 /* ============================================================
-   Programmer’s Picnic – TEMPLE MODE MEDITATION ENGINE
-   Mode C: Temple Mode (Om glow + aura + blessings + chants)
+   Programmer’s Picnic – TEMPLE + LOTUS + FLOWERS GOD MODE
+   Full spiritual engine (Option A)
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
+    // ---------- CORE DOM ELEMENTS ----------
+    const startScreen = document.getElementById("startScreen");
+    const overlay = document.getElementById("pp-gallery-overlay");
+    const slideImg = document.getElementById("slideImg");
+    const captionLine1 = document.getElementById("captionLine1");
+    const captionLine2 = document.getElementById("captionLine2");
+    const musicBtn = document.getElementById("musicBtn");
 
-    // ----- CORE ELEMENTS -----
-    const startScreen   = document.getElementById("startScreen");
-    const overlay       = document.getElementById("pp-gallery-overlay");
-    const slideImg      = document.getElementById("slideImg");
-    const captionLine1  = document.getElementById("captionLine1");
-    const captionLine2  = document.getElementById("captionLine2");
-    const musicBtn      = document.getElementById("musicBtn");
+    const petalLayer = document.getElementById("petalLayer");
+    const fireflyLayer = document.getElementById("fireflyLayer");
+    const bokehLayer = document.getElementById("bokehLayer");
+    const polaroid = document.querySelector(".polaroid");
 
-    const petalLayer    = document.getElementById("petalLayer");
-    const fireflyLayer  = document.getElementById("fireflyLayer");
-    const bokehLayer    = document.getElementById("bokehLayer");
-
-    const polaroid      = document.querySelector(".polaroid");
-
-    // ----- HIDDEN IMAGES -----
+    // ---------- IMAGE LIST ----------
     let imgs = Array.from(document.querySelectorAll("#picnic-images img"));
 
     if (!imgs || imgs.length === 0) {
-        console.error("GOD MODE: No images found inside #picnic-images");
+        console.error("GOD MODE: No images found inside #picnic-images. Add <img src='Picnic/...'> tags.");
         if (startScreen) startScreen.style.display = "none";
         return;
     }
 
-    /* ============================================================
-       TEMPLE MODE – OM GLOW BEHIND POLAROID
-       ============================================================ */
+    // ---------- LOTUS CONSTANTS ----------
+    const LOTUS_SVG = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Indian_Pink_Lotus.svg/512px-Indian_Pink_Lotus.svg.png";
+    const LOTUS_GOLD = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Golden_lotus.svg/512px-Golden_lotus.svg.png";
+
+    // ============================================================
+    //  DYNAMIC CSS INJECTION (Lotus + Flowers)
+    // ============================================================
+    (function addDynamicCSS() {
+        const css = `
+        .templeFlower {
+            position: absolute;
+            will-change: transform, opacity;
+            transition: opacity 2s linear;
+            user-select: none;
+            pointer-events: none;
+        }
+        .lotusWheel {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.12;
+            pointer-events: none;
+            filter: blur(2px);
+        }
+        .lotusBurst {
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            opacity: 0;
+            filter: blur(1px);
+        }
+        .lotusTap {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            opacity: 0;
+        }`;
+        const style = document.createElement("style");
+        style.textContent = css;
+        document.head.appendChild(style);
+    })();
+
+    // ============================================================
+    //  OM GLOW BEHIND POLAROID
+    // ============================================================
     if (polaroid) {
         const omGlow = document.createElement("div");
         omGlow.style.position = "absolute";
         omGlow.style.inset = "10%";
         omGlow.style.borderRadius = "20px";
-        omGlow.style.background =
-            "radial-gradient(circle, rgba(255,220,160,0.45), rgba(255,170,90,0.1), transparent)";
+        omGlow.style.background = "radial-gradient(circle, rgba(255,220,160,0.45), rgba(255,170,90,0.1), transparent)";
         omGlow.style.display = "flex";
         omGlow.style.alignItems = "center";
         omGlow.style.justifyContent = "center";
         omGlow.style.fontSize = "64px";
-        omGlow.style.color = "rgba(150,80,20,0.15)";
+        omGlow.style.color = "rgba(150,80,20,0.16)";
         omGlow.style.zIndex = "4";
         omGlow.style.pointerEvents = "none";
         omGlow.textContent = "ॐ";
-
         polaroid.style.position = "relative";
         polaroid.insertBefore(omGlow, slideImg);
     }
 
-    /* ============================================================
-       ADVANCED RANDOMIZATION
-       ============================================================ */
+    // ============================================================
+    //  ADVANCED RANDOMIZATION
+    // ============================================================
     function advancedShuffle(nodes) {
         const arr = nodes.slice();
         let lastSrc = sessionStorage.getItem("pp_last_start_src") || null;
 
+        // Fisher–Yates
         for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [arr[i], arr[j]] = [arr[j], arr[i]];
         }
 
+        // Avoid same start as last time if possible
         if (lastSrc && arr.length > 1 && arr[0].src === lastSrc) {
             [arr[0], arr[1]] = [arr[1], arr[0]];
         }
@@ -82,9 +130,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    /* ============================================================
-       CAPTION ENGINE – TECH + SPIRITUAL
-       ============================================================ */
+    // ============================================================
+    //  CAPTION ENGINE (Tech + Spiritual)
+    // ============================================================
     const techLines = [
         "Where logic met laughter and new ideas were compiled.",
         "A joyful commit to lifelong learning.",
@@ -138,15 +186,16 @@ document.addEventListener("DOMContentLoaded", () => {
         captionLine2.textContent = mantraLines[index % mantraLines.length];
     }
 
-    /* ============================================================
-       ADAPTIVE CAPTION COLOR
-       ============================================================ */
+    // ============================================================
+    //  ADAPTIVE CAPTION COLOR
+    // ============================================================
     function adjustCaptionColor(imgElement) {
         try {
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
 
-            const w = imgElement.naturalWidth, h = imgElement.naturalHeight;
+            const w = imgElement.naturalWidth;
+            const h = imgElement.naturalHeight;
             if (!w || !h) return;
 
             canvas.width = w;
@@ -163,53 +212,62 @@ document.addEventListener("DOMContentLoaded", () => {
                 b += data[i + 2];
             }
 
-            const brightness = (r + g + b) / (3 * total);
+            const brightness = (r + g + b) / (3 * total); // 0..255
 
-            if (brightness < 0.35) {
+            if (brightness < 90) {
                 captionLine1.style.color = "#ffdd99";
                 captionLine2.style.color = "#ffecca";
-            } else if (brightness < 0.65) {
+            } else if (brightness < 170) {
                 captionLine1.style.color = "#5a2d00";
                 captionLine2.style.color = "#7a3d00";
             } else {
                 captionLine1.style.color = "#3d1a00";
                 captionLine2.style.color = "#4d2000";
             }
-
         } catch (e) {
             console.warn("Brightness check failed:", e);
         }
     }
 
-    /* ============================================================
-       TEMPLE PARTICLES – PETALS, FIREFLIES, BOKEH (SOFT)
-       ============================================================ */
+    // ============================================================
+    //  PARTICLES – FLOWERS, FIREFLIES, BOKEH, BIG LOTUS
+    // ============================================================
+    const flowerEmojis = ["🌸", "🌼", "💮", "🪷"];
 
-    function spawnPetal() {
+    // Falling flowers
+    function spawnFlower() {
         if (!petalLayer) return;
-        const p = document.createElement("div");
-        p.style.position = "absolute";
-        p.style.width = "20px";
-        p.style.height = "20px";
-        p.style.background = "#ffc7d2";
-        p.style.borderRadius = "60% 40% 70% 30%";
-        p.style.opacity = "0.22";
-        p.style.left = Math.random() * window.innerWidth + "px";
-        p.style.top = "-40px";
-        p.style.filter = "blur(0.8px)";
-        p.style.transition = "transform 14s linear, opacity 14s linear";
-        petalLayer.appendChild(p);
+        const f = document.createElement("div");
+        f.className = "templeFlower";
+        f.textContent = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
 
-        setTimeout(() => {
-            p.style.transform = `translateY(${window.innerHeight + 80}px) translateX(${(Math.random() - 0.5) * 60}px) rotate(280deg)`;
-            p.style.opacity = "0";
-        }, 50);
+        const size = 28 + Math.random() * 28;
+        f.style.fontSize = size + "px";
+        f.style.left = Math.random() * window.innerWidth + "px";
+        f.style.top = "-60px";
+        f.style.opacity = (0.4 + Math.random() * 0.4).toString();
+        f.style.filter = "blur(0.5px)";
 
-        setTimeout(() => p.remove(), 14000);
+        petalLayer.appendChild(f);
+
+        const fallDuration = 9000 + Math.random() * 6000;
+        const driftX = (Math.random() - 0.5) * 140;
+        const rotateStart = Math.random() * 40 - 20;
+        const rotateEnd = rotateStart + (Math.random() * 80 - 40);
+
+        f.animate(
+            [
+                { transform: `translate(0,0) rotate(${rotateStart}deg)` },
+                { transform: `translate(${driftX}px, ${window.innerHeight + 120}px) rotate(${rotateEnd}deg)` }
+            ],
+            { duration: fallDuration, easing: "ease-in-out", fill: "forwards" }
+        );
+
+        setTimeout(() => f.remove(), fallDuration + 200);
     }
+    setInterval(spawnFlower, 1600);
 
-    setInterval(spawnPetal, 2100);
-
+    // Fireflies
     function spawnFirefly() {
         if (!fireflyLayer) return;
         const f = document.createElement("div");
@@ -226,16 +284,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const dx = (Math.random() - 0.5) * 60;
         const dy = (Math.random() - 0.5) * 90;
 
-        f.animate([
-            { transform: "translate(0,0)", opacity: 0.2 },
-            { transform: `translate(${dx}px, ${dy}px)`, opacity: 0.55 }
-        ], { duration: 7000, easing: "ease-in-out", fill: "forwards" });
+        f.animate(
+            [
+                { transform: "translate(0,0)", opacity: 0.2 },
+                { transform: `translate(${dx}px, ${dy}px)`, opacity: 0.55 }
+            ],
+            { duration: 7000, easing: "ease-in-out", fill: "forwards" }
+        );
 
         setTimeout(() => f.remove(), 7000);
     }
-
     setInterval(spawnFirefly, 2300);
 
+    // Bokeh
     function spawnBokeh() {
         if (!bokehLayer) return;
         const b = document.createElement("div");
@@ -257,12 +318,69 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => b.remove(), 16000);
     }
-
     setInterval(spawnBokeh, 2800);
 
-    /* ============================================================
-       AURA BLOOM ON SLIDE CHANGE
-       ============================================================ */
+    // Big rare falling lotus
+    function spawnBigLotus() {
+        if (!petalLayer) return;
+        const l = document.createElement("div");
+        l.textContent = "🪷";
+        l.style.position = "absolute";
+        l.style.fontSize = (50 + Math.random() * 40) + "px";
+        l.style.left = Math.random() * window.innerWidth + "px";
+        l.style.top = "-80px";
+        l.style.opacity = "0.55";
+        petalLayer.appendChild(l);
+
+        const duration = 13000 + Math.random() * 5000;
+
+        l.animate(
+            [
+                { transform: "translateY(0px)" },
+                { transform: `translateY(${window.innerHeight + 100}px)` }
+            ],
+            { duration, easing: "ease-out", fill: "forwards" }
+        );
+
+        setTimeout(() => l.remove(), duration + 200);
+    }
+    setInterval(spawnBigLotus, 9000);
+
+    // ============================================================
+    //  LOTUS WHEELS IN BACKGROUND
+    // ============================================================
+    function spawnLotusWheel() {
+        if (!overlay) return;
+        const wheel = document.createElement("div");
+        wheel.className = "lotusWheel";
+        wheel.style.backgroundImage = `url(${LOTUS_SVG})`;
+
+        const size = 140 + Math.random() * 120;
+        wheel.style.width = size + "px";
+        wheel.style.height = size + "px";
+
+        wheel.style.left = Math.random() * window.innerWidth + "px";
+        wheel.style.top = Math.random() * window.innerHeight + "px";
+
+        overlay.appendChild(wheel);
+
+        wheel.animate(
+            [
+                { transform: "rotate(0deg)" },
+                { transform: "rotate(360deg)" }
+            ],
+            {
+                duration: 32000 + Math.random() * 20000,
+                iterations: Infinity,
+                easing: "linear"
+            }
+        );
+    }
+    setInterval(spawnLotusWheel, 12000);
+
+    // ============================================================
+    //  AURA BLOOM + LOTUS BURST ON SLIDE CHANGE
+    // ============================================================
     function triggerAuraBloom() {
         if (!overlay) return;
         const bloom = document.createElement("div");
@@ -276,9 +394,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         bloom.animate(
             [
-                { opacity: 0.0, transform: "scale(0.8)" },
+                { opacity: 0, transform: "scale(0.8)" },
                 { opacity: 0.5, transform: "scale(1.0)" },
-                { opacity: 0.0, transform: "scale(1.2)" }
+                { opacity: 0, transform: "scale(1.2)" }
             ],
             { duration: 900, easing: "ease-out", fill: "forwards" }
         );
@@ -286,9 +404,32 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => bloom.remove(), 950);
     }
 
-    /* ============================================================
-       BLESSING MODE – every 10th slide
-       ============================================================ */
+    function triggerLotusBurst() {
+        if (!overlay) return;
+        const burst = document.createElement("div");
+        burst.className = "lotusBurst";
+        burst.style.backgroundImage = `url(${LOTUS_GOLD})`;
+        burst.style.left = "50%";
+        burst.style.top = "50%";
+        burst.style.transform = "translate(-50%, -50%) scale(0.4)";
+        burst.style.zIndex = "7";
+        overlay.appendChild(burst);
+
+        burst.animate(
+            [
+                { opacity: 0, transform: "translate(-50%, -50%) scale(0.4)" },
+                { opacity: 0.4, transform: "translate(-50%, -50%) scale(1.4)" },
+                { opacity: 0, transform: "translate(-50%, -50%) scale(1.9)" }
+            ],
+            { duration: 900, easing: "ease-out", fill: "forwards" }
+        );
+
+        setTimeout(() => burst.remove(), 950);
+    }
+
+    // ============================================================
+    //  BLESSING MODE – every 10th slide
+    // ============================================================
     const blessings = [
         "शुभम् भवतु",
         "मङ्गलं भवतु",
@@ -313,23 +454,46 @@ document.addEventListener("DOMContentLoaded", () => {
     function showBlessing(index) {
         const slideNumber = index + 1;
         if (slideNumber % 10 !== 0) return;
-
         const msg = blessings[Math.floor(Math.random() * blessings.length)];
         blessingBox.textContent = msg;
         blessingBox.style.transition = "opacity 0.4s ease";
         blessingBox.style.opacity = "1";
-
-        setTimeout(() => {
-            blessingBox.style.opacity = "0";
-        }, 1400);
+        setTimeout(() => blessingBox.style.opacity = "0", 1400);
     }
 
-    /* ============================================================
-       MUSIC + WHISPER CHANT ENGINE
-       ============================================================ */
-    let mainAudio   = null;
+    // ============================================================
+    //  LOTUS TAP BLOSSOM
+    // ============================================================
+    if (overlay) {
+        overlay.addEventListener("click", (e) => {
+            const lotus = document.createElement("div");
+            lotus.className = "lotusTap";
+            lotus.style.backgroundImage = `url(${LOTUS_SVG})`;
+            lotus.style.left = (e.clientX - 60) + "px";
+            lotus.style.top = (e.clientY - 60) + "px";
+            lotus.style.opacity = "0";
+            lotus.style.zIndex = "9";
+            document.body.appendChild(lotus);
+
+            lotus.animate(
+                [
+                    { opacity: 0, transform: "scale(0.5)" },
+                    { opacity: 0.6, transform: "scale(1.2)" },
+                    { opacity: 0, transform: "scale(1.8)" }
+                ],
+                { duration: 1200, easing: "ease-out", fill: "forwards" }
+            );
+
+            setTimeout(() => lotus.remove(), 1300);
+        });
+    }
+
+    // ============================================================
+    //  MUSIC + WHISPER CHANT ENGINE
+    // ============================================================
+    let mainAudio = null;
     let whisperAudio = null;
-    let musicOn     = false;
+    let musicOn = false;
 
     function ensureAudios() {
         if (!mainAudio) {
@@ -350,7 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function setMusicState(on) {
         musicOn = on;
-        if (!mainAudio || !whisperAudio) ensureAudios();
+        ensureAudios();
         if (musicOn) {
             mainAudio.play().catch(e => console.warn("Main audio blocked:", e));
             whisperAudio.play().catch(e => console.warn("Whisper audio blocked:", e));
@@ -362,13 +526,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    musicBtn.addEventListener("click", () => {
-        setMusicState(!musicOn);
-    });
+    if (musicBtn) {
+        musicBtn.addEventListener("click", () => {
+            setMusicState(!musicOn);
+        });
+    }
 
-    /* ============================================================
-       SLIDESHOW ENGINE
-       ============================================================ */
+    // ============================================================
+    //  SLIDESHOW ENGINE
+    // ============================================================
     let currentIndex = 0;
 
     function showSlide(index) {
@@ -381,7 +547,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!imgObj) return;
 
         currentIndex = index;
-
         slideImg.style.opacity = "0";
 
         setTimeout(() => {
@@ -389,11 +554,11 @@ document.addEventListener("DOMContentLoaded", () => {
             slideImg.style.opacity = "1";
 
             triggerAuraBloom();
+            triggerLotusBurst();
             setCaption(index);
             showBlessing(index);
 
             slideImg.onload = () => adjustCaptionColor(slideImg);
-
         }, 300);
     }
 
@@ -412,9 +577,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setInterval(nextSlide, 7000);
     }
 
-    /* ============================================================
-       START SCREEN LOGIC
-       ============================================================ */
+    // ============================================================
+    //  START SCREEN LOGIC
+    // ============================================================
     function begin() {
         if (startScreen) {
             startScreen.style.opacity = "0";
@@ -423,18 +588,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (startScreen.parentNode) startScreen.parentNode.removeChild(startScreen);
             }, 900);
         }
-
         startSlideshow();
         ensureAudios();
-        setMusicState(true);  // turn on both ambient + whisper once user interacts
+        setMusicState(true); // start with sound ON after first user interaction / auto-start
     }
 
     if (startScreen) {
         startScreen.addEventListener("click", begin);
     }
 
+    // Auto-start after 8 seconds
     setTimeout(() => {
         if (document.body.contains(startScreen)) begin();
     }, 8000);
-
 });
