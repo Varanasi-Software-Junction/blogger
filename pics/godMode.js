@@ -498,14 +498,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function ensureAudios() {
         if (!mainAudio) {
             mainAudio = new Audio(
-                "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Lee_Rosevere/Ambient_Classical/Lee_Rosevere_-_11_-_Meditation_Impromptu_01.mp3"
+                "Picnic/0.mp3"
             );
             mainAudio.loop = true;
             mainAudio.volume = 0.45;
         }
         if (!whisperAudio) {
             whisperAudio = new Audio(
-                "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Monk_Turner__Fascinoma/Real_Faith/Monk_Turner__Fascinoma_-_01_-_Om_Sai_Ram.mp3"
+                "Picnic/1.mp3"
             );
             whisperAudio.loop = true;
             whisperAudio.volume = 0.22;
