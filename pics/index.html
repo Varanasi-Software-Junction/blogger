@@ -194,7 +194,56 @@
             margin-top: 6px;
             text-shadow: 0 0 8px rgba(255, 240, 200, 0.7);
         }
-    </style>
+    
+    
+    #photoCounter {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #5a2d00;
+    background: rgba(255,235,200,0.65);
+    padding: 6px 14px;
+    border-radius: 12px;
+    z-index: 99999;
+}
+
+.navBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;
+    color: #6e3300;
+    background: rgba(255,235,200,0.75);
+    padding: 14px 20px;
+    border-radius: 16px;
+    cursor: pointer;
+    z-index: 99999;
+    user-select: none;
+}
+#prevBtn { left: 20px; }
+#nextBtn { right: 20px; }
+
+#progressContainer {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 10px;
+    background: rgba(255,215,160,0.4);
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 99999;
+}
+#progressBar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #ffb347, #ff9234);
+    border-radius: 6px;
+}
+</style>
 
 </head>
 
@@ -419,6 +468,17 @@
             <div id="captionLine1"></div>
             <div id="captionLine2"></div>
         </div>
+<!-- Picture Number -->
+<div id="photoCounter"></div>
+
+<!-- Navigation Buttons -->
+<div id="prevBtn" class="navBtn">⟵</div>
+<div id="nextBtn" class="navBtn">⟶</div>
+
+<!-- Clickable Progress Bar -->
+<div id="progressContainer">
+    <div id="progressBar"></div>
+</div>
 
     </div>
 

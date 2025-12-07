@@ -1,21 +1,28 @@
 /* ============================================================
    Programmer’s Picnic – TEMPLE + LOTUS + FLOWERS GOD MODE
-   Full spiritual engine (Option A)
+   Full spiritual engine (Option B – cleaned + enhanced)
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
     // ---------- CORE DOM ELEMENTS ----------
-    const startScreen = document.getElementById("startScreen");
-    const overlay = document.getElementById("pp-gallery-overlay");
-    const slideImg = document.getElementById("slideImg");
-    const captionLine1 = document.getElementById("captionLine1");
-    const captionLine2 = document.getElementById("captionLine2");
-    const musicBtn = document.getElementById("musicBtn");
+    const startScreen      = document.getElementById("startScreen");
+    const overlay          = document.getElementById("pp-gallery-overlay");
+    const slideImg         = document.getElementById("slideImg");
+    const captionLine1     = document.getElementById("captionLine1");
+    const captionLine2     = document.getElementById("captionLine2");
+    const musicBtn         = document.getElementById("musicBtn");
 
-    const petalLayer = document.getElementById("petalLayer");
-    const fireflyLayer = document.getElementById("fireflyLayer");
-    const bokehLayer = document.getElementById("bokehLayer");
-    const polaroid = document.querySelector(".polaroid");
+    const petalLayer       = document.getElementById("petalLayer");
+    const fireflyLayer     = document.getElementById("fireflyLayer");
+    const bokehLayer       = document.getElementById("bokehLayer");
+    const polaroid         = document.querySelector(".polaroid");
+
+    // NEW UI ELEMENTS
+    const photoCounter     = document.getElementById("photoCounter");
+    const progressContainer= document.getElementById("progressContainer");
+    const progressBar      = document.getElementById("progressBar");
+    const prevBtn          = document.getElementById("prevBtn");
+    const nextBtn          = document.getElementById("nextBtn");
 
     // ---------- IMAGE LIST ----------
     let imgs = Array.from(document.querySelectorAll("#picnic-images img"));
@@ -27,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ---------- LOTUS CONSTANTS ----------
-    const LOTUS_SVG = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Indian_Pink_Lotus.svg/512px-Indian_Pink_Lotus.svg.png";
+    const LOTUS_SVG  = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Indian_Pink_Lotus.svg/512px-Indian_Pink_Lotus.svg.png";
     const LOTUS_GOLD = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Golden_lotus.svg/512px-Golden_lotus.svg.png";
 
     // ============================================================
@@ -84,7 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
         omGlow.style.position = "absolute";
         omGlow.style.inset = "10%";
         omGlow.style.borderRadius = "20px";
-        omGlow.style.background = "radial-gradient(circle, rgba(255,220,160,0.45), rgba(255,170,90,0.1), transparent)";
+        omGlow.style.background =
+            "radial-gradient(circle, rgba(255,220,160,0.45), rgba(255,170,90,0.1), transparent)";
         omGlow.style.display = "flex";
         omGlow.style.alignItems = "center";
         omGlow.style.justifyContent = "center";
@@ -104,13 +112,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const arr = nodes.slice();
         let lastSrc = sessionStorage.getItem("pp_last_start_src") || null;
 
-        // Fisher–Yates
+        // Fisher–Yates shuffle
         for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [arr[i], arr[j]] = [arr[j], arr[i]];
         }
 
-        // Avoid same start as last time if possible
+        // Avoid same starting image as previous session if possible
         if (lastSrc && arr.length > 1 && arr[0].src === lastSrc) {
             [arr[0], arr[1]] = [arr[1], arr[0]];
         }
@@ -177,11 +185,13 @@ document.addEventListener("DOMContentLoaded", () => {
         "A calm mind executes the best solutions."
     ];
 
+    // Attach a combined alt (not critical visually but good metadata)
     imgs.forEach((img, i) => {
         img.alt = `${techLines[i % techLines.length]} — ${mantraLines[i % mantraLines.length]}`;
     });
 
     function setCaption(index) {
+        if (!captionLine1 || !captionLine2) return;
         captionLine1.textContent = techLines[index % techLines.length];
         captionLine2.textContent = mantraLines[index % mantraLines.length];
     }
@@ -190,6 +200,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //  ADAPTIVE CAPTION COLOR
     // ============================================================
     function adjustCaptionColor(imgElement) {
+        if (!captionLine1 || !captionLine2) return;
+
         try {
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
@@ -212,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 b += data[i + 2];
             }
 
-            const brightness = (r + g + b) / (3 * total); // 0..255
+            const brightness = (r + g + b) / (3 * total); // ~0..255
 
             if (brightness < 90) {
                 captionLine1.style.color = "#ffdd99";
@@ -358,9 +370,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const size = 140 + Math.random() * 120;
         wheel.style.width = size + "px";
         wheel.style.height = size + "px";
-
         wheel.style.left = Math.random() * window.innerWidth + "px";
-        wheel.style.top = Math.random() * window.innerHeight + "px";
+        wheel.style.top  = Math.random() * window.innerHeight + "px";
 
         overlay.appendChild(wheel);
 
@@ -380,28 +391,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ============================================================
     //  AURA BLOOM + LOTUS BURST ON SLIDE CHANGE
+    //  (Aura Bloom improved: higher z-index + stronger)
     // ============================================================
     function triggerAuraBloom() {
         if (!overlay) return;
+
         const bloom = document.createElement("div");
         bloom.style.position = "absolute";
-        bloom.style.inset = "0";
-        bloom.style.background = "radial-gradient(circle, rgba(255,230,180,0.5), transparent 60%)";
+        bloom.style.left = "0";
+        bloom.style.top = "0";
+        bloom.style.width = "100%";
+        bloom.style.height = "100%";
+        bloom.style.background =
+            "radial-gradient(circle, rgba(255,220,150,0.55), rgba(255,180,90,0.15) 40%, transparent 70%)";
         bloom.style.pointerEvents = "none";
         bloom.style.opacity = "0";
-        bloom.style.zIndex = "5";
+        bloom.style.zIndex = "99998";
+
         overlay.appendChild(bloom);
 
         bloom.animate(
             [
                 { opacity: 0, transform: "scale(0.8)" },
-                { opacity: 0.5, transform: "scale(1.0)" },
-                { opacity: 0, transform: "scale(1.2)" }
+                { opacity: 0.65, transform: "scale(1.0)" },
+                { opacity: 0, transform: "scale(1.35)" }
             ],
-            { duration: 900, easing: "ease-out", fill: "forwards" }
+            {
+                duration: 1000,
+                easing: "ease-out",
+                fill: "forwards"
+            }
         );
 
-        setTimeout(() => bloom.remove(), 950);
+        setTimeout(() => bloom.remove(), 1100);
     }
 
     function triggerLotusBurst() {
@@ -410,9 +432,9 @@ document.addEventListener("DOMContentLoaded", () => {
         burst.className = "lotusBurst";
         burst.style.backgroundImage = `url(${LOTUS_GOLD})`;
         burst.style.left = "50%";
-        burst.style.top = "50%";
+        burst.style.top  = "50%";
         burst.style.transform = "translate(-50%, -50%) scale(0.4)";
-        burst.style.zIndex = "7";
+        burst.style.zIndex = "99999";
         overlay.appendChild(burst);
 
         burst.animate(
@@ -454,6 +476,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function showBlessing(index) {
         const slideNumber = index + 1;
         if (slideNumber % 10 !== 0) return;
+
         const msg = blessings[Math.floor(Math.random() * blessings.length)];
         blessingBox.textContent = msg;
         blessingBox.style.transition = "opacity 0.4s ease";
@@ -470,7 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
             lotus.className = "lotusTap";
             lotus.style.backgroundImage = `url(${LOTUS_SVG})`;
             lotus.style.left = (e.clientX - 60) + "px";
-            lotus.style.top = (e.clientY - 60) + "px";
+            lotus.style.top  = (e.clientY - 60) + "px";
             lotus.style.opacity = "0";
             lotus.style.zIndex = "9";
             document.body.appendChild(lotus);
@@ -491,22 +514,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // ============================================================
     //  MUSIC + WHISPER CHANT ENGINE
     // ============================================================
-    let mainAudio = null;
+    let mainAudio    = null;
     let whisperAudio = null;
-    let musicOn = false;
+    let musicOn      = false;
 
     function ensureAudios() {
         if (!mainAudio) {
-            mainAudio = new Audio(
-                "Picnic/0.mp3"
-            );
+            mainAudio = new Audio("Picnic/0.mp3");
             mainAudio.loop = true;
             mainAudio.volume = 0.45;
         }
         if (!whisperAudio) {
-            whisperAudio = new Audio(
-                "Picnic/1.mp3"
-            );
+            whisperAudio = new Audio("Picnic/1.mp3");
             whisperAudio.loop = true;
             whisperAudio.volume = 0.22;
         }
@@ -518,11 +537,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (musicOn) {
             mainAudio.play().catch(e => console.warn("Main audio blocked:", e));
             whisperAudio.play().catch(e => console.warn("Whisper audio blocked:", e));
-            musicBtn.textContent = "🔇 Sound Off";
+            if (musicBtn) musicBtn.textContent = "🔇 Sound Off";
         } else {
             mainAudio.pause();
             whisperAudio.pause();
-            musicBtn.textContent = "🎵 Sound On";
+            if (musicBtn) musicBtn.textContent = "🎵 Sound On";
         }
     }
 
@@ -533,9 +552,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ============================================================
-    //  SLIDESHOW ENGINE
+    //  SLIDESHOW ENGINE + UI (photo counter + progress)
     // ============================================================
     let currentIndex = 0;
+
+    function updatePhotoUI() {
+        if (!photoCounter || !progressBar) return;
+        const total = imgs.length;
+        const num = currentIndex + 1;
+
+        photoCounter.textContent = `Photo ${num} / ${total}`;
+        const pct = (num / total) * 100;
+        progressBar.style.width = pct + "%";
+    }
 
     function showSlide(index) {
         if (imgs.length === 0) return;
@@ -559,6 +588,9 @@ document.addEventListener("DOMContentLoaded", () => {
             showBlessing(index);
 
             slideImg.onload = () => adjustCaptionColor(slideImg);
+
+            // Update picture number + progress bar
+            updatePhotoUI();
         }, 300);
     }
 
@@ -578,6 +610,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ============================================================
+    //  NAV BUTTONS + CLICKABLE PROGRESS BAR
+    // ============================================================
+    if (nextBtn) {
+        nextBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            nextSlide();
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showSlide(currentIndex - 1);
+        });
+    }
+
+    if (progressContainer) {
+        progressContainer.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const rect = progressContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const pct = Math.min(Math.max(x / rect.width, 0), 1);
+            const index = Math.floor(pct * imgs.length);
+            currentIndex = index;
+            showSlide(currentIndex);
+        });
+    }
+
+    // ============================================================
     //  START SCREEN LOGIC
     // ============================================================
     function begin() {
@@ -590,14 +651,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         startSlideshow();
         ensureAudios();
-        setMusicState(true); // start with sound ON after first user interaction / auto-start
+        setMusicState(true); // start with sound ON after first interaction / auto-start
     }
 
     if (startScreen) {
         startScreen.addEventListener("click", begin);
     }
 
-    // Auto-start after 8 seconds
+    // Auto-start after 8 seconds if user doesn’t tap
     setTimeout(() => {
         if (document.body.contains(startScreen)) begin();
     }, 8000);
