@@ -179,14 +179,20 @@
             z-index: 6;
         }
 
-        #slideImg {
-            max-width: 90%;
-            max-height: 80%;
-            border-radius: 14px;
-            opacity: 0;
-            transition: opacity 1.4s ease;
-        }
+      /* ✨ Ultra Clarity Spiritual Reveal */
+#slideImg {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 14px;
+    opacity: 0;
+    filter: blur(20px) brightness(0.8) contrast(0.8) saturate(0.8);
+    transition: opacity 1.4s ease, filter 1.8s ease;
+}
 
+/* 🔍 Ultra HD clarity mid-phase */
+#slideImg.sharp {
+    filter: blur(0px) brightness(1.12) contrast(1.45) saturate(1.22) drop-shadow(0 0 22px rgba(255,180,90,0.45));
+}
         /* -----------------------------------------------------------
            🌼 CAPTION BOX
         ----------------------------------------------------------- */
