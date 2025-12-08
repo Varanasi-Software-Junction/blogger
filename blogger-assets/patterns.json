@@ -80,7 +80,7 @@
     "id": "12",
     "title": "Patterns using a condition",
     "diagram": "*****\n*   *\n*   *\n*   *\n*****",
-    "code": "n=7\nmid=(n+1)//2\nfor row in range(1,n+1):\n    for col in range(1,n+1):\n        condition=row==col\n        if condition:\n            print(0,end='')\n        else:\n            print(' ',end='')\n    print()",
+    "code": "n=7\nmid=(n+1)//2\nfor row in range(1,n+1):\n    for col in range(1,n+1):\n        condition=row==1 or row==n or col==1 or col==n\n        if condition:\n            print(0,end='')\n        else:\n            print(' ',end='')\n    print()",
         "explanation": "This code prints an outline of a square pattern. The outer loop iterates through the number of rows, while the inner loop prints asterisks for the borders and spaces for the inside of the square."
   }
 ]
