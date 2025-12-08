@@ -273,6 +273,17 @@
             background: linear-gradient(90deg, #ffb347, #ff9234);
             border-radius: 6px;
         }
+
+
+.godParticle {
+    animation: riseAndFade 2.5s linear forwards;
+}
+
+@keyframes riseAndFade {
+    from { transform: translateY(20px); opacity: 1; }
+    to { transform: translateY(-40px); opacity: 0; }
+}
+
     </style>
 
 </head>
