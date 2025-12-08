@@ -332,7 +332,7 @@ function showSlide() {
             slideImg.style.zIndex = 999999; // top during clarity
             applyKenBurns();
             setCaptionsForCurrentSlide();
-        }, 700);
+        }, 70);
 
         // Exit clarity
         setTimeout(() => {
