@@ -394,6 +394,31 @@ progressContainer.addEventListener("click", (e) => {
     startAutoSlide();
 });
 
+
+
+
+// Show image number on hover over progress bar
+progressContainer.addEventListener("mousemove", (e) => {
+    if (images.length === 0) return;
+
+    const rect = progressContainer.getBoundingClientRect();
+    let percent = (e.clientX - rect.left) / rect.width;
+    if (percent < 0) percent = 0;
+    if (percent > 1) percent = 1;
+
+    const previewIndex = Math.round(percent * (images.length - 1));
+    const number = previewIndex + 1;
+
+    progressTooltip.textContent = `Image ${number} / ${images.length}`;
+    progressTooltip.style.left = e.clientX + "px";
+    progressTooltip.style.top = rect.top + "px";
+    progressTooltip.style.display = "block";
+});
+
+progressContainer.addEventListener("mouseleave", () => {
+    progressTooltip.style.display = "none";
+});
+
 // ------------------------------------------------------
 // Start screen → overlay
 // ------------------------------------------------------
