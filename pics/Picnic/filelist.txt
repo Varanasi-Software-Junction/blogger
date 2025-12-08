@@ -211,6 +211,5 @@
 993960577304419.jpg
 993960580637752.jpg
 993963260637484.jpg
-cmd.exe.lnk
-filelist.txt
-New Text Document.txt
+
+
