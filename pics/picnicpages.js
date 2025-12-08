@@ -269,7 +269,7 @@ function spawnBokeh() {
 // Timers for particles
 setInterval(spawnPetals, 800);
 setInterval(spawnFireflies, 300);
-setInterval(spawnBokeh, 1700);
+setInterval(spawnBokeh, 700);
 
 // ------------------------------------------------------
 // GOD MODE: Ken Burns zoom / pan
