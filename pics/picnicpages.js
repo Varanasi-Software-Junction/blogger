@@ -267,7 +267,7 @@ function spawnBokeh() {
 }
 
 // Timers for particles
-setInterval(spawnPetals, 800);
+setInterval(spawnPetals, 200);
 setInterval(spawnFireflies, 300);
 setInterval(spawnBokeh, 700);
 
