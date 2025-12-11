@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Programmer’s Picnic – Master Task Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    /* ==================== BASE THEME ==================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff7e0;
+      font-family: system-ui, sans-serif;
+      color: #4b2e00;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 12px 0;
+      margin: 0;
+      background: #ffe9bd;
+      color: #8c3f00;
+      border-bottom: 2px solid #f3c26b;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #8c3f00;
+      margin-bottom: 8px;
+    }
+
+    /* ==================== DAILY TASKS ==================== */
+
+    .daily-box {
+      max-width: 650px;
+      margin: 20px auto;
+      background: #fffaf0;
+      padding: 15px;
+      border: 1px solid #eac98a;
+      border-radius: 12px;
+    }
+
+    .date-box {
+      text-align: center;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      background: #ffefc7;
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid #eac98a;
+    }
+
+    .theme-box {
+      text-align: center;
+      padding: 8px;
+      background: #ffe7b5;
+      border: 1px solid #e9b44c;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .daily-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .daily-input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #eac98a;
+    }
+
+    .btn {
+      padding: 7px 12px;
+      background: #ffcc73;
+      border: 1px solid #b57400;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn:hover {
+      background: #ffd894;
+    }
+
+    .daily-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1px solid #eac98a;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    .daily-item.completed {
+      background: #e9ffe8;
+      text-decoration: line-through;
+      color: #166534;
+    }
+
+    .delete-btn {
+      margin-left: auto;
+      cursor: pointer;
+      font-weight: bold;
+      color: #b91c1c;
+    }
+
+    /* ==================== KANBAN ==================== */
+
+    .board {
+      display: flex;
+      gap: 12px;
+      padding: 15px;
+      overflow-x: auto;
+    }
+
+    .column {
+      min-width: 260px;
+      background: #fffaf0;
+      border: 1px solid #eac98a;
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .column h2 {
+      text-align: center;
+      margin-top: 0;
+      color: #a14c00;
+    }
+
+    .col-done {
+      background: #e9ffe8;
+    }
+
+    .col-completed {
+      background: #e7f4ff;
+    }
+
+    .col-working {
+      background: #fff6df;
+    }
+
+    .col-cancelled {
+      background: #ffe8e8;
+    }
+
+    .add-box {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .add-input {
+      flex: 1;
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #eac98a;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #eac98a;
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      cursor: grab;
+      line-height: 1.2rem;
+    }
+
+    .card:hover {
+      background: #fff4d3;
+    }
+
+    .dropzone {
+      min-height: 20px;
+    }
+
+    .highlight {
+      outline: 2px dashed #f59e0b;
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Programmer’s Picnic – Master Task System</h1>
+
+  <!-- ================= DAILY TASKS ================= -->
+
+  <div class="daily-box">
+
+    <div class="section-title">Daily Tasks</div>
+
+    <div class="date-box" id="dateDisplay"></div>
+    <div class="theme-box" id="themeBox"></div>
+
+    <div class="daily-input-row">
+      <input id="dailyInput" class="daily-input" placeholder="Add a task for today...">
+      <button class="btn" onclick="addDaily()">Add</button>
+    </div>
+
+    <div id="dailyList"></div>
+  </div>
+
+  <!-- ================== SAVE/LOAD ================== -->
+
+  <div class="daily-box" style="max-width:900px;">
+    <div class="section-title">Kanban – Project Tasks</div>
+
+    <button class="btn" onclick="saveAll()">💾 Save All JSON</button>
+    <button class="btn" onclick="document.getElementById('jsonInput').click()">📂 Load JSON</button>
+    <input type="file" id="jsonInput" style="display:none;" accept="application/json">
+  </div>
+
+  <!-- ================== KANBAN BOARD ================== -->
+
+  <div id="board" class="board"></div>
+
+  <script>
+    // =====================================================
+    // PRELOADED PROJECT DATA
+    // =====================================================
+
+    let data = {
+      daily: [],
+
+      kanban: {
+        done: [
+          "Lesson Viewer core system",
+          "JSON-driven lesson loading",
+          "Slide viewer basic version",
+          "Quiz engine working",
+          "Pyodide runner integrated",
+          "Binary Search Visualizer (Iterative)",
+          "Visualizer engine core",
+          "Whiteboard v7 (JSON save/load)",
+          "DSA Course Homepage created",
+          "Lesson 22 JSON complete",
+          "Programming Tips v1 page",
+          "Quote collections",
+          "Marriage + astrology reports",
+          "Career pathways basic",
+          "Shadow Frames home page",
+          "Indoor fountain design suggestions",
+          "Resume Maker initial prototype"
+        ],
+
+        completed: [
+          "Linear Search Visualizer (initial)",
+          "Binary Search Recursive draft",
+          "Lesson 21 JSON",
+          "200 Programming Tips Batch 1",
+          "E-Commerce Template basic version",
+          "Daily & Weekly Digest v1",
+          "Resume Maker v1 fields & drag/drop",
+          "Managing the Day article",
+          "Listening vs Talking article",
+          "Early to Bed article",
+          "Premium Blogger structure (free + paid)"
+        ],
+
+        working: [
+          "Resume Maker v2 (timeline, ATS, QR, 2-column)",
+          "All-in-One Visualizer (LS + BS iterative + BS recursive)",
+          "Lesson Viewer enhancements (UI spacing, slides, multi-video)",
+          "Fix Pyodide load delay",
+          "Lessons 23–30",
+          "Whiteboard integration inside viewer",
+          "Visualizer integration inside lessons",
+          "Premium Access (Classroom + Blogger)",
+          "Paid WhatsApp group setup",
+          "E-Commerce Template engine (JSON to cards)"
+        ],
+
+        cancelled: [
+          "Full PDF export (removed)",
+          "Auto-share tips (removed)",
+          "Long astrology generator",
+          "Gumroad integration"
+        ]
+      }
+    };
+
+    // =====================================================
+    // WEEKLY SCHEDULE SUGGESTIONS (OPTION A)
+    // =====================================================
+
+    const weeklyThemes = {
+      1: { theme: "Product / Platform Day", pick: ["working"], keywords: ["Lesson", "Visualizer", "Whiteboard"] },
+      2: { theme: "Monetization Day", pick: ["working"], keywords: ["Resume", "E-Commerce", "Access"] },
+      3: { theme: "Content Day", pick: ["working", "completed"], keywords: ["Lesson", "Tips", "Article", "NLP"] },
+      4: { theme: "Growth Day", pick: ["completed"], keywords: ["SEO", "Path", "Brand", "Short"] },
+      5: { theme: "Paid Access Day", pick: ["working"], keywords: ["Access", "Paid", "WhatsApp"] },
+      6: { theme: "Big Build Saturday", pick: ["working"], keywords: ["integration", "engine", "system"] },
+      0: { theme: "Review & Reset Sunday", pick: ["done", "completed"], keywords: ["review", "fix", "clean"] }
+    };
+
+    function autoSuggestTasks() {
+      const today = new Date().getDay();
+      const info = weeklyThemes[today];
+      document.getElementById("themeBox").textContent = "Today is: " + info.theme;
+
+      const chosen = [];
+
+      info.pick.forEach(col => {
+        data.kanban[col].forEach(task => {
+          if (info.keywords.some(k => task.toLowerCase().includes(k.toLowerCase()))) {
+            chosen.push(task);
+          }
+        });
+      });
+
+      // Suggest max 3 tasks
+      return chosen.slice(0, 3);
+    }
+
+    // =====================================================
+    // DAILY TASKS
+    // =====================================================
+
+    document.getElementById("dateDisplay").textContent = new Date().toDateString();
+
+    function addDaily() {
+      let txt = document.getElementById("dailyInput").value.trim();
+      if (!txt) return;
+      data.daily.push({ text: txt, completed: false });
+      document.getElementById("dailyInput").value = "";
+      renderDaily();
+    }
+
+    function toggleDaily(i) {
+      data.daily[i].completed = !data.daily[i].completed;
+      renderDaily();
+    }
+
+    function deleteDaily(i) {
+      data.daily.splice(i, 1);
+      renderDaily();
+    }
+
+    function renderDaily() {
+      const list = document.getElementById("dailyList");
+      list.innerHTML = "";
+
+      data.daily.forEach((t, i) => {
+        let div = document.createElement("div");
+        div.className = "daily-item" + (t.completed ? " completed" : "");
+        div.innerHTML = `
+      <input type="checkbox" ${t.completed ? "checked" : ""} onclick="toggleDaily(${i})">
+      <span>${t.text}</span>
+      <span class="delete-btn" onclick="deleteDaily(${i})">✖</span>
+    `;
+        list.appendChild(div);
+      });
+    }
+
+    // Add auto-suggestions to today's tasks
+    autoSuggestTasks().forEach(t => data.daily.push({ text: t, completed: false }));
+    renderDaily();
+
+
+    // =====================================================
+    // KANBAN SYSTEM
+    // =====================================================
+
+    function renderKanban() {
+      const board = document.getElementById("board");
+      board.innerHTML = "";
+
+      Object.entries(data.kanban).forEach(([colName, tasks]) => {
+        const col = document.createElement("div");
+        col.className = `column col-${colName}`;
+        col.dataset.col = colName;
+
+        const title = document.createElement("h2");
+        title.textContent = colName.toUpperCase();
+        col.appendChild(title);
+
+        const addBox = document.createElement("div");
+        addBox.className = "add-box";
+        addBox.innerHTML = `
+      <input class="add-input" placeholder="Add task...">
+      <button class="btn">＋</button>
+    `;
+        col.appendChild(addBox);
+
+        addBox.querySelector("button").onclick = () => {
+          let txt = addBox.querySelector("input").value.trim();
+          if (!txt) return;
+          data.kanban[colName].push(txt);
+          renderKanban();
+        };
+
+        const drop = document.createElement("div");
+        drop.className = "dropzone";
+        drop.ondragover = e => { e.preventDefault(); drop.classList.add("highlight"); };
+        drop.ondragleave = () => drop.classList.remove("highlight");
+        drop.ondrop = e => {
+          e.preventDefault();
+          drop.classList.remove("highlight");
+
+          const d = JSON.parse(e.dataTransfer.getData("text/plain"));
+          moveCard(d.col, d.index, colName);
+        };
+        col.appendChild(drop);
+
+        tasks.forEach((text, index) => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.draggable = true;
+
+          card.innerHTML = `
+        <span class="delete-btn" onclick="deleteCard('${colName}', ${index})">✖</span>
+        <div ondblclick="editCard('${colName}', ${index})">${text}</div>
+      `;
+
+          card.ondragstart = e => {
+            e.dataTransfer.setData("text/plain", JSON.stringify({ col: colName, index }));
+          };
+
+          drop.appendChild(card);
+        });
+
+        board.appendChild(col);
+      });
+    }
+
+    function deleteCard(col, index) {
+      data.kanban[col].splice(index, 1);
+      renderKanban();
+    }
+
+    function editCard(col, index) {
+      const newText = prompt("Edit task:", data.kanban[col][index]);
+      if (newText) {
+        data.kanban[col][index] = newText;
+        renderKanban();
+      }
+    }
+
+    function moveCard(fromCol, fromIndex, toCol) {
+      const card = data.kanban[fromCol][fromIndex];
+      data.kanban[fromCol].splice(fromIndex, 1);
+      data.kanban[toCol].push(card);
+      renderKanban();
+    }
+
+    renderKanban();
+
+
+    // =====================================================
+    // SAVE / LOAD JSON
+    // =====================================================
+
+    function saveAll() {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "project-board.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("jsonInput").onchange = e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          data = JSON.parse(ev.target.result);
+          renderDaily();
+          renderKanban();
+          alert("Loaded successfully!");
+        } catch {
+          alert("Invalid JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    };
+
+  </script>
+
+</body>
+
+</html>
