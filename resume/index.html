@@ -4,111 +4,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Maker</title>
+    <title>PROGRAMMER'S PICNIC - RESUME MAKER (PRESETS + BULLET POPUP)</title>
 </head>
 
 <body>
-
+    <!-- =============================================================== -->
+    <!-- PROGRAMMER'S PICNIC - RESUME MAKER (PRESETS + BULLET POPUP)    -->
+    <!-- =============================================================== -->
 
     <div id="resumeMakerApp"
         style="max-width:900px;margin:auto;font-family:system-ui;background:#fff7e6;padding:20px;border-radius:16px;border:1px solid #f3c26b;">
 
         <h1 style="text-align:center;color:#b35a00;">Resume Maker – Programmer's Picnic</h1>
 
-        <!-- THEME + TEMPLATE + ATS -->
+        <!-- THEME / TEMPLATE / ATS -->
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;">
             <select id="themeSelect" class="rm-input">
-                <option value="saffron">Saffron (Default)</option>
+                <option value="saffron">Saffron</option>
                 <option value="blue">Blue</option>
                 <option value="dark">Dark</option>
             </select>
 
             <select id="templateSelect" class="rm-input">
-                <option value="modern">Modern Template</option>
-                <option value="minimal">Minimal Template</option>
-                <option value="creative">Creative Template</option>
-                <option value="ultra">Ultra-Modern Template</option>
+                <option value="modern">Modern</option>
+                <option value="minimal">Minimal</option>
+                <option value="creative">Creative</option>
+                <option value="ultra">Ultra-Modern</option>
+                <option value="timeline">Timeline Layout</option>
+                <option value="twocol">Two-Column Premium</option>
             </select>
 
             <label style="display:flex;align-items:center;gap:6px;">
-                <input type="checkbox" id="atsMode"> ATS-Friendly Mode
+                <input type="checkbox" id="atsMode"> ATS Mode
             </label>
         </div>
 
-        <!-- AUTO SKILL SUGGEST -->
-        <label>Select Your Role for Auto Skill Suggestions</label>
+        <!-- AUTO SKILLS + ROLE PRESETS -->
+        <label>Select Role (Auto Skills + Preset)</label>
         <select id="roleSelect" class="rm-input">
-            <option value="">Select Role</option>
+            <option value="">Select</option>
             <option value="python">Python Developer</option>
             <option value="java">Java Developer</option>
             <option value="frontend">Frontend Developer</option>
             <option value="backend">Backend Developer</option>
             <option value="fullstack">Full Stack Developer</option>
-            <option value="ml">Machine Learning Engineer</option>
+            <option value="ml">ML Engineer</option>
             <option value="data">Data Analyst</option>
+            <option value="cyber">Cybersecurity</option>
+            <option value="cloud">Cloud / DevOps</option>
+            <option value="ba">Business Analyst</option>
+            <option value="dm">Digital Marketing</option>
+            <option value="uiux">UI/UX Designer</option>
         </select>
-        <button id="autoSkillBtn" class="rm-btn">Add Suggested Skills</button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+            <button id="autoSkillBtn" class="rm-btn" type="button">Add Suggested Skills</button>
+            <button id="applyPresetBtn" class="rm-btn" type="button">Apply Role Preset</button>
+        </div>
 
-        <!-- PHOTO UPLOAD -->
-        <label>Upload Photo (Optional)</label>
+        <!-- PHOTO -->
+        <label>Upload Photo</label>
         <input type="file" id="photoInput" accept="image/*" class="rm-input">
 
-        <!-- FORM FIELDS -->
+        <!-- FORM -->
         <div id="resumeForm" style="background:#fffaf0;padding:15px;border-radius:12px;border:1px solid #f1b14b;">
-            <h3 style="color:#8c3f00;margin-top:0;">Fill Your Details</h3>
 
-            <label>Full Name</label>
-            <input type="text" id="name" class="rm-input">
+            <h3 style="color:#8c3f00;">Your Details</h3>
 
-            <label>Email</label>
-            <input type="text" id="email" class="rm-input">
-
-            <label>Phone</label>
-            <input type="text" id="phone" class="rm-input">
-
-            <label>Location</label>
-            <input type="text" id="location" class="rm-input">
-
-            <label>LinkedIn URL</label>
-            <input type="text" id="linkedin" class="rm-input">
-
-            <label>Portfolio / GitHub</label>
-            <input type="text" id="portfolio" class="rm-input">
+            <label>Name</label><input id="name" class="rm-input">
+            <label>Email</label><input id="email" class="rm-input">
+            <label>Phone</label><input id="phone" class="rm-input">
+            <label>Location</label><input id="location" class="rm-input">
+            <label>LinkedIn</label><input id="linkedin" class="rm-input">
+            <label>Portfolio</label><input id="portfolio" class="rm-input">
 
             <label>Career Objective</label>
             <textarea id="objective" class="rm-input"></textarea>
 
-            <label>Skills (comma separated)</label>
-            <input type="text" id="skills" class="rm-input">
+            <!-- SKILLS -->
+            <h3 style="margin-top:20px;color:#8c3f00;">Skills (comma separated)</h3>
+            <input id="skills" class="rm-input">
 
-            <label>Education</label>
-            <textarea id="education" class="rm-input"></textarea>
+            <h4>Add Skill Level (Optional)</h4>
+            <div id="skillBars"></div>
+            <button class="rm-btn" type="button" onclick="addSkillBar()">➕ Add Skill Bar</button>
 
-            <label>Projects</label>
-            <textarea id="projects" class="rm-input"></textarea>
+            <!-- EDUCATION -->
+            <h3 style="margin-top:20px;color:#8c3f00;">Education</h3>
+            <div id="educationList" class="drag-container"></div>
+            <button class="rm-btn" type="button" onclick="addEducation()">➕ Add Education</button>
 
-            <label>Experience</label>
-            <textarea id="experience" class="rm-input"></textarea>
+            <!-- PROJECTS -->
+            <h3 style="margin-top:20px;color:#8c3f00;">Projects</h3>
+            <div id="projectList" class="drag-container"></div>
+            <button class="rm-btn" type="button" onclick="addProject()">➕ Add Project</button>
 
-            <button id="generateBtn" class="rm-btn">Generate Resume</button>
-            <button id="saveJsonBtn" class="rm-btn">Save as JSON</button>
+            <!-- CUSTOM SECTIONS -->
+            <h3 style="margin-top:20px;color:#8c3f00;">Custom Sections (Awards, Certifications, Languages...)</h3>
+            <div id="customSectionList" class="drag-container"></div>
+            <button class="rm-btn" type="button" onclick="addCustomSection()">➕ Add Custom Section</button>
+
+            <br><br>
+            <button id="generateBtn" class="rm-btn" type="button">Generate Resume</button>
+            <button id="saveJsonBtn" class="rm-btn" type="button">Download JSON</button>
 
             <input type="file" id="loadJsonInput" style="display:none;">
-            <button id="loadJsonBtn" class="rm-btn">Load JSON</button>
+            <button id="loadJsonBtn" class="rm-btn" type="button">Load JSON</button>
+
         </div>
 
         <!-- OUTPUT -->
-        <div id="resumeOutput"
-            style="display:none;margin-top:20px;background:white;padding:20px;border-radius:12px;border:1px solid #e9c48f;">
-            <div id="resumeContent"></div>
-            <button class="rm-btn" onclick="window.print()">Download PDF</button>
+        <div id="resumeOutput" style="display:none;margin-top:20px;">
+            <div id="resumePrintArea"
+                style="background:white;padding:20px;border-radius:12px;border:1px solid #e9c48f;"></div>
+            <button class="rm-btn" type="button" onclick="printResume()">Download PDF</button>
         </div>
 
     </div>
 
-    <!-- ============================= -->
-    <!--             CSS               -->
-    <!-- ============================= -->
+    <!-- =============== BULLET IMPROVER MODAL =============== -->
+    <div id="bulletModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;">
+        <div
+            style="max-width:520px;margin:40px auto;background:white;border-radius:14px;padding:16px;border:1px solid #e5b465;">
+            <h3 style="margin-top:0;color:#b35a00;">Improve Your Bullet</h3>
+            <label style="font-size:0.9rem;">Original text</label>
+            <textarea id="bulletOriginal" class="rm-input" style="height:70px;"></textarea>
+
+            <button class="rm-btn" type="button" onclick="regenerateBulletSuggestions()" style="margin-bottom:8px;">
+                🔁 Regenerate Suggestions
+            </button>
+
+            <div id="bulletSuggestions"></div>
+
+            <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+                <button class="rm-btn" type="button" onclick="closeBulletModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== CSS ===================== -->
     <style>
         .rm-input {
             width: 100%;
@@ -116,7 +149,6 @@
             margin: 6px 0 12px;
             border-radius: 8px;
             border: 1px solid #f3c26b;
-            background: #fff;
         }
 
         .rm-btn {
@@ -126,13 +158,185 @@
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 10px;
         }
 
         .rm-btn:hover {
             background: #ffdb9b;
         }
 
+        .small-bullet-btn {
+            background: #e0f2fe;
+            border: 1px solid #38bdf8;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        .list-item-box {
+            background: white;
+            padding: 10px;
+            border: 1px solid #e9c48f;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: move;
+            position: relative;
+        }
+
+        .delete-btn {
+            background: #ff9b9b;
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #b30000;
+            cursor: pointer;
+            font-size: 0.8rem;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        .drag-over {
+            border: 2px dashed #b57400 !important;
+        }
+
+        /* Skill bar editor */
+        .skill-bar-box {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9c48f;
+            position: relative;
+        }
+
+        .skill-bar-view {
+            background: #ffe7b3;
+            height: 10px;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 3px;
+        }
+
+        .skill-bar-view-fill {
+            background: #b57400;
+            height: 10px;
+            border-radius: 999px;
+        }
+
+        /* Bullet modal suggestions */
+        .bullet-suggestion {
+            border: 1px solid #f3c26b;
+            border-radius: 10px;
+            padding: 8px;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background: #fffdf6;
+        }
+
+        .bullet-suggestion:hover {
+            background: #fff0d1;
+        }
+
+        /* Timeline items */
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: "●";
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 22px;
+            color: #b35a00;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 10px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: #b35a00;
+            opacity: 0.4;
+        }
+
+        /* Icons & headings */
+        .icon-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-top: 25px;
+        }
+
+        .icon-edu::before {
+            content: "🎓 ";
+            font-size: 1.5rem;
+        }
+
+        .icon-proj::before {
+            content: "🛠 ";
+            font-size: 1.5rem;
+        }
+
+        .icon-skill::before {
+            content: "⭐ ";
+            font-size: 1.5rem;
+        }
+
+        /* ATS Score */
+        .ats-score-box {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .ats-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 3px solid #22c55e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .ats-score-text small {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Header with photo + info + QR */
+        .resume-header {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .header-photo {
+            width: 120px;
+            flex-shrink: 0;
+        }
+
+        .header-info {
+            flex: 1;
+        }
+
+        .header-qr {
+            width: 100px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        /* Photo */
         .resume-photo {
             width: 120px;
             height: 120px;
@@ -141,15 +345,7 @@
             border: 2px solid #ccc;
         }
 
-        .resume-section-title {
-            font-size: 1.2rem;
-            margin-top: 20px;
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 3px;
-            font-weight: 600;
-        }
-
-        /* THEMES */
+        /* Themes */
         .theme-saffron {
             color: #3a2a1a;
         }
@@ -163,77 +359,383 @@
             color: white !important;
         }
 
-        /* ATS MODE */
+        /* ATS mode */
         .ats * {
             background: white !important;
-            color: #000 !important;
+            color: black !important;
             border: none !important;
             box-shadow: none !important;
         }
+
+        /* Two-column premium */
+        .premium-two-col {
+            display: flex;
+            gap: 24px;
+            margin-top: 18px;
+        }
+
+        .premium-left,
+        .premium-right {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Responsive: stack columns */
+        @media (max-width:768px) {
+            .premium-two-col {
+                flex-direction: column;
+            }
+        }
+
+        /* Resume section title */
+        .resume-section-title {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 3px;
+        }
+
+        /* Print only resume */
+        @media print {
+            body * {
+                visibility: hidden !important;
+            }
+
+            #resumePrintArea,
+            #resumePrintArea * {
+                visibility: visible !important;
+            }
+
+            #resumePrintArea {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+        }
     </style>
 
-    <!-- ============================= -->
-    <!--         JAVASCRIPT            -->
-    <!-- ============================= -->
+    <!-- ===================== JS ===================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script>
         let uploadedPhoto = "";
+        let currentBulletTarget = null;
+        let currentBulletSuggestions = [];
 
-        // Photo Upload
-        document.getElementById("photoInput").onchange = function (e) {
+        /* ---------------- DRAG & DROP ---------------- */
+        let dragSrcEl = null;
+
+        function enableDrag(containerId) {
+            const c = document.getElementById(containerId);
+            if (!c) return;
+            c.querySelectorAll(".list-item-box").forEach(item => {
+                item.draggable = true;
+
+                item.addEventListener("dragstart", e => {
+                    dragSrcEl = item;
+                    item.style.opacity = "0.4";
+                });
+
+                item.addEventListener("dragend", () => {
+                    item.style.opacity = "1";
+                });
+
+                item.addEventListener("dragover", e => {
+                    e.preventDefault();
+                    item.classList.add("drag-over");
+                });
+
+                item.addEventListener("dragleave", () => {
+                    item.classList.remove("drag-over");
+                });
+
+                item.addEventListener("drop", () => {
+                    item.classList.remove("drag-over");
+                    if (dragSrcEl !== item) {
+                        item.parentNode.insertBefore(dragSrcEl, item);
+                        saveToLocal();
+                    }
+                });
+            });
+        }
+
+        /* ---------------- ADD EDUCATION ---------------- */
+        function addEducation(text = "") {
+            const d = document.createElement("div");
+            d.className = "list-item-box";
+            d.innerHTML = `
+    <textarea class="edu-item rm-input" placeholder="Degree - College - Year">${text}</textarea>
+    <button class="delete-btn" type="button"
+            onclick="this.parentElement.remove(); saveToLocal();">🗑</button>
+  `;
+            document.getElementById("educationList").appendChild(d);
+            enableDrag("educationList");
+            saveToLocal();
+        }
+
+        /* ---------------- ADD PROJECT ---------------- */
+        function addProject(text = "") {
+            const d = document.createElement("div");
+            d.className = "list-item-box";
+            d.innerHTML = `
+    <textarea class="project-item rm-input" placeholder="Project Title - Description">${text}</textarea>
+    <button class="small-bullet-btn" type="button"
+            onclick="openBulletModal(this.previousElementSibling)">🧠 Improve Bullet</button>
+    <button class="delete-btn" type="button"
+            onclick="this.parentElement.remove(); saveToLocal();">🗑</button>
+  `;
+            document.getElementById("projectList").appendChild(d);
+            enableDrag("projectList");
+            saveToLocal();
+        }
+
+        /* ---------------- ADD CUSTOM SECTION ---------------- */
+        function addCustomSection(title = "", content = "") {
+            const d = document.createElement("div");
+            d.className = "list-item-box custom-section-box";
+            d.innerHTML = `
+    <input class="custom-section-title rm-input" placeholder="Section Title (e.g. Certifications)" value="${title}">
+    <textarea class="custom-section-content rm-input" placeholder="Each bullet on a new line">${content}</textarea>
+    <button class="small-bullet-btn" type="button"
+            onclick="openBulletModal(this.previousElementSibling)">🧠 Improve Bullet</button>
+    <button class="delete-btn" type="button"
+            onclick="this.parentElement.remove(); saveToLocal();">🗑</button>
+  `;
+            document.getElementById("customSectionList").appendChild(d);
+            enableDrag("customSectionList");
+            saveToLocal();
+        }
+
+        /* ---------------- SKILL BARS (EDITOR) ---------------- */
+        function addSkillBar(name = "", level = 50) {
+            const box = document.createElement("div");
+            box.className = "skill-bar-box";
+            box.innerHTML = `
+    <input class="skill-name rm-input" placeholder="Skill Name" value="${name}">
+    <label>Level: <span class="lvlVal">${level}</span>%</label>
+    <input type="range" class="skill-level" min="0" max="100" value="${level}">
+    <button class="delete-btn" type="button"
+            onclick="this.parentElement.remove(); saveToLocal();">🗑</button>
+  `;
+            document.getElementById("skillBars").appendChild(box);
+
+            box.querySelector(".skill-level").oninput = function () {
+                box.querySelector(".lvlVal").innerText = this.value;
+                saveToLocal();
+            };
+
+            saveToLocal();
+        }
+
+        /* ---------------- AUTO SKILLS ---------------- */
+        const autoSkills = {
+            python: "Python, Django, Flask, Pandas, NumPy, APIs, Git, SQL",
+            java: "Java, Spring Boot, Hibernate, MySQL",
+            frontend: "HTML, CSS, JavaScript, React, Tailwind",
+            backend: "Node.js, Express, MongoDB, SQL",
+            fullstack: "React, Node.js, MongoDB, APIs",
+            ml: "Python, Pandas, TensorFlow, Scikit-Learn",
+            data: "Excel, SQL, Pandas, Power BI, Tableau",
+            cyber: "Network Security, Firewalls, SIEM, Vulnerability Assessment, Linux, Python",
+            cloud: "AWS, Azure, Docker, Kubernetes, CI/CD, Linux, Terraform",
+            ba: "Excel, SQL, Power BI, Requirements Gathering, Stakeholder Communication",
+            dm: "SEO, SEM, Google Analytics, Social Media Marketing, Email Campaigns",
+            uiux: "Wireframing, Figma, Prototyping, User Research, Interaction Design"
+        };
+
+        document.getElementById("autoSkillBtn").onclick = () => {
+            const r = document.getElementById("roleSelect").value;
+            if (r && autoSkills[r]) {
+                const skillsEl = document.getElementById("skills");
+                skillsEl.value = skillsEl.value
+                    ? skillsEl.value + ", " + autoSkills[r]
+                    : autoSkills[r];
+                saveToLocal();
+            }
+        };
+
+        /* ---------------- ROLE PRESETS ---------------- */
+        const rolePresets = {
+            python: {
+                objective: "To obtain a Python developer position where I can build clean, efficient backend code, work with APIs, and contribute to data-driven applications.",
+                projects: [
+                    "Built a RESTful API in Django for student management, including authentication, CRUD operations, and search.",
+                    "Created a data analysis pipeline in Python using Pandas and Matplotlib to generate insights from CSV datasets."
+                ],
+                customSections: [
+                    {
+                        title: "Certifications",
+                        contentLines: [
+                            "Python for Everybody – Coursera",
+                            "Data Analysis with Python – FreeCodeCamp"
+                        ]
+                    }
+                ]
+            },
+            frontend: {
+                objective: "To work as a Frontend Developer focusing on responsive, accessible interfaces using modern JavaScript frameworks.",
+                projects: [
+                    "Developed a responsive portfolio website using HTML, CSS, and JavaScript with smooth scrolling and form validation.",
+                    "Implemented a React-based dashboard with charts and filters for visualizing student performance data."
+                ],
+                customSections: [
+                    {
+                        title: "Tools & Technologies",
+                        contentLines: [
+                            "VS Code, Chrome DevTools, Git, Figma"
+                        ]
+                    }
+                ]
+            },
+            fullstack: {
+                objective: "To contribute as a Full Stack Developer building scalable web apps using modern frontend and backend technologies.",
+                projects: [
+                    "Built a MERN stack e-commerce site with user authentication, product listing, cart, and order management.",
+                    "Created a task manager app with Node.js/Express backend and React frontend, deployed on cloud."
+                ],
+                customSections: [
+                    {
+                        title: "Highlights",
+                        contentLines: [
+                            "Worked on complete feature lifecycle from design to deployment.",
+                            "Comfortable with REST APIs, JSON, and Git workflows."
+                        ]
+                    }
+                ]
+            },
+            ml: {
+                objective: "To grow as a Machine Learning Engineer by building end-to-end ML pipelines, experimenting with models, and deploying practical solutions.",
+                projects: [
+                    "Built a house price prediction model using Scikit-Learn and evaluated it with MAE, RMSE, and R².",
+                    "Implemented a sentiment analysis classifier using Python, Pandas, and Logistic Regression."
+                ],
+                customSections: [
+                    {
+                        title: "ML / DS Skills",
+                        contentLines: [
+                            "Feature engineering, model training, evaluation metrics, Jupyter Notebooks"
+                        ]
+                    }
+                ]
+            },
+            data: {
+                objective: "To start my career as a Data Analyst, turning raw data into useful dashboards and business insights.",
+                projects: [
+                    "Designed an Excel + Power BI dashboard to track sales, revenue and top-performing products.",
+                    " used SQL and Python (Pandas) to clean and analyze customer churn data, presenting actionable insights."
+                ],
+                customSections: [
+                    {
+                        title: "Data Tools",
+                        contentLines: [
+                            "Excel, SQL, Power BI, Tableau, Pandas"
+                        ]
+                    }
+                ]
+            },
+            java: {
+                objective: "To work as a Java backend developer building robust REST APIs and enterprise applications.",
+                projects: [
+                    "Developed a Spring Boot REST API with JWT-based authentication and role-based access control.",
+                    "Created a Java desktop application for library management using JDBC and MySQL."
+                ],
+                customSections: [
+                    {
+                        title: "Java Strengths",
+                        contentLines: [
+                            "OOP, Collections, Multithreading, Exception Handling"
+                        ]
+                    }
+                ]
+            }
+            // You can extend other roles similarly if you like
+        };
+
+        document.getElementById("applyPresetBtn").onclick = () => {
+            const role = document.getElementById("roleSelect").value;
+            const preset = rolePresets[role];
+            if (!preset) return;
+
+            const objEl = document.getElementById("objective");
+            if (!objEl.value.trim() && preset.objective) {
+                objEl.value = preset.objective;
+            }
+
+            const skillsEl = document.getElementById("skills");
+            if (autoSkills[role]) {
+                skillsEl.value = skillsEl.value
+                    ? skillsEl.value + ", " + autoSkills[role]
+                    : autoSkills[role];
+            }
+
+            (preset.projects || []).forEach(p => addProject(p));
+
+            (preset.customSections || []).forEach(cs => {
+                addCustomSection(cs.title, (cs.contentLines || []).join("\\n"));
+            });
+
+            saveToLocal();
+        };
+
+        /* ---------------- LOCAL STORAGE SAVE HOOKS ---------------- */
+        document.querySelectorAll(
+            "#resumeForm input, #resumeForm textarea, #themeSelect, #templateSelect, #atsMode"
+        ).forEach(el => {
+            el.addEventListener("input", saveToLocal);
+            el.addEventListener("change", saveToLocal);
+        });
+
+        document.getElementById("photoInput").onchange = e => {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = () => uploadedPhoto = reader.result;
+                reader.onload = () => {
+                    uploadedPhoto = reader.result;
+                    saveToLocal();
+                };
                 reader.readAsDataURL(file);
             }
         };
 
-        // Auto Skill Suggestions
-        const autoSkills = {
-            python: "Python, Flask, Django, NumPy, Pandas, REST API, Git, SQL, OOP",
-            java: "Java, Spring Boot, Hibernate, JSP, Servlets, MySQL, Git, REST API",
-            frontend: "HTML, CSS, JavaScript, React, Vue, Tailwind, Git, Responsive Design",
-            backend: "Node.js, Express.js, MongoDB, SQL, REST API, Authentication, Git",
-            fullstack: "HTML, CSS, JS, React, Node.js, Express.js, MongoDB, Git, APIs",
-            ml: "Python, NumPy, Pandas, Scikit-Learn, TensorFlow, ML Models, Data Cleaning",
-            data: "Excel, SQL, Python, Pandas, Power BI, Tableau, Data Visualization"
+        function saveToLocal() {
+            localStorage.setItem("pp_resume_data", JSON.stringify(collectData()));
+        }
+
+        /* ---------------- LOAD FROM LOCAL STORAGE ---------------- */
+        window.onload = () => {
+            const raw = localStorage.getItem("pp_resume_data");
+            if (!raw) return;
+            const d = JSON.parse(raw);
+            applyData(d);
         };
 
-        document.getElementById("autoSkillBtn").onclick = function () {
-            const role = document.getElementById("roleSelect").value;
-            if (role && autoSkills[role]) {
-                let curr = document.getElementById("skills").value;
-                document.getElementById("skills").value =
-                    curr ? curr + ", " + autoSkills[role] : autoSkills[role];
-            }
-        };
+        function applyData(d) {
+            const baseKeys = [
+                "name", "email", "phone", "location",
+                "linkedin", "portfolio", "objective",
+                "skills", "theme", "template"
+            ];
+            baseKeys.forEach(k => {
+                if (d[k] !== undefined && document.getElementById(k)) {
+                    document.getElementById(k).value = d[k];
+                }
+            });
+            document.getElementById("atsMode").checked = !!d.ats;
+            uploadedPhoto = d.photo || "";
 
-        // Save JSON
-        document.getElementById("saveJsonBtn").onclick = function () {
-            const data = JSON.stringify(collectData());
-            const blob = new Blob([data], { type: "application/json" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = "resume.json";
-            a.click();
-        };
+            // Clear dynamic lists
+            document.getElementById("educationList").innerHTML = "";
+            document.getElementById("projectList").innerHTML = "";
+            document.getElementById("skillBars").innerHTML = "";
+            document.getElementById("customSectionList").innerHTML = "";
 
-        // Load JSON
-        document.getElementById("loadJsonBtn").onclick = () =>
-            document.getElementById("loadJsonInput").click();
+            (d.educationList || []).forEach(e => addEducation(e));
+            (d.projectList || []).forEach(p => addProject(p));
+            (d.skillBars || []).forEach(s => addSkillBar(s.name, s.level));
+            (d.customSections || []).forEach(cs => addCustomSection(cs.title, cs.content));
+        }
 
-        document.getElementById("loadJsonInput").onchange = function (e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = () => fillForm(JSON.parse(reader.result));
-            reader.readAsText(file);
-        };
-
-        // Generate Resume
-        document.getElementById("generateBtn").onclick = () => {
-            renderResume(collectData());
-        };
-
+        /* ---------------- COLLECT DATA ---------------- */
         function collectData() {
             return {
                 name: val("name"),
@@ -244,87 +746,393 @@
                 portfolio: val("portfolio"),
                 objective: val("objective"),
                 skills: val("skills"),
-                education: val("education"),
-                projects: val("projects"),
-                experience: val("experience"),
-                theme: document.getElementById("themeSelect").value,
-                template: document.getElementById("templateSelect").value,
+                theme: val("themeSelect"),
+                template: val("templateSelect"),
                 ats: document.getElementById("atsMode").checked,
+                educationList: Array.from(document.querySelectorAll(".edu-item")).map(x => x.value),
+                projectList: Array.from(document.querySelectorAll(".project-item")).map(x => x.value),
+                skillBars: Array.from(document.querySelectorAll(".skill-bar-box")).map(box => ({
+                    name: box.querySelector(".skill-name").value,
+                    level: box.querySelector(".skill-level").value
+                })),
+                customSections: Array.from(document.querySelectorAll(".custom-section-box")).map(box => ({
+                    title: box.querySelector(".custom-section-title").value,
+                    content: box.querySelector(".custom-section-content").value
+                })),
                 photo: uploadedPhoto
             };
         }
 
-        function fillForm(d) {
-            for (let k in d) {
-                if (document.getElementById(k)) {
-                    document.getElementById(k).value = d[k];
-                }
+        /* ---------------- ATS SCORE ENGINE ---------------- */
+        function calculateATSScore(d) {
+            let score = 0;
+            const suggestions = [];
+
+            const textBlob = [
+                d.objective,
+                d.educationList.join(" "),
+                d.projectList.join(" "),
+                (d.customSections || []).map(s => s.content).join(" "),
+                d.skills
+            ].join(" ").toLowerCase();
+
+            const wordCount = textBlob.trim().split(/\s+/).filter(Boolean).length;
+            const skillsArr = d.skills ? d.skills.split(",").map(s => s.trim()).filter(Boolean) : [];
+
+            // Objective
+            if (d.objective && d.objective.length > 20) {
+                score += 10;
+            } else {
+                suggestions.push("Add a clear 2–3 line career objective.");
             }
-            uploadedPhoto = d.photo;
+
+            // Skills
+            if (skillsArr.length >= 5) {
+                score += 20;
+            } else if (skillsArr.length > 0) {
+                score += 10;
+                suggestions.push("Add more relevant skills (aim for 8–12).");
+            } else {
+                suggestions.push("Add a skills section with key technologies and tools.");
+            }
+
+            // Education
+            if ((d.educationList || []).length > 0) {
+                score += 15;
+            } else {
+                suggestions.push("Include at least one education entry (degree, college, year).");
+            }
+
+            // Projects
+            if ((d.projectList || []).length > 0) {
+                score += 15;
+            } else {
+                suggestions.push("Add 2–3 solid projects with tech stack and outcomes.");
+            }
+
+            // Word count
+            if (wordCount >= 150 && wordCount <= 600) {
+                score += 15;
+            } else if (wordCount > 600) {
+                score += 10;
+                suggestions.push("Resume is long. Try to fit into 1 page (especially for freshers).");
+            } else {
+                suggestions.push("Add more details to reach at least ~150 words.");
+            }
+
+            // Action verbs
+            const verbs = ["developed", "built", "designed", "implemented", "managed",
+                "led", "created", "improved", "optimized", "collaborated"];
+            let verbHits = 0;
+            verbs.forEach(v => {
+                if (textBlob.includes(v)) verbHits++;
+            });
+            if (verbHits >= 3) {
+                score += 15;
+            } else {
+                suggestions.push("Use action verbs like 'developed', 'implemented', 'optimized' in bullets.");
+            }
+
+            // Skill bars bonus
+            if ((d.skillBars || []).length > 0) {
+                score += 10;
+            }
+
+            // Clamp
+            if (score > 100) score = 100;
+            if (score < 0) score = 0;
+
+            if (suggestions.length === 0) {
+                suggestions.push("Your resume looks strong. You can still refine bullet points to be even more measurable.");
+            }
+
+            return { score, suggestions };
         }
 
-        // TEMPLATE RENDERING
+        /* ---------------- BULLET IMPROVER (POPUP) ---------------- */
+        function openBulletModal(targetEl) {
+            currentBulletTarget = targetEl;
+            document.getElementById("bulletOriginal").value = targetEl.value.trim();
+            regenerateBulletSuggestions();
+            document.getElementById("bulletModal").style.display = "block";
+        }
+
+        function closeBulletModal() {
+            document.getElementById("bulletModal").style.display = "none";
+            currentBulletTarget = null;
+            currentBulletSuggestions = [];
+        }
+
+        function regenerateBulletSuggestions() {
+            const original = document.getElementById("bulletOriginal").value.trim();
+            currentBulletSuggestions = generateBulletSuggestions(original);
+            const container = document.getElementById("bulletSuggestions");
+            container.innerHTML = "";
+            currentBulletSuggestions.forEach((s, idx) => {
+                const div = document.createElement("div");
+                div.className = "bullet-suggestion";
+                div.innerHTML = `<strong>Option ${idx + 1}:</strong><br>${s}`;
+                div.onclick = () => applyBulletSuggestion(idx);
+                container.appendChild(div);
+            });
+        }
+
+        function generateBulletSuggestions(text) {
+            if (!text) {
+                text = "Built a project using Python and web technologies.";
+            }
+            const base = text
+                .replace(/^[-•\s]+/, "")
+                .replace(/\s+/g, " ")
+                .trim();
+
+            // Extract a rough tech phrase (just heuristic)
+            const techMatch = base.match(/(using|with|in)\s+(.+)$/i);
+            const techPart = techMatch ? techMatch[2] : "modern tools and frameworks";
+
+            const subject = base.split(" using ")[0]
+                .split(" with ")[0]
+                .split(" in ")[0];
+
+            const suggestions = [];
+
+            suggestions.push(
+                `Developed ${subject.toLowerCase()} using ${techPart}, improving efficiency and user experience by focusing on clean code and modular design.`
+            );
+            suggestions.push(
+                `Implemented ${subject.toLowerCase()} with ${techPart}, handling end-to-end development, debugging, and performance optimization.`
+            );
+            suggestions.push(
+                `Collaborated to build ${subject.toLowerCase()} on ${techPart}, ensuring reliability, maintainability, and clear documentation for future updates.`
+            );
+
+            return suggestions;
+        }
+
+        function applyBulletSuggestion(idx) {
+            if (!currentBulletTarget) return;
+            currentBulletTarget.value = currentBulletSuggestions[idx] || currentBulletTarget.value;
+            saveToLocal();
+            closeBulletModal();
+        }
+
+        /* ---------------- GENERATE RESUME ---------------- */
+        document.getElementById("generateBtn").onclick = () => {
+            const d = collectData();
+            renderResume(d);
+            document.getElementById("resumeOutput").style.display = "block";
+        };
+
+        /* ---------------- JSON SAVE / LOAD ---------------- */
+        document.getElementById("saveJsonBtn").onclick = () => {
+            const data = JSON.stringify(collectData());
+            const blob = new Blob([data], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "resume.json";
+            a.click();
+        };
+
+        document.getElementById("loadJsonBtn").onclick = () => {
+            document.getElementById("loadJsonInput").click();
+        };
+
+        document.getElementById("loadJsonInput").onchange = e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                const d = JSON.parse(reader.result);
+                applyData(d);
+                saveToLocal();
+            };
+            reader.readAsText(file);
+        };
+
+        /* ---------------- RENDER RESUME ---------------- */
         function renderResume(d) {
-            const skillsArr = d.skills.split(",").map(s => s.trim());
+            const isTimeline = (d.template === "timeline");
+            const isTwoCol = (d.template === "twocol");
 
-            let header = `
-        <div style="text-align:center;">
-            ${d.photo ? `<img src="${d.photo}" class="resume-photo"><br>` : ""}
-            <h1>${d.name}</h1>
-            <p>${d.email} | ${d.phone} | ${d.location}<br>
-               <a href="${d.linkedin}">${d.linkedin}</a> |
-               <a href="${d.portfolio}">${d.portfolio}</a>
-            </p>
-        </div>`;
+            const skillsArr = d.skills
+                ? d.skills.split(",").map(s => s.trim()).filter(Boolean)
+                : [];
 
-            let sections = `
-        <div class="resume-section-title">Career Objective</div><p>${d.objective}</p>
-        <div class="resume-section-title">Skills</div><ul>${skillsArr.map(s => `<li>${s}</li>`).join("")}</ul>
-        <div class="resume-section-title">Education</div><p>${d.education.replace(/\n/g, "<br>")}</p>
-        <div class="resume-section-title">Projects</div><p>${d.projects.replace(/\n/g, "<br>")}</p>
-        <div class="resume-section-title">Experience</div><p>${d.experience.replace(/\n/g, "<br>")}</p>
+            const themeClass = "theme-" + d.theme;
+            const atsData = calculateATSScore(d);
+            const score = atsData.score;
+            const suggestionText = atsData.suggestions[0] || "";
+
+            // QR value
+            const qrValue = [
+                d.name,
+                d.email,
+                d.phone,
+                d.linkedin,
+                d.portfolio
+            ].filter(Boolean).join("\\n");
+
+            /* EDUCATION VIEW */
+            const eduHTML = (d.educationList || []).map(e => `
+    <div class="${isTimeline ? "timeline-item" : ""}">
+      ${isTimeline ? '<div class="timeline-line"></div>' : ""}
+      <p>${e}</p>
+    </div>
+  `).join("");
+
+            /* PROJECTS VIEW */
+            const projHTML = (d.projectList || []).map(p => `
+    <div class="${isTimeline ? "timeline-item" : ""}">
+      ${isTimeline ? '<div class="timeline-line"></div>' : ""}
+      <p>${p}</p>
+    </div>
+  `).join("");
+
+            /* CUSTOM SECTIONS VIEW */
+            const customBlocks = (d.customSections || []).map(cs => {
+                const lines = cs.content
+                    ? cs.content.split(/\n/).map(l => l.trim()).filter(Boolean)
+                    : [];
+                const bullets = lines.length
+                    ? "<ul>" + lines.map(l => `<li>${l}</li>`).join("") + "</ul>"
+                    : "";
+                return `
+      <h2 class="icon-title">${cs.title || "Custom Section"}</h2>
+      ${bullets}
+    `;
+            });
+
+            const customHTMLSingleCol = customBlocks.join("");
+            const customHTMLLeftCol = customBlocks.join("");
+
+            /* SKILL BARS VIEW */
+            const barHTML = (d.skillBars || []).map(b => `
+    <div style="margin-bottom:6px;">
+      <div style="display:flex;justify-content:space-between;font-size:0.9rem;">
+        <span>${b.name || ""}</span>
+        <span>${b.level}%</span>
+      </div>
+      <div class="skill-bar-view">
+        <div class="skill-bar-view-fill" style="width:${b.level}%;"></div>
+      </div>
+    </div>
+  `).join("");
+
+            /* SKILLS BLOCK */
+            const skillBlock = `
+    <h2 class="icon-skill icon-title">Skills</h2>
+    <ul>${skillsArr.map(s => `<li>${s}</li>`).join("")}</ul>
+    ${barHTML}
+  `;
+
+            /* EDUCATION + PROJECT BLOCKS */
+            const eduBlock = `
+    <h2 class="icon-edu icon-title">Education</h2>
+    ${eduHTML}
+  `;
+            const projBlock = `
+    <h2 class="icon-proj icon-title">Projects</h2>
+    ${projHTML}
+  `;
+
+            /* ATS SCORE + HEADER */
+            const atsBox = `
+    <div class="ats-score-box">
+      <div class="ats-circle">${score}</div>
+      <div class="ats-score-text">
+        <strong>ATS Score:</strong> ${score} / 100<br>
+        <small>${suggestionText}</small>
+      </div>
+    </div>
+  `;
+
+            const header = `
+    <div class="resume-header">
+      <div class="header-photo">
+        ${d.photo ? `<img src="${d.photo}" class="resume-photo">` : ""}
+      </div>
+      <div class="header-info">
+        <h1>${d.name || ""}</h1>
+        <p>${[d.email, d.phone, d.location].filter(Boolean).join(" | ")}</p>
+        <p>${[d.linkedin, d.portfolio].filter(Boolean).join(" | ")}</p>
+      </div>
+      <div class="header-qr">
+        <canvas id="qrCanvas" width="90" height="90"></canvas>
+        <div style="font-size:0.7rem;margin-top:4px;">Scan Contact</div>
+      </div>
+    </div>
+  `;
+
+            let html = "";
+
+            if (isTwoCol) {
+                const leftCol = `
+      <h2 class="resume-section-title">Career Objective</h2>
+      <p>${d.objective || ""}</p>
+      ${skillBlock}
+      ${customHTMLLeftCol}
+    `;
+                const rightCol = `
+      ${eduBlock}
+      ${projBlock}
     `;
 
-            // Template variations
-            if (d.template === "minimal") {
-                header = `<h1 style="text-align:left;">${d.name}</h1>
-                  <p>${d.email} | ${d.phone} | ${d.location}</p>`;
+                html = `
+      <div class="${themeClass} ${d.ats ? "ats" : ""}">
+        ${atsBox}
+        ${header}
+        <div class="premium-two-col">
+          <div class="premium-left">
+            ${leftCol}
+          </div>
+          <div class="premium-right">
+            ${rightCol}
+          </div>
+        </div>
+      </div>
+    `;
+            } else {
+                html = `
+      <div class="${themeClass} ${d.ats ? "ats" : ""}">
+        ${atsBox}
+        ${header}
+        <h2 class="resume-section-title">Career Objective</h2>
+        <p>${d.objective || ""}</p>
+        ${skillBlock}
+        ${eduBlock}
+        ${projBlock}
+        ${customHTMLSingleCol}
+      </div>
+    `;
             }
 
-            if (d.template === "creative") {
-                header = `<div style="background:#ffe7b3;padding:15px;border-radius:10px;text-align:center;">
-                    ${d.photo ? `<img src="${d.photo}" class="resume-photo"><br>` : ""}
-                    <h1 style="color:#b35a00;">${d.name}</h1>
-                  </div>`;
-            }
+            document.getElementById("resumePrintArea").innerHTML = html;
 
-            if (d.template === "ultra") {
-                header = `<div style="display:flex;align-items:center;gap:20px;">
-                    ${d.photo ? `<img src="${d.photo}" class="resume-photo">` : ""}
-                    <div>
-                      <h1>${d.name}</h1>
-                      <p>${d.email}<br>${d.phone}<br>${d.location}</p>
-                    </div>
-                  </div>`;
-            }
-
-            // Apply Theme
-            const themeClass = {
-                saffron: "theme-saffron",
-                blue: "theme-blue",
-                dark: "theme-dark"
-            }[d.theme];
-
-            document.getElementById("resumeContent").innerHTML =
-                `<div class="${themeClass} ${d.ats ? 'ats' : ''}">
-            ${header + sections}
-        </div>`;
-
-            document.getElementById("resumeOutput").style.display = "block";
+            // Generate QR code after DOM update
+            setTimeout(() => {
+                const canvas = document.getElementById("qrCanvas");
+                if (canvas && window.QRious && qrValue.trim()) {
+                    new QRious({
+                        element: canvas,
+                        value: qrValue,
+                        size: 90
+                    });
+                }
+            }, 0);
         }
 
-        function val(id) { return document.getElementById(id).value.trim(); }
+        /* ---------------- PRINT ---------------- */
+        function printResume() {
+            window.print();
+        }
+
+        /* ---------------- HELPER ---------------- */
+        function val(id) {
+            const el = document.getElementById(id);
+            return el ? el.value.trim() : "";
+        }
     </script>
+
 </body>
 
 </html>
