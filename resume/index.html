@@ -46,6 +46,7 @@
             <option value="python">Python Developer</option>
             <option value="java">Java Developer</option>
             <option value="frontend">Frontend Developer</option>
+            <option value="flutter">Flutter Developer</option>
             <option value="backend">Backend Developer</option>
             <option value="fullstack">Full Stack Developer</option>
             <option value="ml">ML Engineer</option>
@@ -294,6 +295,7 @@
             gap: 12px;
             align-items: center;
             margin-bottom: 12px;
+            /* display: none; */
         }
 
         .ats-circle {
@@ -540,7 +542,8 @@
             cloud: "AWS, Azure, Docker, Kubernetes, CI/CD, Linux, Terraform",
             ba: "Excel, SQL, Power BI, Requirements Gathering, Stakeholder Communication",
             dm: "SEO, SEM, Google Analytics, Social Media Marketing, Email Campaigns",
-            uiux: "Wireframing, Figma, Prototyping, User Research, Interaction Design"
+            uiux: "Wireframing, Figma, Prototyping, User Research, Interaction Design",
+            flutter: "Dart, Flutter, Firebase, REST APIs, Git, Provider, Bloc, Android Studio, UI/UX, Responsive Design"
         };
 
         document.getElementById("autoSkillBtn").onclick = () => {
@@ -572,6 +575,7 @@
                     }
                 ]
             },
+
             frontend: {
                 objective: "To work as a Frontend Developer focusing on responsive, accessible interfaces using modern JavaScript frameworks.",
                 projects: [
@@ -647,6 +651,44 @@
                         ]
                     }
                 ]
+            }
+            ,
+
+
+
+            flutter: {
+                "label": "Flutter Developer",
+                "objective": "To build cross-platform mobile applications using Flutter and Dart, delivering smooth UI, fast performance, and scalable architecture.",
+                "skills": [
+                    "Dart",
+                    "Flutter",
+                    "Firebase",
+                    "REST APIs",
+                    "Provider",
+                    "Bloc",
+                    "SQLite",
+                    "Git",
+                    "Figma",
+                    "Responsive UI"
+                ],
+                "projects": [
+                    "Built a full-featured Flutter e-commerce app with user authentication, product listings, cart, and checkout using Firebase.",
+                    "Developed a task management mobile app with local storage, notifications, and theme switching (light/dark mode).",
+                    "Created a Flutter social feed app that integrates REST APIs, pull-to-refresh, infinite scroll, and animated UI components."
+                ],
+                "customSections": {
+                    "Certifications": [
+                        "Flutter & Dart Bootcamp – Udemy",
+                        "Google UX Design – Coursera"
+                    ],
+                    "Tools": [
+                        "Android Studio",
+                        "VS Code",
+                        "Firebase Console",
+                        "Postman",
+                        "GitHub"
+                    ]
+                }
             }
             // You can extend other roles similarly if you like
         };
