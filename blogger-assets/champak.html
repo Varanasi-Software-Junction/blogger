@@ -1,1564 +1,2136 @@
 <!-- Learning Sutras — Home v2 (Explore search + counter — mobile frosted menu) -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Learning Sutras — Home</title>
-  <meta name="description"
-    content="Learning Sutras — concise programming lessons, DSA visualizations, quizzes, and mini-tools." />
-  <link rel="stylesheet" href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css">
-  <style>
-    :root {
-      --crx-accent: #0ea5e9;
-      --crx-accent-dark: #0a5fad;
-      --crx-bg-1: #f4fbff;
-      --crx-bg-2: #eef7ff;
-      --card-bg: rgba(255, 255, 255, 0.82);
-      --glass-border: rgba(15, 23, 42, 0.04);
-      --muted: #61707b;
-      --headline: #08263f;
-      --menu-width: 320px;
-    }
-
-    /* Base */
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale
-    }
-
-    body {
-      background: linear-gradient(180deg, var(--crx-bg-1) 0%, var(--crx-bg-2)100%);
-      background-attachment: fixed;
-      color: var(--headline)
-    }
-
-    @keyframes subtleShift {
-      0% {
-        background-position: 0% 50%
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Learning Sutras — Home</title>
+    <meta
+      name="description"
+      content="Learning Sutras — concise programming lessons, DSA visualizations, quizzes, and mini-tools."
+    />
+    <link
+      rel="stylesheet"
+      href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css"
+    />
+    <style>
+      :root {
+        --crx-accent: #0ea5e9;
+        --crx-accent-dark: #0a5fad;
+        --crx-bg-1: #f4fbff;
+        --crx-bg-2: #eef7ff;
+        --card-bg: rgba(255, 255, 255, 0.82);
+        --glass-border: rgba(15, 23, 42, 0.04);
+        --muted: #61707b;
+        --headline: #08263f;
+        --menu-width: 320px;
       }
 
-      50% {
-        background-position: 100% 50%
+      /* Base */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
-      100% {
-        background-position: 0% 50%
-      }
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: -20%;
-      z-index: -1;
-      background: radial-gradient(600px 300px at 10% 10%, rgba(13, 110, 253, 0.03), transparent), radial-gradient(500px 240px at 90% 90%, rgba(6, 182, 212, 0.02), transparent);
-      pointer-events: none;
-      animation: subtleShift 18s linear infinite;
-      opacity: 1
-    }
-
-    main#crx-dashboard-home {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 20px
-    }
-
-    /* Header */
-    #ls-header {
-      position: sticky;
-      top: 0;
-      z-index: 1200;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 12px 18px;
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
-      backdrop-filter: blur(8px) saturate(120%);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(250, 252, 255, 0.80));
-      border-bottom: 1px solid var(--glass-border);
-      box-shadow: 0 6px 18px rgba(8, 38, 64, 0.06);
-      transition: box-shadow .28s ease, transform .12s ease;
-      min-height: 64px;
-    }
-
-    #ls-header:hover {
-      box-shadow: 0 12px 28px rgba(8, 38, 64, 0.09)
-    }
-
-    /* Brand */
-    #ls-brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      min-width: 0
-    }
-
-    #ls-brand img {
-      width: 52px;
-      height: 52px;
-      border-radius: 10px;
-      object-fit: cover;
-      box-shadow: 0 8px 22px rgba(2, 6, 23, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(250, 250, 250, 0.5));
-      flex-shrink: 0
-    }
-
-    #ls-title {
-      display: flex;
-      flex-direction: column;
-      min-width: 0
-    }
-
-    .title-main {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 0.2px;
-      background: linear-gradient(90deg, #061124, var(--crx-accent-dark));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      transition: filter .18s ease
-    }
-
-    .title-sub {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px
-    }
-
-    /* Desktop search area (right side of header) */
-    #ls-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      justify-content: flex-end;
-      min-width: 0
-    }
-
-    #ls-search {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      max-width: 720px;
-      position: relative
-    }
-
-    .search-box {
-      display: flex;
-      gap: 8px;
-      width: 100%;
-      max-width: 560px
-    }
-
-    #ls-search input[type="search"] {
-      flex: 1;
-      height: 44px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(13, 24, 40, 0.08);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 250, 250, 0.95));
-      font-size: 14px;
-      outline: none;
-      box-shadow: inset 0 1px 2px rgba(12, 22, 30, 0.03);
-      transition: box-shadow 0.18s ease, border-color 0.18s ease
-    }
-
-    #ls-search input[type="search"]:focus {
-      border-color: rgba(31, 99, 214, 0.28);
-      box-shadow: 0 6px 20px rgba(31, 99, 214, 0.06)
-    }
-
-    #ls-search button {
-      padding: 10px 14px;
-      height: 44px;
-      border-radius: 10px;
-      border: none;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 6px 18px rgba(29, 78, 216, 0.12);
-      transition: transform 0.12s ease, box-shadow 0.12s ease
-    }
-
-    #ls-search button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 28px rgba(29, 78, 216, 0.14)
-    }
-
-    /* Suggestions */
-    #ls-suggestions {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: calc(100% + 10px);
-      width: calc(100% - 160px);
-      max-width: 560px;
-      background: rgba(255, 255, 255, 0.98);
-      border-radius: 10px;
-      border: 1px solid rgba(13, 24, 40, 0.04);
-      box-shadow: 0 12px 32px rgba(9, 20, 40, 0.06);
-      max-height: 340px;
-      overflow: auto;
-      z-index: 1400
-    }
-
-    #ls-suggestions .ls-item {
-      display: block;
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(15, 23, 42, 0.03);
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--headline);
-      text-decoration: none
-    }
-
-    #ls-suggestions .ls-item:hover {
-      background: rgba(31, 99, 214, 0.03)
-    }
-
-    /* Desktop nav links (hidden on mobile) */
-    #ls-nav {
-      display: flex;
-      gap: 12px;
-      align-items: center
-    }
-
-    #ls-nav a {
-      font-weight: 700;
-      color: var(--crx-accent-dark);
-      text-decoration: none;
-      padding: 8px 10px;
-      border-radius: 8px
-    }
-
-    #ls-nav a:hover {
-      background: rgba(31, 99, 214, 0.06)
-    }
-
-    /* Hamburger for mobile */
-    .menu-toggle {
-      display: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      border: none;
-      background: transparent;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .hamburger {
-      width: 20px;
-      height: 2px;
-      background: var(--headline);
-      border-radius: 2px;
-      position: relative;
-      transition: transform .18s ease
-    }
-
-    .hamburger::before,
-    .hamburger::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--headline);
-      border-radius: 2px;
-      transition: transform .18s ease, top .18s ease, bottom .18s ease
-    }
-
-    .hamburger::before {
-      top: -6px
-    }
-
-    .hamburger::after {
-      bottom: -6px
-    }
-
-    .menu-toggle.open .hamburger {
-      background: transparent
-    }
-
-    .menu-toggle.open .hamburger::before {
-      top: 0;
-      transform: rotate(45deg)
-    }
-
-    .menu-toggle.open .hamburger::after {
-      bottom: 0;
-      transform: rotate(-45deg)
-    }
-
-    /* Mobile menu panel - frosted glass */
-    .mobile-menu-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(8, 18, 30, 0.28);
-      z-index: 1190;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .18s ease;
-      backdrop-filter: blur(2px);
-    }
-
-    .mobile-menu-backdrop.show {
-      opacity: 1;
-      pointer-events: auto
-    }
-
-    .mobile-menu {
-      position: fixed;
-      top: 64px;
-      right: 18px;
-      z-index: 1195;
-      width: var(--menu-width);
-      max-width: calc(100% - 36px);
-      border-radius: 12px;
-      padding: 12px 10px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.78));
-      backdrop-filter: blur(8px) saturate(120%);
-      border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: 0 18px 40px rgba(8, 36, 64, 0.12);
-      transform: translateY(-6px) scale(.99);
-      opacity: 0;
-      transition: transform .26s cubic-bezier(.2, .9, .3, 1), opacity .26s ease;
-      max-height: 72vh;
-      overflow: auto
-    }
-
-    .mobile-menu.show {
-      transform: translateY(0) scale(1);
-      opacity: 1
-    }
-
-    /* Menu contents */
-    .mobile-menu .mm-section {
-      padding: 8px 10px;
-      border-radius: 8px;
-      margin-bottom: 8px
-    }
-
-    .mobile-menu .mm-section a {
-      display: block;
-      padding: 10px 12px;
-      text-decoration: none;
-      color: var(--headline);
-      border-radius: 8px;
-      font-weight: 700;
-    }
-
-    .mobile-menu .mm-section a:hover {
-      background: rgba(13, 24, 40, 0.03)
-    }
-
-    .mobile-menu .mm-keywords {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px
-    }
-
-    .mm-divider {
-      height: 1px;
-      background: rgba(13, 24, 40, 0.03);
-      margin: 8px 0;
-      border-radius: 2px
-    }
-
-    /* CRX content cards */
-    .crx-section {
-      background: var(--card-bg);
-      border-radius: 14px;
-      padding: 24px;
-      margin: 20px 0;
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 28px rgba(8, 36, 64, 0.04);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-      backdrop-filter: blur(4px)
-    }
-
-    .crx-section:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 18px 48px rgba(8, 36, 64, 0.06)
-    }
-
-    .crx-section h1,
-    .crx-section h2 {
-      margin: 0 0 12px;
-      color: var(--headline);
-      font-weight: 800
-    }
-
-    .crx-section p {
-      color: var(--muted);
-      margin: 0 0 8px
-    }
-
-    .crx-keyword {
-      background-color: lightblue;
-      color: white;
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 999px;
-      margin: 6px;
-      font-size: 14px;
-      box-shadow: 0 6px 18px rgba(31, 99, 214, 0.08);
-      text-decoration: none
-    }
-
-    textarea.editor {
-      width: 100%;
-      min-height: 160px;
-      border-radius: 10px;
-      border: 1px solid rgba(13, 24, 40, 0.06);
-      padding: 12px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-      font-size: 20px;
-      box-shadow: inset 0 6px 18px rgba(2, 6, 23, 0.03);
-      resize: vertical
-    }
-
-    .btn {
-      border: none;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer
-    }
-
-    .btn.ghost {
-      background: transparent;
-      border: 1px solid rgba(13, 24, 40, 0.06);
-      color: var(--headline)
-    }
-
-    .btn.primary {
-      background: linear-gradient(135deg, #1f7fc1, #2563eb);
-      color: #fff;
-      box-shadow: 0 8px 24px rgba(29, 78, 216, 0.10);
-      font-size: 14px
-    }
-
-    .status {
-      font-size: 13px;
-      color: var(--muted)
-    }
-
-    .output {
-      margin-top: 12px;
-      background: rgba(243, 250, 255, 0.9);
-      border-radius: 10px;
-      padding: 10px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-      font-size: 13px;
-      color: #08303f;
-      min-height: 80px;
-      white-space: pre-wrap;
-      overflow: auto
-    }
-
-    .mpl-card {
-      border-radius: 10px;
-      padding: 14px;
-      background: #fff;
-      box-shadow: 0 8px 20px rgba(8, 36, 64, 0.04)
-    }
-
-    .mpl-thumb {
-      height: 120px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      background: linear-gradient(180deg, #f7fbff, #ffffff);
-      color: var(--crx-accent-dark);
-      margin-bottom: 10px
-    }
-
-    #crx-feed-panel {
-      max-height: 520px;
-      overflow-y: auto;
-      border-radius: 12px;
-      border: 1px solid rgba(13, 24, 40, 0.04);
-      padding: 12px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.98));
-      box-shadow: 0 10px 30px rgba(9, 20, 40, 0.03)
-    }
-
-    .crx-card-row {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      padding: 12px;
-      border-radius: 10px;
-      margin: 10px 6px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 251, 255, 0.98));
-      border: 1px solid rgba(13, 24, 40, 0.03);
-      transition: transform .12s ease, box-shadow .12s ease;
-      position: relative
-    }
-
-    .crx-card-row:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 30px rgba(8, 36, 64, 0.04)
-    }
-
-    .crx-thumb-square {
-      width: 88px;
-      height: 88px;
-      border-radius: 10px;
-      object-fit: cover;
-      flex-shrink: 0
-    }
-
-    .crx-avatar-circle {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--card-bg);
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%) translateX(-36px);
-      box-shadow: 0 10px 18px rgba(2, 6, 23, 0.06)
-    }
-
-    .crx-post-title {
-      background: #0e63d6;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-weight: 700;
-      display: inline-block;
-      font-size: 0.95rem
-    }
-
-    .crx-post-meta {
-      color: var(--muted);
-      margin-top: 8px;
-      font-size: 13px
-    }
-
-    /* Fade-in on scroll */
-    .crx_fade_in {
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      will-change: opacity, transform
-    }
-
-    .crx_fade_in.crx_visible {
-      opacity: 1;
-      transform: translateY(0)
-    }
-
-    /* back to top */
-    #back-to-top {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, #1f7fc1, #2563eb);
-      color: white;
-      box-shadow: 0 12px 30px rgba(31, 99, 214, 0.12);
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.22s ease, transform 0.22s ease;
-      z-index: 9998
-    }
-
-    #back-to-top.visible {
-      opacity: 1;
-      transform: translateY(0)
-    }
-
-    #back-to-top:active {
-      transform: translateY(1px) scale(0.99)
-    }
-
-    /* Explore search control */
-    #crx-explore-search {
-      width: 100%;
-      max-width: 420px;
-      height: 40px;
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(13, 24, 40, 0.08);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 250, 250, 0.95));
-      font-size: 14px;
-      outline: none
-    }
-
-    #crx-explore-controls {
-      display: flex;
-      gap: 10px;
-      align-items: center
-    }
-
-    /* Responsive: improved mobile header/menu layout */
-    @media (max-width:920px) {
-      #ls-search {
-        max-width: 60%
+      body {
+        background: linear-gradient(
+          180deg,
+          var(--crx-bg-1) 0%,
+          var(--crx-bg-2) 100%
+        );
+        background-attachment: fixed;
+        color: var(--headline);
       }
 
-      #ls-nav {
-        display: none
+      @keyframes subtleShift {
+        0% {
+          background-position: 0% 50%;
+        }
+
+        50% {
+          background-position: 100% 50%;
+        }
+
+        100% {
+          background-position: 0% 50%;
+        }
       }
 
-      .menu-toggle {
-        display: flex
+      body::before {
+        content: "";
+        position: fixed;
+        inset: -20%;
+        z-index: -1;
+        background: radial-gradient(
+            600px 300px at 10% 10%,
+            rgba(13, 110, 253, 0.03),
+            transparent
+          ),
+          radial-gradient(
+            500px 240px at 90% 90%,
+            rgba(6, 182, 212, 0.02),
+            transparent
+          );
+        pointer-events: none;
+        animation: subtleShift 18s linear infinite;
+        opacity: 1;
       }
 
-      #ls-actions {
-        gap: 8px
+      main#crx-dashboard-home {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px 20px;
       }
-    }
 
-    @media (max-width:720px) {
+      /* Header */
       #ls-header {
-        padding: 10px 12px
+        position: sticky;
+        top: 0;
+        z-index: 1200;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 18px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        backdrop-filter: blur(8px) saturate(120%);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.86),
+          rgba(250, 252, 255, 0.8)
+        );
+        border-bottom: 1px solid var(--glass-border);
+        box-shadow: 0 6px 18px rgba(8, 38, 64, 0.06);
+        transition: box-shadow 0.28s ease, transform 0.12s ease;
+        min-height: 64px;
       }
 
-      #ls-search {
-        max-width: 100%
+      #ls-header:hover {
+        box-shadow: 0 12px 28px rgba(8, 38, 64, 0.09);
       }
 
-      .search-box {
-        max-width: 100%
+      /* Brand */
+      #ls-brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+      }
+
+      #ls-brand img {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
+        object-fit: cover;
+        box-shadow: 0 8px 22px rgba(2, 6, 23, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.55),
+          rgba(250, 250, 250, 0.5)
+        );
+        flex-shrink: 0;
+      }
+
+      #ls-title {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      .title-main {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 0.2px;
+        background: linear-gradient(90deg, #061124, var(--crx-accent-dark));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        transition: filter 0.18s ease;
       }
 
       .title-sub {
-        display: none
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
       }
 
-      .card-thumb-small {
-        width: 120px
-      }
-
-      /* Mobile menu becomes full width under header on really small screens */
-      .mobile-menu {
-        left: 12px;
-        right: 12px;
-        top: 70px;
-        width: calc(100% - 24px);
-        max-width: none
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <!-- 🌐 Learn With Champak — Page Labels / Topics -->
-  <div class="page-labels" style="display: none;">
-    <span>Data Structures</span>
-    <span>Algorithms</span>
-    <span>Web Development</span>
-    <span>Python</span>
-    <span>Coding Interviews</span>
-    <span>Career Growth</span>
-  </div>
-
-  <!-- Header -->
-  <header id="ls-header" role="banner" aria-label="Learning Sutras header">
-    <div id="ls-brand" aria-hidden="false">
-      <img
-        src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257"
-        alt="Champak Roy avatar" class="crx_avatar" loading="lazy" />
-      <div id="ls-title">
-        <div class="title-main">Learning Sutras</div>
-        <div class="title-sub">Practical coding lessons & visualizations</div>
-      </div>
-    </div>
-
-    <div id="ls-actions">
-      <!-- Desktop nav links (hidden on small screens) -->
-      <nav id="ls-nav" aria-label="Main">
-        <a href="https://www.learnwithchampak.live/2025/11/ms-excel-complete-course-programmers.html"
-          target="_parent">MS Excel</a>
-
-        <a href="https://www.learnwithchampak.live/2025/11/all-dsa-posts.html" target="_parent">DSA-Full</a>
-        <a href="https://www.learnwithchampak.live" target="_parent">Home</a>
-        <a href="https://www.learnwithchampak.live/search?q=python" target="_parent">Python</a>
-        <a href="https://www.learnwithchampak.live/search?q=javascript" target="_parent">JavaScript</a>
-        <a href="https://www.learnwithchampak.live/search?q=projects" target="_parent">Projects</a>
-        <a href="https://us04web.zoom.us/j/4428355179?pwd=yCZrJtx41cUAxDyApDM9eSrre1GSXe.1" target="Champak">Connect on
-          Zoom</a>
-      </nav>
-
-      <!-- Search -->
-      <div id="ls-search" role="search" aria-label="Search this blog">
-        <div class="search-box">
-          <input id="ls-search-input" type="search" placeholder="Search this blog..." aria-label="Search this blog"
-            autocomplete="off" />
-          <button id="ls-search-btn" title="Search" class="btn primary">Search</button>
-        </div>
-        <div id="ls-suggestions" role="listbox" aria-label="Search suggestions"></div>
-      </div>
-
-      <!-- Hamburger menu toggle (mobile) -->
-      <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu"
-        aria-label="Open menu">
-        <span class="hamburger"></span>
-      </button>
-    </div>
-  </header>
-
-  <!-- Mobile menu + backdrop -->
-  <div class="mobile-menu-backdrop" id="mobile-backdrop" tabindex="-1" aria-hidden="true"></div>
-
-  <aside class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title"
-    hidden>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-      <div id="mobile-menu-title" style="font-weight:800">Menu</div>
-      <button id="mobile-close" aria-label="Close menu" class="btn ghost" style="padding:6px 8px">Close</button>
-    </div>
-
-    <div class="mm-section">
-      <a href="https://www.learnwithchampak.live" target="_parent">Home</a>
-      <a href="https://www.learnwithchampak.live/search?q=python" target="_parent">Python</a>
-      <a href="https://www.learnwithchampak.live/search?q=javascript" target="_parent">JavaScript</a>
-      <a href="https://www.learnwithchampak.live/search?q=projects" target="_parent">Projects</a>
-      <a href="https://www.learnwithchampak.live/search?q=matplotlib" target="_parent">Matplotlib</a>
-      <a href="https://us04web.zoom.us/j/4428355179?pwd=yCZrJtx41cUAxDyApDM9eSrre1GSXe.1" target="Champak">Connect on
-        Zoom</a>
-    </div>
-
-    <div class="mm-divider" aria-hidden="true"></div>
-
-    <div class="mm-section">
-      <div style="font-weight:700;margin-bottom:8px">Quick Search</div>
-      <div style="display:flex;gap:8px;">
-        <input id="mobile-search-input" type="search" placeholder="Search..."
-          style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(13,24,40,0.06);outline:none" />
-        <button id="mobile-search-btn" class="btn primary">Go</button>
-      </div>
-    </div>
-
-    <div class="mm-divider" aria-hidden="true"></div>
-
-    <div class="mm-section">
-      <div style="font-weight:700;margin-bottom:8px">Keywords</div>
-      <div class="mm-keywords">
-        <a class="crx-keyword" style="font-size:13px;padding:6px 10px" target="_parent"
-          href="https://www.learnwithchampak.live/search?q=flutter">Flutter</a>
-
-        <a class="crx-keyword" style="font-size:13px;padding:6px 10px" target="_parent"
-          href="https://www.learnwithchampak.live/2025/11/programmers-picnic_17.html">Programmer's Policy</a>
-
-
-
-        <a class="crx-keyword" style="font-size:13px;padding:6px 10px" target="_parent"
-          href="https://www.learnwithchampak.live/search?q=java">Java</a>
-
-        <a class="crx-keyword" style="font-size:13px;padding:6px 10px" target="_parent"
-          href="https://www.learnwithchampak.live/search?q=python">Python</a>
-        <a class="crx-keyword" style="font-size:13px;padding:6px 10px" target="_parent"
-          href="https://www.learnwithchampak.live/search?q=javascript">JavaScript</a>
-        <a class="crx-keyword" style="font-size:13px;padding:6px 10px" target="_parent"
-          href="https://www.learnwithchampak.live/search?q=css">CSS</a>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Main content -->
-  <main id="crx-dashboard-home" role="main">
-
-
-    <section class="why-blog-section">
-      <div class="why-blog-card">
-        <h2> Hi, I’m <span style="color:#2563eb;">Champak Roy</span> — Developer · Writer · Teacher</h2>
-        <div class="intro-sub">Where professional performance meets warm mentorship</div>
-
-        <p class="intro-paragraph">
-          I help students and professionals master practical skills in <strong>Data Structures, Algorithms, Web
-            Development, and Python</strong>.
-          My lessons focus on clarity, hands-on projects, and interview-readiness so you not only understand concepts —
-          you can apply them with confidence.
-        </p>
-
-
-
-        <p>
-          you’ll find <strong> lessons</strong>, <strong>that target jobs </strong>, and
-          <strong>Internships.</strong>
-        </p>
-      </div>
-    </section>
-
-
-
-
-
-    <!-- 🌐 Learn With Champak — Why This Blog Matters Section -->
-    <section class="why-blog-section">
-      <div class="why-blog-card">
-        <h2>Why This Website Matters</h2>
-        <p>
-          <strong>Learn With Champak</strong> is built for learners who want more than just theory.
-          Every post is thoughtfully crafted with <strong>real-world examples</strong>,
-          <strong>step-by-step explanations</strong>, <strong>visual demos</strong>, and
-          <strong>complete code snippets</strong> — all designed to help you understand
-          how programming truly works in practice.
-        </p>
-        <p>
-          From mastering <strong>Data Structures and Algorithms</strong> to building
-          <strong>Web Development projects</strong> and exploring <strong>Python applications</strong>,
-          you’ll find <strong>interactive lessons</strong>, <strong>hands-on challenges</strong>, and
-          <strong>career-focused insights</strong> that turn your knowledge into job-ready skills.
-        </p>
-      </div>
-    </section>
-
-    <style>
-      /* 🌀 WHY BLOG SECTION — Consistent with blue 3D theme */
-      .why-blog-section {
+      /* Desktop search area (right side of header) */
+      #ls-actions {
         display: flex;
-        justify-content: center;
         align-items: center;
-        padding: 60px 20px;
-        background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+        gap: 12px;
+        width: 100%;
+        justify-content: flex-end;
+        min-width: 0;
       }
 
-      .why-blog-card {
-        max-width: 880px;
-        background: #ffffff;
-        border-radius: 16px;
-        padding: 40px 36px;
-        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.12), 0 2px 6px rgba(0, 0, 0, 0.05);
-        text-align: center;
-        animation: fadeInUp 0.9s ease both;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .why-blog-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 14px 35px rgba(37, 99, 235, 0.18), 0 4px 10px rgba(0, 0, 0, 0.06);
-      }
-
-      .why-blog-card h2 {
-        font-family: "Segoe UI", Roboto, sans-serif;
-        font-size: 2em;
-        font-weight: 700;
-        color: #1e3a8a;
-        margin-bottom: 20px;
+      #ls-search {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        max-width: 720px;
         position: relative;
       }
 
-      .why-blog-card h2::after {
-        content: "";
+      .search-box {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+        max-width: 560px;
+      }
+
+      #ls-search input[type="search"] {
+        flex: 1;
+        height: 44px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(250, 250, 250, 0.95)
+        );
+        font-size: 14px;
+        outline: none;
+        box-shadow: inset 0 1px 2px rgba(12, 22, 30, 0.03);
+        transition: box-shadow 0.18s ease, border-color 0.18s ease;
+      }
+
+      #ls-search input[type="search"]:focus {
+        border-color: rgba(31, 99, 214, 0.28);
+        box-shadow: 0 6px 20px rgba(31, 99, 214, 0.06);
+      }
+
+      #ls-search button {
+        padding: 10px 14px;
+        height: 44px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(29, 78, 216, 0.12);
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+      }
+
+      #ls-search button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 28px rgba(29, 78, 216, 0.14);
+      }
+
+      /* Suggestions */
+      #ls-suggestions {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 10px);
+        width: calc(100% - 160px);
+        max-width: 560px;
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 10px;
+        border: 1px solid rgba(13, 24, 40, 0.04);
+        box-shadow: 0 12px 32px rgba(9, 20, 40, 0.06);
+        max-height: 340px;
+        overflow: auto;
+        z-index: 1400;
+      }
+
+      #ls-suggestions .ls-item {
         display: block;
-        width: 80px;
-        height: 4px;
-        background: linear-gradient(90deg, #2563eb, #1e40af);
-        margin: 10px auto 0;
-        border-radius: 3px;
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.03);
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--headline);
+        text-decoration: none;
       }
 
-      .why-blog-card p {
-        font-size: 1.08em;
-        color: #1e293b;
-        line-height: 1.75;
-        margin-bottom: 16px;
+      #ls-suggestions .ls-item:hover {
+        background: rgba(31, 99, 214, 0.03);
       }
 
-      .why-blog-card strong {
-        color: #2563eb;
-        font-weight: 600;
+      /* Desktop nav links (hidden on mobile) */
+      #ls-nav {
+        display: flex;
+        gap: 12px;
+        align-items: center;
       }
 
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
+      #ls-nav a {
+        font-weight: 700;
+        color: var(--crx-accent-dark);
+        text-decoration: none;
+        padding: 8px 10px;
+        border-radius: 8px;
+      }
+
+      #ls-nav a:hover {
+        background: rgba(31, 99, 214, 0.06);
+      }
+
+      /* Hamburger for mobile */
+      .menu-toggle {
+        display: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        border: none;
+        background: transparent;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .hamburger {
+        width: 20px;
+        height: 2px;
+        background: var(--headline);
+        border-radius: 2px;
+        position: relative;
+        transition: transform 0.18s ease;
+      }
+
+      .hamburger::before,
+      .hamburger::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--headline);
+        border-radius: 2px;
+        transition: transform 0.18s ease, top 0.18s ease, bottom 0.18s ease;
+      }
+
+      .hamburger::before {
+        top: -6px;
+      }
+
+      .hamburger::after {
+        bottom: -6px;
+      }
+
+      .menu-toggle.open .hamburger {
+        background: transparent;
+      }
+
+      .menu-toggle.open .hamburger::before {
+        top: 0;
+        transform: rotate(45deg);
+      }
+
+      .menu-toggle.open .hamburger::after {
+        bottom: 0;
+        transform: rotate(-45deg);
+      }
+
+      /* Mobile menu panel - frosted glass */
+      .mobile-menu-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(8, 18, 30, 0.28);
+        z-index: 1190;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.18s ease;
+        backdrop-filter: blur(2px);
+      }
+
+      .mobile-menu-backdrop.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .mobile-menu {
+        position: fixed;
+        top: 64px;
+        right: 18px;
+        z-index: 1195;
+        width: var(--menu-width);
+        max-width: calc(100% - 36px);
+        border-radius: 12px;
+        padding: 12px 10px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.86),
+          rgba(255, 255, 255, 0.78)
+        );
+        backdrop-filter: blur(8px) saturate(120%);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        box-shadow: 0 18px 40px rgba(8, 36, 64, 0.12);
+        transform: translateY(-6px) scale(0.99);
+        opacity: 0;
+        transition: transform 0.26s cubic-bezier(0.2, 0.9, 0.3, 1),
+          opacity 0.26s ease;
+        max-height: 72vh;
+        overflow: auto;
+      }
+
+      .mobile-menu.show {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+
+      /* Menu contents */
+      .mobile-menu .mm-section {
+        padding: 8px 10px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+      }
+
+      .mobile-menu .mm-section a {
+        display: block;
+        padding: 10px 12px;
+        text-decoration: none;
+        color: var(--headline);
+        border-radius: 8px;
+        font-weight: 700;
+      }
+
+      .mobile-menu .mm-section a:hover {
+        background: rgba(13, 24, 40, 0.03);
+      }
+
+      .mobile-menu .mm-keywords {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .mm-divider {
+        height: 1px;
+        background: rgba(13, 24, 40, 0.03);
+        margin: 8px 0;
+        border-radius: 2px;
+      }
+
+      /* CRX content cards */
+      .crx-section {
+        background: var(--card-bg);
+        border-radius: 14px;
+        padding: 24px;
+        margin: 20px 0;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 8px 28px rgba(8, 36, 64, 0.04);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        backdrop-filter: blur(4px);
+      }
+
+      .crx-section:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 48px rgba(8, 36, 64, 0.06);
+      }
+
+      .crx-section h1,
+      .crx-section h2 {
+        margin: 0 0 12px;
+        color: var(--headline);
+        font-weight: 800;
+      }
+
+      .crx-section p {
+        color: var(--muted);
+        margin: 0 0 8px;
+      }
+
+      .crx-keyword {
+        background-color: lightblue;
+        color: white;
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 999px;
+        margin: 6px;
+        font-size: 14px;
+        box-shadow: 0 6px 18px rgba(31, 99, 214, 0.08);
+        text-decoration: none;
+      }
+
+      textarea.editor {
+        width: 100%;
+        min-height: 160px;
+        border-radius: 10px;
+        border: 1px solid rgba(13, 24, 40, 0.06);
+        padding: 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
+          monospace;
+        font-size: 20px;
+        box-shadow: inset 0 6px 18px rgba(2, 6, 23, 0.03);
+        resize: vertical;
+      }
+
+      .btn {
+        border: none;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .btn.ghost {
+        background: transparent;
+        border: 1px solid rgba(13, 24, 40, 0.06);
+        color: var(--headline);
+      }
+
+      .btn.primary {
+        background: linear-gradient(135deg, #1f7fc1, #2563eb);
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(29, 78, 216, 0.1);
+        font-size: 14px;
+      }
+
+      .status {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .output {
+        margin-top: 12px;
+        background: rgba(243, 250, 255, 0.9);
+        border-radius: 10px;
+        padding: 10px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
+          monospace;
+        font-size: 13px;
+        color: #08303f;
+        min-height: 80px;
+        white-space: pre-wrap;
+        overflow: auto;
+      }
+
+      .mpl-card {
+        border-radius: 10px;
+        padding: 14px;
+        background: #fff;
+        box-shadow: 0 8px 20px rgba(8, 36, 64, 0.04);
+      }
+
+      .mpl-thumb {
+        height: 120px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        background: linear-gradient(180deg, #f7fbff, #ffffff);
+        color: var(--crx-accent-dark);
+        margin-bottom: 10px;
+      }
+
+      #crx-feed-panel {
+        max-height: 520px;
+        overflow-y: auto;
+        border-radius: 12px;
+        border: 1px solid rgba(13, 24, 40, 0.04);
+        padding: 12px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.95),
+          rgba(255, 255, 255, 0.98)
+        );
+        box-shadow: 0 10px 30px rgba(9, 20, 40, 0.03);
+      }
+
+      .crx-card-row {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 12px;
+        border-radius: 10px;
+        margin: 10px 6px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(245, 251, 255, 0.98)
+        );
+        border: 1px solid rgba(13, 24, 40, 0.03);
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+        position: relative;
+      }
+
+      .crx-card-row:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 30px rgba(8, 36, 64, 0.04);
+      }
+
+      .crx-thumb-square {
+        width: 88px;
+        height: 88px;
+        border-radius: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+
+      .crx-avatar-circle {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--card-bg);
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%) translateX(-36px);
+        box-shadow: 0 10px 18px rgba(2, 6, 23, 0.06);
+      }
+
+      .crx-post-title {
+        background: #0e63d6;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-weight: 700;
+        display: inline-block;
+        font-size: 0.95rem;
+      }
+
+      .crx-post-meta {
+        color: var(--muted);
+        margin-top: 8px;
+        font-size: 13px;
+      }
+
+      /* Fade-in on scroll */
+      .crx_fade_in {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+        will-change: opacity, transform;
+      }
+
+      .crx_fade_in.crx_visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* back to top */
+      #back-to-top {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #1f7fc1, #2563eb);
+        color: white;
+        box-shadow: 0 12px 30px rgba(31, 99, 214, 0.12);
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.22s ease, transform 0.22s ease;
+        z-index: 9998;
+      }
+
+      #back-to-top.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      #back-to-top:active {
+        transform: translateY(1px) scale(0.99);
+      }
+
+      /* Explore search control */
+      #crx-explore-search {
+        width: 100%;
+        max-width: 420px;
+        height: 40px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(250, 250, 250, 0.95)
+        );
+        font-size: 14px;
+        outline: none;
+      }
+
+      #crx-explore-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      /* Responsive: improved mobile header/menu layout */
+      @media (max-width: 920px) {
+        #ls-search {
+          max-width: 60%;
         }
 
-        to {
-          opacity: 1;
-          transform: translateY(0);
+        #ls-nav {
+          display: none;
+        }
+
+        .menu-toggle {
+          display: flex;
+        }
+
+        #ls-actions {
+          gap: 8px;
         }
       }
 
-      /* Mobile responsive adjustments */
-      @media (max-width: 600px) {
-        .why-blog-card {
-          padding: 28px 20px;
+      @media (max-width: 720px) {
+        #ls-header {
+          padding: 10px 12px;
         }
 
-        .why-blog-card h2 {
-          font-size: 1.6em;
+        #ls-search {
+          max-width: 100%;
         }
 
-        .why-blog-card p {
-          font-size: 1em;
+        .search-box {
+          max-width: 100%;
+        }
+
+        .title-sub {
+          display: none;
+        }
+
+        .card-thumb-small {
+          width: 120px;
+        }
+
+        /* Mobile menu becomes full width under header on really small screens */
+        .mobile-menu {
+          left: 12px;
+          right: 12px;
+          top: 70px;
+          width: calc(100% - 24px);
+          max-width: none;
         }
       }
     </style>
-    <section class="crx-section keywords crx_fade_in" id="keywords-section">
-      <h2>🔑 Courses</h2>
-      <p style="display:flex;flex-wrap:wrap;gap:10px;justify-content: space-around;">
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/12/ai-ml-data-science-internship-track.html">AI/ML-Internship</a>
+  </head>
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/12/python-starter-club_22.html">Python Starter</a>
+  <body>
+    <!-- 🌐 Learn With Champak — Page Labels / Topics -->
+    <div class="page-labels" style="display: none">
+      <span>Data Structures</span>
+      <span>Algorithms</span>
+      <span>Web Development</span>
+      <span>Python</span>
+      <span>Coding Interviews</span>
+      <span>Career Growth</span>
+    </div>
 
-      </p>
-    </section>
+    <!-- Header -->
+    <header id="ls-header" role="banner" aria-label="Learning Sutras header">
+      <div id="ls-brand" aria-hidden="false">
+        <img
+          src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257"
+          alt="Champak Roy avatar"
+          class="crx_avatar"
+          loading="lazy"
+        />
+        <div id="ls-title">
+          <div class="title-main">Learning Sutras</div>
+          <div class="title-sub">Practical coding lessons & visualizations</div>
+        </div>
+      </div>
 
+      <div id="ls-actions">
+        <!-- Desktop nav links (hidden on small screens) -->
+        <nav id="ls-nav" aria-label="Main">
+          <a
+            href="https://www.learnwithchampak.live/2025/11/ms-excel-complete-course-programmers.html"
+            target="_parent"
+            >MS Excel</a
+          >
 
-    <section class="crx-section keywords crx_fade_in" id="keywords-section">
-      <h2>🔑 Keywords</h2>
-      <p style="display:flex;flex-wrap:wrap;gap:10px;justify-content: space-around;">
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=python">Python</a>
+          <a
+            href="https://www.learnwithchampak.live/2025/11/all-dsa-posts.html"
+            target="_parent"
+            >DSA-Full</a
+          >
+          <a href="https://www.learnwithchampak.live" target="_parent">Home</a>
+          <a
+            href="https://www.learnwithchampak.live/search?q=python"
+            target="_parent"
+            >Python</a
+          >
+          <a
+            href="https://www.learnwithchampak.live/search?q=javascript"
+            target="_parent"
+            >JavaScript</a
+          >
+          <a
+            href="https://www.learnwithchampak.live/search?q=projects"
+            target="_parent"
+            >Projects</a
+          >
+          <a
+            href="https://us04web.zoom.us/j/4428355179?pwd=yCZrJtx41cUAxDyApDM9eSrre1GSXe.1"
+            target="Champak"
+            >Connect on Zoom</a
+          >
+        </nav>
 
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=flutter">Flutter</a>
+        <!-- Search -->
+        <div id="ls-search" role="search" aria-label="Search this blog">
+          <div class="search-box">
+            <input
+              id="ls-search-input"
+              type="search"
+              placeholder="Search this blog..."
+              aria-label="Search this blog"
+              autocomplete="off"
+            />
+            <button id="ls-search-btn" title="Search" class="btn primary">
+              Search
+            </button>
+          </div>
+          <div
+            id="ls-suggestions"
+            role="listbox"
+            aria-label="Search suggestions"
+          ></div>
+        </div>
 
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=java">Java</a>
+        <!-- Hamburger menu toggle (mobile) -->
+        <button
+          class="menu-toggle"
+          id="menu-toggle"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Open menu"
+        >
+          <span class="hamburger"></span>
+        </button>
+      </div>
+    </header>
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/search?q=visualization">Visualization</a>
+    <!-- Mobile menu + backdrop -->
+    <div
+      class="mobile-menu-backdrop"
+      id="mobile-backdrop"
+      tabindex="-1"
+      aria-hidden="true"
+    ></div>
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/search?q=javascript">JavaScript</a>
+    <aside
+      class="mobile-menu"
+      id="mobile-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mobile-menu-title"
+      hidden
+    >
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 6px;
+        "
+      >
+        <div id="mobile-menu-title" style="font-weight: 800">Menu</div>
+        <button
+          id="mobile-close"
+          aria-label="Close menu"
+          class="btn ghost"
+          style="padding: 6px 8px"
+        >
+          Close
+        </button>
+      </div>
 
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=html">HTML</a>
+      <div class="mm-section">
+        <a href="https://www.learnwithchampak.live" target="_parent">Home</a>
+        <a
+          href="https://www.learnwithchampak.live/search?q=python"
+          target="_parent"
+          >Python</a
+        >
+        <a
+          href="https://www.learnwithchampak.live/search?q=javascript"
+          target="_parent"
+          >JavaScript</a
+        >
+        <a
+          href="https://www.learnwithchampak.live/search?q=projects"
+          target="_parent"
+          >Projects</a
+        >
+        <a
+          href="https://www.learnwithchampak.live/search?q=matplotlib"
+          target="_parent"
+          >Matplotlib</a
+        >
+        <a
+          href="https://us04web.zoom.us/j/4428355179?pwd=yCZrJtx41cUAxDyApDM9eSrre1GSXe.1"
+          target="Champak"
+          >Connect on Zoom</a
+        >
+      </div>
 
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/search?q=css">CSS</a>
+      <div class="mm-divider" aria-hidden="true"></div>
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/11/programmers-picnic_17.html">Programmer's Picnic</a>
+      <div class="mm-section">
+        <div style="font-weight: 700; margin-bottom: 8px">Quick Search</div>
+        <div style="display: flex; gap: 8px">
+          <input
+            id="mobile-search-input"
+            type="search"
+            placeholder="Search..."
+            style="
+              flex: 1;
+              padding: 8px;
+              border-radius: 8px;
+              border: 1px solid rgba(13, 24, 40, 0.06);
+              outline: none;
+            "
+          />
+          <button id="mobile-search-btn" class="btn primary">Go</button>
+        </div>
+      </div>
 
-      </p>
-    </section>
+      <div class="mm-divider" aria-hidden="true"></div>
 
-    <section class="crx-section keywords crx_fade_in" id="keywords-section">
-      <h2>🔑 Special Utilities</h2>
-      <p style="display:flex;flex-wrap:wrap;gap:10px;justify-content: space-around;">
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/p/programmers-picnic-master-task-system_11.html">Master Task
-          System</a>
+      <div class="mm-section">
+        <div style="font-weight: 700; margin-bottom: 8px">Keywords</div>
+        <div class="mm-keywords">
+          <a
+            class="crx-keyword"
+            style="font-size: 13px; padding: 6px 10px"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=flutter"
+            >Flutter</a
+          >
 
+          <a
+            class="crx-keyword"
+            style="font-size: 13px; padding: 6px 10px"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/11/programmers-picnic_17.html"
+            >Programmer's Policy</a
+          >
 
+          <a
+            class="crx-keyword"
+            style="font-size: 13px; padding: 6px 10px"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=java"
+            >Java</a
+          >
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/12/programmers-picnic-cosine-similarity.html">Cosine Similarity
-          Maker</a>
+          <a
+            class="crx-keyword"
+            style="font-size: 13px; padding: 6px 10px"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=python"
+            >Python</a
+          >
+          <a
+            class="crx-keyword"
+            style="font-size: 13px; padding: 6px 10px"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=javascript"
+            >JavaScript</a
+          >
+          <a
+            class="crx-keyword"
+            style="font-size: 13px; padding: 6px 10px"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=css"
+            >CSS</a
+          >
+        </div>
+      </div>
+    </aside>
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/12/search-visualizers-linearsearch.html">Linear and Binary Search
-          Visualizer (Iterative and Recursive)</a>
+    <!-- Main content -->
+    <main id="crx-dashboard-home" role="main">
+      <section class="why-blog-section">
+        <div class="why-blog-card">
+          <h2>
+            Hi, I’m <span style="color: #2563eb">Champak Roy</span> — Developer
+            · Writer · Teacher
+          </h2>
+          <div class="intro-sub">
+            Where professional performance meets warm mentorship
+          </div>
 
+          <p class="intro-paragraph">
+            I help students and professionals master practical skills in
+            <strong
+              >Data Structures, Algorithms, Web Development, and Python</strong
+            >. My lessons focus on clarity, hands-on projects, and
+            interview-readiness so you not only understand concepts — you can
+            apply them with confidence.
+          </p>
 
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/2025/12/blog-post_7.html">People
-          Direction Counter (Full Line Crossing)</a>
+          <p>
+            you’ll find <strong> lessons</strong>,
+            <strong>that target jobs </strong>, and
+            <strong>Internships.</strong>
+          </p>
+        </div>
+      </section>
 
+      <!-- 🌐 Learn With Champak — Why This Blog Matters Section -->
+      <section class="why-blog-section">
+        <div class="why-blog-card">
+          <h2>Why This Website Matters</h2>
+          <p>
+            <strong>Learn With Champak</strong> is built for learners who want
+            more than just theory. Every post is thoughtfully crafted with
+            <strong>real-world examples</strong>,
+            <strong>step-by-step explanations</strong>,
+            <strong>visual demos</strong>, and
+            <strong>complete code snippets</strong> — all designed to help you
+            understand how programming truly works in practice.
+          </p>
+          <p>
+            From mastering <strong>Data Structures and Algorithms</strong> to
+            building <strong>Web Development projects</strong> and exploring
+            <strong>Python applications</strong>, you’ll find
+            <strong>interactive lessons</strong>,
+            <strong>hands-on challenges</strong>, and
+            <strong>career-focused insights</strong> that turn your knowledge
+            into job-ready skills.
+          </p>
+        </div>
+      </section>
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/12/programmers-picnic.html">Programmers' Picnic Memories</a>
+      <style>
+        /* 🌀 WHY BLOG SECTION — Consistent with blue 3D theme */
+        .why-blog-section {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 60px 20px;
+          background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+        }
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/12/math-visualization-addition.html">Math-Visualization-Addition-Multiplication-Division-Factorials</a>
+        .why-blog-card {
+          max-width: 880px;
+          background: #ffffff;
+          border-radius: 16px;
+          padding: 40px 36px;
+          box-shadow: 0 8px 25px rgba(37, 99, 235, 0.12),
+            0 2px 6px rgba(0, 0, 0, 0.05);
+          text-align: center;
+          animation: fadeInUp 0.9s ease both;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/12/programmers-picnic-whiteboard.html">Whiteboard</a>
+        .why-blog-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 14px 35px rgba(37, 99, 235, 0.18),
+            0 4px 10px rgba(0, 0, 0, 0.06);
+        }
 
+        .why-blog-card h2 {
+          font-family: "Segoe UI", Roboto, sans-serif;
+          font-size: 2em;
+          font-weight: 700;
+          color: #1e3a8a;
+          margin-bottom: 20px;
+          position: relative;
+        }
 
-      </p>
-    </section>
+        .why-blog-card h2::after {
+          content: "";
+          display: block;
+          width: 80px;
+          height: 4px;
+          background: linear-gradient(90deg, #2563eb, #1e40af);
+          margin: 10px auto 0;
+          border-radius: 3px;
+        }
 
-    <section class="crx-section keywords crx_fade_in" id="keywords-section">
-      <h2>🔑 Image Processing</h2>
-      <p style="display:flex;flex-wrap:wrap;gap:10px;justify-content: space-around;">
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/2025/09/image-outlines.html">Get
-          Images Outline</a>
+        .why-blog-card p {
+          font-size: 1.08em;
+          color: #1e293b;
+          line-height: 1.75;
+          margin-bottom: 16px;
+        }
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/11/cartoonify-js-demo-body-font-family.html">Cartoonify</a>
+        .why-blog-card strong {
+          color: #2563eb;
+          font-weight: 600;
+        }
 
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/11/hover-magnification.html">Hover Magnification</a>
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
+        /* Mobile responsive adjustments */
+        @media (max-width: 600px) {
+          .why-blog-card {
+            padding: 28px 20px;
+          }
 
-      </p>
-    </section>
+          .why-blog-card h2 {
+            font-size: 1.6em;
+          }
 
+          .why-blog-card p {
+            font-size: 1em;
+          }
+        }
+      </style>
+      <section class="crx-section keywords crx_fade_in" id="keywords-section">
+        <h2>🔑 Courses</h2>
+        <p
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-around;
+          "
+        >
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/ai-ml-data-science-internship-track.html"
+            >AI/ML-Internship</a
+          >
 
-    <section class="crx-section keywords crx_fade_in" id="keywords-section">
-      <h2>🔑 Jobs</h2>
-      <p style="display:flex;flex-wrap:wrap;gap:10px;justify-content: space-around;">
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/12/httpswwwlebest-freelancing-websites-for.html">Freelancing</a>
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/python-starter-club_22.html"
+            >Python Starter</a
+          >
+        </p>
+      </section>
 
-        <a class="crx-keyword" target="_parent" href="https://www.learnwithchampak.live/2025/12/resume.html">Resume
-          Maker</a>
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/12/httpsbest-job-and-internship-websites.html">Jobs &
-          Internships</a>
+      <section class="crx-section keywords crx_fade_in" id="keywords-section">
+        <h2>🔑 Keywords</h2>
+        <p
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-around;
+          "
+        >
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=python"
+            >Python</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=flutter"
+            >Flutter</a
+          >
 
-      </p>
-    </section>
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=java"
+            >Java</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=visualization"
+            >Visualization</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=javascript"
+            >JavaScript</a
+          >
 
-    <section class="crx-section keywords crx_fade_in" id="keywords-section">
-      <h2>🔑 Videos</h2>
-      <p style="display:flex;flex-wrap:wrap;gap:10px;justify-content: space-around;">
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/11/programmers-picnic.html">Linear Search</a>
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=html"
+            >HTML</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/search?q=css"
+            >CSS</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/11/programmers-picnic_17.html"
+            >Programmer's Picnic</a
+          >
+        </p>
+      </section>
 
+      <section class="crx-section keywords crx_fade_in" id="keywords-section">
+        <h2>🔑 Special Utilities</h2>
+        <p
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-around;
+          "
+        >
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/p/programmers-picnic-master-task-system_11.html"
+            >Master Task System</a
+          >
 
-      </p>
-    </section>
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/programmers-picnic-cosine-similarity.html"
+            >Cosine Similarity Maker</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/search-visualizers-linearsearch.html"
+            >Linear and Binary Search Visualizer (Iterative and Recursive)</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/blog-post_7.html"
+            >People Direction Counter (Full Line Crossing)</a
+          >
 
-    <section class="crx-section keywords crx_fade_in" id="keywords-section">
-      <h2>🔑 Visualization</h2>
-      <p style="display:flex;flex-wrap:wrap;gap:10px;justify-content: space-around;">
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/11/programmers-picnic.html">Bubble Sort Visualization</a>
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/programmers-picnic.html"
+            >Programmers' Picnic Memories</a
+          >
 
-        <a class="crx-keyword" target="_parent"
-          href="https://www.learnwithchampak.live/2025/10/counting-sort-5-row-visualizer-single_12.html">Counting
-          Sort</a>
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/math-visualization-addition.html"
+            >Math-Visualization-Addition-Multiplication-Division-Factorials</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/programmers-picnic-whiteboard.html"
+            >Whiteboard</a
+          >
+        </p>
+      </section>
 
-      </p>
-    </section>
+      <section class="crx-section keywords crx_fade_in" id="keywords-section">
+        <h2>🔑 Image Processing</h2>
+        <p
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-around;
+          "
+        >
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/09/image-outlines.html"
+            >Get Images Outline</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/11/cartoonify-js-demo-body-font-family.html"
+            >Cartoonify</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/11/hover-magnification.html"
+            >Hover Magnification</a
+          >
+        </p>
+      </section>
 
+      <section class="crx-section keywords crx_fade_in" id="keywords-section">
+        <h2>🔑 Jobs</h2>
+        <p
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-around;
+          "
+        >
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/httpswwwlebest-freelancing-websites-for.html"
+            >Freelancing</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/resume.html"
+            >Resume Maker</a
+          >
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/httpsbest-job-and-internship-websites.html"
+            >Jobs & Internships</a
+          >
+        </p>
+      </section>
 
+      <section class="crx-section keywords crx_fade_in" id="keywords-section">
+        <h2>🔑 Videos</h2>
+        <p
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-around;
+          "
+        >
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/11/programmers-picnic.html"
+            >Linear Search</a
+          >
+        </p>
+      </section>
 
+      <section class="crx-section keywords crx_fade_in" id="keywords-section">
+        <h2>🔑 Visualization</h2>
+        <p
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-around;
+          "
+        >
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/11/programmers-picnic.html"
+            >Bubble Sort Visualization</a
+          >
 
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/10/counting-sort-5-row-visualizer-single_12.html"
+            >Counting Sort</a
+          >
+        </p>
+      </section>
 
+      <section class="crx-section keywords crx_fade_in" id="keywords-section">
+        <h2>🔑 Python Starter</h2>
+        <p
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-around;
+          "
+        >
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/python-starter-club_22.html"
+            >Python Starter Home</a
+          >
 
-    <section class="crx-section coder python-coder crx_fade_in" id="python-section">
-      <h2>🐍 Python Coder</h2>
-      <p style="margin-bottom:14px;color:var(--muted);">Run Python snippets using Pyodide directly in your browser.</p>
-      <textarea id="pyEditor" class="editor" style="min-height:160px;"># Example: simple math & print
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/python-starter-club-day0.html"
+            >Python Starter Syllabus</a
+          >
+
+          <a
+            class="crx-keyword"
+            target="_parent"
+            href="https://www.learnwithchampak.live/2025/12/python-starter-club-day1.html"
+            >Python Starter Day 1</a
+          >
+        </p>
+      </section>
+
+      <section
+        class="crx-section coder python-coder crx_fade_in"
+        id="python-section"
+      >
+        <h2>🐍 Python Coder</h2>
+        <p style="margin-bottom: 14px; color: var(--muted)">
+          Run Python snippets using Pyodide directly in your browser.
+        </p>
+        <textarea id="pyEditor" class="editor" style="min-height: 160px">
+# Example: simple math & print
 print("Hello from Pyodide!")
-print("1 + 1 =", 1+1)</textarea>
-      <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
-        <button id="py-preload" class="btn primary">Preload Pyodide</button>
-        <button id="py-run" class="btn primary">Run</button>
-        <button id="py-clear" class="btn ghost">Clear Output</button>
-        <button id="py-download" class="btn ghost">Download .py</button>
-        <div id="py-status" class="status" style="margin-left:auto">Idle</div>
-      </div>
-      <div id="py-output" class="output" style="margin-top:12px; min-height:100px;"></div>
-    </section>
+print("1 + 1 =", 1+1)</textarea
+        >
+        <div
+          style="display: flex; gap: 8px; align-items: center; margin-top: 10px"
+        >
+          <button id="py-preload" class="btn primary">Preload Pyodide</button>
+          <button id="py-run" class="btn primary">Run</button>
+          <button id="py-clear" class="btn ghost">Clear Output</button>
+          <button id="py-download" class="btn ghost">Download .py</button>
+          <div id="py-status" class="status" style="margin-left: auto">
+            Idle
+          </div>
+        </div>
+        <div
+          id="py-output"
+          class="output"
+          style="margin-top: 12px; min-height: 100px"
+        ></div>
+      </section>
 
-    <section class="crx-section coder js-coder crx_fade_in" id="js-section">
-      <h2>⚙️ JavaScript Coder</h2>
-      <p style="margin-bottom:12px;color:var(--muted);">Try JavaScript snippets and see console output below.</p>
-      <textarea id="jsEditor" class="editor" style="min-height:160px;">// Example
+      <section class="crx-section coder js-coder crx_fade_in" id="js-section">
+        <h2>⚙️ JavaScript Coder</h2>
+        <p style="margin-bottom: 12px; color: var(--muted)">
+          Try JavaScript snippets and see console output below.
+        </p>
+        <textarea id="jsEditor" class="editor" style="min-height: 160px">
+// Example
 console.log('Hello from JavaScript!');
-for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea>
-      <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
-        <button id="js-run" class="btn primary">Run Code</button>
-        <button id="js-clear" class="btn ghost">Clear Output</button>
-        <button id="js-download" class="btn ghost">Download .js</button>
-      </div>
-      <div id="js-output" class="output" style="margin-top:12px; min-height:80px;"></div>
-    </section>
-
-    <section class="crx-section ls-matplot crx_fade_in" id="matplotlib-section">
-      <h2>📈 Python Matplotlib Visualizations</h2>
-      <p style="color:var(--muted);margin-bottom:12px;">Examples, charts and step-by-step explanations.</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
-        <div class="mpl-card">
-          <div class="mpl-thumb">📊</div>
-          <h3 style="margin:6px 0 8px;">Bar Charts in Matplotlib</h3>
-          <p style="margin:0 0 8px;color:var(--muted);font-size:13px;">Learn to create and style bar charts.</p>
-          <a href="https://www.learnwithchampak.live/2025/10/matplotlib-in-python-bar-charts.html" target="_parent"
-            class="btn.primary btn" style="padding:8px 10px;font-size:14px;">View Example</a>
+for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
+        >
+        <div
+          style="display: flex; gap: 8px; align-items: center; margin-top: 10px"
+        >
+          <button id="js-run" class="btn primary">Run Code</button>
+          <button id="js-clear" class="btn ghost">Clear Output</button>
+          <button id="js-download" class="btn ghost">Download .js</button>
         </div>
-        <div class="mpl-card">
-          <div class="mpl-thumb">📈</div>
-          <h3 style="margin:6px 0 8px;">Line Graphs & Trends</h3>
-          <p style="margin:0 0 8px;color:var(--muted);font-size:13px;">Visualize trends using line plots.</p>
-          <a href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-linegraphs-trends.html" target="_parent"
-            class="btn.primary btn" style="padding:8px 10px;font-size:14px;">Open Tutorial</a>
+        <div
+          id="js-output"
+          class="output"
+          style="margin-top: 12px; min-height: 80px"
+        ></div>
+      </section>
+
+      <section
+        class="crx-section ls-matplot crx_fade_in"
+        id="matplotlib-section"
+      >
+        <h2>📈 Python Matplotlib Visualizations</h2>
+        <p style="color: var(--muted); margin-bottom: 12px">
+          Examples, charts and step-by-step explanations.
+        </p>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+          "
+        >
+          <div class="mpl-card">
+            <div class="mpl-thumb">📊</div>
+            <h3 style="margin: 6px 0 8px">Bar Charts in Matplotlib</h3>
+            <p style="margin: 0 0 8px; color: var(--muted); font-size: 13px">
+              Learn to create and style bar charts.
+            </p>
+            <a
+              href="https://www.learnwithchampak.live/2025/10/matplotlib-in-python-bar-charts.html"
+              target="_parent"
+              class="btn.primary btn"
+              style="padding: 8px 10px; font-size: 14px"
+              >View Example</a
+            >
+          </div>
+          <div class="mpl-card">
+            <div class="mpl-thumb">📈</div>
+            <h3 style="margin: 6px 0 8px">Line Graphs & Trends</h3>
+            <p style="margin: 0 0 8px; color: var(--muted); font-size: 13px">
+              Visualize trends using line plots.
+            </p>
+            <a
+              href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-linegraphs-trends.html"
+              target="_parent"
+              class="btn.primary btn"
+              style="padding: 8px 10px; font-size: 14px"
+              >Open Tutorial</a
+            >
+          </div>
+          <div class="mpl-card">
+            <div class="mpl-thumb">🟢</div>
+            <h3 style="margin: 6px 0 8px">Scatter & Bubble Plots</h3>
+            <p style="margin: 0 0 8px; color: var(--muted); font-size: 13px">
+              Show relationships between variables.
+            </p>
+            <a
+              href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-scatter-plots.html"
+              target="_parent"
+              class="btn.primary btn"
+              style="padding: 8px 10px; font-size: 14px"
+              >Try Now</a
+            >
+          </div>
         </div>
-        <div class="mpl-card">
-          <div class="mpl-thumb">🟢</div>
-          <h3 style="margin:6px 0 8px;">Scatter & Bubble Plots</h3>
-          <p style="margin:0 0 8px;color:var(--muted);font-size:13px;">Show relationships between variables.</p>
-          <a href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-scatter-plots.html" target="_parent"
-            class="btn.primary btn" style="padding:8px 10px;font-size:14px;">Try Now</a>
+      </section>
+
+      <section class="crx-section live-search crx_fade_in" id="explore-section">
+        <h2>🧭 Explore Posts</h2>
+        <p style="color: var(--muted); margin-bottom: 12px">
+          Browse recent lessons and tutorials. Use search to find exact topics.
+        </p>
+
+        <div id="crx-explore-controls" style="margin-bottom: 12px">
+          <input
+            id="crx-explore-search"
+            type="search"
+            placeholder="Filter posts (title or snippet)..."
+            aria-label="Filter explore posts"
+          />
+          <div id="crx-explore-count" class="status" style="margin-left: auto">
+            Loading…
+          </div>
         </div>
-      </div>
-    </section>
 
-    <section class="crx-section live-search crx_fade_in" id="explore-section">
-      <h2>🧭 Explore Posts</h2>
-      <p style="color:var(--muted);margin-bottom:12px;">Browse recent lessons and tutorials. Use search to find exact
-        topics.</p>
-
-      <div id="crx-explore-controls" style="margin-bottom:12px;">
-        <input id="crx-explore-search" type="search" placeholder="Filter posts (title or snippet)..."
-          aria-label="Filter explore posts" />
-        <div id="crx-explore-count" class="status" style="margin-left:auto">Loading…</div>
-      </div>
-
-      <div id="crx-feed-panel">
-        <div id="crx-card-list" aria-live="polite">
-          <div style="padding:18px;color:#64748b;">Loading posts…</div>
+        <div id="crx-feed-panel">
+          <div id="crx-card-list" aria-live="polite">
+            <div style="padding: 18px; color: #64748b">Loading posts…</div>
+          </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
 
-  <div id="back-to-top" title="Back to top" aria-hidden="true">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 5l-7 7h4v7h6v-7h4l-7-7z" fill="currentColor" />
-    </svg>
-  </div>
+    <div id="back-to-top" title="Back to top" aria-hidden="true">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path d="M12 5l-7 7h4v7h6v-7h4l-7-7z" fill="currentColor" />
+      </svg>
+    </div>
 
-  <script>
-    (function () {
-      /* small helpers */
-      const $ = (s, ctx = document) => ctx.querySelector(s);
-      const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
-      const escapeHtml = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" }[m]));
+    <script>
+      (function () {
+        /* small helpers */
+        const $ = (s, ctx = document) => ctx.querySelector(s);
+        const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
+        const escapeHtml = (s) =>
+          String(s).replace(
+            /[&<>"']/g,
+            (m) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              }[m])
+          );
 
-      /* ===== Mobile menu behaviour (open/close, close on outside click / Escape) ===== */
-      const menuToggle = $('#menu-toggle');
-      const mobileMenu = $('#mobile-menu');
-      const backdrop = $('#mobile-backdrop');
-      const mobileCloseBtn = $('#mobile-close');
-      const mobileSearchInput = $('#mobile-search-input');
-      const mobileSearchBtn = $('#mobile-search-btn');
+        /* ===== Mobile menu behaviour (open/close, close on outside click / Escape) ===== */
+        const menuToggle = $("#menu-toggle");
+        const mobileMenu = $("#mobile-menu");
+        const backdrop = $("#mobile-backdrop");
+        const mobileCloseBtn = $("#mobile-close");
+        const mobileSearchInput = $("#mobile-search-input");
+        const mobileSearchBtn = $("#mobile-search-btn");
 
-      function openMobileMenu() {
-        menuToggle.classList.add('open');
-        menuToggle.setAttribute('aria-expanded', 'true');
-        mobileMenu.hidden = false;
-        backdrop.classList.add('show');
-        mobileMenu.classList.add('show');
-        backdrop.setAttribute('aria-hidden', 'false');
-        // trap focus to first interactive element in menu
-        setTimeout(() => mobileMenu.querySelector('a, button, input')?.focus(), 120);
-        document.body.style.overflow = ''; // allow page scroll if desired; if you want to lock, set hidden
-      }
-      function closeMobileMenu() {
-        menuToggle.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        mobileMenu.classList.remove('show');
-        backdrop.classList.remove('show');
-        backdrop.setAttribute('aria-hidden', 'true');
-        // wait transition before hiding (matching CSS timing)
-        setTimeout(() => { if (!mobileMenu.classList.contains('show')) mobileMenu.hidden = true; }, 260);
-      }
-
-      menuToggle.addEventListener('click', () => {
-        const open = menuToggle.classList.contains('open');
-        if (open) closeMobileMenu(); else openMobileMenu();
-      });
-
-      mobileCloseBtn.addEventListener('click', closeMobileMenu);
-      // clicking backdrop closes menu
-      backdrop.addEventListener('click', closeMobileMenu);
-
-      // close on Escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeMobileMenu();
-      });
-
-      // close when clicking outside mobileMenu (works even without backdrop visible e.g. small desktop)
-      document.addEventListener('click', (ev) => {
-        if (!mobileMenu.hidden && !mobileMenu.contains(ev.target) && !menuToggle.contains(ev.target) && !ev.target.closest('#ls-search')) {
-          closeMobileMenu();
+        function openMobileMenu() {
+          menuToggle.classList.add("open");
+          menuToggle.setAttribute("aria-expanded", "true");
+          mobileMenu.hidden = false;
+          backdrop.classList.add("show");
+          mobileMenu.classList.add("show");
+          backdrop.setAttribute("aria-hidden", "false");
+          // trap focus to first interactive element in menu
+          setTimeout(
+            () => mobileMenu.querySelector("a, button, input")?.focus(),
+            120
+          );
+          document.body.style.overflow = ""; // allow page scroll if desired; if you want to lock, set hidden
         }
-      });
-
-      // mobile quick search in menu: redirect to blog search (target=_parent)
-      const blogBase = 'https://www.learnwithchampak.live';
-      mobileSearchBtn.addEventListener('click', () => {
-        const q = mobileSearchInput.value.trim();
-        if (!q) { mobileSearchInput.focus(); return; }
-        window.location.href = blogBase + '/search?q=' + encodeURIComponent(q) + '&m=1';
-      });
-      mobileSearchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') mobileSearchBtn.click();
-      });
-
-      /* ===== HEADER SEARCH (JSONP) — suggestions rendered as links with target="_parent" ===== */
-      (function headerSearch() {
-        const input = $('#ls-search-input');
-        const btn = $('#ls-search-btn');
-        const suggBox = $('#ls-suggestions');
-        let posts = [], loaded = false, debounceTimer = null;
-
-        function doSearch(q) {
-          q = (q || '').trim();
-          if (!q) return;
-          window.location.href = blogBase + '/search?q=' + encodeURIComponent(q) + '&m=1';
+        function closeMobileMenu() {
+          menuToggle.classList.remove("open");
+          menuToggle.setAttribute("aria-expanded", "false");
+          mobileMenu.classList.remove("show");
+          backdrop.classList.remove("show");
+          backdrop.setAttribute("aria-hidden", "true");
+          // wait transition before hiding (matching CSS timing)
+          setTimeout(() => {
+            if (!mobileMenu.classList.contains("show"))
+              mobileMenu.hidden = true;
+          }, 260);
         }
 
-        function loadPostsJSONP() {
-          if (loaded) return;
-          loaded = true;
-          const cb = 'lsPosts_' + Date.now();
+        menuToggle.addEventListener("click", () => {
+          const open = menuToggle.classList.contains("open");
+          if (open) closeMobileMenu();
+          else openMobileMenu();
+        });
+
+        mobileCloseBtn.addEventListener("click", closeMobileMenu);
+        // clicking backdrop closes menu
+        backdrop.addEventListener("click", closeMobileMenu);
+
+        // close on Escape
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeMobileMenu();
+        });
+
+        // close when clicking outside mobileMenu (works even without backdrop visible e.g. small desktop)
+        document.addEventListener("click", (ev) => {
+          if (
+            !mobileMenu.hidden &&
+            !mobileMenu.contains(ev.target) &&
+            !menuToggle.contains(ev.target) &&
+            !ev.target.closest("#ls-search")
+          ) {
+            closeMobileMenu();
+          }
+        });
+
+        // mobile quick search in menu: redirect to blog search (target=_parent)
+        const blogBase = "https://www.learnwithchampak.live";
+        mobileSearchBtn.addEventListener("click", () => {
+          const q = mobileSearchInput.value.trim();
+          if (!q) {
+            mobileSearchInput.focus();
+            return;
+          }
+          window.location.href =
+            blogBase + "/search?q=" + encodeURIComponent(q) + "&m=1";
+        });
+        mobileSearchInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") mobileSearchBtn.click();
+        });
+
+        /* ===== HEADER SEARCH (JSONP) — suggestions rendered as links with target="_parent" ===== */
+        (function headerSearch() {
+          const input = $("#ls-search-input");
+          const btn = $("#ls-search-btn");
+          const suggBox = $("#ls-suggestions");
+          let posts = [],
+            loaded = false,
+            debounceTimer = null;
+
+          function doSearch(q) {
+            q = (q || "").trim();
+            if (!q) return;
+            window.location.href =
+              blogBase + "/search?q=" + encodeURIComponent(q) + "&m=1";
+          }
+
+          function loadPostsJSONP() {
+            if (loaded) return;
+            loaded = true;
+            const cb = "lsPosts_" + Date.now();
+            window[cb] = function (data) {
+              try {
+                const items = (data.feed && data.feed.entry) || [];
+                posts = items.map((e) => {
+                  const title = e.title?.$t || "(no title)";
+                  let url = "#";
+                  if (e.link) {
+                    for (const L of e.link) {
+                      if (L.rel === "alternate") {
+                        url = L.href;
+                        break;
+                      }
+                    }
+                  }
+                  let snippet = "";
+                  if (e.summary && e.summary.$t) snippet = e.summary.$t;
+                  else if (e.content && e.content.$t)
+                    snippet =
+                      e.content.$t.replace(/<[^>]+>/g, "").slice(0, 160) +
+                      "...";
+                  snippet = snippet.replace(/\s+/g, " ").trim();
+                  return { title, url, snippet };
+                });
+              } catch (err) {
+                console.warn("ls jsonp parse error", err);
+              }
+              const s = document.getElementById(cb + "_script");
+              if (s) s.remove();
+              try {
+                delete window[cb];
+              } catch (e) {
+                window[cb] = undefined;
+              }
+            };
+            const s = document.createElement("script");
+            s.id = cb + "_script";
+            s.src =
+              blogBase +
+              "/feeds/posts/default?alt=json-in-script&max-results=1000&callback=" +
+              cb;
+            s.async = true;
+            s.onerror = () => {
+              console.warn("ls jsonp load failed");
+              s.remove();
+            };
+            document.body.appendChild(s);
+          }
+
+          function showSuggestions(q) {
+            q = (q || "").trim().toLowerCase();
+            if (!q) {
+              suggBox.style.display = "none";
+              suggBox.innerHTML = "";
+              return;
+            }
+            if (!posts.length) loadPostsJSONP();
+            const matched = posts
+              .filter(
+                (p) =>
+                  p.title.toLowerCase().includes(q) ||
+                  p.snippet.toLowerCase().includes(q)
+              )
+              .slice(0, 8);
+            if (!matched.length) {
+              suggBox.innerHTML =
+                '<div class="ls-item">No quick matches — press Enter to view full results.</div>';
+            } else {
+              // Render as anchor tags with target="_parent"
+              suggBox.innerHTML = matched
+                .map(
+                  (p) =>
+                    `<a class="ls-item" href="${
+                      p.url
+                    }" target="_parent" title="${escapeHtml(
+                      p.title
+                    )}"><strong>${escapeHtml(
+                      p.title
+                    )}</strong><div style="font-size:12px;color:#475569;margin-top:6px;">${escapeHtml(
+                      p.snippet
+                    )}</div></a>`
+                )
+                .join("");
+            }
+            suggBox.style.display = "block";
+          }
+
+          input.addEventListener("input", (e) => {
+            clearTimeout(debounceTimer);
+            const v = e.target.value;
+            debounceTimer = setTimeout(() => showSuggestions(v), 160);
+          });
+
+          input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              const q = input.value.trim();
+              if (!q) return;
+              doSearch(q);
+            }
+            if (e.key === "Escape") {
+              suggBox.style.display = "none";
+              suggBox.innerHTML = "";
+            }
+          });
+
+          btn.addEventListener("click", () => doSearch(input.value));
+
+          document.addEventListener("click", (ev) => {
+            const header = $("#ls-header");
+            if (!header.contains(ev.target)) {
+              suggBox.style.display = "none";
+            }
+          });
+
+          setTimeout(loadPostsJSONP, 900);
+        })();
+
+        /* ===== FEED LOADER & RENDERER (JSONP) ===== */
+        (function loadFeed() {
+          const CRX_BLOGGER_URL = blogBase;
+          const CRX_MAX_POSTS = 60;
+          const TIMEOUT = 9000;
+          const container = $("#crx-card-list");
+          const cb = "crxFeed_" + Date.now();
+
           window[cb] = function (data) {
             try {
-              const items = (data.feed && data.feed.entry) || [];
-              posts = items.map(e => {
-                const title = e.title?.$t || '(no title)';
-                let url = '#';
-                if (e.link) { for (const L of e.link) { if (L.rel === 'alternate') { url = L.href; break; } } }
-                let snippet = '';
-                if (e.summary && e.summary.$t) snippet = e.summary.$t;
-                else if (e.content && e.content.$t) snippet = e.content.$t.replace(/<[^>]+>/g, '').slice(0, 160) + '...';
-                snippet = snippet.replace(/\s+/g, ' ').trim();
-                return { title, url, snippet };
-              });
+              const entries = (data.feed && data.feed.entry) || [];
+              renderCards(entries);
             } catch (err) {
-              console.warn('ls jsonp parse error', err);
+              console.error(err);
+              container.innerHTML =
+                '<div style="padding:20px;text-align:center;color:#b33;">Feed parse error.</div>';
+            } finally {
+              const s = document.getElementById(cb + "_script");
+              if (s) s.remove();
+              try {
+                delete window[cb];
+              } catch (e) {
+                window[cb] = undefined;
+              }
             }
-            const s = document.getElementById(cb + '_script'); if (s) s.remove();
-            try { delete window[cb]; } catch (e) { window[cb] = undefined; }
           };
-          const s = document.createElement('script');
-          s.id = cb + '_script';
-          s.src = blogBase + '/feeds/posts/default?alt=json-in-script&max-results=1000&callback=' + cb;
+
+          const s = document.createElement("script");
+          s.id = cb + "_script";
+          s.src =
+            CRX_BLOGGER_URL.replace(/\/$/, "") +
+            "/feeds/posts/default?alt=json-in-script&max-results=" +
+            CRX_MAX_POSTS +
+            "&callback=" +
+            cb;
           s.async = true;
-          s.onerror = () => { console.warn('ls jsonp load failed'); s.remove(); };
-          document.body.appendChild(s);
-        }
+          s.onerror = function () {
+            container.innerHTML =
+              '<div style="padding:20px;text-align:center;color:#b33;">Unable to load posts.</div>';
+            s.remove();
+          };
+          document.head.appendChild(s);
 
-        function showSuggestions(q) {
-          q = (q || '').trim().toLowerCase();
-          if (!q) { suggBox.style.display = 'none'; suggBox.innerHTML = ''; return; }
-          if (!posts.length) loadPostsJSONP();
-          const matched = posts.filter(p => p.title.toLowerCase().includes(q) || p.snippet.toLowerCase().includes(q)).slice(0, 8);
-          if (!matched.length) {
-            suggBox.innerHTML = '<div class="ls-item">No quick matches — press Enter to view full results.</div>';
-          } else {
-            // Render as anchor tags with target="_parent"
-            suggBox.innerHTML = matched.map(p =>
-              `<a class="ls-item" href="${p.url}" target="_parent" title="${escapeHtml(p.title)}"><strong>${escapeHtml(p.title)}</strong><div style="font-size:12px;color:#475569;margin-top:6px;">${escapeHtml(p.snippet)}</div></a>`
-            ).join('');
-          }
-          suggBox.style.display = 'block';
-        }
-
-        input.addEventListener('input', e => {
-          clearTimeout(debounceTimer);
-          const v = e.target.value;
-          debounceTimer = setTimeout(() => showSuggestions(v), 160);
-        });
-
-        input.addEventListener('keydown', e => {
-          if (e.key === 'Enter') {
-            const q = input.value.trim();
-            if (!q) return;
-            doSearch(q);
-          }
-          if (e.key === 'Escape') { suggBox.style.display = 'none'; suggBox.innerHTML = ''; }
-        });
-
-        btn.addEventListener('click', () => doSearch(input.value));
-
-        document.addEventListener('click', ev => {
-          const header = $('#ls-header');
-          if (!header.contains(ev.target)) { suggBox.style.display = 'none'; }
-        });
-
-        setTimeout(loadPostsJSONP, 900);
-      })();
-
-      /* ===== FEED LOADER & RENDERER (JSONP) ===== */
-      (function loadFeed() {
-        const CRX_BLOGGER_URL = blogBase;
-        const CRX_MAX_POSTS = 60;
-        const TIMEOUT = 9000;
-        const container = $('#crx-card-list');
-        const cb = 'crxFeed_' + Date.now();
-
-        window[cb] = function (data) {
-          try {
-            const entries = (data.feed && data.feed.entry) || [];
-            renderCards(entries);
-          } catch (err) {
-            console.error(err);
-            container.innerHTML = '<div style="padding:20px;text-align:center;color:#b33;">Feed parse error.</div>';
-          } finally {
-            const s = document.getElementById(cb + '_script'); if (s) s.remove();
-            try { delete window[cb]; } catch (e) { window[cb] = undefined; }
-          }
-        };
-
-        const s = document.createElement('script');
-        s.id = cb + '_script';
-        s.src = CRX_BLOGGER_URL.replace(/\/$/, "") + "/feeds/posts/default?alt=json-in-script&max-results=" + CRX_MAX_POSTS + "&callback=" + cb;
-        s.async = true;
-        s.onerror = function () { container.innerHTML = '<div style="padding:20px;text-align:center;color:#b33;">Unable to load posts.</div>'; s.remove(); };
-        document.head.appendChild(s);
-
-        const timer = setTimeout(() => { if (!document.querySelector('#crx-card-list .crx-card-row')) { container.innerHTML = '<div style="padding:20px;text-align:center;color:#b33;">Unable to load posts.</div>'; } }, TIMEOUT);
-
-        function renderCards(entries) {
-          container.innerHTML = "";
-          if (!entries.length) { container.innerHTML = '<div style="padding:20px;text-align:center;">No posts yet.</div>'; window.updateExploreCount && window.updateExploreCount(); return; }
-
-          entries.forEach(e => {
-            const title = e.title?.$t || "Untitled";
-            const url = (e.link || []).find(l => l.rel === 'alternate')?.href || "#";
-            const published = e.published ? new Date(e.published.$t).toLocaleDateString() : "";
-            let snippet = (e.summary?.$t || e.content?.$t || "").replace(/<[^>]+>/g, '').slice(0, 140) + "...";
-            snippet = snippet.replace(/\s+/g, ' ').trim();
-
-            let thumb = e.media$thumbnail?.url || "";
-            if (!thumb) {
-              const m = (e.content?.$t || "").match(/<img[^>]+src=["']([^"']+)["']/i);
-              thumb = m ? m[1] : "";
+          const timer = setTimeout(() => {
+            if (!document.querySelector("#crx-card-list .crx-card-row")) {
+              container.innerHTML =
+                '<div style="padding:20px;text-align:center;color:#b33;">Unable to load posts.</div>';
             }
-            if (!thumb) thumb = "https://varanasi-software-junction.github.io/blogger/blogger-assets/default-thumb.svg";
+          }, TIMEOUT);
 
-            const row = document.createElement('div');
-            row.className = "crx-card-row";
-            row.style.position = 'relative';
-            row.dataset.title = title.toLowerCase();
-            row.dataset.snippet = snippet.toLowerCase();
+          function renderCards(entries) {
+            container.innerHTML = "";
+            if (!entries.length) {
+              container.innerHTML =
+                '<div style="padding:20px;text-align:center;">No posts yet.</div>';
+              window.updateExploreCount && window.updateExploreCount();
+              return;
+            }
 
-            row.innerHTML = `
-            <img class="crx-thumb-square crx-avatar" src="${thumb}" alt="${escapeHtml(title)}">
+            entries.forEach((e) => {
+              const title = e.title?.$t || "Untitled";
+              const url =
+                (e.link || []).find((l) => l.rel === "alternate")?.href || "#";
+              const published = e.published
+                ? new Date(e.published.$t).toLocaleDateString()
+                : "";
+              let snippet =
+                (e.summary?.$t || e.content?.$t || "")
+                  .replace(/<[^>]+>/g, "")
+                  .slice(0, 140) + "...";
+              snippet = snippet.replace(/\s+/g, " ").trim();
+
+              let thumb = e.media$thumbnail?.url || "";
+              if (!thumb) {
+                const m = (e.content?.$t || "").match(
+                  /<img[^>]+src=["']([^"']+)["']/i
+                );
+                thumb = m ? m[1] : "";
+              }
+              if (!thumb)
+                thumb =
+                  "https://varanasi-software-junction.github.io/blogger/blogger-assets/default-thumb.svg";
+
+              const row = document.createElement("div");
+              row.className = "crx-card-row";
+              row.style.position = "relative";
+              row.dataset.title = title.toLowerCase();
+              row.dataset.snippet = snippet.toLowerCase();
+
+              row.innerHTML = `
+            <img class="crx-thumb-square crx-avatar" src="${thumb}" alt="${escapeHtml(
+                title
+              )}">
             <div style="flex:1;min-width:0;">
               <div style="display:flex;align-items:center;gap:10px;">
-                <div class="crx-post-title"><a href="${url}" target="_parent" style="color:white;text-decoration:none;"><span style='color:white;font-size:18px'>${escapeHtml(title)}</span></a></div>
-                <div style="margin-left:auto;color:var(--muted);font-size:12px;">${escapeHtml(published)}</div>
+                <div class="crx-post-title"><a href="${url}" target="_parent" style="color:white;text-decoration:none;"><span style='color:white;font-size:18px'>${escapeHtml(
+                title
+              )}</span></a></div>
+                <div style="margin-left:auto;color:var(--muted);font-size:12px;">${escapeHtml(
+                  published
+                )}</div>
               </div>
               <div class="crx-post-meta">${escapeHtml(snippet)}</div>
             </div>
-            <img class="crx-avatar-circle" src="${thumb}" alt="${escapeHtml(title)}">
+            <img class="crx-avatar-circle" src="${thumb}" alt="${escapeHtml(
+                title
+              )}">
           `;
-            container.appendChild(row);
-          });
-          clearTimeout(timer);
-          window.updateExploreCount && window.updateExploreCount();
-        }
-      })();
+              container.appendChild(row);
+            });
+            clearTimeout(timer);
+            window.updateExploreCount && window.updateExploreCount();
+          }
+        })();
 
-      /* ===== Explore filter + counter ===== */
-      (function exploreSearchAndCounter() {
-        const searchInput = document.getElementById('crx-explore-search');
-        const countEl = document.getElementById('crx-explore-count');
-        const listContainer = document.getElementById('crx-card-list');
-        let debounceTimer = null;
+        /* ===== Explore filter + counter ===== */
+        (function exploreSearchAndCounter() {
+          const searchInput = document.getElementById("crx-explore-search");
+          const countEl = document.getElementById("crx-explore-count");
+          const listContainer = document.getElementById("crx-card-list");
+          let debounceTimer = null;
 
-        window.updateExploreCount = function () {
-          const rows = $$('.crx-card-row', listContainer);
-          const total = rows.length;
-          const visible = rows.filter(r => r.style.display !== 'none').length;
-          if (total === 0) countEl.textContent = 'No posts';
-          else countEl.textContent = `Showing ${visible} of ${total} posts`;
-        };
+          window.updateExploreCount = function () {
+            const rows = $$(".crx-card-row", listContainer);
+            const total = rows.length;
+            const visible = rows.filter(
+              (r) => r.style.display !== "none"
+            ).length;
+            if (total === 0) countEl.textContent = "No posts";
+            else countEl.textContent = `Showing ${visible} of ${total} posts`;
+          };
 
-        const applyFilter = q => {
-          q = (q || '').trim().toLowerCase();
-          const rows = $$('.crx-card-row', listContainer);
-          if (!q) {
-            rows.forEach(r => r.style.display = '');
-          } else {
-            rows.forEach(r => {
-              const t = (r.dataset.title || '') + ' ' + (r.dataset.snippet || '');
-              r.style.display = t.includes(q) ? '' : 'none';
+          const applyFilter = (q) => {
+            q = (q || "").trim().toLowerCase();
+            const rows = $$(".crx-card-row", listContainer);
+            if (!q) {
+              rows.forEach((r) => (r.style.display = ""));
+            } else {
+              rows.forEach((r) => {
+                const t =
+                  (r.dataset.title || "") + " " + (r.dataset.snippet || "");
+                r.style.display = t.includes(q) ? "" : "none";
+              });
+            }
+            window.updateExploreCount();
+          };
+
+          if (searchInput) {
+            searchInput.addEventListener("input", (e) => {
+              clearTimeout(debounceTimer);
+              const q = e.target.value;
+              debounceTimer = setTimeout(() => applyFilter(q), 150);
             });
           }
-          window.updateExploreCount();
-        };
 
-        if (searchInput) {
-          searchInput.addEventListener('input', e => {
-            clearTimeout(debounceTimer);
-            const q = e.target.value;
-            debounceTimer = setTimeout(() => applyFilter(q), 150);
+          const mo = new MutationObserver(() => {
+            window.updateExploreCount();
           });
-        }
+          if (listContainer) mo.observe(listContainer, { childList: true });
 
-        const mo = new MutationObserver(() => { window.updateExploreCount(); });
-        if (listContainer) mo.observe(listContainer, { childList: true });
+          countEl.textContent = "Loading…";
+          setTimeout(() => window.updateExploreCount(), 400);
+        })();
 
-        countEl.textContent = 'Loading…';
-        setTimeout(() => window.updateExploreCount(), 400);
-      })();
+        /* ===== Pyodide runner (keeps behavior) ===== */
+        (function pyodideRunner() {
+          const PYODIDE_VERSION = "0.23.4";
+          const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+          const PYODIDE_SCRIPT = PYODIDE_BASE + "pyodide.js";
+          let pyodide = null;
+          let loading = false;
 
-      /* ===== Pyodide runner (keeps behavior) ===== */
-      (function pyodideRunner() {
-        const PYODIDE_VERSION = '0.23.4';
-        const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
-        const PYODIDE_SCRIPT = PYODIDE_BASE + 'pyodide.js';
-        let pyodide = null;
-        let loading = false;
+          const preloadBtn = document.getElementById("py-preload");
+          const runBtn = document.getElementById("py-run");
+          const clearBtn = document.getElementById("py-clear");
+          const downloadBtn = document.getElementById("py-download");
+          const editor = document.getElementById("pyEditor");
+          const out = document.getElementById("py-output");
+          const status = document.getElementById("py-status");
 
-        const preloadBtn = document.getElementById('py-preload');
-        const runBtn = document.getElementById('py-run');
-        const clearBtn = document.getElementById('py-clear');
-        const downloadBtn = document.getElementById('py-download');
-        const editor = document.getElementById('pyEditor');
-        const out = document.getElementById('py-output');
-        const status = document.getElementById('py-status');
+          const appendOutput = (text, isError = false) => {
+            const now = new Date().toLocaleTimeString();
+            const div = document.createElement("div");
+            div.textContent = `[${now}] ${text}`;
+            if (isError) div.style.color = "#a33";
+            out.appendChild(div);
+            out.scrollTop = out.scrollHeight;
+          };
 
-        const appendOutput = (text, isError = false) => {
-          const now = new Date().toLocaleTimeString();
-          const div = document.createElement('div');
-          div.textContent = `[${now}] ${text}`;
-          if (isError) div.style.color = '#a33';
-          out.appendChild(div);
-          out.scrollTop = out.scrollHeight;
-        };
+          const loadPyodideOnce = async () => {
+            if (pyodide) return pyodide;
+            if (loading) throw new Error("Pyodide is already loading");
+            loading = true;
+            status.textContent = "Loading Pyodide…";
 
-        const loadPyodideOnce = async () => {
-          if (pyodide) return pyodide;
-          if (loading) throw new Error('Pyodide is already loading');
-          loading = true;
-          status.textContent = 'Loading Pyodide…';
-
-          await new Promise((resolve, reject) => {
-            if (window.loadPyodide) { resolve(); return; }
-            const s = document.createElement('script');
-            s.src = PYODIDE_SCRIPT;
-            s.async = true;
-            s.onload = resolve;
-            s.onerror = () => reject(new Error('Failed to load pyodide.js'));
-            document.head.appendChild(s);
-          });
-
-          pyodide = await loadPyodide({ indexURL: PYODIDE_BASE });
-          status.textContent = 'Pyodide ready';
-          loading = false;
-          return pyodide;
-        };
-
-        const runPython = async code => {
-          out.innerHTML = '';
-          try {
-            await loadPyodideOnce();
-          } catch (e) {
-            appendOutput('Cannot run: Pyodide not loaded.', true);
-            return;
-          }
-          status.textContent = 'Running...';
-          try {
-            pyodide.setStdout({ batched: s => { if (s && s.length) appendOutput(s); } });
-            pyodide.setStderr({ batched: s => { if (s && s.length) appendOutput(s, true); } });
-            const result = await pyodide.runPythonAsync(code);
-            if (result !== undefined && result !== null) appendOutput('Return: ' + String(result));
-            status.textContent = 'Done';
-          } catch (err) {
-            appendOutput('Runtime error: ' + err, true);
-            status.textContent = 'Error';
-          } finally {
-            try { pyodide.setStdout({ batched: () => { } }); pyodide.setStderr({ batched: () => { } }); } catch (e) { }
-          }
-        };
-
-        preloadBtn.addEventListener('click', async () => {
-          if (pyodide) { status.textContent = 'Already loaded'; return; }
-          try { await loadPyodideOnce(); } catch (e) { appendOutput('Load failed: ' + e, true); }
-        });
-
-        runBtn.addEventListener('click', async () => {
-          const code = editor.value;
-          await runPython(code);
-        });
-
-        clearBtn.addEventListener('click', () => { out.innerHTML = ''; status.textContent = 'Idle'; });
-
-        downloadBtn.addEventListener('click', () => {
-          const blob = new Blob([editor.value], { type: 'text/x-python' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url; a.download = 'script.py';
-          document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-        });
-      })();
-
-      /* ===== JS runner ===== */
-      (function jsRunner() {
-        const editor = document.getElementById('jsEditor');
-        const output = document.getElementById('js-output');
-        const runBtn = document.getElementById('js-run');
-        const clearBtn = document.getElementById('js-clear');
-        const downloadBtn = document.getElementById('js-download');
-
-        const appendOut = text => { output.textContent += text + "\n"; output.scrollTop = output.scrollHeight; };
-
-        runBtn.addEventListener('click', () => {
-          output.textContent = '';
-          const code = editor.value;
-          const origLog = console.log;
-          console.log = (...args) => { appendOut(args.join(' ')); origLog(...args); };
-          try {
-            const fn = new Function(code);
-            const res = fn();
-            if (res !== undefined) appendOut('Return: ' + res);
-          } catch (e) {
-            appendOut('Error: ' + (e && e.message ? e.message : e));
-          }
-          console.log = origLog;
-        });
-
-        clearBtn.addEventListener('click', () => output.textContent = '');
-        downloadBtn.addEventListener('click', () => {
-          const blob = new Blob([editor.value], { type: 'text/javascript' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url; a.download = 'script.js';
-          a.click(); URL.revokeObjectURL(url);
-        });
-      })();
-
-      /* ===== Scroll reveal + back-to-top ===== */
-      (function scrollRevealBackTop() {
-        const els = document.querySelectorAll('.crx_fade_in');
-        if (els.length) {
-          const obs = new IntersectionObserver((entries, o) => {
-            entries.forEach(en => {
-              if (en.isIntersecting) { en.target.classList.add('crx_visible'); o.unobserve(en.target); }
+            await new Promise((resolve, reject) => {
+              if (window.loadPyodide) {
+                resolve();
+                return;
+              }
+              const s = document.createElement("script");
+              s.src = PYODIDE_SCRIPT;
+              s.async = true;
+              s.onload = resolve;
+              s.onerror = () => reject(new Error("Failed to load pyodide.js"));
+              document.head.appendChild(s);
             });
-          }, { threshold: 0.12 });
-          els.forEach(e => obs.observe(e));
-        }
-        const btt = document.getElementById('back-to-top');
-        window.addEventListener('scroll', () => {
-          const y = window.scrollY || window.pageYOffset;
-          if (y > 360) btt.classList.add('visible'); else btt.classList.remove('visible');
-        });
-        btt.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-      })();
 
-    })();
-  </script>
+            pyodide = await loadPyodide({ indexURL: PYODIDE_BASE });
+            status.textContent = "Pyodide ready";
+            loading = false;
+            return pyodide;
+          };
+
+          const runPython = async (code) => {
+            out.innerHTML = "";
+            try {
+              await loadPyodideOnce();
+            } catch (e) {
+              appendOutput("Cannot run: Pyodide not loaded.", true);
+              return;
+            }
+            status.textContent = "Running...";
+            try {
+              pyodide.setStdout({
+                batched: (s) => {
+                  if (s && s.length) appendOutput(s);
+                },
+              });
+              pyodide.setStderr({
+                batched: (s) => {
+                  if (s && s.length) appendOutput(s, true);
+                },
+              });
+              const result = await pyodide.runPythonAsync(code);
+              if (result !== undefined && result !== null)
+                appendOutput("Return: " + String(result));
+              status.textContent = "Done";
+            } catch (err) {
+              appendOutput("Runtime error: " + err, true);
+              status.textContent = "Error";
+            } finally {
+              try {
+                pyodide.setStdout({ batched: () => {} });
+                pyodide.setStderr({ batched: () => {} });
+              } catch (e) {}
+            }
+          };
+
+          preloadBtn.addEventListener("click", async () => {
+            if (pyodide) {
+              status.textContent = "Already loaded";
+              return;
+            }
+            try {
+              await loadPyodideOnce();
+            } catch (e) {
+              appendOutput("Load failed: " + e, true);
+            }
+          });
+
+          runBtn.addEventListener("click", async () => {
+            const code = editor.value;
+            await runPython(code);
+          });
+
+          clearBtn.addEventListener("click", () => {
+            out.innerHTML = "";
+            status.textContent = "Idle";
+          });
+
+          downloadBtn.addEventListener("click", () => {
+            const blob = new Blob([editor.value], { type: "text/x-python" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "script.py";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          });
+        })();
+
+        /* ===== JS runner ===== */
+        (function jsRunner() {
+          const editor = document.getElementById("jsEditor");
+          const output = document.getElementById("js-output");
+          const runBtn = document.getElementById("js-run");
+          const clearBtn = document.getElementById("js-clear");
+          const downloadBtn = document.getElementById("js-download");
+
+          const appendOut = (text) => {
+            output.textContent += text + "\n";
+            output.scrollTop = output.scrollHeight;
+          };
+
+          runBtn.addEventListener("click", () => {
+            output.textContent = "";
+            const code = editor.value;
+            const origLog = console.log;
+            console.log = (...args) => {
+              appendOut(args.join(" "));
+              origLog(...args);
+            };
+            try {
+              const fn = new Function(code);
+              const res = fn();
+              if (res !== undefined) appendOut("Return: " + res);
+            } catch (e) {
+              appendOut("Error: " + (e && e.message ? e.message : e));
+            }
+            console.log = origLog;
+          });
+
+          clearBtn.addEventListener("click", () => (output.textContent = ""));
+          downloadBtn.addEventListener("click", () => {
+            const blob = new Blob([editor.value], { type: "text/javascript" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "script.js";
+            a.click();
+            URL.revokeObjectURL(url);
+          });
+        })();
+
+        /* ===== Scroll reveal + back-to-top ===== */
+        (function scrollRevealBackTop() {
+          const els = document.querySelectorAll(".crx_fade_in");
+          if (els.length) {
+            const obs = new IntersectionObserver(
+              (entries, o) => {
+                entries.forEach((en) => {
+                  if (en.isIntersecting) {
+                    en.target.classList.add("crx_visible");
+                    o.unobserve(en.target);
+                  }
+                });
+              },
+              { threshold: 0.12 }
+            );
+            els.forEach((e) => obs.observe(e));
+          }
+          const btt = document.getElementById("back-to-top");
+          window.addEventListener("scroll", () => {
+            const y = window.scrollY || window.pageYOffset;
+            if (y > 360) btt.classList.add("visible");
+            else btt.classList.remove("visible");
+          });
+          btt.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        })();
+      })();
+    </script>
     <script src="https://programmer-s-picnic.github.io/json-images/imgshow.js"></script>
-  <script src='https://programmer-s-picnic.github.io/json-images/find-on-page.js'></script>
-</body>
-
+    <script src="https://programmer-s-picnic.github.io/json-images/find-on-page.js"></script>
+  </body>
 </html>
