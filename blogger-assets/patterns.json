@@ -1,167 +1,163 @@
 [
-  {
-    "id": "1",
-    "title": "Right-Angled Triangle",
-    "diagram": "*\n**\n***\n****\n*****",
-    "code": "rows = 5\nfor i in range(1, rows + 1):\n    print('*' * i)",
-    "explanation": "This code prints a right-angled triangle pattern using nested loops. The outer loop iterates through the number of rows, while the inner loop prints the asterisks for each row."
-  },
-  {
-    "id": "2",
-    "title": "Inverted Triangle",
-    "diagram": "*****\n****\n***\n**\n*",
-    "code": "rows = 5\nfor i in range(rows, 0, -1):\n    print('*' * i)",
-    "explanation": "This code prints an inverted triangle pattern. The outer loop starts from the total number of rows and decrements down to 1, while the inner loop prints the asterisks for each row."
-  },
-  {
-    "id": "3",
-    "title": "Pyramid Pattern",
-    "diagram": "    *\n   ***\n  *****\n *******\n*********",
-    "code": "rows = 5\nfor i in range(rows):\n    print(' ' * (rows - i - 1) + '*' * (2 * i + 1))",
-    "explanation": "This code prints a pyramid pattern. The outer loop iterates through the number of rows, while the inner loop prints spaces followed by asterisks to form the pyramid shape."
-  },
-  {
-    "id": "4",
-    "title": "Inverted Pyramid",
-    "diagram": "*********\n *******\n  *****\n   ***\n    *",
-    "code": "rows = 5\nfor i in range(rows, 0, -1):\n    print(' ' * (rows - i) + '*' * (2 * i - 1))",
-    "explanation": "This code prints an inverted pyramid pattern. The outer loop starts from the total number of rows and decrements down to 1, while the inner loop prints spaces followed by asterisks to form the inverted pyramid shape."
-  },
-  {
-    "id": "5",
-    "title": "Diamond Pattern",
-    "diagram": "    *\n   ***\n  *****\n *******\n*********\n *******\n  *****\n   ***\n    *",
-    "code": "rows = 5\nfor i in range(rows):\n    print(' ' * (rows - i - 1) + '*' * (2 * i + 1))\nfor i in range(rows - 2, -1, -1):\n    print(' ' * (rows - i - 1) + '*' * (2 * i + 1))",
-    "explanation": "This code prints a diamond pattern by combining a pyramid and an inverted pyramid. The first loop creates the upper half, while the second loop creates the lower half."
-  },
-  {
-    "id": "6",
-    "title": "Right-Aligned Triangle",
-    "diagram": "    *\n   **\n  ***\n ****\n*****",
-    "code": "rows = 5\nfor i in range(1, rows + 1):\n    print(' ' * (rows - i) + '*' * i)",
-    "explanation": "This code prints a right-aligned triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints spaces followed by asterisks to align the triangle to the right."
-  },
-  {
-    "id": "7",
-    "title": "Number Triangle",
-    "diagram": "1\n12\n123\n1234\n12345",
-    "code": "rows = 5\nfor i in range(1, rows + 1):\n    for j in range(1, i + 1):\n        print(j, end='')\n    print()",
-    "explanation": "This code prints a number triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints numbers from 1 to the current row number."
-  },
-  {
-    "id": "8",
-    "title": "Inverted Number Triangle",
-    "diagram": "12345\n1234\n123\n12\n1",
-    "code": "rows = 5\nfor i in range(rows, 0, -1):\n    for j in range(1, i + 1):\n        print(j, end='')\n    print()",
-    "explanation": "This code prints an inverted number triangle pattern. The outer loop starts from the total number of rows and decrements down to 1, while the inner loop prints numbers from 1 to the current row number."
-  },
-  {
-    "id": "9",
-    "title": "Floyd’s Triangle",
-    "diagram": "1\n2 3\n4 5 6\n7 8 9 10\n11 12 13 14 15",
-    "code": "rows = 5\nnum = 1\nfor i in range(1, rows + 1):\n    for j in range(1, i + 1):\n        print(num, end=' ')\n        num += 1\n    print()",
-    "explanation": "This code prints Floyd's triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints consecutive numbers, incrementing the number after each print."
-  },
-  {
-    "id": "10",
-    "title": "Pascal’s Triangle (Simple)",
-    "diagram": "    1\n   1 1\n  1 2 1\n 1 3 3 1\n1 4 6 4 1",
-    "code": "rows = 5\nfor i in range(rows):\n    num = 1\n    print(' ' * (rows - i), end='')\n    for j in range(i + 1):\n        print(num, end=' ')\n        num = num * (i - j) // (j + 1)\n    print()",
-    "explanation": "This code prints a simple version of Pascal's triangle. The outer loop iterates through the number of rows, while the inner loop calculates and prints the binomial coefficients for each row."
-  },
-  {
-    "id": "11",
-    "title": "Open Square Pattern",
-    "diagram": "*****\n*   *\n*   *\n*   *\n*****",
-    "code": "rows = 5\nfor i in range(rows):\n    for j in range(rows):\n        if i==0 or j==0 or i==rows-1 or j==rows-1:\n            print('*',end='')\n        else:\n            print(end=' ')\n    print()",
-    "explanation": "This code prints an outline of a square pattern. The outer loop iterates through the number of rows, while the inner loop prints asterisks for the borders and spaces for the inside of the square."
-  },
-   {
-    "id": "12",
-    "title": "Patterns using a condition",
-    "diagram": "*****\n*   *\n*   *\n*   *\n*****",
-    "code": "n=7\nmid=(n+1)//2\nfor row in range(1,n+1):\n    for col in range(1,n+1):\n        condition=row==1 or row==n or col==1 or col==n\n        if condition:\n            print(0,end='')\n        else:\n            print(' ',end='')\n    print()",
-        "explanation": "This code prints an outline of a square pattern. The outer loop iterates through the number of rows, while the inner loop prints asterisks for the borders and spaces for the inside of the square."
-  }
-  ,
-  [
-  {
-    "id": "13",
-    "title": "Alphabet Triangle (A, AB, ABC...)",
-    "diagram": "A\nAB\nABC\nABCD\nABCDE",
-    "code": "rows = 5\nfor i in range(1, rows + 1):\n    for j in range(i):\n        print(chr(65 + j), end='')\n    print()",
-    "explanation": "Prints letters starting from 'A' on each row. chr(65) is 'A'. The inner loop prints increasing letters up to the current row length."
-  },
-  {
-    "id": "14",
-    "title": "Alphabet Triangle (Same Letter Per Row)",
-    "diagram": "A\nBB\nCCC\nDDDD\nEEEEE",
-    "code": "rows = 5\nfor i in range(rows):\n    ch = chr(65 + i)\n    print(ch * (i + 1))",
-    "explanation": "Each row prints the same letter repeated. The row index decides the character (A, B, C...) and it repeats (i+1) times."
-  },
-  {
-    "id": "15",
-    "title": "Inverted Alphabet Triangle",
-    "diagram": "ABCDE\nABCD\nABC\nAB\nA",
-    "code": "rows = 5\nfor i in range(rows, 0, -1):\n    for j in range(i):\n        print(chr(65 + j), end='')\n    print()",
-    "explanation": "Starts with 5 letters (ABCDE) then reduces one letter per row. The outer loop counts down, inner loop prints letters from A upward."
-  },
-  {
-    "id": "16",
-    "title": "Alphabet Pyramid (Centered)",
-    "diagram": "    A\n   ABA\n  ABCBA\n ABCDCBA\nABCDEDCBA",
-    "code": "rows = 5\nfor i in range(rows):\n    print(' ' * (rows - i - 1), end='')\n    for j in range(i + 1):\n        print(chr(65 + j), end='')\n    for j in range(i - 1, -1, -1):\n        print(chr(65 + j), end='')\n    print()",
-    "explanation": "Builds a centered alphabet pyramid. First prints leading spaces, then prints ascending letters (A..), then descending letters (..A) to mirror the pattern."
-  },
-  {
-    "id": "17",
-    "title": "Number Pyramid (Centered 1, 121, 12321...)",
-    "diagram": "    1\n   121\n  12321\n 1234321\n123454321",
-    "code": "rows = 5\nfor i in range(1, rows + 1):\n    print(' ' * (rows - i), end='')\n    for j in range(1, i + 1):\n        print(j, end='')\n    for j in range(i - 1, 0, -1):\n        print(j, end='')\n    print()",
-    "explanation": "Prints a palindromic number pyramid. Each row increases from 1 up to i, then decreases back to 1, with spaces to center-align."
-  },
-  {
-    "id": "18",
-    "title": "Number Repeated Triangle (1, 22, 333...)",
-    "diagram": "1\n22\n333\n4444\n55555",
-    "code": "rows = 5\nfor i in range(1, rows + 1):\n    print(str(i) * i)",
-    "explanation": "Each row prints the row number repeated i times. Using str(i) * i repeats the digit as a string."
-  },
-  {
-    "id": "19",
-    "title": "0-1 Triangle",
-    "diagram": "1\n01\n101\n0101\n10101",
-    "code": "rows = 5\nfor i in range(1, rows + 1):\n    for j in range(1, i + 1):\n        print((i + j) % 2, end='')\n    print()",
-    "explanation": "Prints a 0-1 triangle using parity. (i + j) % 2 alternates between 0 and 1 depending on whether the sum is even or odd."
-  },
-  {
-    "id": "20",
-    "title": "Fibonacci Triangle",
-    "diagram": "1\n1 2\n3 5 8\n13 21 34 55\n89 144 233 377 610",
-    "code": "rows = 5\na, b = 0, 1\nfor i in range(1, rows + 1):\n    for j in range(i):\n        a, b = b, a + b\n        print(a, end=' ')\n    print()",
-    "explanation": "Prints Fibonacci numbers in a triangle form. Each print advances the Fibonacci sequence by updating (a, b)."
-  },
-  {
-    "id": "21",
-    "title": "Pascal’s Triangle (Using Combination Formula)",
-    "diagram": "    1\n   1 1\n  1 2 1\n 1 3 3 1\n1 4 6 4 1",
-    "code": "rows = 5\nfor i in range(rows):\n    num = 1\n    print(' ' * (rows - i - 1), end='')\n    for j in range(i + 1):\n        print(num, end=' ')\n        num = num * (i - j) // (j + 1)\n    print()",
-    "explanation": "Prints Pascal's triangle by computing each next value in a row from the previous using the combination relationship. Uses integer division to keep numbers exact."
-  },
-  {
-    "id": "22",
-    "title": "Pascal’s Triangle (Using List Building)",
-    "diagram": "1\n1 1\n1 2 1\n1 3 3 1\n1 4 6 4 1",
-    "code": "rows = 5\ntriangle = []\nfor i in range(rows):\n    row = [1] * (i + 1)\n    for j in range(1, i):\n        row[j] = triangle[i - 1][j - 1] + triangle[i - 1][j]\n    triangle.append(row)\n\nfor row in triangle:\n    print(' '.join(map(str, row)))",
-    "explanation": "Builds Pascal's triangle row-by-row using the rule: middle elements are the sum of the two elements above. This approach is easy to understand and debug."
-  },
-  {
-    "id": "23",
-    "title": "Pascal’s Triangle (Centered Output)",
-    "diagram": "        1\n      1   1\n    1   2   1\n  1   3   3   1\n1   4   6   4   1",
-    "code": "rows = 5\ntriangle = []\nfor i in range(rows):\n    row = [1] * (i + 1)\n    for j in range(1, i):\n        row[j] = triangle[i - 1][j - 1] + triangle[i - 1][j]\n    triangle.append(row)\n\nwidth = rows * 4\nfor row in triangle:\n    line = '   '.join(map(str, row))\n    print(line.center(width))",
-    "explanation": "Same list-building method as Pascal’s triangle, but the final printing is centered using string centering so the triangle shape is visually clearer."
-  }
-]
-
+{
+"id": "1",
+"title": "Right-Angled Triangle",
+"diagram": "* ** *** **** *****",
+"code": "rows = 5 for i in range(1, rows + 1): print('*' * i)",
+"explanation": "This code prints a right-angled triangle pattern using nested loops. The outer loop iterates through the number of rows, while the inner loop prints the asterisks for each row."
+},
+{
+"id": "2",
+"title": "Inverted Triangle",
+"diagram": "***** **** *** ** *",
+"code": "rows = 5 for i in range(rows, 0, -1): print('*' * i)",
+"explanation": "This code prints an inverted triangle pattern. The outer loop starts from the total number of rows and decrements down to 1, while the inner loop prints the asterisks for each row."
+},
+{
+"id": "3",
+"title": "Pyramid Pattern",
+"diagram": " * *** ***** ******* *********",
+"code": "rows = 5 for i in range(rows): print(' ' * (rows - i - 1) + '*' * (2 * i + 1))",
+"explanation": "This code prints a pyramid pattern. The outer loop iterates through the number of rows, while the inner loop prints spaces followed by asterisks to form the pyramid shape."
+},
+{
+"id": "4",
+"title": "Inverted Pyramid",
+"diagram": "********* ******* ***** *** *",
+"code": "rows = 5 for i in range(rows, 0, -1): print(' ' * (rows - i) + '*' * (2 * i - 1))",
+"explanation": "This code prints an inverted pyramid pattern. The outer loop starts from the total number of rows and decrements down to 1, while the inner loop prints spaces followed by asterisks to form the inverted pyramid shape."
+},
+{
+"id": "5",
+"title": "Diamond Pattern",
+"diagram": " * *** ***** ******* ********* ******* ***** *** *",
+"code": "rows = 5 for i in range(rows): print(' ' * (rows - i - 1) + '*' * (2 * i + 1)) for i in range(rows - 2, -1, -1): print(' ' * (rows - i - 1) + '*' * (2 * i + 1))",
+"explanation": "This code prints a diamond pattern by combining a pyramid and an inverted pyramid. The first loop creates the upper half, while the second loop creates the lower half."
+},
+{
+"id": "6",
+"title": "Right-Aligned Triangle",
+"diagram": " * ** *** **** *****",
+"code": "rows = 5 for i in range(1, rows + 1): print(' ' * (rows - i) + '*' * i)",
+"explanation": "This code prints a right-aligned triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints spaces followed by asterisks to align the triangle to the right."
+},
+{
+"id": "7",
+"title": "Number Triangle",
+"diagram": "1 12 123 1234 12345",
+"code": "rows = 5 for i in range(1, rows + 1): for j in range(1, i + 1): print(j, end='') print()",
+"explanation": "This code prints a number triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints numbers from 1 to the current row number."
+},
+{
+"id": "8",
+"title": "Inverted Number Triangle",
+"diagram": "12345 1234 123 12 1",
+"code": "rows = 5 for i in range(rows, 0, -1): for j in range(1, i + 1): print(j, end='') print()",
+"explanation": "This code prints an inverted number triangle pattern. The outer loop starts from the total number of rows and decrements down to 1, while the inner loop prints numbers from 1 to the current row number."
+},
+{
+"id": "9",
+"title": "Floyd’s Triangle",
+"diagram": "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15",
+"code": "rows = 5 num = 1 for i in range(1, rows + 1): for j in range(1, i + 1): print(num, end=' ') num += 1 print()",
+"explanation": "This code prints Floyd's triangle pattern. The outer loop iterates through the number of rows, while the inner loop prints consecutive numbers, incrementing the number after each print."
+},
+{
+"id": "10",
+"title": "Pascal’s Triangle (Simple)",
+"diagram": " 1 1 1 1 2 1 1 3 3 1 1 4 6 4 1",
+"code": "rows = 5 for i in range(rows): num = 1 print(' ' * (rows - i), end='') for j in range(i + 1): print(num, end=' ') num = num * (i - j) // (j + 1) print()",
+"explanation": "This code prints a simple version of Pascal's triangle. The outer loop iterates through the number of rows, while the inner loop calculates and prints the binomial coefficients for each row."
+},
+{
+"id": "11",
+"title": "Open Square Pattern",
+"diagram": "***** * * * * * * *****",
+"code": "rows = 5 for i in range(rows): for j in range(rows): if i==0 or j==0 or i==rows-1 or j==rows-1: print('*',end='') else: print(end=' ') print()",
+"explanation": "This code prints an outline of a square pattern. The outer loop iterates through the number of rows, while the inner loop prints asterisks for the borders and spaces for the inside of the square."
+},
+{
+"id": "12",
+"title": "Patterns using a condition",
+"diagram": "***** * * * * * * *****",
+"code": "n=7 mid=(n+1)//2 for row in range(1,n+1): for col in range(1,n+1): condition=row==1 or row==n or col==1 or col==n if condition: print(0,end='') else: print(' ',end='') print()",
+"explanation": "This code prints an outline of a square pattern. The outer loop iterates through the number of rows, while the inner loop prints asterisks for the borders and spaces for the inside of the square."
+},
+{
+"id": "13",
+"title": "Alphabet Triangle (A, AB, ABC...)",
+"diagram": "A AB ABC ABCD ABCDE",
+"code": "rows = 5 for i in range(1, rows + 1): for j in range(i): print(chr(65 + j), end='') print()",
+"explanation": "Prints letters starting from 'A' on each row. chr(65) is 'A'. The inner loop prints increasing letters up to the current row length."
+},
+{
+"id": "14",
+"title": "Alphabet Triangle (Same Letter Per Row)",
+"diagram": "A BB CCC DDDD EEEEE",
+"code": "rows = 5 for i in range(rows): ch = chr(65 + i) print(ch * (i + 1))",
+"explanation": "Each row prints the same letter repeated. The row index decides the character (A, B, C...) and it repeats (i+1) times."
+},
+{
+"id": "15",
+"title": "Inverted Alphabet Triangle",
+"diagram": "ABCDE ABCD ABC AB A",
+"code": "rows = 5 for i in range(rows, 0, -1): for j in range(i): print(chr(65 + j), end='') print()",
+"explanation": "Starts with 5 letters (ABCDE) then reduces one letter per row. The outer loop counts down, inner loop prints letters from A upward."
+},
+{
+"id": "16",
+"title": "Alphabet Pyramid (Centered)",
+"diagram": " A ABA ABCBA ABCDCBA ABCDEDCBA",
+"code": "rows = 5 for i in range(rows): print(' ' * (rows - i - 1), end='') for j in range(i + 1): print(chr(65 + j), end='') for j in range(i - 1, -1, -1): print(chr(65 + j), end='') print()",
+"explanation": "Builds a centered alphabet pyramid. First prints leading spaces, then prints ascending letters (A..), then descending letters (..A) to mirror the pattern."
+},
+{
+"id": "17",
+"title": "Number Pyramid (Centered 1, 121, 12321...)",
+"diagram": " 1 121 12321 1234321 123454321",
+"code": "rows = 5 for i in range(1, rows + 1): print(' ' * (rows - i), end='') for j in range(1, i + 1): print(j, end='') for j in range(i - 1, 0, -1): print(j, end='') print()",
+"explanation": "Prints a palindromic number pyramid. Each row increases from 1 up to i, then decreases back to 1, with spaces to center-align."
+},
+{
+"id": "18",
+"title": "Number Repeated Triangle (1, 22, 333...)",
+"diagram": "1 22 333 4444 55555",
+"code": "rows = 5 for i in range(1, rows + 1): print(str(i) * i)",
+"explanation": "Each row prints the row number repeated i times. Using str(i) * i repeats the digit as a string."
+},
+{
+"id": "19",
+"title": "0-1 Triangle",
+"diagram": "1 01 101 0101 10101",
+"code": "rows = 5 for i in range(1, rows + 1): for j in range(1, i + 1): print((i + j) % 2, end='') print()",
+"explanation": "Prints a 0-1 triangle using parity. (i + j) % 2 alternates between 0 and 1 depending on whether the sum is even or odd."
+},
+{
+"id": "20",
+"title": "Fibonacci Triangle",
+"diagram": "1 1 2 3 5 8 13 21 34 55 89 144 233 377 610",
+"code": "rows = 5 a, b = 0, 1 for i in range(1, rows + 1): for j in range(i): a, b = b, a + b print(a, end=' ') print()",
+"explanation": "Prints Fibonacci numbers in a triangle form. Each print advances the Fibonacci sequence by updating (a, b)."
+},
+{
+"id": "21",
+"title": "Pascal’s Triangle (Using Combination Formula)",
+"diagram": " 1 1 1 1 2 1 1 3 3 1 1 4 6 4 1",
+"code": "rows = 5 for i in range(rows): num = 1 print(' ' * (rows - i - 1), end='') for j in range(i + 1): print(num, end=' ') num = num * (i - j) // (j + 1) print()",
+"explanation": "Prints Pascal's triangle by computing each next value in a row from the previous using the combination relationship. Uses integer division to keep numbers exact."
+},
+{
+"id": "22",
+"title": "Pascal’s Triangle (Using List Building)",
+"diagram": "1 1 1 1 2 1 1 3 3 1 1 4 6 4 1",
+"code": "rows = 5 triangle = [] for i in range(rows): row = [1] * (i + 1) for j in range(1, i): row[j] = triangle[i - 1][j - 1] + triangle[i - 1][j] triangle.append(row) for row in triangle: print(' '.join(map(str, row)))",
+"explanation": "Builds Pascal's triangle row-by-row using the rule: middle elements are the sum of the two elements above. This approach is easy to understand and debug."
+},
+{
+"id": "23",
+"title": "Pascal’s Triangle (Centered Output)",
+"diagram": " 1 1 1 1 2 1 1 3 3 1 1 4 6 4 1",
+"code": "rows = 5 triangle = [] for i in range(rows): row = [1] * (i + 1) for j in range(1, i): row[j] = triangle[i - 1][j - 1] + triangle[i - 1][j] triangle.append(row) width = rows * 4 for row in triangle: line = ' '.join(map(str, row)) print(line.center(width))",
+"explanation": "Same list-building method as Pascal’s triangle, but the final printing is centered using string centering so the triangle shape is visually clearer."
+}
 ]
