@@ -1431,7 +1431,7 @@
           Run Python snippets using Pyodide directly in your browser.
         </p>
         <textarea id="pyEditor" class="editor" style="min-height: 160px">
-# Example: simple math & print
+# Example: print example
 print("Hello from Champak!")
 print("1 + 1 =", 1+1)</textarea
         >
@@ -1689,7 +1689,8 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
           function loadPostsJSONP() {
             if (loaded) return;
             loaded = true;
-            const cb = "lsPosts_" + Date.now();
+            //const cb = "lsPosts_" + Date.now();
+            const cb = "lsPosts_";
             window[cb] = function (data) {
               try {
                 const items = (data.feed && data.feed.entry) || [];
@@ -1989,7 +1990,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
           const appendOutput = (text, isError = false) => {
             const now = new Date().toLocaleTimeString();
             const div = document.createElement("div");
-            div.textContent = `[${now}] ${text}`;
+            div.textContent = ` ${text}`;
             if (isError) div.style.color = "#a33";
             out.appendChild(div);
             out.scrollTop = out.scrollHeight;
