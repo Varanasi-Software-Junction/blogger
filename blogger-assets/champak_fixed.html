@@ -15,15 +15,14 @@
     />
     <style>
       :root {
-        /* Light Saffron theme (Programmer's Picnic) */
-        --crx-accent: #d97706;
-        --crx-accent-dark: #b45309;
-        --crx-bg-1: #fff7e6;
-        --crx-bg-2: #fff1d6;
-        --card-bg: rgba(255, 255, 255, 0.88);
-        --glass-border: rgba(31, 41, 55, 0.1);
-        --muted: #6b7280;
-        --headline: #1f2937;
+        --crx-accent: #0ea5e9;
+        --crx-accent-dark: #0a5fad;
+        --crx-bg-1: #f4fbff;
+        --crx-bg-2: #eef7ff;
+        --card-bg: rgba(255, 255, 255, 0.82);
+        --glass-border: rgba(15, 23, 42, 0.04);
+        --muted: #61707b;
+        --headline: #08263f;
         --menu-width: 320px;
       }
 
@@ -69,12 +68,12 @@
         z-index: -1;
         background: radial-gradient(
             600px 300px at 10% 10%,
-            rgba(245, 158, 11, 0.06),
+            rgba(13, 110, 253, 0.03),
             transparent
           ),
           radial-gradient(
             500px 240px at 90% 90%,
-            rgba(217, 119, 6, 0.05),
+            rgba(6, 182, 212, 0.02),
             transparent
           );
         pointer-events: none;
@@ -149,7 +148,7 @@
         font-size: 18px;
         font-weight: 800;
         letter-spacing: 0.2px;
-        background: linear-gradient(90deg, #7c2d12, var(--crx-accent-dark));
+        background: linear-gradient(90deg, #061124, var(--crx-accent-dark));
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -206,8 +205,8 @@
       }
 
       #ls-search input[type="search"]:focus {
-        border-color: rgba(217, 119, 6, 0.35);
-        box-shadow: 0 6px 20px rgba(217, 119, 6, 0.08);
+        border-color: rgba(31, 99, 214, 0.28);
+        box-shadow: 0 6px 20px rgba(31, 99, 214, 0.06);
       }
 
       #ls-search button {
@@ -215,17 +214,17 @@
         height: 44px;
         border-radius: 10px;
         border: none;
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
         color: white;
         font-weight: 700;
         cursor: pointer;
-        box-shadow: 0 6px 18px rgba(217, 119, 6, 0.16);
+        box-shadow: 0 6px 18px rgba(29, 78, 216, 0.12);
         transition: transform 0.12s ease, box-shadow 0.12s ease;
       }
 
       #ls-search button:hover {
         transform: translateY(-1px);
-        box-shadow: 0 10px 28px rgba(217, 119, 6, 0.18);
+        box-shadow: 0 10px 28px rgba(29, 78, 216, 0.14);
       }
 
       /* Suggestions */
@@ -256,7 +255,7 @@
       }
 
       #ls-suggestions .ls-item:hover {
-        background: rgba(217, 119, 6, 0.08);
+        background: rgba(31, 99, 214, 0.03);
       }
 
       /* Desktop nav links (hidden on mobile) */
@@ -275,7 +274,7 @@
       }
 
       #ls-nav a:hover {
-        background: rgba(217, 119, 6, 0.1);
+        background: rgba(31, 99, 214, 0.06);
       }
 
       /* Hamburger for mobile */
@@ -444,21 +443,15 @@
       }
 
       .crx-keyword {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
-        color: #ffffff;
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        color: #fff;
         display: inline-block;
         padding: 8px 12px;
         border-radius: 999px;
         margin: 6px;
         font-size: 14px;
-        box-shadow: 0 6px 18px rgba(217, 119, 6, 0.16);
+        box-shadow: 0 6px 18px rgba(31, 99, 214, 0.08);
         text-decoration: none;
-        border: 1px solid rgba(180, 83, 9, 0.16);
-      }
-
-      .crx-keyword:hover {
-        filter: brightness(1.02);
-        transform: translateY(-1px);
       }
 
       textarea.editor {
@@ -489,20 +482,18 @@
       }
 
       .btn.primary {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        background: linear-gradient(135deg, #1f7fc1, #2563eb);
         color: #fff;
-        box-shadow: 0 8px 24px rgba(217, 119, 6, 0.16);
+        box-shadow: 0 8px 24px rgba(29, 78, 216, 0.1);
         font-size: 14px;
       }
 
       /* Accessibility: clear keyboard focus */
-      a:focus-visible,
-      button:focus-visible,
-      input:focus-visible,
-      textarea:focus-visible {
+      a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
         outline: 3px solid rgba(37, 99, 235, 0.45);
         outline-offset: 2px;
       }
+
 
       .status {
         font-size: 13px;
@@ -556,26 +547,6 @@
         box-shadow: 0 10px 30px rgba(9, 20, 40, 0.03);
       }
 
-      /* Explore Posts: centered 2-column grid on desktop */
-      #crx-feed-panel {
-        display: flex;
-        justify-content: center;
-      }
-      #crx-card-list {
-        width: 100%;
-        max-width: 980px;
-      }
-      @media (min-width: 900px) {
-        #crx-card-list {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 14px;
-        }
-        .crx-card-row {
-          margin: 0;
-        }
-      }
-
       .crx-card-row {
         display: flex;
         gap: 16px;
@@ -620,7 +591,7 @@
       }
 
       .crx-post-title {
-        background: #d97706;
+        background: #0e63d6;
         color: white;
         padding: 8px 12px;
         border-radius: 8px;
@@ -658,9 +629,9 @@
         border-radius: 10px;
         display: grid;
         place-items: center;
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        background: linear-gradient(135deg, #1f7fc1, #2563eb);
         color: white;
-        box-shadow: 0 12px 30px rgba(217, 119, 6, 0.18);
+        box-shadow: 0 12px 30px rgba(31, 99, 214, 0.12);
         cursor: pointer;
         opacity: 0;
         transform: translateY(8px);
@@ -993,7 +964,7 @@
       <section class="why-blog-section">
         <div class="why-blog-card">
           <h2>
-            Hi, I’m <span style="color: #d97706">Champak Roy</span> — Developer
+            Hi, I’m <span style="color: #2563eb">Champak Roy</span> — Developer
             · Writer · Teacher
           </h2>
           <div class="intro-sub">
@@ -1049,7 +1020,7 @@
           justify-content: center;
           align-items: center;
           padding: 60px 20px;
-          background: linear-gradient(180deg, #fff7e6 0%, #fff1d6 100%);
+          background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
         }
 
         .why-blog-card {
@@ -1057,7 +1028,7 @@
           background: #ffffff;
           border-radius: 16px;
           padding: 40px 36px;
-          box-shadow: 0 8px 25px rgba(217, 119, 6, 0.14),
+          box-shadow: 0 8px 25px rgba(37, 99, 235, 0.12),
             0 2px 6px rgba(0, 0, 0, 0.05);
           text-align: center;
           animation: fadeInUp 0.9s ease both;
@@ -1066,7 +1037,7 @@
 
         .why-blog-card:hover {
           transform: translateY(-4px);
-          box-shadow: 0 14px 35px rgba(217, 119, 6, 0.18),
+          box-shadow: 0 14px 35px rgba(37, 99, 235, 0.18),
             0 4px 10px rgba(0, 0, 0, 0.06);
         }
 
@@ -1074,7 +1045,7 @@
           font-family: "Segoe UI", Roboto, sans-serif;
           font-size: 2em;
           font-weight: 700;
-          color: #7c2d12;
+          color: #1e3a8a;
           margin-bottom: 20px;
           position: relative;
         }
@@ -1084,7 +1055,7 @@
           display: block;
           width: 80px;
           height: 4px;
-          background: linear-gradient(90deg, #f59e0b, #d97706);
+          background: linear-gradient(90deg, #2563eb, #1e40af);
           margin: 10px auto 0;
           border-radius: 3px;
         }
@@ -1097,7 +1068,7 @@
         }
 
         .why-blog-card strong {
-          color: #d97706;
+          color: #2563eb;
           font-weight: 600;
         }
 
@@ -1289,10 +1260,7 @@
         </p>
       </section>
 
-      <section
-        class="crx-section keywords crx_fade_in"
-        id="image-processing-section"
-      >
+      <section class="crx-section keywords crx_fade_in" id="image-processing-section">
         <h2>🔑 Image Processing</h2>
         <p
           style="
@@ -1376,10 +1344,7 @@
         </p>
       </section>
 
-      <section
-        class="crx-section keywords crx_fade_in"
-        id="visualization-section"
-      >
+      <section class="crx-section keywords crx_fade_in" id="visualization-section">
         <h2>🔑 Visualization</h2>
         <p
           style="
@@ -1405,10 +1370,7 @@
         </p>
       </section>
 
-      <section
-        class="crx-section keywords crx_fade_in"
-        id="python-starter-section"
-      >
+      <section class="crx-section keywords crx_fade_in" id="python-starter-section">
         <h2>🔑 Python Starter</h2>
         <p
           style="
@@ -1469,46 +1431,33 @@
 
       <section
         class="crx-section coder python-coder crx_fade_in"
-        id="python-editor-embed"
+        id="python-section"
       >
-        <h2>🐍 Python Editor</h2>
+        <h2>🐍 Python Coder</h2>
         <p style="margin-bottom: 14px; color: var(--muted)">
-          Use the full Programmer’s Picnic Python Editor right here.
+          Run Python snippets using Pyodide directly in your browser.
         </p>
-        <div
-          style="
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid rgba(31, 41, 55, 0.1);
-            box-shadow: 0 14px 36px rgba(31, 41, 55, 0.08);
-            background: rgba(255, 255, 255, 0.85);
-          "
+        <textarea id="pyEditor" class="editor" style="min-height: 160px">
+# Example: print example
+print("Hello from Champak!")
+print("1 + 1 =", 1+1)</textarea
         >
-          <iframe
-            title="Programmer's Picnic Python Editor"
-            src="https://www.learnwithchampak.live/2026/01/programmers-picnic-python-editor.html"
-            style="
-              width: 100%;
-              height: 560px;
-              border: 0;
-              display: block;
-              background: #fff;
-            "
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allow="clipboard-read; clipboard-write"
-          ></iframe>
+        <div
+          style="display: flex; gap: 8px; align-items: center; margin-top: 10px"
+        >
+          <button id="py-preload" class="btn primary">Preload Pyodide</button>
+          <button id="py-run" class="btn primary">Run</button>
+          <button id="py-clear" class="btn ghost">Clear Output</button>
+          <button id="py-download" class="btn ghost">Download .py</button>
+          <div id="py-status" class="status" style="margin-left: auto">
+            Idle
+          </div>
         </div>
-        <div class="status" style="margin-top: 10px">
-          If the editor doesn’t load,
-          <a
-            href="https://www.learnwithchampak.live/2026/01/programmers-picnic-python-editor.html"
-            target="champak"
-            rel="noopener"
-            style="color: var(--crx-accent-dark); font-weight: 800"
-            >open it in a new tab</a
-          >.
-        </div>
+        <div
+          id="py-output"
+          class="output"
+          style="margin-top: 12px; min-height: 100px"
+        ></div>
       </section>
 
       <section class="crx-section coder js-coder crx_fade_in" id="js-section">
@@ -2028,6 +1977,127 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
           countEl.textContent = "Loading…";
           setTimeout(() => window.updateExploreCount(), 400);
         })();
+
+        /* ===== Pyodide runner (keeps behavior) ===== */
+        (function pyodideRunner() {
+          const PYODIDE_VERSION = "0.23.4";
+          const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+          const PYODIDE_SCRIPT = PYODIDE_BASE + "pyodide.js";
+          let pyodide = null;
+          let loading = false;
+
+          const preloadBtn = document.getElementById("py-preload");
+          const runBtn = document.getElementById("py-run");
+          const clearBtn = document.getElementById("py-clear");
+          const downloadBtn = document.getElementById("py-download");
+          const editor = document.getElementById("pyEditor");
+          const out = document.getElementById("py-output");
+          const status = document.getElementById("py-status");
+
+          const appendOutput = (text, isError = false) => {
+            const now = new Date().toLocaleTimeString();
+            const div = document.createElement("div");
+            div.textContent = ` ${text}`;
+            if (isError) div.style.color = "#a33";
+            out.appendChild(div);
+            out.scrollTop = out.scrollHeight;
+          };
+
+          const loadPyodideOnce = async () => {
+            if (pyodide) return pyodide;
+            if (loading) throw new Error("Pyodide is already loading");
+            loading = true;
+            status.textContent = "Loading Pyodide…";
+
+            await new Promise((resolve, reject) => {
+              if (window.loadPyodide) {
+                resolve();
+                return;
+              }
+              const s = document.createElement("script");
+              s.src = PYODIDE_SCRIPT;
+              s.async = true;
+              s.onload = resolve;
+              s.onerror = () => reject(new Error("Failed to load pyodide.js"));
+              document.head.appendChild(s);
+            });
+
+            pyodide = await loadPyodide({ indexURL: PYODIDE_BASE });
+            status.textContent = "Pyodide ready";
+            loading = false;
+            return pyodide;
+          };
+
+          const runPython = async (code) => {
+            out.innerHTML = "";
+            try {
+              await loadPyodideOnce();
+            } catch (e) {
+              appendOutput("Cannot run: Pyodide not loaded.", true);
+              return;
+            }
+            status.textContent = "Running...";
+            try {
+              pyodide.setStdout({
+                batched: (s) => {
+                  if (s && s.length) appendOutput(s);
+                },
+              });
+              pyodide.setStderr({
+                batched: (s) => {
+                  if (s && s.length) appendOutput(s, true);
+                },
+              });
+              const result = await pyodide.runPythonAsync(code);
+              if (result !== undefined && result !== null)
+                appendOutput("Return: " + String(result));
+              status.textContent = "Done";
+            } catch (err) {
+              appendOutput("Runtime error: " + err, true);
+              status.textContent = "Error";
+            } finally {
+              try {
+                pyodide.setStdout({ batched: () => {} });
+                pyodide.setStderr({ batched: () => {} });
+              } catch (e) {}
+            }
+          };
+
+          preloadBtn.addEventListener("click", async () => {
+            if (pyodide) {
+              status.textContent = "Already loaded";
+              return;
+            }
+            try {
+              await loadPyodideOnce();
+            } catch (e) {
+              appendOutput("Load failed: " + e, true);
+            }
+          });
+
+          runBtn.addEventListener("click", async () => {
+            const code = editor.value;
+            await runPython(code);
+          });
+
+          clearBtn.addEventListener("click", () => {
+            out.innerHTML = "";
+            status.textContent = "Idle";
+          });
+
+          downloadBtn.addEventListener("click", () => {
+            const blob = new Blob([editor.value], { type: "text/x-python" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "script.py";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          });
+        })();
+
         /* ===== JS runner ===== */
         (function jsRunner() {
           const editor = document.getElementById("jsEditor");

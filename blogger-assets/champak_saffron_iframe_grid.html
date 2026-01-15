@@ -21,7 +21,7 @@
         --crx-bg-1: #fff7e6;
         --crx-bg-2: #fff1d6;
         --card-bg: rgba(255, 255, 255, 0.88);
-        --glass-border: rgba(31, 41, 55, 0.1);
+        --glass-border: rgba(31, 41, 55, 0.10);
         --muted: #6b7280;
         --headline: #1f2937;
         --menu-width: 320px;
@@ -275,7 +275,7 @@
       }
 
       #ls-nav a:hover {
-        background: rgba(217, 119, 6, 0.1);
+        background: rgba(217, 119, 6, 0.10);
       }
 
       /* Hamburger for mobile */
@@ -456,7 +456,7 @@
         border: 1px solid rgba(180, 83, 9, 0.16);
       }
 
-      .crx-keyword:hover {
+      .crx-keyword:hover{
         filter: brightness(1.02);
         transform: translateY(-1px);
       }
@@ -496,13 +496,11 @@
       }
 
       /* Accessibility: clear keyboard focus */
-      a:focus-visible,
-      button:focus-visible,
-      input:focus-visible,
-      textarea:focus-visible {
+      a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
         outline: 3px solid rgba(37, 99, 235, 0.45);
         outline-offset: 2px;
       }
+
 
       .status {
         font-size: 13px;
@@ -556,25 +554,27 @@
         box-shadow: 0 10px 30px rgba(9, 20, 40, 0.03);
       }
 
+
       /* Explore Posts: centered 2-column grid on desktop */
-      #crx-feed-panel {
-        display: flex;
-        justify-content: center;
+      #crx-feed-panel{
+        display:flex;
+        justify-content:center;
       }
-      #crx-card-list {
-        width: 100%;
-        max-width: 980px;
+      #crx-card-list{
+        width:100%;
+        max-width:980px;
       }
-      @media (min-width: 900px) {
-        #crx-card-list {
-          display: grid;
+      @media (min-width: 900px){
+        #crx-card-list{
+          display:grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 14px;
+          gap:14px;
         }
-        .crx-card-row {
-          margin: 0;
+        .crx-card-row{
+          margin:0;
         }
       }
+
 
       .crx-card-row {
         display: flex;
@@ -1289,10 +1289,7 @@
         </p>
       </section>
 
-      <section
-        class="crx-section keywords crx_fade_in"
-        id="image-processing-section"
-      >
+      <section class="crx-section keywords crx_fade_in" id="image-processing-section">
         <h2>🔑 Image Processing</h2>
         <p
           style="
@@ -1376,10 +1373,7 @@
         </p>
       </section>
 
-      <section
-        class="crx-section keywords crx_fade_in"
-        id="visualization-section"
-      >
+      <section class="crx-section keywords crx_fade_in" id="visualization-section">
         <h2>🔑 Visualization</h2>
         <p
           style="
@@ -1405,10 +1399,7 @@
         </p>
       </section>
 
-      <section
-        class="crx-section keywords crx_fade_in"
-        id="python-starter-section"
-      >
+      <section class="crx-section keywords crx_fade_in" id="python-starter-section">
         <h2>🔑 Python Starter</h2>
         <p
           style="
@@ -1467,47 +1458,23 @@
         </p>
       </section>
 
-      <section
-        class="crx-section coder python-coder crx_fade_in"
-        id="python-editor-embed"
-      >
+      <section class="crx-section coder python-coder crx_fade_in" id="python-editor-embed">
         <h2>🐍 Python Editor</h2>
         <p style="margin-bottom: 14px; color: var(--muted)">
           Use the full Programmer’s Picnic Python Editor right here.
         </p>
-        <div
-          style="
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid rgba(31, 41, 55, 0.1);
-            box-shadow: 0 14px 36px rgba(31, 41, 55, 0.08);
-            background: rgba(255, 255, 255, 0.85);
-          "
-        >
+        <div style="border-radius: 14px; overflow: hidden; border: 1px solid rgba(31,41,55,0.10); box-shadow: 0 14px 36px rgba(31,41,55,0.08); background: rgba(255,255,255,0.85);">
           <iframe
             title="Programmer's Picnic Python Editor"
             src="https://www.learnwithchampak.live/2026/01/programmers-picnic-python-editor.html"
-            style="
-              width: 100%;
-              height: 560px;
-              border: 0;
-              display: block;
-              background: #fff;
-            "
+            style="width:100%; height: 560px; border:0; display:block; background: #fff;"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
             allow="clipboard-read; clipboard-write"
           ></iframe>
         </div>
-        <div class="status" style="margin-top: 10px">
-          If the editor doesn’t load,
-          <a
-            href="https://www.learnwithchampak.live/2026/01/programmers-picnic-python-editor.html"
-            target="champak"
-            rel="noopener"
-            style="color: var(--crx-accent-dark); font-weight: 800"
-            >open it in a new tab</a
-          >.
+        <div class="status" style="margin-top:10px;">
+          If the editor doesn’t load, <a href="https://www.learnwithchampak.live/2026/01/programmers-picnic-python-editor.html" target="champak" rel="noopener" style="color: var(--crx-accent-dark); font-weight:800;">open it in a new tab</a>.
         </div>
       </section>
 
