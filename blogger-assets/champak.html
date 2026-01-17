@@ -1,5 +1,5 @@
 <!-- Learning Sutras — Home v2 (Explore search + counter — mobile frosted menu) -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -32,7 +32,13 @@
       body {
         height: 100%;
         margin: 0;
-        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          Arial,
           sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -67,7 +73,8 @@
         position: fixed;
         inset: -20%;
         z-index: -1;
-        background: radial-gradient(
+        background:
+          radial-gradient(
             600px 300px at 10% 10%,
             rgba(245, 158, 11, 0.06),
             transparent
@@ -108,7 +115,9 @@
         );
         border-bottom: 1px solid var(--glass-border);
         box-shadow: 0 6px 18px rgba(8, 38, 64, 0.06);
-        transition: box-shadow 0.28s ease, transform 0.12s ease;
+        transition:
+          box-shadow 0.28s ease,
+          transform 0.12s ease;
         min-height: 64px;
       }
 
@@ -202,7 +211,9 @@
         font-size: 14px;
         outline: none;
         box-shadow: inset 0 1px 2px rgba(12, 22, 30, 0.03);
-        transition: box-shadow 0.18s ease, border-color 0.18s ease;
+        transition:
+          box-shadow 0.18s ease,
+          border-color 0.18s ease;
       }
 
       #ls-search input[type="search"]:focus {
@@ -220,7 +231,9 @@
         font-weight: 700;
         cursor: pointer;
         box-shadow: 0 6px 18px rgba(217, 119, 6, 0.16);
-        transition: transform 0.12s ease, box-shadow 0.12s ease;
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease;
       }
 
       #ls-search button:hover {
@@ -309,7 +322,10 @@
         height: 2px;
         background: var(--headline);
         border-radius: 2px;
-        transition: transform 0.18s ease, top 0.18s ease, bottom 0.18s ease;
+        transition:
+          transform 0.18s ease,
+          top 0.18s ease,
+          bottom 0.18s ease;
       }
 
       .hamburger::before {
@@ -370,7 +386,8 @@
         box-shadow: 0 18px 40px rgba(8, 36, 64, 0.12);
         transform: translateY(-6px) scale(0.99);
         opacity: 0;
-        transition: transform 0.26s cubic-bezier(0.2, 0.9, 0.3, 1),
+        transition:
+          transform 0.26s cubic-bezier(0.2, 0.9, 0.3, 1),
           opacity 0.26s ease;
         max-height: 72vh;
         overflow: auto;
@@ -422,7 +439,9 @@
         margin: 20px 0;
         border: 1px solid var(--glass-border);
         box-shadow: 0 8px 28px rgba(8, 36, 64, 0.04);
-        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease;
         backdrop-filter: blur(4px);
       }
 
@@ -467,8 +486,8 @@
         border-radius: 10px;
         border: 1px solid rgba(13, 24, 40, 0.06);
         padding: 12px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
-          monospace;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
         font-size: 20px;
         box-shadow: inset 0 6px 18px rgba(2, 6, 23, 0.03);
         resize: vertical;
@@ -514,8 +533,8 @@
         background: rgba(243, 250, 255, 0.9);
         border-radius: 10px;
         padding: 10px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
-          monospace;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
         font-size: 13px;
         color: #08303f;
         min-height: 80px;
@@ -589,7 +608,9 @@
           rgba(245, 251, 255, 0.98)
         );
         border: 1px solid rgba(13, 24, 40, 0.03);
-        transition: transform 0.12s ease, box-shadow 0.12s ease;
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease;
         position: relative;
       }
 
@@ -639,7 +660,9 @@
       .crx_fade_in {
         opacity: 0;
         transform: translateY(12px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
         will-change: opacity, transform;
       }
 
@@ -664,7 +687,9 @@
         cursor: pointer;
         opacity: 0;
         transform: translateY(8px);
-        transition: opacity 0.22s ease, transform 0.22s ease;
+        transition:
+          opacity 0.22s ease,
+          transform 0.22s ease;
         z-index: 9998;
       }
 
@@ -783,34 +808,34 @@
         <nav id="ls-nav" aria-label="Main">
           <a
             href="https://www.learnwithchampak.live/2025/11/ms-excel-complete-course-programmers.html"
-            target="_blank"
+            target="champak"
             >MS Excel</a
           >
 
           <a
             href="https://www.learnwithchampak.live/2025/11/all-dsa-posts.html"
-            target="_blank"
+            target="champak"
             >DSA-Full</a
           >
-          <a href="https://www.learnwithchampak.live" target="_blank">Home</a>
+          <a href="https://www.learnwithchampak.live" target="champak">Home</a>
           <a
             href="https://www.learnwithchampak.live/search?q=python"
-            target="_blank"
+            target="champak"
             >Python</a
           >
           <a
             href="https://www.learnwithchampak.live/search?q=javascript"
-            target="_blank"
+            target="champak"
             >JavaScript</a
           >
           <a
             href="https://www.learnwithchampak.live/search?q=projects"
-            target="_blank"
+            target="champak"
             >Projects</a
           >
           <a
             href="https://us04web.zoom.us/j/4428355179?pwd=yCZrJtx41cUAxDyApDM9eSrre1GSXe.1"
-            target="_blank"
+            target="champak"
             >Connect on Zoom</a
           >
         </nav>
@@ -885,30 +910,30 @@
       </div>
 
       <div class="mm-section">
-        <a href="https://www.learnwithchampak.live" target="_blank">Home</a>
+        <a href="https://www.learnwithchampak.live" target="champak">Home</a>
         <a
           href="https://www.learnwithchampak.live/search?q=python"
-          target="_blank"
+          target="champak"
           >Python</a
         >
         <a
           href="https://www.learnwithchampak.live/search?q=javascript"
-          target="_blank"
+          target="champak"
           >JavaScript</a
         >
         <a
           href="https://www.learnwithchampak.live/search?q=projects"
-          target="_blank"
+          target="champak"
           >Projects</a
         >
         <a
           href="https://www.learnwithchampak.live/search?q=matplotlib"
-          target="_blank"
+          target="champak"
           >Matplotlib</a
         >
         <a
           href="https://us04web.zoom.us/j/4428355179?pwd=yCZrJtx41cUAxDyApDM9eSrre1GSXe.1"
-          target="_blank"
+          target="champak"
           >Connect on Zoom</a
         >
       </div>
@@ -942,7 +967,7 @@
           <a
             class="crx-keyword"
             style="font-size: 13px; padding: 6px 10px"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=flutter"
             >Flutter</a
           >
@@ -950,7 +975,7 @@
           <a
             class="crx-keyword"
             style="font-size: 13px; padding: 6px 10px"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/11/programmers-picnic_17.html"
             >Programmer's Policy</a
           >
@@ -958,7 +983,7 @@
           <a
             class="crx-keyword"
             style="font-size: 13px; padding: 6px 10px"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=java"
             >Java</a
           >
@@ -966,21 +991,21 @@
           <a
             class="crx-keyword"
             style="font-size: 13px; padding: 6px 10px"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=python"
             >Python</a
           >
           <a
             class="crx-keyword"
             style="font-size: 13px; padding: 6px 10px"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=javascript"
             >JavaScript</a
           >
           <a
             class="crx-keyword"
             style="font-size: 13px; padding: 6px 10px"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=css"
             >CSS</a
           >
@@ -1057,16 +1082,20 @@
           background: #ffffff;
           border-radius: 16px;
           padding: 40px 36px;
-          box-shadow: 0 8px 25px rgba(217, 119, 6, 0.14),
+          box-shadow:
+            0 8px 25px rgba(217, 119, 6, 0.14),
             0 2px 6px rgba(0, 0, 0, 0.05);
           text-align: center;
           animation: fadeInUp 0.9s ease both;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
         }
 
         .why-blog-card:hover {
           transform: translateY(-4px);
-          box-shadow: 0 14px 35px rgba(217, 119, 6, 0.18),
+          box-shadow:
+            0 14px 35px rgba(217, 119, 6, 0.18),
             0 4px 10px rgba(0, 0, 0, 0.06);
         }
 
@@ -1140,20 +1169,20 @@
         >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/ai-ml-data-science-internship-track.html"
             >AI/ML-Internship</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/python-starter-club_22.html"
             >Python Starter</a
           >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2026/01/python-pickle.html"
             >Python Pickle</a
           >
@@ -1172,56 +1201,56 @@
         >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=python"
             >Python</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=flutter"
             >Flutter</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=java"
             >Java</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=visualization"
             >Visualization</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=javascript"
             >JavaScript</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=html"
             >HTML</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/search?q=css"
             >CSS</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/11/programmers-picnic_17.html"
             >Programmer's Picnic</a
           >
@@ -1240,49 +1269,49 @@
         >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/p/programmers-picnic-master-task-system_11.html"
             >Master Task System</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/programmers-picnic-cosine-similarity.html"
             >Cosine Similarity Maker</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/search-visualizers-linearsearch.html"
             >Linear and Binary Search Visualizer (Iterative and Recursive)</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/blog-post_7.html"
             >People Direction Counter (Full Line Crossing)</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/programmers-picnic.html"
             >Programmers' Picnic Memories</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/math-visualization-addition.html"
             >Math-Visualization-Addition-Multiplication-Division-Factorials</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/programmers-picnic-whiteboard.html"
             >Whiteboard</a
           >
@@ -1304,21 +1333,21 @@
         >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/09/image-outlines.html"
             >Get Images Outline</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/11/cartoonify-js-demo-body-font-family.html"
             >Cartoonify</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/11/hover-magnification.html"
             >Hover Magnification</a
           >
@@ -1337,20 +1366,20 @@
         >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/httpswwwlebest-freelancing-websites-for.html"
             >Freelancing</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/resume.html"
             >Resume Maker</a
           >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/httpsbest-job-and-internship-websites.html"
             >Jobs & Internships</a
           >
@@ -1369,7 +1398,7 @@
         >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/11/programmers-picnic.html"
             >Linear Search</a
           >
@@ -1391,14 +1420,14 @@
         >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/11/programmers-picnic.html"
             >Bubble Sort Visualization</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/10/counting-sort-5-row-visualizer-single_12.html"
             >Counting Sort</a
           >
@@ -1420,47 +1449,47 @@
         >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/python-starter-club_22.html"
             >Python Starter Home</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/python-starter-club-day0.html"
             >Python Starter Syllabus</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/python-starter-club-day1.html"
             >Python Starter Day 1</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/python-starter-club-day-2.html"
             >Python Starter Day 2</a
           >
 
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2025/12/python-starter-club-day-3.html"
             >Python Starter Day 3</a
           >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2026/01/python-starter-club-day4.html"
             >Python Starter Day 4</a
           >
           <a
             class="crx-keyword"
-            target="_blank"
+            target="champak"
             href="https://www.learnwithchampak.live/2026/01/python-starter-club-day5.html"
             >Python Starter Day 5</a
           >
@@ -1503,7 +1532,7 @@
           If the editor doesn’t load,
           <a
             href="https://www.learnwithchampak.live/2026/01/programmers-picnic-python-editor.html"
-            target="_blank"
+            target="champak"
             rel="noopener"
             style="color: var(--crx-accent-dark); font-weight: 800"
             >open it in a new tab</a
@@ -1558,7 +1587,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
             </p>
             <a
               href="https://www.learnwithchampak.live/2025/10/matplotlib-in-python-bar-charts.html"
-              target="_blank"
+              target="champak"
               class="btn.primary btn"
               style="padding: 8px 10px; font-size: 14px"
               >View Example</a
@@ -1572,7 +1601,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
             </p>
             <a
               href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-linegraphs-trends.html"
-              target="_blank"
+              target="champak"
               class="btn.primary btn"
               style="padding: 8px 10px; font-size: 14px"
               >Open Tutorial</a
@@ -1586,7 +1615,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
             </p>
             <a
               href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-scatter-plots.html"
-              target="_blank"
+              target="champak"
               class="btn.primary btn"
               style="padding: 8px 10px; font-size: 14px"
               >Try Now</a
@@ -1648,7 +1677,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
                 ">": "&gt;",
                 '"': "&quot;",
                 "'": "&#39;",
-              }[m])
+              })[m],
           );
 
         /* ===== Mobile menu behaviour (open/close, close on outside click / Escape) ===== */
@@ -1669,7 +1698,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
           // trap focus to first interactive element in menu
           setTimeout(
             () => mobileMenu.querySelector("a, button, input")?.focus(),
-            120
+            120,
           );
           document.body.style.overflow = "hidden"; // lock background scroll while menu is open
         }
@@ -1729,7 +1758,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
           if (e.key === "Enter") mobileSearchBtn.click();
         });
 
-        /* ===== HEADER SEARCH (JSONP) — suggestions rendered as links with target="_blank" ===== */
+        /* ===== HEADER SEARCH (JSONP) — suggestions rendered as links with target="champak" ===== */
         (function headerSearch() {
           const input = $("#ls-search-input");
           const btn = $("#ls-search-btn");
@@ -1809,26 +1838,26 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
               .filter(
                 (p) =>
                   p.title.toLowerCase().includes(q) ||
-                  p.snippet.toLowerCase().includes(q)
+                  p.snippet.toLowerCase().includes(q),
               )
               .slice(0, 8);
             if (!matched.length) {
               suggBox.innerHTML =
                 '<div class="ls-item">No quick matches — press Enter to view full results.</div>';
             } else {
-              // Render as anchor tags with target="_blank"
+              // Render as anchor tags with target="champak"
               suggBox.innerHTML = matched
                 .map(
                   (p) =>
                     `<a class="ls-item" href="${
                       p.url
-                    }" target="_blank" title="${escapeHtml(
-                      p.title
+                    }" target="champak" title="${escapeHtml(
+                      p.title,
                     )}"><strong>${escapeHtml(
-                      p.title
+                      p.title,
                     )}</strong><div style="font-size:12px;color:#475569;margin-top:6px;">${escapeHtml(
-                      p.snippet
-                    )}</div></a>`
+                      p.snippet,
+                    )}</div></a>`,
                 )
                 .join("");
             }
@@ -1940,7 +1969,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
               let thumb = e.media$thumbnail?.url || "";
               if (!thumb) {
                 const m = (e.content?.$t || "").match(
-                  /<img[^>]+src=["']([^"']+)["']/i
+                  /<img[^>]+src=["']([^"']+)["']/i,
                 );
                 thumb = m ? m[1] : "";
               }
@@ -1956,22 +1985,22 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
 
               row.innerHTML = `
             <img class="crx-thumb-square crx-avatar" src="${thumb}" alt="${escapeHtml(
-                title
-              )}">
+              title,
+            )}">
             <div style="flex:1;min-width:0;">
               <div style="display:flex;align-items:center;gap:10px;">
-                <div class="crx-post-title"><a href="${url}" target="_blank" style="color:white;text-decoration:none;"><span style='color:white;font-size:18px'>${escapeHtml(
-                title
-              )}</span></a></div>
+                <div class="crx-post-title"><a href="${url}" target="champak" style="color:white;text-decoration:none;"><span style='color:white;font-size:18px'>${escapeHtml(
+                  title,
+                )}</span></a></div>
                 <div style="margin-left:auto;color:var(--muted);font-size:12px;">${escapeHtml(
-                  published
+                  published,
                 )}</div>
               </div>
               <div class="crx-post-meta">${escapeHtml(snippet)}</div>
             </div>
             <img class="crx-avatar-circle" src="${thumb}" alt="${escapeHtml(
-                title
-              )}">
+              title,
+            )}">
           `;
               container.appendChild(row);
             });
@@ -1991,7 +2020,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
             const rows = $$(".crx-card-row", listContainer);
             const total = rows.length;
             const visible = rows.filter(
-              (r) => r.style.display !== "none"
+              (r) => r.style.display !== "none",
             ).length;
             if (total === 0) countEl.textContent = "No posts";
             else countEl.textContent = `Showing ${visible} of ${total} posts`;
@@ -2084,7 +2113,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
                   }
                 });
               },
-              { threshold: 0.12 }
+              { threshold: 0.12 },
             );
             els.forEach((e) => obs.observe(e));
           }
@@ -2100,8 +2129,10 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
         })();
       })();
     </script>
+
     <script src="https://programmer-s-picnic.github.io/json-images/find-on-page.js"></script>
     <script src="https://programmer-s-picnic.github.io/json-images/imgshow.js"></script>
     <script src="https://programmer-s-picnic.github.io/json-images/hometag.js"></script>
+    <script src="https://programmer-s-picnic.github.io/json-images/champak-links.js"></script>
   </body>
 </html>
