@@ -1665,30 +1665,145 @@
         </div>
       </section>
 
-      <section class="crx-section coder js-coder crx_fade_in" id="js-section">
-        <h2>⚙️ JavaScript Coder</h2>
-        <p style="margin-bottom: 12px; color: var(--muted)">
-          Try JavaScript snippets and see console output below.
-        </p>
-        <textarea id="jsEditor" class="editor" style="min-height: 160px">
-// Example
-console.log('Hello from Champak!');
-for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
-        >
-        <div
-          style="display: flex; gap: 8px; align-items: center; margin-top: 10px"
-        >
-          <button id="js-run" class="btn primary">Run Code</button>
-          <button id="js-clear" class="btn ghost">Clear Output</button>
-          <button id="js-download" class="btn ghost">Download .js</button>
-        </div>
-        <div
-          id="js-output"
-          class="output"
-          style="margin-top: 12px; min-height: 80px"
-        ></div>
-      </section>
+     <!----------------------------------------->
+ <main class="col-right">
+        <section class="card">
+          <div class="hd">
+            <h2>Embedded JavaScript Editor</h2>
+            <p>
+              Paste code here and run. If the iframe ever blocks, use “Open
+              Editor ↗”.
+            </p>
+          </div>
+          <div class="bd">
+            <div
+              class="iframeWrap"
+              role="region"
+              aria-label="Embedded JavaScript editor"
+            >
+              <iframe
+                id="editorFrame"
+                src="https://programmer-s-picnic.github.io/lesson-viewer/java-script/editor/"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                allow="clipboard-read; clipboard-write"
+              ></iframe>
+            </div>
 
+            <div class="hr"></div>
+
+            <div class="grid2">
+              <div>
+                <div class="code">
+                  <button class="copy" data-copy="#starterSolve">Copy</button>
+                  <div id="starterSolve">
+                    // Competitive-style starter function solve(input){ input =
+                    input.trim(); // TODO: parse input and compute return input;
+                    // replace } // Example runner (optional) const fs = (typeof
+                    require !== "undefined") ? require("fs") : null; const input
+                    = fs ? fs.readFileSync(0, "utf8") : ""; if (input)
+                    console.log(String(solve(input)));
+                  </div>
+                </div>
+                <div class="muted" style="margin-top: 8px">
+                  Use this template when you’re solving input/output style
+                  problems (Problem Mode).
+                </div>
+              </div>
+
+              <div>
+                <div class="code">
+                  <button class="copy" data-copy="#starterDom">Copy</button>
+                  <div id="starterDom">
+                    // DOM starter (use this in a normal web page) // Example:
+                    button click counter document.body.innerHTML = `
+                    <div style="font-family: system-ui; padding: 16px">
+                      <h2>Click Counter</h2>
+                      <button id="btn">Click me</button>
+                      <p id="out">0</p>
+                    </div>
+                    `; let c = 0;
+                    document.querySelector("#btn").addEventListener("click", ()
+                    => { c++; document.querySelector("#out").textContent = c;
+                    });
+                  </div>
+                </div>
+                <div class="muted" style="margin-top: 8px">
+                  Use this to practice events and DOM manipulation quickly.
+                </div>
+              </div>
+            </div>
+
+            <details style="margin-top: 12px" open>
+              <summary>Mini Quizzes (self-check)</summary>
+              <div class="muted" style="margin-top: 8px">
+                <div id="quizBox"></div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Mini Projects (build + show)</summary>
+              <div class="muted" style="margin-top: 8px">
+                <ul style="margin: 8px 0 0; padding-left: 18px">
+                  <li>
+                    <b>Project 1:</b> To-do app (add/delete/complete, store in
+                    localStorage)
+                  </li>
+                  <li>
+                    <b>Project 2:</b> Weather dashboard (fetch API, render
+                    cards, loading/error states)
+                  </li>
+                  <li>
+                    <b>Project 3:</b> Quiz app (MCQ + timer + score + review
+                    answers)
+                  </li>
+                  <li>
+                    <b>Project 4:</b> Expense tracker (income/expense, totals,
+                    charts later)
+                  </li>
+                  <li>
+                    <b>Project 5:</b> DOM game (Whack-a-mole / memory game /
+                    typing speed test)
+                  </li>
+                </ul>
+                <div class="hr"></div>
+                <b>Rule:</b> Every project must have:
+                <ul style="margin: 6px 0 0; padding-left: 18px">
+                  <li>Clean UI + responsive layout</li>
+                  <li>Data saved (localStorage) OR fetched from API</li>
+                  <li>Shareable output (screenshot + hosted link)</li>
+                </ul>
+              </div>
+            </details>
+
+            <details>
+              <summary>Best practice habits</summary>
+              <div class="muted" style="margin-top: 8px">
+                <ul style="margin: 8px 0 0; padding-left: 18px">
+                  <li>Always write small tests: “input → expected output”.</li>
+                  <li>
+                    Prefer <code>const</code>, use <code>let</code> when
+                    reassignment is needed.
+                  </li>
+                  <li>
+                    Use <code>===</code> instead of <code>==</code> (avoid
+                    coercion surprises).
+                  </li>
+                  <li>
+                    Learn array methods: <code>map</code>, <code>filter</code>,
+                    <code>reduce</code>.
+                  </li>
+                  <li>
+                    For async: always handle errors (<code>try/catch</code> or
+                    <code>.catch</code>).
+                  </li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </section>
+      </main>
+     <!---------------------------------------->
       <section
         class="crx-section ls-matplot crx_fade_in"
         id="matplotlib-section"
@@ -2180,50 +2295,7 @@ for(let i=1;i<=5;i++){console.log('Count:',i);}</textarea
           countEl.textContent = "Loading…";
           setTimeout(() => window.updateExploreCount(), 400);
         })();
-        /* ===== JS runner ===== */
-        (function jsRunner() {
-          const editor = document.getElementById("jsEditor");
-          const output = document.getElementById("js-output");
-          const runBtn = document.getElementById("js-run");
-          const clearBtn = document.getElementById("js-clear");
-          const downloadBtn = document.getElementById("js-download");
-
-          const appendOut = (text) => {
-            output.textContent += text + "\n";
-            output.scrollTop = output.scrollHeight;
-          };
-
-          runBtn.addEventListener("click", () => {
-            output.textContent = "";
-            const code = editor.value;
-            const origLog = console.log;
-            console.log = (...args) => {
-              appendOut(args.join(" "));
-              origLog(...args);
-            };
-            try {
-              const fn = new Function(code);
-              const res = fn();
-              if (res !== undefined) appendOut("Return: " + res);
-            } catch (e) {
-              appendOut("Error: " + (e && e.message ? e.message : e));
-            }
-            console.log = origLog;
-          });
-
-          clearBtn.addEventListener("click", () => (output.textContent = ""));
-          downloadBtn.addEventListener("click", () => {
-            const blob = new Blob([editor.value], { type: "text/javascript" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "script.js";
-            a.click();
-            URL.revokeObjectURL(url);
-          });
-        })();
-
-        /* ===== Scroll reveal + back-to-top ===== */
+        
         (function scrollRevealBackTop() {
           const els = document.querySelectorAll(".crx_fade_in");
           if (els.length) {
