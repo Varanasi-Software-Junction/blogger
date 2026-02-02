@@ -1,531 +1,1403 @@
+/* ==========================================================
+   Programmer’s Picnic — GOD MODE Slideshow v2.1
+   - Clean engine (class-based)
+   - Memory Timeline mode (thumbnails)
+   - Bookmarks (localStorage)
+   - Lite Mobile mode (auto + toggle)
+   - Favorites-only playback mode ✅
+   ========================================================== */
 
-// Fisher-Yates Shuffle 🔀
-function shuffleArray(arr) {
+(() => {
+  "use strict";
+
+  /* ----------------------------- CONFIG ----------------------------- */
+  const CFG = {
+    STORAGE: {
+      BOOKMARKS_KEY: "pp_bookmarks_v2",
+      SETTINGS_KEY: "pp_settings_v2",
+    },
+    TIMING: {
+      SHARP_TIME: 6000,
+      TRANSITION_TIME: 1800,
+      START_FADE_OUT_MS: 900,
+      CLARITY_ENTER_DELAY: 700,
+      IMAGE_FADE_IN_DELAY: 200,
+      CAPTION_1_DELAY: 2000,
+      CAPTION_2_DELAY: 2600,
+      KEN_BURNS_MS: 7000,
+    },
+    AUDIO: { SRC: "Picnic/0.mp3", VOLUME: 0.6 },
+    UI: {
+      autoCreateControls: true,
+      timelineThumbsMax: 220, // safety
+      timelineThumbSize: 52,
+    },
+    QUALITY: {
+      liteOnSmallScreen: true,
+      smallScreenPx: 768,
+      liteOnLowMemory: true,
+      lowMemoryGB: 4,
+      liteOnReducedMotion: true,
+    },
+  };
+
+  /* ----------------------------- HELPERS ----------------------------- */
+  const $ = (id) => document.getElementById(id);
+
+  function clamp(n, a, b) {
+    return Math.max(a, Math.min(b, n));
+  }
+
+  function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-}
+  }
 
-
-// 🌼 Programmer’s Picnic — Maha Divine GOD MODE Slideshow
-
-let images = [];
-let currentSlide = 0;
-let autoSlideInterval = null;
-
-const SLIDE_SHARP_TIME = 6000; // 6 seconds full clarity
-const TRANSITION_TIME = 1800;
-const TOTAL_TIME = SLIDE_SHARP_TIME + TRANSITION_TIME;
-
-// Elements
-const slideImg = document.getElementById("slideImg");
-const overlay = document.getElementById("pp-gallery-overlay");
-const startScreen = document.getElementById("startScreen");
-const progressBar = document.getElementById("progressBar");
-const progressContainer = document.getElementById("progressContainer");
-const photoCounter = document.getElementById("photoCounter");
-const musicBtn = document.getElementById("musicBtn");
-const petalLayer = document.getElementById("petalLayer");
-const fireflyLayer = document.getElementById("fireflyLayer");
-const bokehLayer = document.getElementById("bokehLayer");
-const captionLine1 = document.getElementById("captionLine1");
-const captionLine2 = document.getElementById("captionLine2");
-
-// 🎵 Spiritual background music
-const audio = new Audio("Picnic/0.mp3");
-audio.loop = true;
-audio.volume = 0.6;
-
-// 🌸 GOD MODE particle intensity control
-let clarityBoost = false;
-
-// Spiritual quote list (for Option E)
-const spiritualQuotes = [
-  "Every bug I fixed as a student is now a story I smile about.",
-  "Old projects feel like handwritten letters from my younger self.",
-  "In programming and in life, the first draft is allowed to be ugly.",
-  "Some of my favorite memories are just me, a cheap laptop, and impossible dreams.",
-  "Refactoring code taught me I can refactor my life too.",
-  "The first time my code ran successfully felt like the universe nodded back at me.",
-  "Your future self is quietly hoping you don’t give up today.",
-  "Every error message is just a mentor with bad communication skills.",
-  "We don’t really delete old code; we just hide our growth inside git history.",
-  "The nights you stayed up coding will one day feel like sacred pilgrimages.",
-  "Sometimes the bravest thing you can do is run the program again.",
-  "You’re not starting from scratch, you’re starting from experience.",
-  "The best tutorials I ever had were my own mistakes.",
-  "When life feels stuck, remember: even infinite loops can be broken.",
-  "One day you’ll miss the time when Hello World was your biggest challenge.",
-  "Behind every confident programmer is a search history full of doubts.",
-  "Your childhood curiosity is still inside you, it just learned new keyboard shortcuts.",
-  "Some bugs are just reminders that you’re trying something you’ve never done before.",
-  "The code that embarrasses you today is proof that you’ve grown.",
-  "Sometimes ‘deploy’ is less scary than saying what you really feel.",
-  "We cache our fears but we can also invalidate them.",
-  "Your dreams are not deprecated, just waiting for the next release.",
-  "Even the strongest developer started with copy–paste and confusion.",
-  "One day you’ll open an old project and realize how far you’ve really come.",
-  "The keyboard was my first time machine; it took me to all the futures I imagined.",
-  "We version-control code, not people. You’re allowed to change.",
-  "Every TODO comment in life is a promise that you still believe in tomorrow.",
-  "You are not behind; your path just has custom requirements.",
-  "Some friendships feel like pair-programming for the soul.",
-  "The same way we handle exceptions in code, we can forgive ourselves in life.",
-  "Childhood was just life in sandbox mode.",
-  "The first time I pressed Enter on a scary command and nothing broke, I grew a little braver.",
-  "Hope is just the human version of lazy loading.",
-  "Your passion doesn’t expire; it only waits for better bandwidth.",
-  "Some days you optimize performance, some days you just avoid crashing. Both are valid.",
-  "We debug code with prints and hearts with conversations.",
-  "The projects that never launched still trained your courage.",
-  "Your younger self didn’t have your skills, but they had your courage. Honor both.",
-  "The same hands that typed ‘I can’t’ also typed your best work.",
-  "Every commit says: I was here, I tried, I learned.",
-  "The compiler doesn’t care how many times you failed, only what you wrote now.",
-  "Simplicity in code and sincerity in life are both hard and worth it.",
-  "Sometimes the most powerful feature you can add is rest.",
-  "Not all progress shows on the screen; some of it grows quiet and deep inside you.",
-  "The bugs you fear at 2 AM will be jokes in a few years.",
-  "You don’t outgrow dreams, you just upgrade them.",
-  "Every ‘why is this not working’ brought you closer to ‘oh, now I get it’.",
-  "The lab, the café, the hostel roof—our first offices were full of stars and wifi drops.",
-  "A good childhood memory is like a global constant in your heart.",
-  "Life won’t always compile, but that doesn’t mean the story is broken.",
-  "Sometimes the repository you need to pull from is your own past courage.",
-  "You are the only person who has seen every one of your comebacks.",
-  "Failures age like wine; one day they turn into wisdom and stories.",
-  "We used to share games and songs; now we share repos—but the love is the same.",
-  "The first time someone asked you for help with code, you became a teacher.",
-  "Your code may run on silicon, but it was powered by hope and stubbornness.",
-  "Growing up feels like moving from print statements to proper logging.",
-  "The moments you almost quit became the foundations you stand on now.",
-  "Memories are just snapshots in the cloud of your mind—worth backing up often.",
-  "A single kind teacher or friend can change your whole architecture.",
-  "Don’t compare your chapter one to someone else’s production build.",
-  "Your childhood dreams were never silly; they were your earliest user stories.",
-  "Even when you feel lost, your heart still remembers the way home.",
-  "One person believing in you can feel like switching from 2G to fiber.",
-  "You learned loops long before code—waking, trying, failing, trying again.",
-  "The first time you solved a problem alone, the world quietly got bigger.",
-  "Not all heroes wear capes; some wear cracked spectacles and explain pointers patiently.",
-  "It’s okay if today’s commit is small; it still moves the story forward.",
-  "The screen once felt bigger than the world; now the world fits inside your screen.",
-  "Courage is pressing run even when you’re sure you missed a semicolon.",
-  "You owe it to your younger self to at least try.",
-  "The best optimization is removing the fear of starting.",
-  "One day you’ll miss these messy, half-finished dreams.",
-  "Every language you learned—C, Java, Python—was just another way of saying ‘I want to create’.",
-  "Silently grinding at a corner desk is its own form of prayer.",
-  "The projects that failed taught you how to build a life that won’t.",
-  "You are not just debugging code; you’re debugging generational doubt.",
-  "Childhood evenings with cheap computers and big hopes were priceless investments.",
-  "You learned recursion from life itself: the same lessons repeating until you understood.",
-  "Some of the sweetest moments are when an old friend pings you like no time has passed.",
-  "The day you realized you could teach others was your real graduation.",
-  "We outgrow classrooms but never outgrow learning.",
-  "A single working prototype is worth a thousand perfect ideas.",
-  "If life were an IDE, your heart is the place where real-time errors show up first.",
-  "Every time you chose learning over ego, you leveled up.",
-  "The feeling of shipping your first project stays forever in your personal changelog.",
-  "You can always rewrite code; you can also rewrite the story you tell yourself.",
-  "Past you would be proud of how far you’ve come with so little.",
-  "Even when no one was watching, you kept trying. That’s your true resume.",
-  "Sometimes the bravest refactor is to walk away from what’s breaking you.",
-  "The bugs will not remember you, but the people you helped will.",
-  "You learned latency from old internet connections and patience from life.",
-  "Growing older is just adding new libraries of wisdom to your mind.",
-  "Some of your best ideas were born in small rooms with big dreams.",
-  "Your keyboard has heard your doubts, your prayers, and your victories.",
-  "Behind every ‘I’ll just try once more’ lives a quiet miracle.",
-  "The kid who loved breaking toys is the engineer who loves understanding systems.",
-  "You were compiling courage long before you compiled code.",
-  "The algorithm of life is simple: try, learn, share, repeat.",
-  "The best backup plan is faith in your ability to learn again.",
-  "When you teach someone, you let your memories become their shortcuts.",
-  "You can’t time-travel back to childhood, but you can protect today’s curiosity.",
-  "Every time you choose kindness over cleverness, your heart gets an upgrade.",
-  "One day these hard days will be the nostalgia that makes you smile softly.",
-  "Your story is still in active development; don’t judge it by a single failed build."
-];
-//************************************************** */
-const progressTooltip = document.createElement("div");
-progressTooltip.style.position = "fixed";
-progressTooltip.style.padding = "4px 8px";
-progressTooltip.style.borderRadius = "8px";
-progressTooltip.style.fontSize = "12px";
-progressTooltip.style.background = "rgba(90, 40, 0, 0.9)";
-progressTooltip.style.color = "#ffe9c4";
-progressTooltip.style.pointerEvents = "none";
-progressTooltip.style.transform = "translate(-50%, -120%)";
-progressTooltip.style.whiteSpace = "nowrap";
-progressTooltip.style.zIndex = "1000000";
-progressTooltip.style.display = "none";
-document.body.appendChild(progressTooltip);
-//**************************************** */
-// ------------------------------------------------------
-// Preload images from hidden DOM container
-// ------------------------------------------------------
-function preloadImages() {
-    const stored = document.querySelectorAll("#picnic-images img");
-    stored.forEach((img) => {
-        if (img.src) {
-            images.push({ src: img.src });
-        }
-    });
-     shuffleArray(images);
-}
-preloadImages();
-
-// ------------------------------------------------------
-// Helpers for captions
-// ------------------------------------------------------
-function prettifyFilename(src) {
+  function loadJSON(key, fallback) {
     try {
-        let name = src.split("/").pop().split("?")[0]; // last part, remove query
-        name = name.replace(/\.[^/.]+$/, "");          // remove extension
-        name = name.replace(/[_-]+/g, " ");            // underscores & dashes to spaces
-        name = name.replace(/\s+/g, " ").trim();
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      return JSON.parse(raw);
+    } catch {
+      return fallback;
+    }
+  }
 
-        if (!name) return "Programmer’s Picnic Memory";
+  function saveJSON(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {}
+  }
 
-        // If it's mostly numbers, just call it a memory
-        if (/^\d+$/.test(name.replace(/\s/g, ""))) {
-            return "Programmer’s Picnic Memory";
+  function prefersReducedMotion() {
+    return !!(
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }
+
+  function deviceMemoryGB() {
+    const dm = navigator.deviceMemory;
+    return typeof dm === "number" ? dm : null;
+  }
+
+  function prettifyFilename(src) {
+    try {
+      let name = src.split("/").pop().split("?")[0];
+      name = name.replace(/\.[^/.]+$/, "");
+      name = name.replace(/[_-]+/g, " ");
+      name = name.replace(/\s+/g, " ").trim();
+
+      if (!name) return "Programmer’s Picnic Memory";
+      if (/^\d+$/.test(name.replace(/\s/g, "")))
+        return "Programmer’s Picnic Memory";
+
+      name = name
+        .toLowerCase()
+        .split(" ")
+        .map((w) => (w ? w.charAt(0).toUpperCase() + w.slice(1) : ""))
+        .join(" ");
+      return name;
+    } catch {
+      return "Programmer’s Picnic Memory";
+    }
+  }
+
+  /* ----------------------------- ENGINE ----------------------------- */
+  class PicnicSlideshowV2 {
+    constructor() {
+      // DOM refs
+      this.slideImg = $("slideImg");
+      this.overlay = $("pp-gallery-overlay");
+      this.startScreen = $("startScreen");
+      this.progressBar = $("progressBar");
+      this.progressContainer = $("progressContainer");
+      this.photoCounter = $("photoCounter");
+      this.musicBtn = $("musicBtn");
+      this.petalLayer = $("petalLayer");
+      this.fireflyLayer = $("fireflyLayer");
+      this.bokehLayer = $("bokehLayer");
+      this.captionLine1 = $("captionLine1");
+      this.captionLine2 = $("captionLine2");
+      this.nextBtn = $("nextBtn");
+      this.prevBtn = $("prevBtn");
+
+      // runtime
+      this.images = []; // master list
+      this.current = 0; // index into active playlist
+      this.autoTimer = null;
+      this.runToken = 0;
+      this.isRunning = false;
+
+      // settings
+      this.settings = loadJSON(CFG.STORAGE.SETTINGS_KEY, {
+        lite: null, // null=auto
+        timeline: false,
+        favoritesOnly: false, // ✅ new
+      });
+
+      // bookmarks
+      this.bookmarks = loadJSON(CFG.STORAGE.BOOKMARKS_KEY, {
+        bySrc: {},
+        order: [],
+      });
+
+      // playlist (active playback list)
+      // contains indices into this.images
+      this.playlist = {
+        mode: this.settings.favoritesOnly ? "favorites" : "all",
+        indices: [],
+        posByMasterIndex: new Map(), // masterIndex -> playlistPos
+      };
+
+      // particles via rAF
+      this.rafId = null;
+      this.particleState = {
+        clarityBoost: false,
+        lastPetal: 0,
+        lastFirefly: 0,
+        lastBokeh: 0,
+      };
+
+      // audio
+      this.audio = new Audio(CFG.AUDIO.SRC);
+      this.audio.loop = true;
+      this.audio.volume = CFG.AUDIO.VOLUME;
+
+      // tooltip
+      this.progressTooltip = this.createProgressTooltip();
+
+      // quotes
+      this.quotes = window.spiritualQuotes || [];
+      if (!this.quotes.length) this.quotes = this.defaultQuotes();
+
+      // derived
+      this.totalTime = CFG.TIMING.SHARP_TIME + CFG.TIMING.TRANSITION_TIME;
+
+      // timeline
+      this.timeline = { wrap: null, rail: null, isBuilt: false };
+
+      // controls
+      this.controls = {
+        wrap: null,
+        btnLite: null,
+        btnTimeline: null,
+        btnBookmark: null,
+        btnBookmarks: null,
+        btnFavOnly: null, // ✅ new
+      };
+
+      // bind handlers
+      this.onVisibility = this.onVisibility.bind(this);
+      this.onResize = this.onResize.bind(this);
+      this.onOverlayMouseOver = this.onOverlayMouseOver.bind(this);
+      this.onOverlayMouseOut = this.onOverlayMouseOut.bind(this);
+      this.onOverlayTouchStart = this.onOverlayTouchStart.bind(this);
+      this.onOverlayTouchEnd = this.onOverlayTouchEnd.bind(this);
+      this.onProgressClick = this.onProgressClick.bind(this);
+      this.onProgressMove = this.onProgressMove.bind(this);
+      this.onProgressLeave = this.onProgressLeave.bind(this);
+
+      this.touchStartX = 0;
+    }
+
+    /* ----------------------------- INIT ----------------------------- */
+    init() {
+      this.assertDom();
+      this.injectV2Styles();
+      this.loadImagesFromHiddenContainer();
+      if (!this.images.length) return;
+
+      shuffleArray(this.images);
+
+      // build initial playlist
+      this.rebuildPlaylist(true);
+
+      if (CFG.UI.autoCreateControls) this.ensureControlsUI();
+      this.bindEvents();
+
+      // placeholder
+      this.slideImg.src = this.images[0].src;
+
+      this.applyQualityMode();
+
+      if (this.settings.timeline) this.enableTimeline(true);
+
+      // sync favorites button label
+      this.syncFavoritesButton();
+
+      return true;
+    }
+
+    assertDom() {
+      const needed = [
+        this.slideImg,
+        this.overlay,
+        this.startScreen,
+        this.progressBar,
+        this.progressContainer,
+        this.photoCounter,
+        this.musicBtn,
+        this.petalLayer,
+        this.fireflyLayer,
+        this.bokehLayer,
+        this.captionLine1,
+        this.captionLine2,
+        this.nextBtn,
+        this.prevBtn,
+      ];
+      if (needed.some((x) => !x))
+        console.warn("PicnicSlideshowV2: Missing required DOM elements.");
+    }
+
+    loadImagesFromHiddenContainer() {
+      const stored = document.querySelectorAll("#picnic-images img");
+      stored.forEach((img) => {
+        if (img && img.src) this.images.push({ src: img.src });
+      });
+    }
+
+    /* ----------------------------- PLAYLIST (ALL vs FAVORITES) ----------------------------- */
+    rebuildPlaylist(keepCurrentIfPossible = false) {
+      const wantFav = !!this.settings.favoritesOnly;
+
+      let indices;
+      if (!wantFav) {
+        indices = this.images.map((_, i) => i);
+        this.playlist.mode = "all";
+      } else {
+        const bookmarkedSrcs = new Set(this.bookmarks.order);
+        indices = this.images
+          .map((x, i) => (bookmarkedSrcs.has(x.src) ? i : -1))
+          .filter((i) => i >= 0);
+
+        if (!indices.length) {
+          // no favorites -> force back to all
+          this.settings.favoritesOnly = false;
+          saveJSON(CFG.STORAGE.SETTINGS_KEY, this.settings);
+          indices = this.images.map((_, i) => i);
+          this.playlist.mode = "all";
+          this.toast("No bookmarks yet — Favorites mode needs ⭐ bookmarks.");
+        } else {
+          this.playlist.mode = "favorites";
+        }
+      }
+
+      this.playlist.indices = indices;
+      this.playlist.posByMasterIndex = new Map();
+      indices.forEach((masterIdx, pos) =>
+        this.playlist.posByMasterIndex.set(masterIdx, pos),
+      );
+
+      if (keepCurrentIfPossible) {
+        // try to keep currently displayed image stable across rebuild
+        // current currently points to playlist position; translate to master index first
+        const currentMaster = this.getCurrentMasterIndexSafe();
+        if (
+          currentMaster != null &&
+          this.playlist.posByMasterIndex.has(currentMaster)
+        ) {
+          this.current = this.playlist.posByMasterIndex.get(currentMaster);
+        } else {
+          this.current = 0;
+        }
+      } else {
+        this.current = clamp(this.current, 0, this.playlist.indices.length - 1);
+      }
+
+      // rebuild timeline if visible (so it switches to favorites thumbnails)
+      if (this.settings.timeline) {
+        this.destroyTimeline();
+        this.buildTimeline();
+      }
+
+      this.syncFavoritesButton();
+    }
+
+    getCurrentMasterIndexSafe() {
+      const idx = this.playlist.indices[this.current];
+      return typeof idx === "number" ? idx : null;
+    }
+
+    activeCount() {
+      return this.playlist.indices.length;
+    }
+
+    /* ----------------------------- QUALITY ----------------------------- */
+    autoLiteDecision() {
+      const w = window.innerWidth || 1024;
+      const small =
+        CFG.QUALITY.liteOnSmallScreen && w <= CFG.QUALITY.smallScreenPx;
+      const lowMem =
+        CFG.QUALITY.liteOnLowMemory &&
+        (deviceMemoryGB() !== null
+          ? deviceMemoryGB() <= CFG.QUALITY.lowMemoryGB
+          : false);
+      const reduced = CFG.QUALITY.liteOnReducedMotion && prefersReducedMotion();
+      return small || lowMem || reduced;
+    }
+
+    isLite() {
+      if (this.settings.lite === true) return true;
+      if (this.settings.lite === false) return false;
+      return this.autoLiteDecision();
+    }
+
+    applyQualityMode() {
+      const lite = this.isLite();
+      document.documentElement.classList.toggle("pp-lite", lite);
+      if (this.controls.btnLite) {
+        this.controls.btnLite.textContent = lite
+          ? "📱 Lite: ON"
+          : "✨ Lite: OFF";
+      }
+    }
+
+    toggleLite() {
+      const cur = this.settings.lite;
+      const next = cur === null ? true : cur === true ? false : null;
+      this.settings.lite = next;
+      saveJSON(CFG.STORAGE.SETTINGS_KEY, this.settings);
+      this.applyQualityMode();
+    }
+
+    /* ----------------------------- CONTROLS UI ----------------------------- */
+    ensureControlsUI() {
+      if (this.controls.wrap) return;
+
+      const wrap = document.createElement("div");
+      wrap.id = "pp-v2-controls";
+      wrap.style.cssText = `
+        position: fixed;
+        left: 14px;
+        bottom: 14px;
+        z-index: 1000001;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 16px;
+        background: rgba(255, 245, 225, 0.82);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(90,40,0,0.12);
+        box-shadow: 0 18px 40px rgba(120,60,10,0.18);
+        user-select: none;
+        flex-wrap: wrap;
+      `;
+
+      const mkBtn = (id, text) => {
+        const b = document.createElement("button");
+        b.id = id;
+        b.type = "button";
+        b.textContent = text;
+        b.style.cssText = `
+          appearance: none;
+          border: 1px solid rgba(90,40,0,0.18);
+          background: rgba(255, 210, 155, 0.75);
+          color: #5a2d00;
+          font-weight: 800;
+          padding: 8px 10px;
+          border-radius: 12px;
+          cursor: pointer;
+          font-size: 13px;
+        `;
+        return b;
+      };
+
+      const btnLite = mkBtn("ppBtnLite", "✨ Lite");
+      const btnTimeline = mkBtn("ppBtnTimeline", "🕰️ Timeline");
+      const btnBookmark = mkBtn("ppBtnBookmark", "⭐ Bookmark");
+      const btnBookmarks = mkBtn("ppBtnBookmarks", "📌 Bookmarks");
+      const btnFavOnly = mkBtn("ppBtnFavOnly", "⭐ Favorites: OFF"); // ✅ new
+
+      wrap.appendChild(btnLite);
+      wrap.appendChild(btnTimeline);
+      wrap.appendChild(btnBookmark);
+      wrap.appendChild(btnBookmarks);
+      wrap.appendChild(btnFavOnly);
+
+      document.body.appendChild(wrap);
+
+      this.controls.wrap = wrap;
+      this.controls.btnLite = btnLite;
+      this.controls.btnTimeline = btnTimeline;
+      this.controls.btnBookmark = btnBookmark;
+      this.controls.btnBookmarks = btnBookmarks;
+      this.controls.btnFavOnly = btnFavOnly;
+
+      btnLite.addEventListener("click", () => this.toggleLite());
+      btnTimeline.addEventListener("click", () =>
+        this.enableTimeline(!this.settings.timeline),
+      );
+      btnBookmark.addEventListener("click", () =>
+        this.toggleBookmarkForCurrent(),
+      );
+      btnBookmarks.addEventListener("click", () => this.openBookmarksPanel());
+      btnFavOnly.addEventListener("click", () => this.toggleFavoritesOnly()); // ✅
+    }
+
+    syncFavoritesButton() {
+      if (!this.controls.btnFavOnly) return;
+      const on =
+        !!this.settings.favoritesOnly && this.playlist.mode === "favorites";
+      this.controls.btnFavOnly.textContent = on
+        ? "⭐ Favorites: ON"
+        : "⭐ Favorites: OFF";
+    }
+
+    toggleFavoritesOnly() {
+      this.settings.favoritesOnly = !this.settings.favoritesOnly;
+      saveJSON(CFG.STORAGE.SETTINGS_KEY, this.settings);
+
+      // rebuild playlist; try to keep current memory if it exists in new list
+      this.rebuildPlaylist(true);
+
+      // refresh current slide immediately
+      if (this.isRunning) {
+        this.stopAuto();
+        this.show();
+        this.startAuto();
+      }
+    }
+
+    /* ----------------------------- TIMELINE MODE ----------------------------- */
+    enableTimeline(on) {
+      this.settings.timeline = !!on;
+      saveJSON(CFG.STORAGE.SETTINGS_KEY, this.settings);
+
+      if (this.controls.btnTimeline) {
+        this.controls.btnTimeline.textContent = on
+          ? "🕰️ Timeline: ON"
+          : "🕰️ Timeline";
+      }
+
+      if (!on) {
+        this.destroyTimeline();
+        return;
+      }
+      this.buildTimeline();
+      this.syncTimelineActive();
+    }
+
+    buildTimeline() {
+      if (this.timeline.isBuilt) return;
+
+      const wrap = document.createElement("div");
+      wrap.id = "pp-timeline";
+      wrap.style.cssText = `
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 64px;
+        width: min(920px, 92vw);
+        z-index: 1000000;
+        padding: 10px;
+        border-radius: 18px;
+        background: rgba(255, 245, 225, 0.78);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(90,40,0,0.12);
+        box-shadow: 0 22px 55px rgba(120,60,10,0.22);
+      `;
+
+      const rail = document.createElement("div");
+      rail.style.cssText = `
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 6px 4px;
+        scroll-snap-type: x mandatory;
+      `;
+
+      // ✅ timeline follows active playlist (favorites timeline in favorites mode)
+      const activeMasterIndices = this.playlist.indices;
+      const max = Math.min(
+        activeMasterIndices.length,
+        CFG.UI.timelineThumbsMax,
+      );
+
+      for (let p = 0; p < max; p++) {
+        const masterIdx = activeMasterIndices[p];
+        const src = this.images[masterIdx].src;
+
+        const t = document.createElement("img");
+        t.alt = "memory";
+        t.loading = "lazy";
+        t.decoding = "async";
+        t.src = src;
+        t.dataset.playpos = String(p); // playlist position
+        t.style.cssText = `
+          width: ${CFG.UI.timelineThumbSize}px;
+          height: ${CFG.UI.timelineThumbSize}px;
+          object-fit: cover;
+          border-radius: 12px;
+          border: 2px solid rgba(90,40,0,0.10);
+          opacity: 0.88;
+          cursor: pointer;
+          scroll-snap-align: start;
+          flex: 0 0 auto;
+        `;
+
+        t.addEventListener("click", () => {
+          this.stopAuto();
+          this.goTo(p); // playlist position
+          this.startAuto();
+        });
+
+        rail.appendChild(t);
+      }
+
+      wrap.appendChild(rail);
+      document.body.appendChild(wrap);
+
+      this.timeline.wrap = wrap;
+      this.timeline.rail = rail;
+      this.timeline.isBuilt = true;
+
+      if (this.isLite()) wrap.style.bottom = "58px";
+    }
+
+    destroyTimeline() {
+      if (this.timeline.wrap) this.timeline.wrap.remove();
+      this.timeline.wrap = null;
+      this.timeline.rail = null;
+      this.timeline.isBuilt = false;
+    }
+
+    syncTimelineActive() {
+      if (!this.timeline.isBuilt || !this.timeline.rail) return;
+      const thumbs = this.timeline.rail.querySelectorAll("img[data-playpos]");
+      thumbs.forEach((img) => {
+        const pos = Number(img.dataset.playpos);
+        const active = pos === this.current;
+        img.style.opacity = active ? "1" : "0.78";
+        img.style.borderColor = active
+          ? "rgba(180, 83, 9, 0.9)"
+          : "rgba(90,40,0,0.10)";
+      });
+
+      const activeEl = this.timeline.rail.querySelector(
+        `img[data-playpos="${this.current}"]`,
+      );
+      if (activeEl) {
+        activeEl.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest",
+        });
+      }
+    }
+
+    /* ----------------------------- BOOKMARKS ----------------------------- */
+    toggleBookmarkForCurrent() {
+      const masterIdx = this.getCurrentMasterIndexSafe();
+      if (masterIdx == null) return;
+
+      const src = this.images[masterIdx]?.src;
+      if (!src) return;
+
+      const exists = !!this.bookmarks.bySrc[src];
+      if (exists) {
+        delete this.bookmarks.bySrc[src];
+        this.bookmarks.order = this.bookmarks.order.filter((x) => x !== src);
+        this.toast("Removed bookmark ⭐");
+      } else {
+        this.bookmarks.bySrc[src] = {
+          src,
+          title: prettifyFilename(src),
+          ts: Date.now(),
+        };
+        this.bookmarks.order.unshift(src);
+        this.bookmarks.order = Array.from(new Set(this.bookmarks.order)).slice(
+          0,
+          300,
+        );
+        this.toast("Bookmarked ⭐");
+      }
+
+      saveJSON(CFG.STORAGE.BOOKMARKS_KEY, this.bookmarks);
+      this.syncBookmarkButton();
+
+      // ✅ if in favorites-only mode, playlist changes immediately
+      if (this.settings.favoritesOnly) {
+        this.rebuildPlaylist(true);
+        if (this.isRunning) {
+          this.stopAuto();
+          this.show();
+          this.startAuto();
+        }
+      } else {
+        // if timeline is open, optional: keep showing all mode timeline; we keep active list
+        if (this.settings.timeline) this.syncTimelineActive();
+      }
+    }
+
+    syncBookmarkButton() {
+      if (!this.controls.btnBookmark) return;
+      const masterIdx = this.getCurrentMasterIndexSafe();
+      const src = masterIdx != null ? this.images[masterIdx]?.src : "";
+      const marked = src ? !!this.bookmarks.bySrc[src] : false;
+      this.controls.btnBookmark.textContent = marked
+        ? "⭐ Bookmarked"
+        : "⭐ Bookmark";
+    }
+
+    openBookmarksPanel() {
+      const panelId = "pp-bookmarks-panel";
+      const old = document.getElementById(panelId);
+      if (old) old.remove();
+
+      const panel = document.createElement("div");
+      panel.id = panelId;
+      panel.style.cssText = `
+        position: fixed;
+        inset: 0;
+        z-index: 1000002;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(10, 6, 2, 0.55);
+        backdrop-filter: blur(6px);
+      `;
+
+      const card = document.createElement("div");
+      card.style.cssText = `
+        width: min(860px, 94vw);
+        max-height: 78vh;
+        overflow: hidden;
+        border-radius: 22px;
+        background: rgba(255, 248, 235, 0.94);
+        border: 1px solid rgba(90,40,0,0.14);
+        box-shadow: 0 40px 120px rgba(20, 10, 2, 0.45);
+        display: flex;
+        flex-direction: column;
+      `;
+
+      const header = document.createElement("div");
+      header.style.cssText = `
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid rgba(90,40,0,0.10);
+      `;
+
+      const title = document.createElement("div");
+      title.textContent = "📌 Bookmarks";
+      title.style.cssText = `font-weight: 900; color:#5a2d00; font-size: 16px;`;
+
+      const actions = document.createElement("div");
+      actions.style.cssText = `display:flex; gap:10px; align-items:center; flex-wrap: wrap;`;
+
+      const mkBtn = (txt) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = txt;
+        b.style.cssText = `
+          border: 1px solid rgba(90,40,0,0.18);
+          background: rgba(255, 210, 155, 0.75);
+          color: #5a2d00;
+          font-weight: 800;
+          padding: 8px 10px;
+          border-radius: 12px;
+          cursor: pointer;
+          font-size: 13px;
+        `;
+        return b;
+      };
+
+      const btnPlayFav = mkBtn("Play Favorites");
+      const btnClear = mkBtn("Clear All");
+      const btnClose = mkBtn("Close");
+
+      actions.appendChild(btnPlayFav);
+      actions.appendChild(btnClear);
+      actions.appendChild(btnClose);
+
+      header.appendChild(title);
+      header.appendChild(actions);
+
+      const list = document.createElement("div");
+      list.style.cssText = `
+        padding: 12px;
+        overflow: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+      `;
+
+      const items = this.bookmarks.order
+        .map((src) => this.bookmarks.bySrc[src])
+        .filter(Boolean);
+
+      if (!items.length) {
+        const empty = document.createElement("div");
+        empty.textContent = "No bookmarks yet. Tap ⭐ to save a memory.";
+        empty.style.cssText = `color:#6e3300; opacity:.85; padding: 16px; font-weight: 700;`;
+        list.appendChild(empty);
+        btnPlayFav.disabled = true;
+        btnPlayFav.style.opacity = "0.55";
+        btnPlayFav.style.cursor = "not-allowed";
+      } else {
+        items.forEach((it) => {
+          const tile = document.createElement("div");
+          tile.style.cssText = `
+            border: 1px solid rgba(90,40,0,0.12);
+            border-radius: 16px;
+            padding: 10px;
+            background: rgba(255,255,255,0.75);
+            cursor: pointer;
+          `;
+
+          const img = document.createElement("img");
+          img.src = it.src;
+          img.loading = "lazy";
+          img.decoding = "async";
+          img.alt = it.title || "bookmark";
+          img.style.cssText = `width: 100%; height: 110px; object-fit: cover; border-radius: 12px;`;
+
+          const cap = document.createElement("div");
+          cap.textContent = it.title || "Memory";
+          cap.style.cssText = `margin-top: 8px; font-weight: 900; color:#5a2d00; font-size: 13px; line-height: 1.2;`;
+
+          tile.appendChild(img);
+          tile.appendChild(cap);
+
+          tile.addEventListener("click", () => {
+            const masterIdx = this.images.findIndex((x) => x.src === it.src);
+            if (masterIdx >= 0) {
+              panel.remove();
+
+              // If favorites-only is ON, jump within favorites playlist (if present)
+              if (this.settings.favoritesOnly) {
+                this.rebuildPlaylist(true);
+                const pos = this.playlist.posByMasterIndex.get(masterIdx);
+                if (typeof pos === "number") {
+                  this.stopAuto();
+                  this.goTo(pos);
+                  this.startAuto();
+                } else {
+                  this.toast(
+                    "This bookmark isn’t in the current favorites list.",
+                  );
+                }
+              } else {
+                // all mode: find its position in all playlist
+                const pos = masterIdx; // all playlist pos == masterIdx
+                this.stopAuto();
+                this.goTo(pos);
+                this.startAuto();
+              }
+            } else {
+              this.toast("Bookmark image not found in this set.");
+            }
+          });
+
+          list.appendChild(tile);
+        });
+      }
+
+      card.appendChild(header);
+      card.appendChild(list);
+      panel.appendChild(card);
+      document.body.appendChild(panel);
+
+      const close = () => panel.remove();
+      btnClose.addEventListener("click", close);
+      panel.addEventListener("click", (e) => {
+        if (e.target === panel) close();
+      });
+
+      btnClear.addEventListener("click", () => {
+        this.bookmarks = { bySrc: {}, order: [] };
+        saveJSON(CFG.STORAGE.BOOKMARKS_KEY, this.bookmarks);
+        panel.remove();
+        this.toast("Bookmarks cleared.");
+        this.syncBookmarkButton();
+
+        if (this.settings.favoritesOnly) {
+          // will auto fall back to all
+          this.rebuildPlaylist(true);
+          if (this.isRunning) {
+            this.stopAuto();
+            this.show();
+            this.startAuto();
+          }
+        }
+      });
+
+      btnPlayFav.addEventListener("click", () => {
+        panel.remove();
+        this.settings.favoritesOnly = true;
+        saveJSON(CFG.STORAGE.SETTINGS_KEY, this.settings);
+        this.rebuildPlaylist(true);
+
+        if (this.isRunning) {
+          this.stopAuto();
+          this.show();
+          this.startAuto();
+        }
+        this.toast("Playing Favorites ⭐");
+      });
+    }
+
+    /* ----------------------------- EVENTS ----------------------------- */
+    bindEvents() {
+
+        // Start Screen buttons (All / Favorites / Timeline)
+const btnAll = document.getElementById("ppStartAll");
+const btnFav = document.getElementById("ppStartFav");
+const btnTL  = document.getElementById("ppStartTimeline");
+
+// Helper: start flow with chosen modes
+const begin = ({ favoritesOnly, timeline }) => {
+  // persist settings
+  this.settings.favoritesOnly = !!favoritesOnly;
+  this.settings.timeline = !!timeline;
+  saveJSON(CFG.STORAGE.SETTINGS_KEY, this.settings);
+
+  // rebuild playlist BEFORE start
+  this.rebuildPlaylist(true);
+
+  // timeline auto-build if requested
+  if (this.settings.timeline) {
+    this.destroyTimeline();
+    this.buildTimeline();
+  } else {
+    this.destroyTimeline();
+  }
+
+  // fade out start screen
+  this.startScreen.style.opacity = "0";
+  setTimeout(() => {
+    this.startScreen.style.display = "none";
+    this.overlay.style.display = "flex";
+
+    this.start();
+    this.tryPlayMusic();
+
+    // If starting favorites, ensure "favorites-only timeline" feel:
+    // show timeline automatically (even if user didn't press timeline)
+    if (this.settings.favoritesOnly && !this.settings.timeline) {
+      // optional: auto-enable timeline when favorites start
+      this.enableTimeline(true);
+      this.toast("Favorites Timeline ON ⭐");
+    }
+  }, CFG.TIMING.START_FADE_OUT_MS);
+};
+
+// Wire buttons if present; otherwise fallback to click-to-begin
+if (btnAll) btnAll.addEventListener("click", (e) => {
+  e.stopPropagation();
+  begin({ favoritesOnly: false, timeline: false });
+});
+
+if (btnFav) btnFav.addEventListener("click", (e) => {
+  e.stopPropagation();
+  // favorites starts with favorites-only timeline for your requirement
+  begin({ favoritesOnly: true, timeline: true });
+});
+
+if (btnTL) btnTL.addEventListener("click", (e) => {
+  e.stopPropagation();
+  // start all photos, timeline on
+  begin({ favoritesOnly: false, timeline: true });
+});
+
+// Fallback: click anywhere on start screen => start All (no timeline)
+this.startScreen.addEventListener("click", () => {
+  // If buttons exist, they already handle start; this is safe fallback
+  begin({ favoritesOnly: false, timeline: false });
+});
+
+      this.musicBtn.addEventListener("click", () => {
+        if (this.audio.paused) {
+          this.audio.play().catch(() => {});
+          this.musicBtn.textContent = "🔊 Playing";
+        } else {
+          this.audio.pause();
+          this.musicBtn.textContent = "🎵 Music";
+        }
+      });
+
+      this.nextBtn.addEventListener("click", () => {
+        this.stopAuto();
+        this.next();
+        this.startAuto();
+      });
+
+      this.prevBtn.addEventListener("click", () => {
+        this.stopAuto();
+        this.prev();
+        this.startAuto();
+      });
+
+      this.progressContainer.addEventListener("click", this.onProgressClick);
+      this.progressContainer.addEventListener("mousemove", this.onProgressMove);
+      this.progressContainer.addEventListener(
+        "mouseleave",
+        this.onProgressLeave,
+      );
+
+      this.overlay.addEventListener("touchstart", this.onOverlayTouchStart, {
+        passive: true,
+      });
+      this.overlay.addEventListener("touchend", this.onOverlayTouchEnd, {
+        passive: true,
+      });
+
+      this.overlay.addEventListener("mouseover", this.onOverlayMouseOver);
+      this.overlay.addEventListener("mouseout", this.onOverlayMouseOut);
+      this.overlay.addEventListener("touchstart", this.onOverlayMouseOver, {
+        passive: true,
+      });
+      this.overlay.addEventListener("touchend", this.onOverlayMouseOut, {
+        passive: true,
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (this.overlay.style.display !== "flex") return;
+
+        if (e.key === "ArrowRight") {
+          this.stopAuto();
+          this.next();
+          this.startAuto();
+        }
+        if (e.key === "ArrowLeft") {
+          this.stopAuto();
+          this.prev();
+          this.startAuto();
         }
 
-        // Capitalize words
-        name = name.toLowerCase().split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-        return name;
-    } catch {
-        return "Programmer’s Picnic Memory";
+        // shortcuts
+        if (e.key.toLowerCase() === "b") this.toggleBookmarkForCurrent();
+        if (e.key.toLowerCase() === "t")
+          this.enableTimeline(!this.settings.timeline);
+        if (e.key.toLowerCase() === "l") this.toggleLite();
+        if (e.key.toLowerCase() === "f") this.toggleFavoritesOnly(); // ✅ favorites-only toggle
+      });
+
+      document.addEventListener("visibilitychange", this.onVisibility);
+      window.addEventListener("resize", this.onResize);
     }
+
+    onVisibility() {
+      if (document.hidden) {
+        this.stopAuto();
+        this.pauseParticles();
+        if (!this.audio.paused) this.audio.pause();
+      } else {
+        if (this.isRunning) {
+          this.startAuto();
+          this.resumeParticles();
+        }
+      }
+    }
+
+    onResize() {
+      this.applyQualityMode();
+    }
+
+    onOverlayMouseOver() {
+      this.stopAuto();
+    }
+    onOverlayMouseOut() {
+      this.startAuto();
+    }
+
+    onOverlayTouchStart(e) {
+      if (!e.changedTouches || !e.changedTouches.length) return;
+      this.touchStartX = e.changedTouches[0].clientX;
+    }
+
+    onOverlayTouchEnd(e) {
+      if (!e.changedTouches || !e.changedTouches.length) return;
+      const x = e.changedTouches[0].clientX;
+      const diff = x - this.touchStartX;
+
+      if (diff > 50) {
+        this.stopAuto();
+        this.prev();
+        this.startAuto();
+      } else if (diff < -50) {
+        this.stopAuto();
+        this.next();
+        this.startAuto();
+      }
+    }
+
+    onProgressClick(e) {
+      if (!this.activeCount()) return;
+
+      const rect = this.progressContainer.getBoundingClientRect();
+      const percent = (e.clientX - rect.left) / rect.width;
+      const idx = Math.round(clamp(percent, 0, 1) * (this.activeCount() - 1));
+
+      this.stopAuto();
+      this.goTo(idx);
+      this.startAuto();
+    }
+
+    onProgressMove(e) {
+      if (!this.activeCount()) return;
+
+      const rect = this.progressContainer.getBoundingClientRect();
+      let percent = (e.clientX - rect.left) / rect.width;
+      percent = clamp(percent, 0, 1);
+
+      const previewIndex = Math.round(percent * (this.activeCount() - 1));
+      const number = previewIndex + 1;
+
+      const modeLabel =
+        this.playlist.mode === "favorites" ? "Favorites" : "All";
+      this.progressTooltip.textContent = `${modeLabel}: ${number} / ${this.activeCount()}`;
+      this.progressTooltip.style.left = e.clientX + "px";
+      this.progressTooltip.style.top = rect.top + "px";
+      this.progressTooltip.style.display = "block";
+    }
+
+    onProgressLeave() {
+      this.progressTooltip.style.display = "none";
+    }
+
+    /* ----------------------------- START/STOP ----------------------------- */
+    start() {
+      if (!this.activeCount()) return;
+      this.isRunning = true;
+
+if (!this._marketingShownOnce) {
+  this._marketingShownOnce = true;
+  setTimeout(() => {
+    this.toast("Tip: ⭐ Bookmark your best memories — then Play Favorites.");
+  }, 1200);
 }
 
-function setCaptionsForCurrentSlide() {
-    const src = images[currentSlide]?.src || "";
-    const title = prettifyFilename(src);
-    const quote = spiritualQuotes[currentSlide % spiritualQuotes.length];
 
-    captionLine1.textContent = title;
-    captionLine2.textContent = quote;
 
-    captionLine1.classList.remove("caption-show");
-    captionLine2.classList.remove("caption-show");
+      this.current = clamp(this.current, 0, this.activeCount() - 1);
+      this.show();
+      this.startAuto();
+      this.resumeParticles();
+      this.syncBookmarkButton();
+      this.syncFavoritesButton();
+    }
 
-    // fade in captions a bit after clarity starts
-    setTimeout(() => captionLine1.classList.add("caption-show"), 2000);
-    setTimeout(() => captionLine2.classList.add("caption-show"), 2600);
-}
+    stop() {
+      this.isRunning = false;
+      this.stopAuto();
+      this.pauseParticles();
+      try {
+        this.audio.pause();
+      } catch {}
+    }
 
-// ------------------------------------------------------
-// GOD MODE: Fireflies / glowing particles & bokeh
-// ------------------------------------------------------
-function spawnPetals() {
-    if (!clarityBoost) return;
+    startAuto() {
+      if (!this.isRunning) return;
+      this.stopAuto();
+      this.autoTimer = setInterval(() => this.next(), this.totalTime);
+    }
 
-    // 1–3 petals per tick
-    const count = 1 + Math.floor(Math.random() * 3);
-    for (let i = 0; i < count; i++) {
-        const isMarigold = Math.random() < 0.5; // Both, as you chose
+    stopAuto() {
+      if (this.autoTimer) clearInterval(this.autoTimer);
+      this.autoTimer = null;
+    }
+
+    /* ----------------------------- NAVIGATION (playlist-based) ----------------------------- */
+    next() {
+      if (!this.activeCount()) return;
+      this.current = (this.current + 1) % this.activeCount();
+      this.show();
+    }
+
+    prev() {
+      if (!this.activeCount()) return;
+      this.current =
+        (this.current - 1 + this.activeCount()) % this.activeCount();
+      this.show();
+    }
+
+    goTo(playlistPos) {
+      if (!this.activeCount()) return;
+      this.current = clamp(playlistPos, 0, this.activeCount() - 1);
+      this.show();
+    }
+
+    /* ----------------------------- DISPLAY ----------------------------- */
+    show() {
+      if (!this.activeCount()) return;
+
+      const token = ++this.runToken;
+
+      this.particleState.clarityBoost = false;
+      this.slideImg.style.opacity = 0;
+      this.slideImg.classList.remove("sharp");
+      this.slideImg.style.transform = "scale(1) translate(0,0)";
+      this.captionLine1.classList.remove("caption-show");
+      this.captionLine2.classList.remove("caption-show");
+
+      const masterIdx = this.playlist.indices[this.current];
+      const src = this.images[masterIdx].src;
+
+      const modeLabel = this.playlist.mode === "favorites" ? "⭐" : "";
+      this.photoCounter.textContent = `${modeLabel}${this.current + 1} / ${this.activeCount()}`;
+
+      this.updateProgress();
+      this.syncTimelineActive();
+      this.syncBookmarkButton();
+      this.syncFavoritesButton();
+
+      this.slideImg.onload = () => {
+        if (token !== this.runToken) return;
+
+        setTimeout(() => {
+          if (token !== this.runToken) return;
+          this.slideImg.style.opacity = 1;
+        }, CFG.TIMING.IMAGE_FADE_IN_DELAY);
+
+        setTimeout(() => {
+          if (token !== this.runToken) return;
+          this.particleState.clarityBoost = true;
+          this.slideImg.classList.add("sharp");
+          this.applyKenBurns();
+          this.setCaptions();
+        }, CFG.TIMING.CLARITY_ENTER_DELAY);
+
+        setTimeout(() => {
+          if (token !== this.runToken) return;
+          this.particleState.clarityBoost = false;
+          this.slideImg.classList.remove("sharp");
+          this.slideImg.style.transform = "scale(1) translate(0,0)";
+          this.captionLine1.classList.remove("caption-show");
+          this.captionLine2.classList.remove("caption-show");
+        }, CFG.TIMING.SHARP_TIME);
+      };
+
+      this.slideImg.src = src;
+    }
+
+    updateProgress() {
+      if (this.activeCount() <= 1) {
+        this.progressBar.style.width = "100%";
+        return;
+      }
+      const percent = (this.current / (this.activeCount() - 1)) * 100;
+      this.progressBar.style.width = percent + "%";
+    }
+
+    setCaptions() {
+      const masterIdx = this.getCurrentMasterIndexSafe();
+      const src = masterIdx != null ? this.images[masterIdx]?.src : "";
+      const title = prettifyFilename(src);
+      const quote =
+        this.quotes[(masterIdx ?? this.current) % this.quotes.length];
+
+      this.captionLine1.textContent = title;
+      this.captionLine2.textContent = quote;
+
+      this.captionLine1.classList.remove("caption-show");
+      this.captionLine2.classList.remove("caption-show");
+
+      const token = this.runToken;
+
+      setTimeout(() => {
+        if (token !== this.runToken) return;
+        this.captionLine1.classList.add("caption-show");
+      }, CFG.TIMING.CAPTION_1_DELAY);
+
+      setTimeout(() => {
+        if (token !== this.runToken) return;
+        this.captionLine2.classList.add("caption-show");
+      }, CFG.TIMING.CAPTION_2_DELAY);
+    }
+
+    /* ----------------------------- KEN BURNS ----------------------------- */
+    applyKenBurns() {
+      if (this.isLite()) {
+        this.slideImg.style.transform = "scale(1) translate(0,0)";
+        return;
+      }
+
+      const zoomVal = Math.random() < 0.5 ? 1.08 : 1.12;
+      const translateX = Math.random() * 24 - 12;
+      const translateY = Math.random() * 24 - 12;
+
+      this.slideImg.style.transition = `transform ${CFG.TIMING.KEN_BURNS_MS}ms ease-in-out`;
+      this.slideImg.style.transform = `scale(${zoomVal}) translate(${translateX}px, ${translateY}px)`;
+    }
+
+    /* ----------------------------- PARTICLES (rAF) ----------------------------- */
+    resumeParticles() {
+      if (this.rafId) return;
+      const loop = (t) => {
+        this.rafId = requestAnimationFrame(loop);
+        this.tickParticles(t);
+      };
+      this.rafId = requestAnimationFrame(loop);
+    }
+
+    pauseParticles() {
+      if (this.rafId) cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+
+    tickParticles(t) {
+      if (!this.particleState.clarityBoost) return;
+
+      const lite = this.isLite();
+      const petalEvery = lite ? 520 : 200;
+      const fireflyEvery = lite ? 700 : 300;
+      const bokehEvery = lite ? 1400 : 700;
+
+      if (t - this.particleState.lastPetal > petalEvery) {
+        this.particleState.lastPetal = t;
+        this.spawnPetals(lite ? 1 : 1 + Math.floor(Math.random() * 3));
+      }
+
+      if (t - this.particleState.lastFirefly > fireflyEvery) {
+        this.particleState.lastFirefly = t;
+        this.spawnFirefly();
+      }
+
+      if (!lite && t - this.particleState.lastBokeh > bokehEvery) {
+        this.particleState.lastBokeh = t;
+        this.spawnBokeh();
+      }
+    }
+
+    spawnPetals(count) {
+      for (let i = 0; i < count; i++) {
+        const isMarigold = Math.random() < 0.5;
         const el = document.createElement("div");
         el.className = isMarigold ? "marigold" : "petal";
 
-        const startX = Math.random() * window.innerWidth;
-        el.style.left = startX + "px";
+        el.style.left = Math.random() * window.innerWidth + "px";
         el.style.top = "-40px";
+        el.style.animationDelay = `${Math.random() * 2}s`;
 
-        const delay = Math.random() * 2;
-        el.style.animationDelay = `${delay}s`;
-
-        petalLayer.appendChild(el);
+        this.petalLayer.appendChild(el);
         setTimeout(() => el.remove(), 9000);
-    }
-}
-
-function spawnFireflies() {
-    if (!clarityBoost) return;
-
-    const dot = document.createElement("div");
-    const size = Math.random() * 8 + 4;
-    dot.className = "godParticle";
-    dot.style.width = size + "px";
-    dot.style.height = size + "px";
-    dot.style.top = Math.random() * window.innerHeight + "px";
-    dot.style.left = Math.random() * window.innerWidth + "px";
-    dot.style.background = "radial-gradient(circle, rgba(255,255,220,0.9), rgba(255,200,120,0.1))";
-    dot.style.boxShadow = "0 0 16px rgba(255,230,160,0.9)";
-    dot.style.zIndex = 5;
-
-    fireflyLayer.appendChild(dot);
-    setTimeout(() => dot.remove(), 2600);
-}
-
-function spawnBokeh() {
-    if (!clarityBoost) return;
-
-    const orb = document.createElement("div");
-    const size = Math.random() * 120 + 60;
-    orb.className = "bokehOrb";
-    orb.style.width = size + "px";
-    orb.style.height = size + "px";
-    orb.style.top = Math.random() * window.innerHeight + "px";
-    orb.style.left = Math.random() * window.innerWidth + "px";
-    orb.style.zIndex = 4;
-
-    bokehLayer.appendChild(orb);
-    setTimeout(() => orb.remove(), 4200);
-}
-
-// Timers for particles
-setInterval(spawnPetals, 200);
-setInterval(spawnFireflies, 300);
-setInterval(spawnBokeh, 700);
-
-// ------------------------------------------------------
-// GOD MODE: Ken Burns zoom / pan
-// ------------------------------------------------------
-let zoomDirection = 1;
-
-function applyKenBurns() {
-    if (!clarityBoost) {
-        slideImg.style.transform = "scale(1) translate(0,0)";
-        return;
+      }
     }
 
-    zoomDirection *= -1;
+    spawnFirefly() {
+      const dot = document.createElement("div");
+      const size = Math.random() * 8 + 4;
+      dot.className = "godParticle";
+      dot.style.width = size + "px";
+      dot.style.height = size + "px";
+      dot.style.top = Math.random() * window.innerHeight + "px";
+      dot.style.left = Math.random() * window.innerWidth + "px";
+      dot.style.background =
+        "radial-gradient(circle, rgba(255,255,220,0.9), rgba(255,200,120,0.1))";
+      dot.style.boxShadow = "0 0 16px rgba(255,230,160,0.9)";
+      dot.style.zIndex = 5;
 
-    const zoomVal = zoomDirection > 0 ? 1.08 : 1.12;
-    const translateX = Math.random() * 24 - 12; // ±12px
-    const translateY = Math.random() * 24 - 12;
-
-    slideImg.style.transition = "transform 7s ease-in-out";
-    slideImg.style.transform = `scale(${zoomVal}) translate(${translateX}px, ${translateY}px)`;
-}
-
-// ------------------------------------------------------
-// Main slide display logic
-// ------------------------------------------------------
-function showSlide() {
-    if (images.length === 0) return;
-
-    clarityBoost = false;
-    slideImg.style.opacity = 0;
-    slideImg.style.zIndex = 6; // base
-    slideImg.classList.remove("sharp");
-    slideImg.style.transform = "scale(1) translate(0,0)";
-    captionLine1.classList.remove("caption-show");
-    captionLine2.classList.remove("caption-show");
-
-    photoCounter.textContent = `${currentSlide + 1} / ${images.length}`;
-
-    slideImg.onload = () => {
-        // Fade-in blurred
-        setTimeout(() => {
-            slideImg.style.opacity = 1;
-        }, 200);
-
-        // Enter clarity phase
-        setTimeout(() => {
-            clarityBoost = true;
-            slideImg.classList.add("sharp");
-            slideImg.style.zIndex = 999999; // top during clarity
-            applyKenBurns();
-            setCaptionsForCurrentSlide();
-        }, 700);
-
-        // Exit clarity
-        setTimeout(() => {
-            clarityBoost = false;
-            slideImg.classList.remove("sharp");
-            slideImg.style.zIndex = 6;
-            slideImg.style.transform = "scale(1) translate(0,0)";
-            captionLine1.classList.remove("caption-show");
-            captionLine2.classList.remove("caption-show");
-        }, SLIDE_SHARP_TIME);
-
-        updateProgress();
-    };
-
-    slideImg.src = images[currentSlide].src;
-}
-
-// ------------------------------------------------------
-// Navigation
-// ------------------------------------------------------
-function nextSlide() {
-    if (images.length === 0) return;
-    currentSlide = (currentSlide + 1) % images.length;
-    showSlide();
-}
-
-function prevSlide() {
-    if (images.length === 0) return;
-    currentSlide = (currentSlide - 1 + images.length) % images.length;
-    showSlide();
-}
-
-// ------------------------------------------------------
-// Auto slide
-// ------------------------------------------------------
-function startAutoSlide() {
-    if (autoSlideInterval) clearInterval(autoSlideInterval);
-    autoSlideInterval = setInterval(nextSlide, TOTAL_TIME);
-}
-
-function stopAutoSlide() {
-    if (autoSlideInterval) {
-        clearInterval(autoSlideInterval);
-        autoSlideInterval = null;
+      this.fireflyLayer.appendChild(dot);
+      setTimeout(() => dot.remove(), 2600);
     }
-}
 
-// ------------------------------------------------------
-// Progress bar based on image number
-// ------------------------------------------------------
-function updateProgress() {
-    if (images.length <= 1) {
-        progressBar.style.width = "100%";
-        return;
+    spawnBokeh() {
+      const orb = document.createElement("div");
+      const size = Math.random() * 120 + 60;
+      orb.className = "bokehOrb";
+      orb.style.width = size + "px";
+      orb.style.height = size + "px";
+      orb.style.top = Math.random() * window.innerHeight + "px";
+      orb.style.left = Math.random() * window.innerWidth + "px";
+      orb.style.zIndex = 4;
+
+      this.bokehLayer.appendChild(orb);
+      setTimeout(() => orb.remove(), 4200);
     }
-    const percent = (currentSlide / (images.length - 1)) * 100;
-    progressBar.style.width = percent + "%";
-}
 
-progressContainer.addEventListener("click", (e) => {
-    if (images.length === 0) return;
-
-    const rect = progressContainer.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-
-    currentSlide = Math.round(percent * (images.length - 1));
-
-    stopAutoSlide();
-    showSlide();
-    startAutoSlide();
-});
-
-
-
-
-// Show image number on hover over progress bar
-progressContainer.addEventListener("mousemove", (e) => {
-    if (images.length === 0) return;
-
-    const rect = progressContainer.getBoundingClientRect();
-    let percent = (e.clientX - rect.left) / rect.width;
-    if (percent < 0) percent = 0;
-    if (percent > 1) percent = 1;
-
-    const previewIndex = Math.round(percent * (images.length - 1));
-    const number = previewIndex + 1;
-
-    progressTooltip.textContent = `Image ${number} / ${images.length}`;
-    progressTooltip.style.left = e.clientX + "px";
-    progressTooltip.style.top = rect.top + "px";
-    progressTooltip.style.display = "block";
-});
-
-progressContainer.addEventListener("mouseleave", () => {
-    progressTooltip.style.display = "none";
-});
-
-// ------------------------------------------------------
-// Start screen → overlay
-// ------------------------------------------------------
-startScreen.addEventListener("click", () => {
-    startScreen.style.opacity = "0";
-
-    setTimeout(() => {
-        startScreen.style.display = "none";
-        overlay.style.display = "flex";
-        showSlide();
-        startAutoSlide();
-        tryPlayMusic();
-    }, 900);
-});
-
-// ------------------------------------------------------
-// Music
-// ------------------------------------------------------
-function tryPlayMusic() {
-    audio.play().catch(() => {
-        // Some browsers require explicit click; user can use the button.
-    });
-}
-
-musicBtn.addEventListener("click", () => {
-    if (audio.paused) {
-        audio.play();
-        musicBtn.textContent = "🔊 Playing";
-    } else {
-        audio.pause();
-        musicBtn.textContent = "🎵 Music";
+    /* ----------------------------- AUDIO ----------------------------- */
+    tryPlayMusic() {
+      this.audio.play().catch(() => {});
     }
-});
 
-// ------------------------------------------------------
-// Buttons
-// ------------------------------------------------------
-document.getElementById("nextBtn").addEventListener("click", () => {
-    stopAutoSlide();
-    nextSlide();
-    startAutoSlide();
-});
-
-document.getElementById("prevBtn").addEventListener("click", () => {
-    stopAutoSlide();
-    prevSlide();
-    startAutoSlide();
-});
-
-// ------------------------------------------------------
-// Mobile swipe navigation
-// ------------------------------------------------------
-let touchStartX = 0;
-overlay.addEventListener("touchstart", (e) => {
-    if (!e.changedTouches || !e.changedTouches.length) return;
-    touchStartX = e.changedTouches[0].clientX;
-}, { passive: true });
-
-overlay.addEventListener("touchend", (e) => {
-    if (!e.changedTouches || !e.changedTouches.length) return;
-    const x = e.changedTouches[0].clientX;
-    const diff = x - touchStartX;
-
-    if (diff > 50) {
-        stopAutoSlide();
-        prevSlide();
-        startAutoSlide();
-    } else if (diff < -50) {
-        stopAutoSlide();
-        nextSlide();
-        startAutoSlide();
+    /* ----------------------------- TOOLTIP / TOAST ----------------------------- */
+    createProgressTooltip() {
+      const d = document.createElement("div");
+      d.style.position = "fixed";
+      d.style.padding = "4px 8px";
+      d.style.borderRadius = "8px";
+      d.style.fontSize = "12px";
+      d.style.background = "rgba(90, 40, 0, 0.9)";
+      d.style.color = "#ffe9c4";
+      d.style.pointerEvents = "none";
+      d.style.transform = "translate(-50%, -120%)";
+      d.style.whiteSpace = "nowrap";
+      d.style.zIndex = "1000000";
+      d.style.display = "none";
+      document.body.appendChild(d);
+      return d;
     }
-}, { passive: true });
 
-// ------------------------------------------------------
-// Pause on hover / touch
-// ------------------------------------------------------
-overlay.addEventListener("mouseover", () => {
-    stopAutoSlide();
-});
+    toast(msg) {
+      const id = "pp-toast-v2";
+      let t = document.getElementById(id);
+      if (!t) {
+        t = document.createElement("div");
+        t.id = id;
+        t.style.cssText = `
+          position: fixed;
+          top: 16px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 1000003;
+          padding: 10px 14px;
+          border-radius: 14px;
+          background: rgba(255,245,225,0.92);
+          border: 1px solid rgba(90,40,0,0.14);
+          box-shadow: 0 18px 45px rgba(120,60,10,0.22);
+          color: #5a2d00;
+          font-weight: 900;
+          opacity: 0;
+          transition: opacity .22s ease;
+        `;
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      requestAnimationFrame(() => (t.style.opacity = "1"));
+      clearTimeout(t._hideTimer);
+      t._hideTimer = setTimeout(() => (t.style.opacity = "0"), 1200);
+    }
 
-overlay.addEventListener("mouseout", () => {
-    startAutoSlide();
-});
+    /* ----------------------------- STYLES ----------------------------- */
+    injectV2Styles() {
+      const style = document.createElement("style");
+      style.textContent = `
+        .pp-lite #godRays { display: none !important; }
+        .pp-lite #aurora { opacity: 0.65 !important; }
+        .pp-lite #memoryOrb { opacity: 0.65 !important; }
+        .pp-lite #slideImg { transition: opacity 1s ease, filter 1.2s ease, transform 0s ease !important; }
+        .pp-lite #slideImg.sharp { filter: blur(0px) brightness(1.08) contrast(1.25) saturate(1.12) !important; }
 
-overlay.addEventListener("touchstart", () => {
-    stopAutoSlide();
-}, { passive: true });
+        @media (max-width: 768px){
+          #pp-v2-controls{ left: 10px !important; bottom: 10px !important; gap: 8px !important; padding: 8px 10px !important; }
+          #pp-v2-controls button{ font-size: 12px !important; padding: 7px 9px !important; }
+          #pp-timeline{ bottom: 58px !important; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
 
-overlay.addEventListener("touchend", () => {
-    startAutoSlide();
-}, { passive: true });
+    defaultQuotes() {
+      return [
+        "Old projects feel like handwritten letters from my younger self.",
+        "Refactoring code taught me I can refactor my life too.",
+        "Every error message is just a mentor with bad communication skills.",
+        "Your future self is quietly hoping you don’t give up today.",
+        "Memories are snapshots worth backing up often.",
+      ];
+    }
+  }
 
-// ------------------------------------------------------
-// Initial placeholder
-// ------------------------------------------------------
-if (images.length > 0) {
-    slideImg.src = images[0].src;
-}
+  /* ----------------------------- BOOT ----------------------------- */
+  const engine = new PicnicSlideshowV2();
+  engine.init();
+  window.PP_GODMODE = engine;
+})();

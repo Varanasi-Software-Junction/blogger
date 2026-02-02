@@ -47,6 +47,108 @@
         color: #8a3b00;
         opacity: 0.8;
       }
+      #startBrand {
+        margin-top: 18px;
+        width: min(860px, 92vw);
+        padding: 18px 18px 14px;
+        border-radius: 22px;
+        background: rgba(255, 248, 235, 0.78);
+        border: 1px solid rgba(90, 40, 0, 0.14);
+        box-shadow: 0 30px 90px rgba(120, 60, 10, 0.28);
+        backdrop-filter: blur(10px);
+        text-align: center;
+      }
+
+      .sb-tag {
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 210, 155, 0.65);
+        color: #5a2d00;
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+
+      .sb-line {
+        margin-top: 10px;
+        color: #6e3300;
+        font-size: 16px;
+        font-weight: 650;
+        opacity: 0.92;
+      }
+
+      .sb-actions {
+        margin-top: 14px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .sb-btn {
+        appearance: none;
+        border: 1px solid rgba(90, 40, 0, 0.18);
+        background: rgba(255, 235, 200, 0.86);
+        color: #5a2d00;
+        font-weight: 900;
+        padding: 12px 14px;
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: 14px;
+        box-shadow: 0 14px 30px rgba(120, 60, 10, 0.16);
+      }
+
+      .sb-btn.primary {
+        background: linear-gradient(180deg, #ffcf95, #ffb55e);
+        border-color: rgba(90, 40, 0, 0.22);
+      }
+
+      .sb-btn.ghost {
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .sb-marketing {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(90, 40, 0, 0.1);
+        color: #6e3300;
+      }
+
+      .sb-m1 {
+        font-weight: 900;
+      }
+
+      .sb-m2 {
+        margin-top: 4px;
+        opacity: 0.9;
+        font-weight: 650;
+      }
+
+      .sb-link {
+        display: inline-block;
+        margin-top: 8px;
+        color: #8a3b00;
+        font-weight: 900;
+        text-decoration: none;
+        background: rgba(255, 210, 155, 0.55);
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(90, 40, 0, 0.14);
+      }
+
+      .sb-link:hover {
+        filter: brightness(1.03);
+      }
+
+      @media (max-width: 768px) {
+        .sb-line {
+          font-size: 14px;
+        }
+        .sb-btn {
+          padding: 11px 12px;
+          border-radius: 14px;
+        }
+      }
 
       /* -----------------------------------------------------------
            🌼 MUSIC BUTTON
@@ -448,7 +550,45 @@
     <!-- 🌼 Start Screen -->
     <div id="startScreen">
       <div id="startTitle">🌼 Programmer’s Picnic 🌼<br /></div>
-      <div id="startHint">Tap to Begin</div>
+
+      <div id="startBrand">
+        <div class="sb-tag">Memories • Music • Meditation Mode</div>
+        <div class="sb-line">
+          A calm, cinematic memory-walk — made with love by Programmer’s Picnic.
+        </div>
+
+        <div class="sb-actions">
+          <button id="ppStartAll" class="sb-btn primary">
+            ▶ Start (All Photos)
+          </button>
+          <button id="ppStartFav" class="sb-btn">⭐ Play Favorites</button>
+          <button id="ppStartTimeline" class="sb-btn ghost">
+            🕰️ Start with Timeline
+          </button>
+        </div>
+
+        <div class="sb-marketing">
+          <div class="sb-m1">
+            📚 Learn with Champak • 7 PM Python Starter Club
+          </div>
+          <div class="sb-m2">
+            Daily guidance • WhatsApp group • Beginner-friendly
+          </div>
+          <a
+            class="sb-link"
+            href="https://www.learnwithchampak.live/"
+            target="_blank"
+            rel="noopener"
+          >
+            Visit: learnwithchampak.live →
+          </a>
+        </div>
+      </div>
+
+      <div id="startHint">
+        Tip: Press <b>F</b> for Favorites, <b>T</b> for Timeline, <b>B</b> to
+        Bookmark
+      </div>
     </div>
 
     <!-- 🎵 Music Button -->
