@@ -1,602 +1,424 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Programmer’s Picnic – Spiritual Meditation Mode</title>
-
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        background: #fff7e6;
-        font-family: "Segoe UI", system-ui, sans-serif;
-        overflow: hidden;
-      }
-
-      /* -----------------------------------------------------------
-           🌼 START SCREEN
-        ----------------------------------------------------------- */
-      #startScreen {
-        position: fixed;
-        inset: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        z-index: 999999999;
-        cursor: pointer;
-        transition: opacity 0.8s ease;
-        background:
-          radial-gradient(circle at 20% 20%, #ffe9c4, transparent 60%),
-          radial-gradient(circle at 80% 80%, #ffd29b, transparent 70%),
-          linear-gradient(180deg, #fff3d0, #ffd393, #ffbb54);
-      }
-
-      #startTitle {
-        font-size: 54px;
-        text-align: center;
-        color: #6e3300;
-        font-weight: bold;
-        text-shadow: 0px 4px 18px rgba(255, 200, 130, 0.8);
-      }
-
-      #startHint {
-        margin-top: 25px;
-        font-size: 28px;
-        color: #8a3b00;
-        opacity: 0.8;
-      }
-      #startBrand {
-        margin-top: 18px;
-        width: min(860px, 92vw);
-        padding: 18px 18px 14px;
-        border-radius: 22px;
-        background: rgba(255, 248, 235, 0.78);
-        border: 1px solid rgba(90, 40, 0, 0.14);
-        box-shadow: 0 30px 90px rgba(120, 60, 10, 0.28);
-        backdrop-filter: blur(10px);
-        text-align: center;
-      }
-
-      .sb-tag {
-        display: inline-block;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(255, 210, 155, 0.65);
-        color: #5a2d00;
-        font-weight: 800;
-        letter-spacing: 0.2px;
-      }
-
-      .sb-line {
-        margin-top: 10px;
-        color: #6e3300;
-        font-size: 16px;
-        font-weight: 650;
-        opacity: 0.92;
-      }
-
-      .sb-actions {
-        margin-top: 14px;
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .sb-btn {
-        appearance: none;
-        border: 1px solid rgba(90, 40, 0, 0.18);
-        background: rgba(255, 235, 200, 0.86);
-        color: #5a2d00;
-        font-weight: 900;
-        padding: 12px 14px;
-        border-radius: 16px;
-        cursor: pointer;
-        font-size: 14px;
-        box-shadow: 0 14px 30px rgba(120, 60, 10, 0.16);
-      }
-
-      .sb-btn.primary {
-        background: linear-gradient(180deg, #ffcf95, #ffb55e);
-        border-color: rgba(90, 40, 0, 0.22);
-      }
-
-      .sb-btn.ghost {
-        background: rgba(255, 255, 255, 0.62);
-      }
-
-      .sb-marketing {
-        margin-top: 14px;
-        padding-top: 12px;
-        border-top: 1px solid rgba(90, 40, 0, 0.1);
-        color: #6e3300;
-      }
-
-      .sb-m1 {
-        font-weight: 900;
-      }
-
-      .sb-m2 {
-        margin-top: 4px;
-        opacity: 0.9;
-        font-weight: 650;
-      }
-
-      .sb-link {
-        display: inline-block;
-        margin-top: 8px;
-        color: #8a3b00;
-        font-weight: 900;
-        text-decoration: none;
-        background: rgba(255, 210, 155, 0.55);
-        padding: 8px 12px;
-        border-radius: 999px;
-        border: 1px solid rgba(90, 40, 0, 0.14);
-      }
-
-      .sb-link:hover {
-        filter: brightness(1.03);
-      }
-
-      @media (max-width: 768px) {
-        .sb-line {
-          font-size: 14px;
-        }
-        .sb-btn {
-          padding: 11px 12px;
-          border-radius: 14px;
-        }
-      }
-
-      /* -----------------------------------------------------------
-           🌼 MUSIC BUTTON
-        ----------------------------------------------------------- */
-      #musicBtn {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(255, 200, 120, 0.92);
-        padding: 12px 20px;
-        border-radius: 32px;
-        font-size: 20px;
-        cursor: pointer;
-        box-shadow: 0 0 20px rgba(255, 160, 60, 0.8);
-        z-index: 9999999;
-        user-select: none;
-      }
-
-      /* -----------------------------------------------------------
-           🌼 HIDDEN IMAGES STORAGE
-        ----------------------------------------------------------- */
-      #picnic-images {
-        display: none;
-      }
-
-      /* -----------------------------------------------------------
-           🌼 SPIRITUAL BACKGROUND LAYERS
-        ----------------------------------------------------------- */
-      #pp-gallery-overlay {
-        position: fixed;
-        inset: 0;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        z-index: 999998;
-        background: transparent;
-      }
-
-      #aurora {
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(
-            circle at 30% 40%,
-            rgba(255, 210, 120, 0.7),
-            transparent 60%
-          ),
-          radial-gradient(
-            circle at 70% 60%,
-            rgba(255, 155, 60, 0.55),
-            transparent 70%
-          ),
-          radial-gradient(
-            circle at 50% 50%,
-            rgba(255, 220, 160, 0.8),
-            transparent 80%
-          );
-        animation: auroraFlow 16s ease-in-out infinite alternate;
-        z-index: 1;
-        pointer-events: none;
-      }
-
-      @keyframes auroraFlow {
-        0% {
-          transform: scale(1) translate(0, 0);
-          opacity: 0.7;
-        }
-
-        100% {
-          transform: scale(1.3) translate(30px, -40px);
-          opacity: 1;
-        }
-      }
-
-      #godRays {
-        position: absolute;
-        width: 260%;
-        height: 260%;
-        background: conic-gradient(
-          from 0deg,
-          rgba(255, 210, 120, 0.4),
-          transparent,
-          rgba(255, 180, 80, 0.35),
-          transparent
-        );
-        animation: godRayRotate 36s linear infinite;
-        pointer-events: none;
-        z-index: 2;
-        mix-blend-mode: screen;
-      }
-
-      @keyframes godRayRotate {
-        from {
-          transform: rotate(0deg);
-        }
-
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      #memoryOrb {
-        position: absolute;
-        width: 130px;
-        height: 130px;
-        background: radial-gradient(
-          circle,
-          rgba(255, 240, 200, 0.9),
-          rgba(255, 190, 110, 0.6),
-          transparent
-        );
-        border-radius: 50%;
-        box-shadow: 0 0 55px rgba(255, 200, 130, 0.9);
-        pointer-events: none;
-        z-index: 3;
-        opacity: 0.9;
-        animation: orbFloat 20s ease-in-out infinite alternate;
-      }
-
-      @keyframes orbFloat {
-        0% {
-          transform: translate(-40px, 10px);
-        }
-
-        100% {
-          transform: translate(180px, -190px);
-        }
-      }
-
-      #petalLayer,
-      #fireflyLayer,
-      #bokehLayer {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        z-index: 4;
-        overflow: hidden;
-      }
-
-      /* -----------------------------------------------------------
-           🌼 POLAROID FRAME
-        ----------------------------------------------------------- */
-      .polaroid {
-        padding: 18px;
-        background: white;
-        border-radius: 18px;
-        position: relative;
-        z-index: 6;
-        box-shadow: 0 35px 80px rgba(120, 60, 10, 0.42);
-      }
-
-      /* ✨ Ultra Clarity Spiritual Reveal */
-      #slideImg {
-        max-width: 90vw;
-        max-height: 80vh;
-        border-radius: 14px;
-        opacity: 0;
-        filter: blur(20px) brightness(0.8) contrast(0.8) saturate(0.8);
-        transition:
-          opacity 1.4s ease,
-          filter 1.8s ease,
-          transform 7s ease-in-out;
-        transform: scale(1);
-      }
-
-      /* 🔍 Ultra HD clarity mid-phase */
-      #slideImg.sharp {
-        filter: blur(0px) brightness(1.12) contrast(1.45) saturate(1.22)
-          drop-shadow(0 0 26px rgba(255, 200, 130, 0.6));
-      }
-
-      /* -----------------------------------------------------------
-           🌼 CAPTION BOX
-        ----------------------------------------------------------- */
-      #captionContainer {
-        position: absolute;
-        bottom: 6%;
-        width: 100%;
-        text-align: center;
-        z-index: 7;
-        pointer-events: none;
-      }
-
-      #captionLine1,
-      #captionLine2 {
-        opacity: 1;
-        transform: translateY(12px);
-        transition:
-          opacity 1s ease,
-          transform 1s ease;
-        color: #4a2200;
-      }
-
-      #captionLine1 {
-        font-size: 32px;
-        font-weight: 600;
-        text-shadow: 0 0 10px rgba(255, 240, 200, 0.9);
-        background-color: #ffd29b;
-      }
-
-      #captionLine2 {
-        background-color: #ffd29b;
-        font-size: 32px;
-        opacity: 0.9;
-        font-style: italic;
-        margin-top: 6px;
-        text-shadow: 0 0 8px rgba(255, 240, 200, 0.7);
-      }
-
-      .caption-show {
-        opacity: 1 !important;
-        transform: translateY(0) !important;
-      }
-
-      /* Picture Number */
-      #photoCounter {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        font-size: 22px;
-        font-weight: 600;
-        color: #5a2d00;
-        background: rgba(255, 235, 200, 0.88);
-        padding: 6px 14px;
-        border-radius: 12px;
-        z-index: 99999;
-      }
-
-      .navBtn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 48px;
-        color: #6e3300;
-        background: rgba(255, 235, 200, 0.9);
-        padding: 14px 20px;
-        border-radius: 16px;
-        cursor: pointer;
-        z-index: 99999;
-        user-select: none;
-      }
-
-      #prevBtn {
-        left: 20px;
-      }
-
-      #nextBtn {
-        right: 20px;
-      }
-
-      #progressContainer {
-        position: absolute;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 70%;
-        height: 10px;
-        background: rgba(255, 215, 160, 0.4);
-        border-radius: 6px;
-        cursor: pointer;
-        z-index: 99999;
-      }
-
-      #progressBar {
-        width: 0%;
-        height: 100%;
-        background: linear-gradient(90deg, #ffb347, #ff9234);
-        border-radius: 6px;
-      }
-
-      /* -----------------------------------------------------------
-           🌸 GOD MODE PARTICLES
-        ----------------------------------------------------------- */
-      .petal,
-      .marigold {
-        position: absolute;
-        opacity: 0.9;
-        pointer-events: none;
-        animation: petalFall 8s linear forwards;
-      }
-
-      .petal {
-        width: 18px;
-        height: 32px;
-        background: radial-gradient(circle at 20% 20%, #ffe4f2, #ff8dbc);
-        border-radius: 50% 50% 50% 50%;
-        filter: drop-shadow(0 0 10px rgba(255, 140, 190, 0.8));
-      }
-
-      .marigold {
-        width: 22px;
-        height: 22px;
-        background: radial-gradient(circle, #ffd44a, #ff9c1a);
-        border-radius: 50%;
-        filter: drop-shadow(0 0 12px rgba(255, 190, 60, 0.9));
-      }
-
-      @keyframes petalFall {
-        0% {
-          transform: translateY(-40px) translateX(0) rotate(0deg);
-          opacity: 1;
-        }
-
-        100% {
-          transform: translateY(120vh) translateX(60px) rotate(120deg);
-          opacity: 0;
-        }
-      }
-
-      .godParticle {
-        position: absolute;
-        border-radius: 50%;
-        pointer-events: none;
-        animation: riseAndFade 2.5s linear forwards;
-      }
-
-      @keyframes riseAndFade {
-        from {
-          transform: translateY(20px);
-          opacity: 1;
-        }
-
-        to {
-          transform: translateY(-40px);
-          opacity: 0;
-        }
-      }
-
-      .bokehOrb {
-        position: absolute;
-        border-radius: 50%;
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.65),
-          transparent
-        );
-        mix-blend-mode: screen;
-        pointer-events: none;
-        animation: bokehPulse 4s ease-in-out forwards;
-      }
-
-      @keyframes bokehPulse {
-        0% {
-          transform: scale(0.8);
-          opacity: 0;
-        }
-
-        50% {
-          transform: scale(1.2);
-          opacity: 0.8;
-        }
-
-        100% {
-          transform: scale(1.6);
-          opacity: 0;
-        }
-      }
-
-      @media (max-width: 768px) {
-        #startTitle {
-          font-size: 34px;
-        }
-
-        #startHint {
-          font-size: 20px;
-        }
-
-        #captionLine1 {
-          font-size: 24px;
-        }
-
-        #captionLine2 {
-          font-size: 18px;
-        }
-
-        .navBtn {
-          font-size: 34px;
-          padding: 10px 16px;
-        }
-
-        #photoCounter {
-          font-size: 18px;
-        }
-      }
-    </style>
-    <link
-      href="https://www.learnwithchampak.live/favicon.ico"
-      rel="icon"
-      type="image/x-icon"
-    />
-    <link
-      href="https://www.learnwithchampak.live/p/champak.html"
-      rel="canonical"
-    />
-  </head>
-
-  <body>
-    <!-- 🌼 Start Screen -->
-    <div id="startScreen">
-      <div id="startTitle">🌼 Programmer’s Picnic 🌼<br /></div>
-
-      <div id="startBrand">
-        <div class="sb-tag">Memories • Music • Meditation Mode</div>
-        <div class="sb-line">
-          A calm, cinematic memory-walk — made with love by Programmer’s Picnic.
-        </div>
-
-        <div class="sb-actions">
-          <button id="ppStartAll" class="sb-btn primary">
-            ▶ Start (All Photos)
-          </button>
-          <button id="ppStartFav" class="sb-btn">⭐ Play Favorites</button>
-          <button id="ppStartTimeline" class="sb-btn ghost">
-            🕰️ Start with Timeline
-          </button>
-        </div>
-
-        <div class="sb-marketing">
-          <div class="sb-m1">
-            📚 Learn with Champak • 7 PM Python Starter Club
-          </div>
-          <div class="sb-m2">
-            Daily guidance • WhatsApp group • Beginner-friendly
-          </div>
-          <a
-            class="sb-link"
-            href="https://www.learnwithchampak.live/"
-            target="_blank"
-            rel="noopener"
-          >
-            Visit: learnwithchampak.live →
-          </a>
-        </div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Programmer’s Picnic — GOD MODE Memories</title>
+  <meta name="description" content="A calm, cinematic memory-walk — memories, music, timeline, favorites." />
+
+  <style>
+    :root{
+      --bg1:#fff7e6;
+      --bg2:#fff1d6;
+      --brand:#d97706;
+      --brand2:#b45309;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --card:rgba(255,255,255,.78);
+      --glass:rgba(255,245,225,.82);
+      --line:rgba(90,40,0,.14);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      background: radial-gradient(1200px 900px at 20% 10%, #fffaf2 0%, var(--bg1) 35%, var(--bg2) 100%);
+      color:var(--ink);
+      overflow-x:hidden;
+    }
+
+    /* ---------- Ambient layers ---------- */
+    #aurora{
+      position:fixed; inset:0;
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(217,119,6,.22), transparent 60%),
+        radial-gradient(1000px 700px at 75% 30%, rgba(251,191,36,.18), transparent 60%),
+        radial-gradient(900px 700px at 45% 85%, rgba(180,83,9,.14), transparent 60%);
+      filter: blur(18px);
+      pointer-events:none;
+      z-index:1;
+    }
+
+    #godRays{
+      position:fixed; inset:0;
+      background: repeating-linear-gradient(
+        115deg,
+        rgba(255,255,255,.05) 0px,
+        rgba(255,255,255,.00) 36px,
+        rgba(255,255,255,.05) 72px
+      );
+      mix-blend-mode: soft-light;
+      opacity:.35;
+      pointer-events:none;
+      z-index:2;
+      transform: translateZ(0);
+      animation: rays 10s ease-in-out infinite alternate;
+    }
+    @keyframes rays{
+      from{transform: translateX(-10px) translateY(-6px) scale(1)}
+      to{transform: translateX(10px) translateY(6px) scale(1.02)}
+    }
+
+    /* ---------- Start Screen ---------- */
+    #startScreen{
+      position:fixed; inset:0;
+      z-index:50;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      text-align:center;
+      background: radial-gradient(900px 700px at 50% 30%, rgba(255,255,255,.7), rgba(255,247,230,.95));
+      transition: opacity .6s ease;
+    }
+
+    #startTitle{
+      font-size:44px;
+      font-weight:900;
+      letter-spacing:.2px;
+      color:#5a2d00;
+      text-shadow: 0 14px 50px rgba(180,83,9,.18);
+    }
+
+    #startHint{
+      margin-top:12px;
+      font-size:14px;
+      color:#6e3300;
+      opacity:.9;
+      font-weight:700;
+    }
+
+    #startBrand{
+      margin-top: 18px;
+      width: min(860px, 92vw);
+      padding: 18px 18px 14px;
+      border-radius: 22px;
+      background: rgba(255, 248, 235, 0.78);
+      border: 1px solid rgba(90,40,0,0.14);
+      box-shadow: 0 30px 90px rgba(120,60,10,0.28);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .sb-tag{
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 210, 155, 0.65);
+      color: #5a2d00;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .sb-line{
+      margin-top: 10px;
+      color: #6e3300;
+      font-size: 16px;
+      font-weight: 650;
+      opacity: .92;
+    }
+
+    .sb-actions{
+      margin-top: 14px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .sb-btn{
+      appearance: none;
+      border: 1px solid rgba(90,40,0,0.18);
+      background: rgba(255, 235, 200, 0.86);
+      color: #5a2d00;
+      font-weight: 900;
+      padding: 12px 14px;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 14px 30px rgba(120,60,10,0.16);
+    }
+
+    .sb-btn.primary{
+      background: linear-gradient(180deg,#ffcf95,#ffb55e);
+      border-color: rgba(90,40,0,0.22);
+    }
+
+    .sb-btn.ghost{
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .sb-marketing{
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(90,40,0,0.10);
+      color: #6e3300;
+    }
+
+    .sb-m1{font-weight: 900;}
+    .sb-m2{margin-top: 4px; opacity: .9; font-weight: 650;}
+
+    .sb-link{
+      display: inline-block;
+      margin-top: 8px;
+      color: #8a3b00;
+      font-weight: 900;
+      text-decoration: none;
+      background: rgba(255, 210, 155, 0.55);
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(90,40,0,0.14);
+    }
+    .sb-link:hover{filter:brightness(1.03)}
+
+    @media (max-width:768px){
+      #startTitle{font-size:34px}
+      .sb-line{font-size:14px}
+      .sb-btn{padding:11px 12px; border-radius:14px}
+    }
+
+    /* ---------- Overlay / Slideshow ---------- */
+    #pp-gallery-overlay{
+      position:fixed; inset:0;
+      z-index:100;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background: rgba(0,0,0,.94);
+      overflow:hidden;
+      touch-action: pan-y;
+    }
+
+    #slideImg{
+      max-width: 92vw;
+      max-height: 78vh;
+      border-radius: 22px;
+      opacity: 0;
+      transition: opacity 1s ease, filter 1.2s ease, transform 7s ease-in-out;
+      filter: blur(6px) brightness(.85) contrast(1.05) saturate(.9);
+      box-shadow: 0 50px 160px rgba(0,0,0,.65);
+      z-index:6;
+      transform: translateZ(0);
+    }
+    #slideImg.sharp{
+      filter: blur(0px) brightness(1.02) contrast(1.18) saturate(1.18);
+    }
+
+    /* captions */
+    #pp-captions{
+      position:fixed;
+      left:50%;
+      bottom: 108px;
+      transform: translateX(-50%);
+      z-index: 200;
+      width: min(980px, 92vw);
+      text-align:center;
+      pointer-events:none;
+    }
+    #captionLine1{
+      font-size: 18px;
+      font-weight: 900;
+      color: rgba(255,245,225,.95);
+      text-shadow: 0 18px 60px rgba(0,0,0,.6);
+      opacity:0;
+      transform: translateY(10px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    #captionLine2{
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 750;
+      color: rgba(255,230,190,.92);
+      text-shadow: 0 18px 60px rgba(0,0,0,.6);
+      opacity:0;
+      transform: translateY(10px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .caption-show{
+      opacity:1 !important;
+      transform: translateY(0) !important;
+    }
+
+    /* controls */
+    #prevBtn, #nextBtn{
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 300;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      user-select:none;
+      background: rgba(255,245,225,.18);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,245,225,.9);
+      font-size: 26px;
+      backdrop-filter: blur(10px);
+    }
+    #prevBtn{left: 14px;}
+    #nextBtn{right: 14px;}
+
+    /* top HUD */
+    #ppHud{
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 350;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255,245,225,.12);
+      border: 1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      color: rgba(255,245,225,.95);
+    }
+
+    #photoCounter{
+      font-weight: 900;
+      letter-spacing: .2px;
+      font-size: 13px;
+      opacity: .95;
+    }
+
+    #musicBtn{
+      cursor:pointer;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,245,225,.16);
+      color: rgba(255,245,225,.95);
+      font-weight: 900;
+      padding: 8px 10px;
+      border-radius: 12px;
+    }
+
+    /* progress bar */
+    #progressContainer{
+      width: min(560px, 62vw);
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,245,225,.14);
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+      cursor:pointer;
+    }
+    #progressBar{
+      width:0%;
+      height:100%;
+      background: linear-gradient(90deg, rgba(255,183,94,.95), rgba(217,119,6,.95));
+      border-radius: 999px;
+      transition: width .25s ease;
+    }
+
+    /* particle layers */
+    #petalLayer, #fireflyLayer, #bokehLayer{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index: 120;
+      overflow:hidden;
+    }
+
+    .petal, .marigold{
+      position:absolute;
+      width:14px; height:14px;
+      border-radius: 8px;
+      opacity:.9;
+      filter: blur(.2px);
+      animation: fall 8.5s linear forwards;
+    }
+    .petal{background: radial-gradient(circle, rgba(255,255,255,.85), rgba(255,200,120,.18));}
+    .marigold{background: radial-gradient(circle, rgba(255,185,90,.95), rgba(180,83,9,.18));}
+    @keyframes fall{
+      from{transform: translateY(-40px) rotate(0deg)}
+      to{transform: translateY(110vh) rotate(220deg)}
+    }
+
+    .godParticle{
+      position:absolute;
+      border-radius: 50%;
+      opacity: .95;
+    }
+
+    .bokehOrb{
+      position:absolute;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255,220,170,.12), rgba(255,220,170,0));
+      filter: blur(1px);
+      opacity: .9;
+    }
+
+    /* hidden images store */
+    #picnic-images{display:none}
+
+  </style>
+</head>
+
+<body>
+  <div id="aurora"></div>
+  <div id="godRays"></div>
+
+  <!-- Start Screen -->
+  <div id="startScreen">
+    <div id="startTitle">🌼 Programmer’s Picnic 🌼</div>
+
+    <div id="startBrand">
+      <div class="sb-tag">Memories • Music • Meditation Mode</div>
+      <div class="sb-line">A calm, cinematic memory-walk — a little nostalgia, a little glow.</div>
+
+      <div class="sb-actions">
+        <button id="ppStartAll" class="sb-btn primary">▶ Start (All Photos)</button>
+        <button id="ppStartFav" class="sb-btn">⭐ Play Favorites</button>
+        <button id="ppStartTimeline" class="sb-btn ghost">🕰️ Start with Timeline</button>
       </div>
 
-      <div id="startHint">
-        Tip: Press <b>F</b> for Favorites, <b>T</b> for Timeline, <b>B</b> to
-        Bookmark
+      <div class="sb-marketing">
+        <div class="sb-m1">📚 Learn with Champak • 7 PM Python Starter Club</div>
+        <div class="sb-m2">Daily guidance • WhatsApp group • Beginner-friendly</div>
+        <a class="sb-link" href="https://www.learnwithchampak.live/" target="_blank" rel="noopener">
+          Visit: learnwithchampak.live →
+        </a>
       </div>
     </div>
 
-    <!-- 🎵 Music Button -->
-    <div id="musicBtn">🎵 Music</div>
+    <div id="startHint">Tip: Press <b>F</b> Favorites • <b>T</b> Timeline • <b>B</b> Bookmark • <b>L</b> Lite</div>
+  </div>
 
-    <!-- 🌼 Hidden Images -->
-    <div id="picnic-images">
-      <img loading="lazy" src="Picnic/0.jpg" />
+  <!-- Overlay -->
+  <div id="pp-gallery-overlay">
+    <div id="petalLayer"></div>
+    <div id="fireflyLayer"></div>
+    <div id="bokehLayer"></div>
+
+    <img id="slideImg" alt="Programmer’s Picnic memory" />
+
+    <div id="prevBtn">‹</div>
+    <div id="nextBtn">›</div>
+
+    <div id="ppHud">
+      <div id="photoCounter">0 / 0</div>
+      <div id="progressContainer" title="Click to jump">
+        <div id="progressBar"></div>
+      </div>
+      <button id="musicBtn" type="button">🎵 Music</button>
+    </div>
+
+    <div id="pp-captions">
+      <div id="captionLine1"></div>
+      <div id="captionLine2"></div>
+    </div>
+  </div>
+
+  <!-- Hidden images store: replace/extend with your real images -->
+  <div id="picnic-images">
+    <!-- Example images (replace with your own) -->
+    <img loading="lazy" src="Picnic/0.jpg" />
       <img loading="lazy" src="Picnic/1.jpg" />
       <img loading="lazy" src="Picnic/10.jpg" />
       <img loading="lazy" src="Picnic/1050048051695671.jpg" />
@@ -956,40 +778,19 @@
       <img loading="lazy" src="Picnic/993963260637484.jpg" />
       <img loading="lazy" src="Picnic/cricket0.jpg" />
       <img loading="lazy" src="Picnic/cricket1.jpg" />
-    </div>
+  </div>
 
-    <!-- 🌼 SPIRITUAL SLIDESHOW -->
-    <div id="pp-gallery-overlay">
-      <div id="aurora"></div>
-      <div id="godRays"></div>
-      <div id="petalLayer"></div>
-      <div id="fireflyLayer"></div>
-      <div id="bokehLayer"></div>
-      <div id="memoryOrb"></div>
+  <!-- Optional: your quote list (or keep default inside JS) -->
+  <script>
+    window.spiritualQuotes = [
+      "Every commit says: I was here, I tried, I learned.",
+      "Your story is still in active development; don’t judge it by one build.",
+      "Old projects feel like letters from a younger self.",
+      "You are not behind — your path has custom requirements.",
+      "Today’s small commit still moves the story forward."
+    ];
+  </script>
 
-      <div class="polaroid">
-        <img id="slideImg" src="" alt="" />
-      </div>
-
-      <div id="captionContainer">
-        <div id="captionLine1"></div>
-        <div id="captionLine2"></div>
-      </div>
-
-      <!-- Picture Number -->
-      <div id="photoCounter"></div>
-
-      <!-- Navigation Buttons -->
-      <div id="prevBtn" class="navBtn">⟵</div>
-      <div id="nextBtn" class="navBtn">⟶</div>
-
-      <!-- Clickable Progress Bar -->
-      <div id="progressContainer">
-        <div id="progressBar"></div>
-      </div>
-    </div>
-
-    <!-- GOD MODE JS -->
-    <script src="picnicpages.js"></script>
-  </body>
+  <script src="./picnicpages.js"></script>
+</body>
 </html>
