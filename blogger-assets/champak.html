@@ -12,6 +12,7 @@
       rel="stylesheet"
       href="https://varanasi-software-junction.github.io/blogger/blogger-assets/crx_styles_v1.css"
     />
+
     <style>
       :root {
         --crx-accent: #d97706;
@@ -24,34 +25,20 @@
         --headline: #1f2937;
         --menu-width: 320px;
       }
-h2{
-  text-align: center;
-  color: teal !important;
-  
-}
+
       /* Base */
       html,
       body {
         height: 100%;
         margin: 0;
-        font-family:
-          Inter,
-          system-ui,
-          -apple-system,
-          "Segoe UI",
-          Roboto,
-          Arial,
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
           sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
 
       body {
-        background: linear-gradient(
-          180deg,
-          var(--crx-bg-1) 0%,
-          var(--crx-bg-2) 100%
-        );
+        background: linear-gradient(180deg, var(--crx-bg-1) 0%, var(--crx-bg-2) 100%);
         background-attachment: fixed;
         color: var(--headline);
       }
@@ -60,11 +47,9 @@ h2{
         0% {
           background-position: 0% 50%;
         }
-
         50% {
           background-position: 100% 50%;
         }
-
         100% {
           background-position: 0% 50%;
         }
@@ -75,8 +60,7 @@ h2{
         position: fixed;
         inset: -20%;
         z-index: -1;
-        background:
-          radial-gradient(
+        background: radial-gradient(
             600px 300px at 10% 10%,
             rgba(245, 158, 11, 0.06),
             transparent
@@ -95,6 +79,22 @@ h2{
         max-width: 1200px;
         margin: 0 auto;
         padding: 24px 20px;
+      }
+
+      /* Skip link */
+      .skip-link {
+        position: absolute;
+        left: -999px;
+        top: 10px;
+        background: #fff;
+        border: 1px solid var(--glass-border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        z-index: 9999;
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.12);
+      }
+      .skip-link:focus {
+        left: 12px;
       }
 
       /* Header */
@@ -117,14 +117,24 @@ h2{
         );
         border-bottom: 1px solid var(--glass-border);
         box-shadow: 0 6px 18px rgba(8, 38, 64, 0.06);
-        transition:
-          box-shadow 0.28s ease,
-          transform 0.12s ease;
+        transition: box-shadow 0.28s ease, transform 0.12s ease, padding 0.18s ease;
         min-height: 64px;
       }
 
       #ls-header:hover {
         box-shadow: 0 12px 28px rgba(8, 38, 64, 0.09);
+      }
+
+      /* Compact header on scroll */
+      #ls-header.compact {
+        padding: 8px 14px;
+      }
+      #ls-header.compact #ls-brand img {
+        width: 44px;
+        height: 44px;
+      }
+      #ls-header.compact .title-sub {
+        display: none;
       }
 
       /* Brand */
@@ -165,12 +175,20 @@ h2{
         background-clip: text;
         color: transparent;
         transition: filter 0.18s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 280px;
       }
 
       .title-sub {
         font-size: 12px;
         color: var(--muted);
         margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 320px;
       }
 
       /* Desktop search area (right side of header) */
@@ -213,9 +231,7 @@ h2{
         font-size: 14px;
         outline: none;
         box-shadow: inset 0 1px 2px rgba(12, 22, 30, 0.03);
-        transition:
-          box-shadow 0.18s ease,
-          border-color 0.18s ease;
+        transition: box-shadow 0.18s ease, border-color 0.18s ease;
       }
 
       #ls-search input[type="search"]:focus {
@@ -230,12 +246,11 @@ h2{
         border: none;
         background: linear-gradient(135deg, #f59e0b, #d97706);
         color: white;
-        font-weight: 700;
+        font-weight: 800;
         cursor: pointer;
         box-shadow: 0 6px 18px rgba(217, 119, 6, 0.16);
-        transition:
-          transform 0.12s ease,
-          box-shadow 0.12s ease;
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+        white-space: nowrap;
       }
 
       #ls-search button:hover {
@@ -280,7 +295,7 @@ h2{
       }
 
       #ls-nav a {
-        font-weight: 700;
+        font-weight: 800;
         color: var(--crx-accent-dark);
         text-decoration: none;
         padding: 8px 10px;
@@ -289,6 +304,32 @@ h2{
 
       #ls-nav a:hover {
         background: rgba(217, 119, 6, 0.1);
+      }
+
+      /* NEW: streak badge */
+      .ls-badges {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .ls-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 8px 22px rgba(2, 6, 23, 0.06);
+        font-weight: 800;
+        font-size: 13px;
+        color: var(--headline);
+        user-select: none;
+      }
+      .ls-badge small {
+        font-weight: 800;
+        color: var(--muted);
       }
 
       .menu-toggle {
@@ -321,10 +362,7 @@ h2{
         height: 2px;
         background: var(--headline);
         border-radius: 2px;
-        transition:
-          transform 0.18s ease,
-          top 0.18s ease,
-          bottom 0.18s ease;
+        transition: transform 0.18s ease, top 0.18s ease, bottom 0.18s ease;
       }
 
       .hamburger::before {
@@ -384,8 +422,7 @@ h2{
         box-shadow: 0 18px 40px rgba(8, 36, 64, 0.12);
         transform: translateY(-6px) scale(0.99);
         opacity: 0;
-        transition:
-          transform 0.26s cubic-bezier(0.2, 0.9, 0.3, 1),
+        transition: transform 0.26s cubic-bezier(0.2, 0.9, 0.3, 1),
           opacity 0.26s ease;
         max-height: 72vh;
         overflow: auto;
@@ -408,7 +445,7 @@ h2{
         text-decoration: none;
         color: var(--headline);
         border-radius: 8px;
-        font-weight: 700;
+        font-weight: 900;
       }
 
       .mobile-menu .mm-section a:hover {
@@ -435,9 +472,7 @@ h2{
         margin: 20px 0;
         border: 1px solid var(--glass-border);
         box-shadow: 0 8px 28px rgba(8, 36, 64, 0.04);
-        transition:
-          transform 0.18s ease,
-          box-shadow 0.18s ease;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
         backdrop-filter: blur(4px);
       }
 
@@ -450,7 +485,7 @@ h2{
       .crx-section h2 {
         margin: 0 0 12px;
         color: var(--headline);
-        font-weight: 800;
+        font-weight: 900;
       }
 
       .crx-section p {
@@ -469,6 +504,7 @@ h2{
         box-shadow: 0 6px 18px rgba(217, 119, 6, 0.16);
         text-decoration: none;
         border: 1px solid rgba(180, 83, 9, 0.16);
+        font-weight: 900;
       }
 
       .crx-keyword:hover {
@@ -476,24 +512,11 @@ h2{
         transform: translateY(-1px);
       }
 
-      textarea.editor {
-        width: 100%;
-        min-height: 160px;
-        border-radius: 10px;
-        border: 1px solid rgba(13, 24, 40, 0.06);
-        padding: 12px;
-        font-family:
-          ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-        font-size: 20px;
-        box-shadow: inset 0 6px 18px rgba(2, 6, 23, 0.03);
-        resize: vertical;
-      }
-
       .btn {
         border: none;
-        padding: 8px 12px;
+        padding: 10px 12px;
         border-radius: 10px;
-        font-weight: 700;
+        font-weight: 900;
         cursor: pointer;
       }
 
@@ -510,6 +533,12 @@ h2{
         font-size: 14px;
       }
 
+      .btn.small {
+        padding: 8px 10px;
+        font-size: 13px;
+        border-radius: 999px;
+      }
+
       a:focus-visible,
       button:focus-visible,
       input:focus-visible,
@@ -518,47 +547,99 @@ h2{
         outline-offset: 2px;
       }
 
-      .status {
-        font-size: 13px;
-        color: var(--muted);
+      /* NEW: Today strip */
+      .ls-grid-3 {
+        display: grid;
+        gap: 14px;
+      }
+      @media (min-width: 900px) {
+        .ls-grid-3 {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
       }
 
-      .output {
-        margin-top: 12px;
-        background: rgba(243, 250, 255, 0.9);
-        border-radius: 10px;
-        padding: 10px;
-        font-family:
-          ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-        font-size: 13px;
-        color: #08303f;
-        min-height: 80px;
-        white-space: pre-wrap;
-        overflow: auto;
+      .ls-tile {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(245, 251, 255, 0.98)
+        );
+        border: 1px solid rgba(13, 24, 40, 0.06);
+        border-radius: 14px;
+        padding: 16px;
+        box-shadow: 0 10px 24px rgba(8, 36, 64, 0.03);
       }
-
-      .mpl-card {
-        border-radius: 10px;
-        padding: 14px;
-        background: #fff;
-        box-shadow: 0 8px 20px rgba(8, 36, 64, 0.04);
+      .ls-tile h3 {
+        margin: 0 0 8px;
+        font-weight: 1000;
+        font-size: 16px;
       }
-
-      .mpl-thumb {
-        height: 120px;
-        border-radius: 8px;
-        display: flex;
+      .ls-tile .kicker {
+        display: inline-flex;
+        gap: 8px;
         align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        background: linear-gradient(180deg, #f7fbff, #ffffff);
+        font-weight: 1000;
+        font-size: 12px;
         color: var(--crx-accent-dark);
+        background: rgba(217, 119, 6, 0.1);
+        border: 1px solid rgba(217, 119, 6, 0.12);
+        padding: 6px 10px;
+        border-radius: 999px;
         margin-bottom: 10px;
       }
+      .ls-tile .muted {
+        color: var(--muted);
+        font-size: 13px;
+        margin: 6px 0 10px;
+      }
+      .ls-actions-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .ls-done-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.18);
+        font-weight: 1000;
+        font-size: 13px;
+        color: #065f46;
+      }
 
+      /* NEW: chips */
+      .ls-chips {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .ls-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        background: rgba(255, 255, 255, 0.92);
+        font-weight: 1000;
+        color: var(--headline);
+        cursor: pointer;
+        user-select: none;
+      }
+      .ls-chip.active {
+        border-color: rgba(217, 119, 6, 0.35);
+        box-shadow: 0 10px 24px rgba(217, 119, 6, 0.08);
+      }
+
+      /* Feed */
       #crx-feed-panel {
-        max-height: 520px;
-        overflow-y: auto;
+        max-height: none; /* let page scroll naturally */
+        overflow: visible;
         border-radius: 12px;
         border: 1px solid rgba(13, 24, 40, 0.04);
         padding: 12px;
@@ -578,6 +659,7 @@ h2{
         width: 100%;
         max-width: 980px;
       }
+
       @media (min-width: 900px) {
         #crx-card-list {
           display: grid;
@@ -594,7 +676,7 @@ h2{
         gap: 16px;
         align-items: center;
         padding: 12px;
-        border-radius: 10px;
+        border-radius: 14px;
         margin: 10px 6px;
         background: linear-gradient(
           180deg,
@@ -602,9 +684,7 @@ h2{
           rgba(245, 251, 255, 0.98)
         );
         border: 1px solid rgba(13, 24, 40, 0.03);
-        transition:
-          transform 0.12s ease,
-          box-shadow 0.12s ease;
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
         position: relative;
       }
 
@@ -616,32 +696,21 @@ h2{
       .crx-thumb-square {
         width: 88px;
         height: 88px;
-        border-radius: 10px;
+        border-radius: 12px;
         object-fit: cover;
         flex-shrink: 0;
-      }
-
-      .crx-avatar-circle {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid var(--card-bg);
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%) translateX(-36px);
-        box-shadow: 0 10px 18px rgba(2, 6, 23, 0.06);
+        border: 1px solid rgba(13, 24, 40, 0.06);
       }
 
       .crx-post-title {
         background: #d97706;
         color: white;
         padding: 8px 12px;
-        border-radius: 8px;
-        font-weight: 700;
+        border-radius: 10px;
+        font-weight: 900;
         display: inline-block;
         font-size: 0.95rem;
+        text-decoration: none;
       }
 
       .crx-post-meta {
@@ -650,20 +719,55 @@ h2{
         font-size: 13px;
       }
 
-      .crx_fade_in {
+      .crx-card-tools {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+
+      .mini-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        background: rgba(255, 255, 255, 0.92);
+        font-weight: 1000;
+        cursor: pointer;
+        user-select: none;
+        font-size: 13px;
+      }
+      .mini-pill.on {
+        border-color: rgba(217, 119, 6, 0.35);
+        box-shadow: 0 10px 24px rgba(217, 119, 6, 0.08);
+      }
+
+      /* toast */
+      .ls-toast {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        bottom: 18px;
+        padding: 12px 14px;
+        border-radius: 999px;
+        background: rgba(17, 24, 39, 0.92);
+        color: #fff;
+        font-weight: 900;
+        font-size: 13px;
+        box-shadow: 0 18px 48px rgba(2, 6, 23, 0.22);
         opacity: 0;
-        transform: translateY(12px);
-        transition:
-          opacity 0.6s ease,
-          transform 0.6s ease;
-        will-change: opacity, transform;
+        pointer-events: none;
+        transition: opacity 0.18s ease, transform 0.18s ease;
+        z-index: 9999;
       }
-
-      .crx_fade_in.crx_visible {
+      .ls-toast.show {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
       }
 
+      /* back to top */
       #back-to-top {
         position: fixed;
         right: 18px;
@@ -679,9 +783,7 @@ h2{
         cursor: pointer;
         opacity: 0;
         transform: translateY(8px);
-        transition:
-          opacity 0.22s ease,
-          transform 0.22s ease;
+        transition: opacity 0.22s ease, transform 0.22s ease;
         z-index: 9998;
       }
 
@@ -692,28 +794,6 @@ h2{
 
       #back-to-top:active {
         transform: translateY(1px) scale(0.99);
-      }
-
-      #crx-explore-search {
-        width: 100%;
-        max-width: 420px;
-        height: 40px;
-        padding: 8px 12px;
-        border-radius: 10px;
-        border: 1px solid rgba(13, 24, 40, 0.08);
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.98),
-          rgba(250, 250, 250, 0.95)
-        );
-        font-size: 14px;
-        outline: none;
-      }
-
-      #crx-explore-controls {
-        display: flex;
-        gap: 10px;
-        align-items: center;
       }
 
       @media (max-width: 920px) {
@@ -751,10 +831,6 @@ h2{
           display: none;
         }
 
-        .card-thumb-small {
-          width: 120px;
-        }
-
         .mobile-menu {
           left: 12px;
           right: 12px;
@@ -762,12 +838,18 @@ h2{
           width: calc(100% - 24px);
           max-width: none;
         }
+
+        .ls-badges {
+          display: none; /* keep header clean on small screens */
+        }
       }
     </style>
   </head>
 
   <body>
-  
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- Hidden labels (optional SEO / future use) -->
     <div class="page-labels" style="display: none">
       <span>Data Structures</span>
       <span>Algorithms</span>
@@ -782,7 +864,6 @@ h2{
         <img
           src="https://blogger.googleusercontent.com/img/a/AVvXsEhlfwIqq3YYxj6LMFr4E7IKN2bYIor-bFpbUXBT3Jthp8PKmRdWozV3hEk2xcj3kPrJ9WBIkXCr4lw5MTAz0AE5b0lPhQ2ReNbCmMOumP4zLTEOb7GY6s4YWcgcCfzltJVmQcgCObeQNRvn_SWPa_2c6cROZUOBHhRJB20PaV-peuA3GTSafM8JxgaYu5M=s257"
           alt="Champak Roy avatar"
-          class="crx_avatar"
           loading="lazy"
         />
         <div id="ls-title">
@@ -796,1135 +877,975 @@ h2{
           <a
             href="https://www.learnwithchampak.live/2025/12/programmers-picnic.html"
             target="_blank"
+            rel="noopener"
             >Programmer's Picnic</a
           >
           <a
             href="https://www.learnwithchampak.live/2025/12/python-starter-club-day1.html"
             target="_blank"
-            >Python & VS Code Installation</a
+            rel="noopener"
+            >Python & VS Code</a
           >
           <a
             href="https://www.learnwithchampak.live/2025/11/all-dsa-posts.html"
             target="_blank"
+            rel="noopener"
             >DSA-Full</a
           >
-          <a target="_blank" href="https://www.learnwithchampak.live">Home</a>
-          <a
-            target="_blank"
-            href="https://www.learnwithchampak.live/search?q=python"
-            >Python</a
-          >
-          <a
-            target="_blank"
-            href="https://www.learnwithchampak.live/search?q=javascript"
-            >JavaScript</a
-          >
-          <a
-            href="https://www.learnwithchampak.live/search?q=projects"
-            target="_blank"
-            >Projects</a
-          >
-          <a
-            href="https://us04web.zoom.us/j/4428355179?pwd=yCZrJtx41cUAxDyApDM9eSrre1GSXe.1"
-            target="_blank"
-            >Connect on Zoom</a
-          >
-
-          <a
-            target="_blank"
-            href="https://programmer-s-picnic.github.io/learnwithchampak-pwa/"
-            target="_blank"
-            >Learn with Champak - App</a
+          <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live"
+            >Home</a
           >
         </nav>
 
-        <div id="ls-search" role="search" aria-label="Search this blog">
-          <div class="search-box">
-            <input
-              id="ls-search-input"
-              type="search"
-              placeholder="Search this blog..."
-              aria-label="Search this blog"
-              autocomplete="off"
-            />
-            <button id="ls-search-btn" title="Search" class="btn primary">
-              Search
-            </button>
+        <!-- NEW: streak + points -->
+        <div class="ls-badges" aria-label="Daily progress">
+          <div class="ls-badge" id="lsStreakBadge" title="Daily streak">
+            🔥 <span id="lsStreak">0</span> <small>days</small>
           </div>
-          <div
-            id="ls-suggestions"
-            role="listbox"
-            aria-label="Search suggestions"
-          ></div>
+          <div class="ls-badge" id="lsPointsBadge" title="Points earned">
+            ⭐ <span id="lsPoints">0</span>
+          </div>
         </div>
 
-        <button
-          class="menu-toggle"
-          id="menu-toggle"
-          aria-expanded="false"
-          aria-controls="mobile-menu"
-          aria-label="Open menu"
-        >
+        <div id="ls-search" role="search" aria-label="Search Learning Sutras">
+          <div class="search-box">
+            <input
+              id="lsQuery"
+              type="search"
+              placeholder="Search: python, arrays, recursion, interview..."
+              autocomplete="off"
+            />
+            <button id="lsSearchBtn" type="button">Search</button>
+          </div>
+
+          <div id="ls-suggestions" aria-label="Search suggestions"></div>
+        </div>
+
+        <button class="menu-toggle" id="lsMenuBtn" aria-label="Open menu">
           <span class="hamburger"></span>
         </button>
       </div>
     </header>
 
-    <div
-      class="mobile-menu-backdrop"
-      id="mobile-backdrop"
-      tabindex="-1"
-      aria-hidden="true"
-    ></div>
+    <div class="mobile-menu-backdrop" id="lsBackdrop"></div>
 
-    <aside
-      class="mobile-menu"
-      id="mobile-menu"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="mobile-menu-title"
-      hidden
-    >
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 6px;
-        "
-      >
-        <div id="mobile-menu-title" style="font-weight: 800">Menu</div>
-        <button
-          id="mobile-close"
-          aria-label="Close menu"
-          class="btn ghost"
-          style="padding: 6px 8px"
-        >
-          Close
-        </button>
-      </div>
-
+    <div class="mobile-menu" id="lsMobileMenu" aria-label="Mobile menu">
       <div class="mm-section">
-        <a target="_blank" href="https://www.learnwithchampak.live">Home</a>
+        <a
+          href="https://www.learnwithchampak.live/2025/12/programmers-picnic.html"
+          target="_blank"
+          rel="noopener"
+          >Programmer's Picnic</a
+        >
         <a
           href="https://www.learnwithchampak.live/2025/12/python-starter-club-day1.html"
           target="_blank"
-          >Python & VS Code Installation</a
+          rel="noopener"
+          >Python & VS Code</a
         >
         <a
+          href="https://www.learnwithchampak.live/2025/11/all-dsa-posts.html"
           target="_blank"
-          href="https://www.learnwithchampak.live/search?q=python"
+          rel="noopener"
+          >DSA — All posts</a
+        >
+        <a href="https://www.learnwithchampak.live/search?q=python" target="_blank" rel="noopener"
           >Python</a
         >
         <a
-          target="_blank"
           href="https://www.learnwithchampak.live/search?q=javascript"
+          target="_blank"
+          rel="noopener"
           >JavaScript</a
         >
-        <a
-          target="_blank"
-          href="https://www.learnwithchampak.live/search?q=projects"
-          >Projects</a
-        >
-        <a
-          target="_blank"
-          href="https://www.learnwithchampak.live/search?q=matplotlib"
-          >Matplotlib</a
-        >
-        <a
-          target="_blank"
-          href="https://us04web.zoom.us/j/4428355179?pwd=yCZrJtx41cUAxDyApDM9eSrre1GSXe.1"
-          >Connect on Zoom</a
-        >
       </div>
 
-      <div class="mm-divider" aria-hidden="true"></div>
+      <div class="mm-divider"></div>
 
       <div class="mm-section">
-        <div style="font-weight: 700; margin-bottom: 8px">Quick Search</div>
-        <div style="display: flex; gap: 8px">
-          <input
-            id="mobile-search-input"
-            type="search"
-            placeholder="Search..."
-            style="
-              flex: 1;
-              padding: 8px;
-              border-radius: 8px;
-              border: 1px solid rgba(13, 24, 40, 0.06);
-              outline: none;
-            "
-          />
-          <button id="mobile-search-btn" class="btn primary">Go</button>
-        </div>
-      </div>
-
-      <div class="mm-divider" aria-hidden="true"></div>
-
-      <div class="mm-section">
-        <div style="font-weight: 700; margin-bottom: 8px">Keywords</div>
+        <div style="font-weight: 1000; margin: 6px 0 10px">Explore</div>
         <div class="mm-keywords">
-          <a
-            target="_blank"
-            class="crx-keyword"
-            style="font-size: 13px; padding: 6px 10px"
-            href="https://www.learnwithchampak.live/search?q=flutter"
-            >Flutter</a
-          >
-
-          <a
-            class="crx-keyword"
-            target="_blank"
-            style="font-size: 13px; padding: 6px 10px"
-            href="https://www.learnwithchampak.live/2025/11/programmers-picnic_17.html"
-            >Programmer's Policy</a
-          >
-
-          <a
-            target="_blank"
-            class="crx-keyword"
-            style="font-size: 13px; padding: 6px 10px"
-            href="https://www.learnwithchampak.live/search?q=java"
-            >Java</a
-          >
-
-          <a
-            target="_blank"
-            class="crx-keyword"
-            style="font-size: 13px; padding: 6px 10px"
-            href="https://www.learnwithchampak.live/search?q=python"
-            >Python</a
-          >
-          <a
-            target="_blank"
-            class="crx-keyword"
-            style="font-size: 13px; padding: 6px 10px"
-            href="https://www.learnwithchampak.live/search?q=javascript"
-            >JavaScript</a
-          >
-          <a
-            target="_blank"
-            class="crx-keyword"
-            style="font-size: 13px; padding: 6px 10px"
-            href="https://www.learnwithchampak.live/search?q=css"
-            >CSS</a
-          >
+          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=python">Python</a>
+          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=dsa">DSA</a>
+          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=arrays">Arrays</a>
+          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=recursion">Recursion</a>
+          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=interview">Interview</a>
         </div>
       </div>
-    </aside>
-
-    <!-- Main content -->
-    <main id="crx-dashboard-home" role="main">
-      <section class="why-blog-section">
-        <div class="why-blog-card">
-          <h2>
-            Hi, I’m <span style="color: #d97706">Champak Roy</span> — Developer
-            · Writer · Teacher
-          </h2>
-          <div class="intro-sub">
-            Where professional performance meets warm mentorship
-          </div>
-
-          <p class="intro-paragraph">
-            I help students and professionals master practical skills in
-            <strong
-              >Data Structures, Algorithms, Web Development, and Python</strong
-            >. My lessons focus on clarity, hands-on projects, and
-            interview-readiness so you not only understand concepts — you can
-            apply them with confidence.
-          </p>
-
-          <p>
-            you’ll find <strong> lessons</strong>,
-            <strong>that target jobs </strong>, and
-            <strong>Internships.</strong>
-          </p>
-        </div>
-      </section>
-
-      <section class="why-blog-section">
-        <div class="why-blog-card">
-          <h2>Why This Website Matters</h2>
-          <p>
-            <strong>Learn With Champak</strong> is built for learners who want
-            more than just theory. Every post is thoughtfully crafted with
-            <strong>real-world examples</strong>,
-            <strong>step-by-step explanations</strong>,
-            <strong>visual demos</strong>, and
-            <strong>complete code snippets</strong> — all designed to help you
-            understand how programming truly works in practice.
-          </p>
-          <p>
-            From mastering <strong>Data Structures and Algorithms</strong> to
-            building <strong>Web Development projects</strong> and exploring
-            <strong>Python applications</strong>, you’ll find
-            <strong>interactive lessons</strong>,
-            <strong>hands-on challenges</strong>, and
-            <strong>career-focused insights</strong> that turn your knowledge
-            into job-ready skills.
-          </p>
-        </div>
-      </section>
-
-      <style>
-        .why-blog-section {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 60px 20px;
-          background: linear-gradient(180deg, #fff7e6 0%, #fff1d6 100%);
-        }
-
-        .why-blog-card {
-          max-width: 880px;
-          background: #ffffff;
-          border-radius: 16px;
-          padding: 40px 36px;
-          box-shadow:
-            0 8px 25px rgba(217, 119, 6, 0.14),
-            0 2px 6px rgba(0, 0, 0, 0.05);
-          text-align: center;
-          animation: fadeInUp 0.9s ease both;
-          transition:
-            transform 0.3s ease,
-            box-shadow 0.3s ease;
-        }
-
-        .why-blog-card:hover {
-          transform: translateY(-4px);
-          box-shadow:
-            0 14px 35px rgba(217, 119, 6, 0.18),
-            0 4px 10px rgba(0, 0, 0, 0.06);
-        }
-
-        .why-blog-card h2 {
-          font-family: "Segoe UI", Roboto, sans-serif;
-          font-size: 2em;
-          font-weight: 700;
-          color: #7c2d12;
-          margin-bottom: 20px;
-          position: relative;
-        }
-
-        .why-blog-card h2::after {
-          content: "";
-          display: block;
-          width: 80px;
-          height: 4px;
-          background: linear-gradient(90deg, #f59e0b, #d97706);
-          margin: 10px auto 0;
-          border-radius: 3px;
-        }
-
-        .why-blog-card p {
-          font-size: 1.08em;
-          color: #1e293b;
-          line-height: 1.75;
-          margin-bottom: 16px;
-        }
-
-        .why-blog-card strong {
-          color: #d97706;
-          font-weight: 600;
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @media (max-width: 600px) {
-          .why-blog-card {
-            padding: 28px 20px;
-          }
-
-          .why-blog-card h2 {
-            font-size: 1.6em;
-          }
-
-          .why-blog-card p {
-            font-size: 1em;
-          }
-        }
-      </style>
-     
-   <section class="crx-section keywords crx_fade_in" id="courses-section">
-      <h2>🔑 Editors</h2>
-      <p
-        style="
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          justify-content: space-around;
-        "
-      >
-        <a
-          target="_blank"
-          class="crx-keyword"
-          title="SQL Editor"
-          href="https://www.learnwithchampak.live/2026/01/programmers-picnic.html"
-          >SQL Editor</a
-        >
-
-        <a
-          title="The Programmmer's Picnic --- Python Editor"
-          target="_blank"
-          class="crx-keyword"
-          href="https://www.learnwithchampak.live/p/programmers-picnic-teacher-mode.html"
-          >Python Editor</a
-        >
-        <a
-          target="_blank"
-          title="The Programmmer's Picnic --- Javascript Editor"
-          class="crx-keyword"
-          href="https://www.learnwithchampak.live/2026/01/programmers-picnic-javascript-editor.html"
-          >Javascript Editor</a
-        >
-      </p>
-
-      <!--********************************************-->
-      <section class="crx-section keywords crx_fade_in" id="courses-section">
-        <h2>🔑 Image Processing</h2>
-        <p
-          style="
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-around;
-          "
-        >
-          <a
-            target="_blank"
-            class="crx-keyword"
-            title="Hover Magnify"
-            href="https://www.learnwithchampak.live/2025/12/programmers-picnic-multi-image-product.html"
-            >Hover Magnify --- Amazon Style</a
-          >
-
-          <a
-            title="The Programmmer's Picnic --- Image Lab"
-            target="_blank"
-            class="crx-keyword"
-            href="https://www.learnwithchampak.live/2026/01/programmers-picnic-image-processing.html"
-            >Image Lab</a
-          >
-         <section class="crx-section keywords crx_fade_in" id="courses-section">
-        <h2>🔑 QR Code</h2>
-        <p
-          style="
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-around;
-          "
-        >
-          <a
-            target="_blank"
-            class="crx-keyword"
-            title="QR Code Creater."
-            href="https://www.learnwithchampak.live/2026/01/programmers-picnic-qr-code-creator.html"
-            >QR Code Creator</a
-          >
-
- <a
-            target="_blank"
-            class="crx-keyword"
-            title="QR Code Reader."
-            href="https://www.learnwithchampak.live/2026/01/programmers-picnic-qr-code-reader.html"
-            >QR Code Reader</a
-          >
-          
-
-                 </p>
-      </section>
-          
-<a
-            target="_blank"
-            class="crx-keyword"
-            title="Face based Attendance"
-            href="https://www.learnwithchampak.live/2025/12/blog-post_7.html"
-            >Face based Attendance</a
-          >
-
-
-
-
-        </p>
-      </section>
-
-      <!--********************************************-->
-      <!--********************************************-->
-      <section class="crx-section keywords crx_fade_in" id="courses-section">
-        <h2>🔑 Visualizers</h2>
-        <p
-          style="
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-around;
-          "
-        >
-          <a
-            target="_blank"
-            class="crx-keyword"
-            title="Mathematics Visualizers"
-            href="https://www.learnwithchampak.live/2025/12/math-visualization-addition.html"
-            >Mathematics Visualizer</a
-          >
-
-          <a
-            title="The Programmmer's Picnic --- Bubble Sort Visualizer"
-            target="_blank"
-            class="crx-keyword"
-            href="https://www.learnwithchampak.live/2025/10/minimal-styles-crxcontainer_3.html"
-            >Bubble Sort Visualizer</a
-          >
-          <a
-            target="_blank"
-            title="The Programmmer's Picnic --- Counting Sort Visualizer"
-            class="crx-keyword"
-            href="https://www.learnwithchampak.live/2025/10/counting-sort-5-row-visualizer-single_12.html"
-            >Counting Sort Visualizer</a
-          >
-            <a
-            target="_blank"
-            title="The Programmmer's Picnic --- Undo  Redo Visualizer"
-            class="crx-keyword"
-            href="https://www.learnwithchampak.live/2026/01/programmers-picnic-complete-course_28.html"
-            >Undo  Redo Visualizer</a
-          >
-
-
-          
-        </p>
-      </section>
-
-      <!--********************************************-->
-    </section>
-
-    
-      <section
-        class="crx-section coder python-coder crx_fade_in"
-        id="python-editor-embed"
-      >
-        <h2>🐍 Python Editor</h2>
-        <p style="margin-bottom: 14px; color: var(--muted)">
-          Use the full Programmer’s Picnic Python Editor right here.
-        </p>
-        <div
-          style="
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid rgba(31, 41, 55, 0.1);
-            box-shadow: 0 14px 36px rgba(31, 41, 55, 0.08);
-            background: rgba(255, 255, 255, 0.85);
-          "
-        >
-          <iframe
-            title="Programmer's Picnic Python Editor"
-            src="https://www.learnwithchampak.live/2026/01/programmers-picnic-python-editor.html"
-            style="
-              width: 100%;
-              height: 560px;
-              border: 0;
-              display: block;
-              background: #fff;
-            "
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allow="clipboard-read; clipboard-write"
-          ></iframe>
-        </div>
-        <div class="status" style="margin-top: 10px">
-          If the editor doesn’t load,
-          <a
-            target="_blank"
-            href="https://www.learnwithchampak.live/2026/01/programmers-picnic-python-editor.html"
-            rel="noopener"
-            style="color: var(--crx-accent-dark); font-weight: 800"
-            >open it in a new tab</a
-          >.
-        </div>
-      </section>
-
-     <!------------------------------------------------------------>
-      <section
-        class="crx-section coder python-coder crx_fade_in"
-        id="javascript-editor-embed"
-      >
-        <h2>🐍 Javascript Editor</h2>
-        <p style="margin-bottom: 14px; color: var(--muted)">
-          Use the full Programmer’s Picnic Javascript Editor right here.
-        </p>
-        <div
-          style="
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid rgba(31, 41, 55, 0.1);
-            box-shadow: 0 14px 36px rgba(31, 41, 55, 0.08);
-            background: rgba(255, 255, 255, 0.85);
-          "
-        >
-          <iframe
-            title="Programmer's Picnic Javascript Editor"
-            src="https://www.learnwithchampak.live/2026/01/programmers-picnic-javascript-editor.html"
-            style="
-              width: 100%;
-              height: 560px;
-              border: 0;
-              display: block;
-              background: #fff;
-            "
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allow="clipboard-read; clipboard-write"
-          ></iframe>
-        </div>
-        <div class="status" style="margin-top: 10px">
-          If the editor doesn’t load,
-          <a
-            target="_blank"
-            href="https://www.learnwithchampak.live/2026/01/programmers-picnic-javascript-editor.html"
-            rel="noopener"
-            style="color: var(--crx-accent-dark); font-weight: 800"
-            >open it in a new tab</a
-          >.
-        </div>
-      </section>
-
-     <!------------------------------------------------------------>
-      <section
-        class="crx-section ls-matplot crx_fade_in"
-        id="matplotlib-section"
-      >
-        <h2>📈 Python Matplotlib Visualizations</h2>
-        <p style="color: var(--muted); margin-bottom: 12px">
-          Examples, charts and step-by-step explanations.
-        </p>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-          "
-        >
-          <div class="mpl-card">
-            <div class="mpl-thumb">📊</div>
-            <h3 style="margin: 6px 0 8px">Bar Charts in Matplotlib</h3>
-            <p style="margin: 0 0 8px; color: var(--muted); font-size: 13px">
-              Learn to create and style bar charts.
-            </p>
-            <a
-              target="_blank"
-              href="https://www.learnwithchampak.live/2025/10/matplotlib-in-python-bar-charts.html"
-              class="btn.primary btn"
-              style="padding: 8px 10px; font-size: 14px"
-              >View Example</a
-            >
-          </div>
-          <div class="mpl-card">
-            <div class="mpl-thumb">📈</div>
-            <h3 style="margin: 6px 0 8px">Line Graphs & Trends</h3>
-            <p style="margin: 0 0 8px; color: var(--muted); font-size: 13px">
-              Visualize trends using line plots.
-            </p>
-            <a
-              target="_blank"
-              href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-linegraphs-trends.html"
-              class="btn.primary btn"
-              style="padding: 8px 10px; font-size: 14px"
-              >Open Tutorial</a
-            >
-          </div>
-          <div class="mpl-card">
-            <div class="mpl-thumb">🟢</div>
-            <h3 style="margin: 6px 0 8px">Scatter & Bubble Plots</h3>
-            <p style="margin: 0 0 8px; color: var(--muted); font-size: 13px">
-              Show relationships between variables.
-            </p>
-            <a
-              target="_blank"
-              href="https://www.learnwithchampak.live/2025/11/matplotlib-bubble-scatter-plots.html"
-              class="btn.primary btn"
-              style="padding: 8px 10px; font-size: 14px"
-              >Try Now</a
-            >
-          </div>
-        </div>
-      </section>
-
-      <section class="crx-section live-search crx_fade_in" id="explore-section">
-        <h2>🧭 Explore Posts</h2>
-        <p style="color: var(--muted); margin-bottom: 12px">
-          Browse recent lessons and tutorials. Use search to find exact topics.
-        </p>
-
-        <div id="crx-explore-controls" style="margin-bottom: 12px">
-          <input
-            id="crx-explore-search"
-            type="search"
-            placeholder="Filter posts (title or snippet)..."
-            aria-label="Filter explore posts"
-          />
-          <div id="crx-explore-count" class="status" style="margin-left: auto">
-            Loading…
-          </div>
-        </div>
-
-        <div id="crx-feed-panel">
-          <div id="crx-card-list" aria-live="polite">
-            <div style="padding: 18px; color: #64748b">Loading posts…</div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <div id="back-to-top" title="Back to top" aria-hidden="true">
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path d="M12 5l-7 7h4v7h6v-7h4l-7-7z" fill="currentColor" />
-      </svg>
     </div>
 
+    <main id="main" id="crx-dashboard-home" role="main">
+      <main id="crx-dashboard-home">
+        <!-- NEW: Today strip -->
+        <section class="crx-section crx_fade_in" id="lsToday">
+          <h1 style="margin-bottom: 6px">Today at Learning Sutras</h1>
+          <p style="margin-bottom: 14px">
+            Quick wins for the day — complete 1 tile to keep your streak.
+          </p>
+
+          <div class="ls-grid-3">
+            <div class="ls-tile" id="tileChallenge">
+              <div class="kicker">✅ Daily Challenge</div>
+              <h3 id="challengeTitle">Loading…</h3>
+              <div class="muted" id="challengePrompt"></div>
+              <div class="ls-actions-row">
+                <button class="btn primary small" id="btnChallengeDone">Mark Done (+10)</button>
+                <button class="btn ghost small" id="btnChallengeCopy">Copy Prompt</button>
+              </div>
+              <div style="margin-top: 10px; display: none" id="challengeDoneChip" class="ls-done-chip">
+                🎉 Completed today
+              </div>
+            </div>
+
+            <div class="ls-tile" id="tileMCQ">
+              <div class="kicker">🧠 Daily MCQ</div>
+              <h3 id="mcqQ">Loading…</h3>
+              <div class="muted" id="mcqA" style="display: none"></div>
+              <div class="ls-actions-row">
+                <button class="btn ghost small" id="btnMCQReveal">Reveal</button>
+                <button class="btn primary small" id="btnMCQDone">I got it (+5)</button>
+              </div>
+              <div style="margin-top: 10px; display: none" id="mcqDoneChip" class="ls-done-chip">
+                ✅ MCQ done
+              </div>
+            </div>
+
+            <div class="ls-tile" id="tileViz">
+              <div class="kicker">🧩 Today’s Visual</div>
+              <h3 id="vizTitle">Loading…</h3>
+              <div class="muted" id="vizDesc"></div>
+              <div class="ls-actions-row">
+                <a class="btn primary small" id="vizLink" href="#" target="_blank" rel="noopener">Open</a>
+                <button class="btn ghost small" id="btnVizDone">Watched (+3)</button>
+              </div>
+              <div style="margin-top: 10px; display: none" id="vizDoneChip" class="ls-done-chip">
+                👍 Nice
+              </div>
+            </div>
+          </div>
+
+          <div class="ls-chips" aria-label="Quick filters">
+            <div class="ls-chip active" data-q="learnwithchampak">All</div>
+            <div class="ls-chip" data-q="python">Python</div>
+            <div class="ls-chip" data-q="dsa">DSA</div>
+            <div class="ls-chip" data-q="javascript">JavaScript</div>
+            <div class="ls-chip" data-q="interview">Interview</div>
+            <div class="ls-chip" data-q="projects">Projects</div>
+          </div>
+        </section>
+
+        <!-- NEW: Continue -->
+        <section class="crx-section crx_fade_in" id="lsContinue" style="display: none">
+          <h2 style="margin-bottom: 6px">Continue where you left off</h2>
+          <p class="muted" style="margin-bottom: 12px">
+            Your last opened page is saved on this device.
+          </p>
+          <div class="ls-tile" style="padding: 14px">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+              <div>
+                <div style="font-weight:1000; font-size: 16px" id="lsLastTitle">—</div>
+                <div class="muted" id="lsLastMeta">—</div>
+              </div>
+              <div class="ls-actions-row" style="margin-top:0">
+                <a class="btn primary" id="lsLastOpen" href="#" target="_blank" rel="noopener">Continue</a>
+                <button class="btn ghost" id="lsLastClear" type="button">Clear</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Roadmaps -->
+        <section class="crx-section crx_fade_in" id="lsRoadmaps">
+          <h2 style="margin-bottom: 6px">Roadmaps</h2>
+          <p style="margin-bottom: 14px">Tick daily progress. Share streak on WhatsApp.</p>
+
+          <div class="ls-grid-3">
+            <div class="ls-tile">
+              <div class="kicker">⭐ Python Starter</div>
+              <h3>28-Day Python Plan</h3>
+              <div class="muted">Daily small tasks + practice programs.</div>
+              <div class="ls-actions-row">
+                <a class="btn primary small" target="_blank" rel="noopener"
+                  href="https://www.learnwithchampak.live/search?q=python%20starter%20club"
+                  >Open Lessons</a
+                >
+                <button class="btn ghost small" data-share="python28">Share</button>
+              </div>
+            </div>
+
+            <div class="ls-tile">
+              <div class="kicker">🧠 DSA Saturdays</div>
+              <h3>Interview Practice</h3>
+              <div class="muted">MCQs + assignments + submissions format.</div>
+              <div class="ls-actions-row">
+                <a class="btn primary small" target="_blank" rel="noopener"
+                  href="https://www.learnwithchampak.live/2025/11/all-dsa-posts.html"
+                  >Open DSA</a
+                >
+                <button class="btn ghost small" data-share="dsaSat">Share</button>
+              </div>
+            </div>
+
+            <div class="ls-tile">
+              <div class="kicker">🧩 Visualizers</div>
+              <h3>Learn by Seeing</h3>
+              <div class="muted">Sorting, recursion, pointers, trees (visual + code).</div>
+              <div class="ls-actions-row">
+                <a class="btn primary small" target="_blank" rel="noopener"
+                  href="https://www.learnwithchampak.live/search?q=visualizer"
+                  >Explore</a
+                >
+                <button class="btn ghost small" data-share="viz">Share</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Explore keywords -->
+        <section class="crx-section crx_fade_in" id="lsExplore">
+          <h2 style="margin-bottom: 6px">Explore topics</h2>
+          <p style="margin-bottom: 14px">Tap a chip to open matching posts.</p>
+
+          <div>
+            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=python">Python</a>
+            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=arrays">Arrays</a>
+            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=string">Strings</a>
+            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=recursion">Recursion</a>
+            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=sorting">Sorting</a>
+            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=binary%20search">Binary Search</a>
+            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=javascript">JavaScript</a>
+            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=dom">DOM</a>
+            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=interview">Interview</a>
+          </div>
+        </section>
+
+        <!-- NEW: Mini tools -->
+        <section class="crx-section crx_fade_in" id="lsTools">
+          <h2 style="margin-bottom: 6px">Mini tools</h2>
+          <p style="margin-bottom: 14px">Small utilities people actually return for.</p>
+
+          <div class="ls-grid-3">
+            <div class="ls-tile">
+              <div class="kicker">🔧 JSON</div>
+              <h3>JSON Pretty</h3>
+              <div class="muted">Paste JSON → format quickly (in this page).</div>
+              <div class="ls-actions-row">
+                <button class="btn primary small" id="openJsonTool">Open</button>
+                <button class="btn ghost small" id="copyJsonToolLink">Copy Link</button>
+              </div>
+            </div>
+            <div class="ls-tile">
+              <div class="kicker">🧮 Python</div>
+              <h3>Format Cheatsheet</h3>
+              <div class="muted">Dates, zero-padding, commas, floats.</div>
+              <div class="ls-actions-row">
+                <a class="btn primary small" target="_blank" rel="noopener"
+                  href="https://www.learnwithchampak.live/search?q=format%20python"
+                  >Open</a
+                >
+              </div>
+            </div>
+            <div class="ls-tile">
+              <div class="kicker">📣 Join</div>
+              <h3>Daily Tasks (WhatsApp)</h3>
+              <div class="muted">Get daily prompts and doubt support.</div>
+              <div class="ls-actions-row">
+                <a class="btn primary small" target="_blank" rel="noopener"
+                  href="https://wa.me/?text=Namaste%20%F0%9F%99%8F%20I%20want%20to%20join%20Learning%20Sutras%20daily%20tasks."
+                  >WhatsApp</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Inline JSON tool (hidden until opened) -->
+          <div class="ls-tile" id="jsonTool" style="margin-top: 14px; display: none">
+            <div class="kicker">🔧 JSON Pretty</div>
+            <h3 style="margin-bottom: 6px">Paste JSON</h3>
+            <textarea id="jsonInput" style="width:100%; min-height:140px; border-radius:12px; border:1px solid rgba(13,24,40,.08); padding:12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;"></textarea>
+            <div class="ls-actions-row" style="margin-top: 10px">
+              <button class="btn primary" id="btnJsonFormat">Format</button>
+              <button class="btn ghost" id="btnJsonMinify">Minify</button>
+              <button class="btn ghost" id="btnJsonCopy">Copy Output</button>
+              <button class="btn ghost" id="btnJsonClose">Close</button>
+            </div>
+            <pre id="jsonOut" style="margin-top: 12px; background: rgba(243, 250, 255, 0.9); border-radius: 12px; padding: 12px; overflow:auto; white-space: pre-wrap; border:1px solid rgba(13,24,40,.06)"></pre>
+          </div>
+        </section>
+
+        <!-- Feed -->
+        <section class="crx-section crx_fade_in" id="lsLatest">
+          <h2 style="margin-bottom: 6px">Latest & Popular</h2>
+          <p style="margin-bottom: 14px">
+            Bookmark posts, mark as done, and continue anytime.
+          </p>
+
+          <div id="crx-feed-panel">
+            <div id="crx-card-list"></div>
+          </div>
+        </section>
+
+        <div id="back-to-top" aria-label="Back to top" title="Back to top">↑</div>
+      </main>
+    </main>
+
+    <div class="ls-toast" id="lsToast">Saved</div>
+
     <script>
-      (function () {
-        /* small helpers */
-        const $ = (s, ctx = document) => ctx.querySelector(s);
-        const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
-        const escapeHtml = (s) =>
-          String(s).replace(
-            /[&<>"']/g,
-            (m) =>
-              ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;",
-              })[m],
-          );
+      (() => {
+        // --------------------------
+        // Utilities
+        // --------------------------
+        const $ = (id) => document.getElementById(id);
+        const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
-        /* ===== Mobile menu behaviour (open/close, close on outside click / Escape) ===== */
-        const menuToggle = $("#menu-toggle");
-        const mobileMenu = $("#mobile-menu");
-        const backdrop = $("#mobile-backdrop");
-        const mobileCloseBtn = $("#mobile-close");
-        const mobileSearchInput = $("#mobile-search-input");
-        const mobileSearchBtn = $("#mobile-search-btn");
-
-        function openMobileMenu() {
-          menuToggle.classList.add("open");
-          menuToggle.setAttribute("aria-expanded", "true");
-          mobileMenu.hidden = false;
-          backdrop.classList.add("show");
-          mobileMenu.classList.add("show");
-          backdrop.setAttribute("aria-hidden", "false");
-          // trap focus to first interactive element in menu
-          setTimeout(
-            () => mobileMenu.querySelector("a, button, input")?.focus(),
-            120,
-          );
-          document.body.style.overflow = "hidden"; // lock background scroll while menu is open
+        // IST day-key (stable even when embedded)
+        const IST_OFFSET_MIN = 330; // +05:30
+        function getISTDayKey(ts = Date.now()) {
+          const utcMs = ts + new Date(ts).getTimezoneOffset() * 60000;
+          const istMs = utcMs + IST_OFFSET_MIN * 60000;
+          const d = new Date(istMs);
+          const y = d.getUTCFullYear();
+          const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+          const day = String(d.getUTCDate()).padStart(2, "0");
+          return `${y}-${m}-${day}`;
         }
-        function closeMobileMenu() {
-          document.body.style.overflow = "";
-          menuToggle.classList.remove("open");
-          menuToggle.setAttribute("aria-expanded", "false");
-          mobileMenu.classList.remove("show");
-          backdrop.classList.remove("show");
-          backdrop.setAttribute("aria-hidden", "true");
-          // wait transition before hiding (matching CSS timing)
-          setTimeout(() => {
-            if (!mobileMenu.classList.contains("show"))
-              mobileMenu.hidden = true;
-          }, 260);
+        function getISTDayIndex(ts = Date.now()) {
+          const utcMs = ts + new Date(ts).getTimezoneOffset() * 60000;
+          const istMs = utcMs + IST_OFFSET_MIN * 60000;
+          return Math.floor(istMs / 86400000);
         }
 
-        menuToggle.addEventListener("click", () => {
-          const open = menuToggle.classList.contains("open");
-          if (open) closeMobileMenu();
-          else openMobileMenu();
-        });
+        function toast(msg) {
+          const t = $("lsToast");
+          t.textContent = msg;
+          t.classList.add("show");
+          clearTimeout(toast._timer);
+          toast._timer = setTimeout(() => t.classList.remove("show"), 1400);
+        }
 
-        mobileCloseBtn.addEventListener("click", closeMobileMenu);
-        // clicking backdrop closes menu
-        backdrop.addEventListener("click", closeMobileMenu);
-
-        // close on Escape
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape") closeMobileMenu();
-        });
-
-        // close when clicking outside mobileMenu (works even without backdrop visible e.g. small desktop)
-        document.addEventListener("click", (ev) => {
-          if (
-            !mobileMenu.hidden &&
-            !mobileMenu.contains(ev.target) &&
-            !menuToggle.contains(ev.target) &&
-            !ev.target.closest("#ls-search")
-          ) {
-            closeMobileMenu();
+        function safeJSONParse(s, fallback) {
+          try {
+            return JSON.parse(s);
+          } catch {
+            return fallback;
           }
-        });
+        }
 
-        // mobile quick search in menu: redirect to blog search (target=champak)
-        const blogBase = "https://www.learnwithchampak.live";
-        mobileSearchBtn.addEventListener("click", () => {
-          const q = mobileSearchInput.value.trim();
-          if (!q) {
-            mobileSearchInput.focus();
+        // --------------------------
+        // Storage keys
+        // --------------------------
+        const K = {
+          streak: "ls_streak",
+          lastDay: "ls_last_day",
+          points: "ls_points",
+          doneToday: "ls_done_today_", // + dayKey
+          mcqDone: "ls_done_mcq_", // + dayKey
+          vizDone: "ls_done_viz_", // + dayKey
+          bookmarks: "ls_bookmarks_v1",
+          donePosts: "ls_doneposts_v1",
+          last: "ls_last_v1",
+          recentSearch: "ls_recent_search_v1",
+        };
+
+        // --------------------------
+        // Streak & points
+        // --------------------------
+        function initStreak() {
+          const today = getISTDayKey();
+          const yesterdayIndex = getISTDayIndex(Date.now() - 86400000);
+          const todayIndex = getISTDayIndex();
+          const lastDay = localStorage.getItem(K.lastDay);
+          let streak = parseInt(localStorage.getItem(K.streak) || "0", 10);
+          let points = parseInt(localStorage.getItem(K.points) || "0", 10);
+
+          if (!lastDay) {
+            localStorage.setItem(K.lastDay, today);
+            localStorage.setItem(K.streak, String(streak));
+          } else {
+            // if first visit of a new day, update streak if yesterday was last day
+            const lastIndex = getISTDayIndex(new Date(lastDay + "T00:00:00Z").getTime());
+            // Note: lastDay saved as IST date, but using UTC midnight is ok for day index comparisons
+            if (today !== lastDay) {
+              if (lastIndex === yesterdayIndex) streak += 1;
+              else streak = 1;
+              localStorage.setItem(K.streak, String(streak));
+              localStorage.setItem(K.lastDay, today);
+            } else {
+              // same day: keep streak as is
+              streak = clamp(streak, 0, 9999);
+            }
+          }
+
+          $("lsStreak").textContent = String(streak);
+          $("lsPoints").textContent = String(points);
+        }
+
+        function addPoints(n) {
+          const points = parseInt(localStorage.getItem(K.points) || "0", 10) + n;
+          localStorage.setItem(K.points, String(points));
+          $("lsPoints").textContent = String(points);
+        }
+
+        // --------------------------
+        // Daily items (edit freely)
+        // --------------------------
+        const DAILY_CHALLENGES = [
+          { title: "Zero Pad in Python", prompt: "Write code to print 4 as 04 and 4 as 004." },
+          { title: "Array Sum", prompt: "Given a list, compute sum without using sum()." },
+          { title: "Palindrome Check", prompt: "Check if a string is palindrome (ignore case)." },
+          { title: "Right Triangle", prompt: "Given a,b,c check triangle possible + type + right-angled." },
+          { title: "Count Vowels", prompt: "Count vowels in a sentence; print counts per vowel." },
+          { title: "Binary Search (Iterative)", prompt: "Implement binary search and return index or -1." },
+          { title: "FizzBuzz+", prompt: "FizzBuzz plus print 'Prime' for primes." },
+          { title: "Frequency Map", prompt: "Build a frequency dict for words in a paragraph." },
+        ];
+
+        const DAILY_MCQ = [
+          { q: "Python: What does n = 4; print(f\"{n:02}\") output?", a: "04 (02 means width 2, pad with 0)" },
+          { q: "DSA: Time complexity of binary search?", a: "O(log n)" },
+          { q: "JS: querySelector returns…", a: "The first matching element (or null)" },
+          { q: "Python: list.append(x) returns…", a: "None (it mutates the list)" },
+          { q: "DSA: Stack is best for…", a: "LIFO operations / recursion simulation" },
+        ];
+
+        const DAILY_VIZ = [
+          { title: "Quicksort Visual", desc: "See partitioning happen step-by-step.", url: "https://www.learnwithchampak.live/search?q=quicksort%20visual" },
+          { title: "Recursion Visual", desc: "Call stack made visible.", url: "https://www.learnwithchampak.live/search?q=recursion%20visualizer" },
+          { title: "Binary Search Visual", desc: "Mid pointers and shrinking range.", url: "https://www.learnwithchampak.live/search?q=binary%20search%20visual" },
+          { title: "Triangle Type Practice", desc: "Edge cases + right-angled check.", url: "https://www.learnwithchampak.live/search?q=triangle%20program" },
+        ];
+
+        function initDailyTiles() {
+          const dayIndex = getISTDayIndex();
+          const dayKey = getISTDayKey();
+
+          const challenge = DAILY_CHALLENGES[dayIndex % DAILY_CHALLENGES.length];
+          $("challengeTitle").textContent = challenge.title;
+          $("challengePrompt").textContent = challenge.prompt;
+
+          const mcq = DAILY_MCQ[dayIndex % DAILY_MCQ.length];
+          $("mcqQ").textContent = mcq.q;
+          $("mcqA").textContent = "Answer: " + mcq.a;
+
+          const viz = DAILY_VIZ[dayIndex % DAILY_VIZ.length];
+          $("vizTitle").textContent = viz.title;
+          $("vizDesc").textContent = viz.desc;
+          $("vizLink").href = viz.url;
+
+          // Restore done states
+          const chalDone = localStorage.getItem(K.doneToday + dayKey) === "1";
+          const mcqDone = localStorage.getItem(K.mcqDone + dayKey) === "1";
+          const vizDone = localStorage.getItem(K.vizDone + dayKey) === "1";
+
+          $("challengeDoneChip").style.display = chalDone ? "inline-flex" : "none";
+          $("mcqDoneChip").style.display = mcqDone ? "inline-flex" : "none";
+          $("vizDoneChip").style.display = vizDone ? "inline-flex" : "none";
+
+          $("btnChallengeDone").disabled = chalDone;
+          $("btnMCQDone").disabled = mcqDone;
+          $("btnVizDone").disabled = vizDone;
+
+          $("btnChallengeDone").addEventListener("click", () => {
+            if (localStorage.getItem(K.doneToday + dayKey) === "1") return;
+            localStorage.setItem(K.doneToday + dayKey, "1");
+            $("challengeDoneChip").style.display = "inline-flex";
+            $("btnChallengeDone").disabled = true;
+            addPoints(10);
+            toast("Daily Challenge complete! +10");
+          });
+
+          $("btnChallengeCopy").addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(challenge.title + " — " + challenge.prompt);
+              toast("Copied prompt");
+            } catch {
+              toast("Copy blocked");
+            }
+          });
+
+          $("btnMCQReveal").addEventListener("click", () => {
+            const a = $("mcqA");
+            a.style.display = a.style.display === "none" ? "block" : "none";
+          });
+
+          $("btnMCQDone").addEventListener("click", () => {
+            if (localStorage.getItem(K.mcqDone + dayKey) === "1") return;
+            localStorage.setItem(K.mcqDone + dayKey, "1");
+            $("mcqDoneChip").style.display = "inline-flex";
+            $("btnMCQDone").disabled = true;
+            addPoints(5);
+            toast("MCQ done! +5");
+          });
+
+          $("btnVizDone").addEventListener("click", () => {
+            if (localStorage.getItem(K.vizDone + dayKey) === "1") return;
+            localStorage.setItem(K.vizDone + dayKey, "1");
+            $("vizDoneChip").style.display = "inline-flex";
+            $("btnVizDone").disabled = true;
+            addPoints(3);
+            toast("Nice! +3");
+          });
+        }
+
+        // --------------------------
+        // Continue card
+        // --------------------------
+        function loadContinue() {
+          const last = safeJSONParse(localStorage.getItem(K.last) || "null", null);
+          if (!last || !last.url) {
+            $("lsContinue").style.display = "none";
             return;
           }
-          window.location.href =
-            blogBase + "/search?q=" + encodeURIComponent(q) + "&m=1";
-        });
-        mobileSearchInput.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") mobileSearchBtn.click();
-        });
+          $("lsContinue").style.display = "block";
+          $("lsLastTitle").textContent = last.title || "Last opened";
+          $("lsLastMeta").textContent = last.when
+            ? "Last opened: " + new Date(last.when).toLocaleString()
+            : "";
+          $("lsLastOpen").href = last.url;
 
-        /* ===== HEADER SEARCH (JSONP) — suggestions rendered as links with  ===== */
-        (function headerSearch() {
-          const input = $("#ls-search-input");
-          const btn = $("#ls-search-btn");
-          const suggBox = $("#ls-suggestions");
-          let posts = [],
-            loaded = false,
-            debounceTimer = null;
-
-          function doSearch(q) {
-            q = (q || "").trim();
-            if (!q) return;
-            window.location.href =
-              blogBase + "/search?q=" + encodeURIComponent(q) + "&m=1";
-          }
-
-          function loadPostsJSONP() {
-            if (loaded) return;
-            loaded = true;
-            const cb = "lsPosts_" + Math.random().toString(36).slice(2);
-            window[cb] = function (data) {
-              try {
-                const items = (data.feed && data.feed.entry) || [];
-                posts = items.map((e) => {
-                  const title = e.title?.$t || "(no title)";
-                  let url = "#";
-                  if (e.link) {
-                    for (const L of e.link) {
-                      if (L.rel === "alternate") {
-                        url = L.href;
-                        break;
-                      }
-                    }
-                  }
-                  let snippet = "";
-                  if (e.summary && e.summary.$t) snippet = e.summary.$t;
-                  else if (e.content && e.content.$t)
-                    snippet =
-                      e.content.$t.replace(/<[^>]+>/g, "").slice(0, 160) +
-                      "...";
-                  snippet = snippet.replace(/\s+/g, " ").trim();
-                  return { title, url, snippet };
-                });
-              } catch (err) {
-                console.warn("ls jsonp parse error", err);
-              }
-              const s = document.getElementById(cb + "_script");
-              if (s) s.remove();
-              try {
-                delete window[cb];
-              } catch (e) {
-                window[cb] = undefined;
-              }
-            };
-            const s = document.createElement("script");
-            s.id = cb + "_script";
-            s.src =
-              blogBase +
-              "/feeds/posts/default?alt=json-in-script&max-results=1000&callback=" +
-              cb;
-            s.async = true;
-            s.onerror = () => {
-              console.warn("ls jsonp load failed");
-              s.remove();
-            };
-            document.body.appendChild(s);
-          }
-
-          function showSuggestions(q) {
-            q = (q || "").trim().toLowerCase();
-            if (!q) {
-              suggBox.style.display = "none";
-              suggBox.innerHTML = "";
-              return;
-            }
-            if (!posts.length) loadPostsJSONP();
-            const matched = posts
-              .filter(
-                (p) =>
-                  p.title.toLowerCase().includes(q) ||
-                  p.snippet.toLowerCase().includes(q),
-              )
-              .slice(0, 8);
-            if (!matched.length) {
-              suggBox.innerHTML =
-                '<div class="ls-item">No quick matches — press Enter to view full results.</div>';
-            } else {
-              // Render as anchor tags with
-              suggBox.innerHTML = matched
-                .map(
-                  (p) =>
-                    `<a   target="_blank"    class="ls-item" href="${p.url}"  title="${escapeHtml(
-                      p.title,
-                    )}"><strong>${escapeHtml(
-                      p.title,
-                    )}</strong><div style="font-size:12px;color:#475569;margin-top:6px;">${escapeHtml(
-                      p.snippet,
-                    )}</div></a>`,
-                )
-                .join("");
-            }
-            suggBox.style.display = "block";
-          }
-
-          input.addEventListener("input", (e) => {
-            clearTimeout(debounceTimer);
-            const v = e.target.value;
-            debounceTimer = setTimeout(() => showSuggestions(v), 160);
-          });
-
-          input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-              const q = input.value.trim();
-              if (!q) return;
-              doSearch(q);
-            }
-            if (e.key === "Escape") {
-              suggBox.style.display = "none";
-              suggBox.innerHTML = "";
-            }
-          });
-
-          btn.addEventListener("click", () => doSearch(input.value));
-
-          document.addEventListener("click", (ev) => {
-            const header = $("#ls-header");
-            if (!header.contains(ev.target)) {
-              suggBox.style.display = "none";
-            }
-          });
-
-          setTimeout(loadPostsJSONP, 900);
-        })();
-
-        /* ===== FEED LOADER & RENDERER (JSONP) ===== */
-        (function loadFeed() {
-          const CRX_BLOGGER_URL = blogBase;
-          const CRX_MAX_POSTS = 60;
-          const TIMEOUT = 9000;
-          const container = $("#crx-card-list");
-          const cb = "crxFeed_" + Date.now();
-
-          window[cb] = function (data) {
-            try {
-              const entries = (data.feed && data.feed.entry) || [];
-              renderCards(entries);
-            } catch (err) {
-              console.error(err);
-              container.innerHTML =
-                '<div style="padding:20px;text-align:center;color:#b33;">Feed parse error.</div>';
-            } finally {
-              const s = document.getElementById(cb + "_script");
-              if (s) s.remove();
-              try {
-                delete window[cb];
-              } catch (e) {
-                window[cb] = undefined;
-              }
-            }
+          $("lsLastClear").onclick = () => {
+            localStorage.removeItem(K.last);
+            $("lsContinue").style.display = "none";
+            toast("Cleared");
           };
+        }
 
-          const s = document.createElement("script");
-          s.id = cb + "_script";
-          s.src =
-            CRX_BLOGGER_URL.replace(/\/$/, "") +
-            "/feeds/posts/default?alt=json-in-script&max-results=" +
-            CRX_MAX_POSTS +
-            "&callback=" +
-            cb;
-          s.async = true;
-          s.onerror = function () {
-            container.innerHTML =
-              '<div style="padding:20px;text-align:center;color:#b33;">Unable to load posts.</div>';
-            s.remove();
-          };
-          document.head.appendChild(s);
+        function saveContinue(title, url) {
+          localStorage.setItem(K.last, JSON.stringify({ title, url, when: Date.now() }));
+        }
 
-          const timer = setTimeout(() => {
-            if (!document.querySelector("#crx-card-list .crx-card-row")) {
-              container.innerHTML =
-                '<div style="padding:20px;text-align:center;color:#b33;">Unable to load posts.</div>';
-            }
-          }, TIMEOUT);
+        // --------------------------
+        // Feed data (edit these links anytime)
+        // --------------------------
+        const FEED = [
+          {
+            title: "Python Starter Club — Day 1",
+            url: "https://www.learnwithchampak.live/2025/12/python-starter-club-day1.html",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/Python-Starter%20Club.png",
+            meta: "Beginner • Setup • VS Code • First program",
+            tags: ["python", "beginner"],
+          },
+          {
+            title: "All DSA Posts",
+            url: "https://www.learnwithchampak.live/2025/11/all-dsa-posts.html",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/DSA.png",
+            meta: "Arrays • Strings • Recursion • Sorting • Interview prep",
+            tags: ["dsa", "interview"],
+          },
+          {
+            title: "JavaScript Editor Lessons",
+            url: "https://www.learnwithchampak.live/search?q=javascript%20editor",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/JavaScript.png",
+            meta: "DOM • Events • Fetch • Promises • UI",
+            tags: ["javascript", "web"],
+          },
+          {
+            title: "Triangle Checker (Type + Right-angled)",
+            url: "https://www.learnwithchampak.live/search?q=triangle%20type%20right%20angled",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/Python.png",
+            meta: "Conditionals • Sorting sides • Pythagoras check",
+            tags: ["python", "logic"],
+          },
+          {
+            title: "Promises + Async/Await (with Fetch)",
+            url: "https://www.learnwithchampak.live/search?q=async%20await%20promise%20fetch",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/Web.png",
+            meta: "Async patterns • Real-world fetch",
+            tags: ["javascript", "web"],
+          },
+          {
+            title: "Pandas + CSV + Matplotlib",
+            url: "https://www.learnwithchampak.live/search?q=pandas%20csv%20matplotlib",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/Pandas.png",
+            meta: "Data analysis • Charts • Exports",
+            tags: ["python", "data"],
+          },
+        ];
 
-          function renderCards(entries) {
-            container.innerHTML = "";
-            if (!entries.length) {
-              container.innerHTML =
-                '<div style="padding:20px;text-align:center;">No posts yet.</div>';
-              window.updateExploreCount && window.updateExploreCount();
-              return;
-            }
+        // --------------------------
+        // Bookmarks & Done
+        // --------------------------
+        function getSet(key) {
+          return new Set(safeJSONParse(localStorage.getItem(key) || "[]", []));
+        }
+        function setSet(key, setObj) {
+          localStorage.setItem(key, JSON.stringify([...setObj]));
+        }
 
-            entries.forEach((e) => {
-              const title = e.title?.$t || "Untitled";
-              const url =
-                (e.link || []).find((l) => l.rel === "alternate")?.href || "#";
-              const published = e.published
-                ? new Date(e.published.$t).toLocaleDateString()
-                : "";
-              let snippet =
-                (e.summary?.$t || e.content?.$t || "")
-                  .replace(/<[^>]+>/g, "")
-                  .slice(0, 140) + "...";
-              snippet = snippet.replace(/\s+/g, " ").trim();
+        function renderFeed(filterQ = "learnwithchampak") {
+          const list = $("crx-card-list");
+          list.innerHTML = "";
 
-              let thumb = e.media$thumbnail?.url || "";
-              if (!thumb) {
-                const m = (e.content?.$t || "").match(
-                  /<img[^>]+src=["']([^"']+)["']/i,
-                );
-                thumb = m ? m[1] : "";
-              }
-              if (!thumb)
-                thumb =
-                  "https://varanasi-software-junction.github.io/blogger/blogger-assets/default-thumb.svg";
+          const bm = getSet(K.bookmarks);
+          const dn = getSet(K.donePosts);
 
-              const row = document.createElement("div");
-              row.className = "crx-card-row";
-              row.style.position = "relative";
-              row.dataset.title = title.toLowerCase();
-              row.dataset.snippet = snippet.toLowerCase();
+          const q = (filterQ || "").toLowerCase().trim();
 
-              row.innerHTML = `
-            <img class="crx-thumb-square crx-avatar" src="${thumb}" alt="${escapeHtml(
-              title,
-            )}">
-            <div style="flex:1;min-width:0;">
-              <div style="display:flex;align-items:center;gap:10px;">
-                <div class="crx-post-title"><a   target="_blank"     href="${url}"  style="color:white;text-decoration:none;"><span style='color:white;font-size:18px'>${escapeHtml(
-                  title,
-                )}</span></a></div>
-                <div style="margin-left:auto;color:var(--muted);font-size:12px;">${escapeHtml(
-                  published,
-                )}</div>
+          const items = FEED.filter((it) => {
+            if (!q || q === "learnwithchampak" || q === "all") return true;
+            const hay = (it.title + " " + it.meta + " " + (it.tags || []).join(" ")).toLowerCase();
+            return hay.includes(q);
+          });
+
+          for (const it of items) {
+            const isBm = bm.has(it.url);
+            const isDone = dn.has(it.url);
+
+            const row = document.createElement("div");
+            row.className = "crx-card-row";
+
+            row.innerHTML = `
+              <img class="crx-thumb-square" src="${it.img}" alt="" loading="lazy"/>
+              <div style="min-width:0; flex:1;">
+                <a class="crx-post-title ls-track" data-title="${escapeHtml(it.title)}" href="${it.url}" target="_blank" rel="noopener">${escapeHtml(it.title)}</a>
+                <div class="crx-post-meta">${escapeHtml(it.meta)}</div>
+                <div class="crx-card-tools">
+                  <button class="mini-pill ${isBm ? "on" : ""}" data-action="bookmark" data-url="${escapeAttr(it.url)}">
+                    ⭐ ${isBm ? "Bookmarked" : "Bookmark"}
+                  </button>
+                  <button class="mini-pill ${isDone ? "on" : ""}" data-action="done" data-url="${escapeAttr(it.url)}">
+                    ✅ ${isDone ? "Done" : "Mark done"}
+                  </button>
+                  <button class="mini-pill" data-action="share" data-url="${escapeAttr(it.url)}" data-title="${escapeAttr(it.title)}">
+                    📣 Share
+                  </button>
+                </div>
               </div>
-              <div class="crx-post-meta">${escapeHtml(snippet)}</div>
-            </div>
-            <img class="crx-avatar-circle" src="${thumb}" alt="${escapeHtml(
-              title,
-            )}">
-          `;
-              container.appendChild(row);
-            });
-            clearTimeout(timer);
-            window.updateExploreCount && window.updateExploreCount();
+            `;
+
+            list.appendChild(row);
           }
-        })();
 
-        /* ===== Explore filter + counter ===== */
-        (function exploreSearchAndCounter() {
-          const searchInput = document.getElementById("crx-explore-search");
-          const countEl = document.getElementById("crx-explore-count");
-          const listContainer = document.getElementById("crx-card-list");
-          let debounceTimer = null;
+          if (items.length === 0) {
+            list.innerHTML = `<div style="padding:14px; color: var(--muted); font-weight:900">No matches. Try another topic chip.</div>`;
+          }
+        }
 
-          window.updateExploreCount = function () {
-            const rows = $$(".crx-card-row", listContainer);
-            const total = rows.length;
-            const visible = rows.filter(
-              (r) => r.style.display !== "none",
-            ).length;
-            if (total === 0) countEl.textContent = "No posts";
-            else countEl.textContent = `Showing ${visible} of ${total} posts`;
-          };
+        function escapeHtml(s) {
+          return String(s)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+        }
+        function escapeAttr(s) {
+          return escapeHtml(s).replaceAll("`", "&#096;");
+        }
 
-          const applyFilter = (q) => {
-            q = (q || "").trim().toLowerCase();
-            const rows = $$(".crx-card-row", listContainer);
-            if (!q) {
-              rows.forEach((r) => (r.style.display = ""));
-            } else {
-              rows.forEach((r) => {
-                const t =
-                  (r.dataset.title || "") + " " + (r.dataset.snippet || "");
-                r.style.display = t.includes(q) ? "" : "none";
-              });
+        // Delegated actions
+        function initFeedActions() {
+          document.addEventListener("click", async (e) => {
+            const track = e.target.closest(".ls-track");
+            if (track && track.getAttribute("href")) {
+              const title = track.dataset.title || track.textContent.trim();
+              const url = track.getAttribute("href");
+              saveContinue(title, url);
+              // allow navigation
+              return;
             }
-            window.updateExploreCount();
+
+            const btn = e.target.closest("[data-action]");
+            if (!btn) return;
+
+            const action = btn.dataset.action;
+            const url = btn.dataset.url;
+
+            if (!url) return;
+
+            if (action === "bookmark") {
+              const bm = getSet(K.bookmarks);
+              if (bm.has(url)) bm.delete(url);
+              else bm.add(url);
+              setSet(K.bookmarks, bm);
+              toast(bm.has(url) ? "Bookmarked ⭐" : "Removed bookmark");
+              renderFeed(currentFilter);
+            }
+
+            if (action === "done") {
+              const dn = getSet(K.donePosts);
+              if (dn.has(url)) dn.delete(url);
+              else dn.add(url);
+              setSet(K.donePosts, dn);
+              if (dn.has(url)) addPoints(2);
+              toast(dn.has(url) ? "Marked done ✅ (+2)" : "Unmarked");
+              renderFeed(currentFilter);
+            }
+
+            if (action === "share") {
+              const title = btn.dataset.title || "Learning Sutras";
+              const text = encodeURIComponent(`📌 ${title}\n${url}\n\nDaily learning at Learning Sutras ✨`);
+              const wa = `https://wa.me/?text=${text}`;
+              window.open(wa, "_blank", "noopener");
+            }
+          });
+        }
+
+        // --------------------------
+        // Search + suggestions
+        // --------------------------
+        const SUGGEST_TRENDING = ["python", "arrays", "recursion", "interview", "javascript", "pandas"];
+        function getRecentSearches() {
+          return safeJSONParse(localStorage.getItem(K.recentSearch) || "[]", []);
+        }
+        function pushRecentSearch(q) {
+          const arr = getRecentSearches();
+          const cleaned = q.trim().toLowerCase();
+          if (!cleaned) return;
+          const next = [cleaned, ...arr.filter((x) => x !== cleaned)].slice(0, 8);
+          localStorage.setItem(K.recentSearch, JSON.stringify(next));
+        }
+
+        function openSearch(q) {
+          const cleaned = (q || "").trim();
+          if (!cleaned) return;
+          pushRecentSearch(cleaned);
+          // Blogger search
+          const url = `https://www.learnwithchampak.live/search?q=${encodeURIComponent(cleaned)}`;
+          window.open(url, "_blank", "noopener");
+        }
+
+        let suggestTimer = null;
+        function initSearch() {
+          const input = $("lsQuery");
+          const sug = $("ls-suggestions");
+
+          function renderSuggestions(q) {
+            const recent = getRecentSearches();
+            const dayIndex = getISTDayIndex();
+            const trending = [
+              SUGGEST_TRENDING[dayIndex % SUGGEST_TRENDING.length],
+              SUGGEST_TRENDING[(dayIndex + 1) % SUGGEST_TRENDING.length],
+              SUGGEST_TRENDING[(dayIndex + 2) % SUGGEST_TRENDING.length],
+            ];
+
+            const base = [...new Set([...recent, ...trending])].slice(0, 8);
+            const filtered = q
+              ? base.filter((x) => x.includes(q.toLowerCase().trim())).slice(0, 8)
+              : base;
+
+            if (!filtered.length) {
+              sug.style.display = "none";
+              sug.innerHTML = "";
+              return;
+            }
+
+            sug.innerHTML = filtered
+              .map((x) => `<a class="ls-item" data-q="${escapeAttr(x)}">🔎 ${escapeHtml(x)}</a>`)
+              .join("");
+            sug.style.display = "block";
+          }
+
+          input.addEventListener("input", () => {
+            clearTimeout(suggestTimer);
+            suggestTimer = setTimeout(() => renderSuggestions(input.value), 180);
+          });
+
+          input.addEventListener("focus", () => renderSuggestions(input.value));
+
+          document.addEventListener("click", (e) => {
+            const item = e.target.closest("#ls-suggestions .ls-item");
+            if (item) {
+              const q = item.dataset.q || item.textContent.replace("🔎", "").trim();
+              openSearch(q);
+              sug.style.display = "none";
+              return;
+            }
+            if (!e.target.closest("#ls-search")) sug.style.display = "none";
+          });
+
+          $("lsSearchBtn").addEventListener("click", () => openSearch(input.value));
+          input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") openSearch(input.value);
+          });
+        }
+
+        // --------------------------
+        // Topic chips filter (local feed)
+        // --------------------------
+        let currentFilter = "learnwithchampak";
+        function initChips() {
+          document.querySelectorAll(".ls-chip").forEach((chip) => {
+            chip.addEventListener("click", () => {
+              document.querySelectorAll(".ls-chip").forEach((c) => c.classList.remove("active"));
+              chip.classList.add("active");
+              currentFilter = chip.dataset.q || "learnwithchampak";
+              renderFeed(currentFilter);
+            });
+          });
+        }
+
+        // --------------------------
+        // Mobile menu
+        // --------------------------
+        function initMenu() {
+          const btn = $("lsMenuBtn");
+          const menu = $("lsMobileMenu");
+          const back = $("lsBackdrop");
+
+          function close() {
+            btn.classList.remove("open");
+            menu.classList.remove("show");
+            back.classList.remove("show");
+          }
+
+          btn.addEventListener("click", () => {
+            const open = btn.classList.toggle("open");
+            menu.classList.toggle("show", open);
+            back.classList.toggle("show", open);
+          });
+
+          back.addEventListener("click", close);
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") close();
+          });
+        }
+
+        // --------------------------
+        // Back to top
+        // --------------------------
+        function initBackToTop() {
+          const b = $("back-to-top");
+          window.addEventListener("scroll", () => {
+            b.classList.toggle("visible", window.scrollY > 420);
+          });
+          b.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+        }
+
+        // --------------------------
+        // Fade-in sections
+        // --------------------------
+        function initFadeIn() {
+          const els = document.querySelectorAll(".crx_fade_in");
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const en of entries) {
+                if (en.isIntersecting) en.target.classList.add("crx_visible");
+              }
+            },
+            { threshold: 0.12 }
+          );
+          els.forEach((el) => io.observe(el));
+        }
+
+        // --------------------------
+        // Compact header on scroll
+        // --------------------------
+        function initHeaderCompact() {
+          const header = $("ls-header");
+          let lastY = window.scrollY;
+          window.addEventListener("scroll", () => {
+            const y = window.scrollY;
+            header.classList.toggle("compact", y > 40);
+            lastY = y;
+          });
+        }
+
+        // --------------------------
+        // Share roadmap buttons
+        // --------------------------
+        function initShareButtons() {
+          document.addEventListener("click", (e) => {
+            const b = e.target.closest("[data-share]");
+            if (!b) return;
+            const type = b.dataset.share;
+            const streak = localStorage.getItem(K.streak) || "0";
+            const points = localStorage.getItem(K.points) || "0";
+            const msg = encodeURIComponent(
+              `🔥 Learning Sutras Daily\nStreak: ${streak} days\nPoints: ${points}\n\nJoin me:\nhttps://www.learnwithchampak.live/`
+            );
+            window.open(`https://wa.me/?text=${msg}`, "_blank", "noopener");
+          });
+        }
+
+        // --------------------------
+        // Mini JSON tool
+        // --------------------------
+        function initJsonTool() {
+          const tool = $("jsonTool");
+          const input = $("jsonInput");
+          const out = $("jsonOut");
+
+          $("openJsonTool").onclick = () => {
+            tool.style.display = "block";
+            tool.scrollIntoView({ behavior: "smooth", block: "start" });
+            toast("JSON tool opened");
           };
 
-          if (searchInput) {
-            searchInput.addEventListener("input", (e) => {
-              clearTimeout(debounceTimer);
-              const q = e.target.value;
-              debounceTimer = setTimeout(() => applyFilter(q), 150);
-            });
-          }
+          $("btnJsonClose").onclick = () => {
+            tool.style.display = "none";
+            toast("Closed");
+          };
 
-          const mo = new MutationObserver(() => {
-            window.updateExploreCount();
-          });
-          if (listContainer) mo.observe(listContainer, { childList: true });
+          $("btnJsonFormat").onclick = () => {
+            const v = input.value.trim();
+            if (!v) return (out.textContent = "");
+            try {
+              out.textContent = JSON.stringify(JSON.parse(v), null, 2);
+              toast("Formatted");
+            } catch {
+              out.textContent = "Invalid JSON";
+              toast("Invalid JSON");
+            }
+          };
 
-          countEl.textContent = "Loading…";
-          setTimeout(() => window.updateExploreCount(), 400);
-        })();
-        /* ===== JS runner ===== */
-        
-        /* ===== Scroll reveal + back-to-top ===== */
-        (function scrollRevealBackTop() {
-          const els = document.querySelectorAll(".crx_fade_in");
-          if (els.length) {
-            const obs = new IntersectionObserver(
-              (entries, o) => {
-                entries.forEach((en) => {
-                  if (en.isIntersecting) {
-                    en.target.classList.add("crx_visible");
-                    o.unobserve(en.target);
-                  }
-                });
-              },
-              { threshold: 0.12 },
-            );
-            els.forEach((e) => obs.observe(e));
+          $("btnJsonMinify").onclick = () => {
+            const v = input.value.trim();
+            if (!v) return (out.textContent = "");
+            try {
+              out.textContent = JSON.stringify(JSON.parse(v));
+              toast("Minified");
+            } catch {
+              out.textContent = "Invalid JSON";
+              toast("Invalid JSON");
+            }
+          };
+
+          $("btnJsonCopy").onclick = async () => {
+            try {
+              await navigator.clipboard.writeText(out.textContent || "");
+              toast("Copied output");
+            } catch {
+              toast("Copy blocked");
+            }
+          };
+
+          $("copyJsonToolLink").onclick = async () => {
+            // In iframes, location might be restricted; this tries best-effort
+            const link = (location && location.href) ? location.href.split("#")[0] + "#json" : "https://www.learnwithchampak.live/";
+            try {
+              await navigator.clipboard.writeText(link);
+              toast("Copied link");
+            } catch {
+              toast("Copy blocked");
+            }
+          };
+
+          // open if hash #json
+          if (location.hash === "#json") {
+            tool.style.display = "block";
           }
-          const btt = document.getElementById("back-to-top");
-          window.addEventListener("scroll", () => {
-            const y = window.scrollY || window.pageYOffset;
-            if (y > 360) btt.classList.add("visible");
-            else btt.classList.remove("visible");
-          });
-          btt.addEventListener("click", () => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          });
-        })();
+        }
+
+        // --------------------------
+        // Boot
+        // --------------------------
+        initStreak();
+        initDailyTiles();
+        initSearch();
+        initChips();
+        initMenu();
+        initBackToTop();
+        initFadeIn();
+        initHeaderCompact();
+        initShareButtons();
+        initJsonTool();
+
+        renderFeed("learnwithchampak");
+        initFeedActions();
+        loadContinue();
       })();
     </script>
-
-    <script src="https://programmer-s-picnic.github.io/json-images/find-on-page.js"></script>
-    <script src="https://programmer-s-picnic.github.io/json-images/imgshow.js"></script>
-    <script src="https://programmer-s-picnic.github.io/json-images/hometag.js"></script>
   </body>
 </html>
