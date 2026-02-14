@@ -14,6 +14,9 @@
     />
 
     <style>
+      /* =========================================================
+         THEMES (3) — saved in localStorage, works inside iframe
+         ========================================================= */
       :root {
         --crx-accent: #d97706;
         --crx-accent-dark: #b45309;
@@ -24,9 +27,62 @@
         --muted: #6b7280;
         --headline: #1f2937;
         --menu-width: 320px;
+
+        --tile-bg1: rgba(255, 255, 255, 0.98);
+        --tile-bg2: rgba(245, 251, 255, 0.98);
+        --chip-bg: rgba(255, 255, 255, 0.92);
+        --shadow-1: 0 10px 24px rgba(8, 36, 64, 0.03);
+        --shadow-2: 0 18px 48px rgba(8, 36, 64, 0.06);
+        --outline: rgba(37, 99, 235, 0.45);
+
+        --bg-orb-1: rgba(245, 158, 11, 0.06);
+        --bg-orb-2: rgba(217, 119, 6, 0.05);
+
+        --ring: rgba(217, 119, 6, 0.28);
       }
 
-      /* Base */
+      /* Theme: Midnight */
+      [data-theme="midnight"] {
+        --crx-bg-1: #0b1220;
+        --crx-bg-2: #0a0f1a;
+        --headline: #e5e7eb;
+        --muted: #a1a1aa;
+        --card-bg: rgba(17, 24, 39, 0.78);
+        --glass-border: rgba(148, 163, 184, 0.16);
+
+        --tile-bg1: rgba(17, 24, 39, 0.92);
+        --tile-bg2: rgba(2, 6, 23, 0.35);
+        --chip-bg: rgba(17, 24, 39, 0.85);
+
+        --shadow-1: 0 12px 28px rgba(0, 0, 0, 0.25);
+        --shadow-2: 0 22px 60px rgba(0, 0, 0, 0.35);
+
+        --bg-orb-1: rgba(245, 158, 11, 0.08);
+        --bg-orb-2: rgba(59, 130, 246, 0.07);
+
+        --ring: rgba(14, 165, 233, 0.22);
+      }
+
+      /* Theme: Mint */
+      [data-theme="mint"] {
+        --crx-accent: #10b981;
+        --crx-accent-dark: #059669;
+        --crx-bg-1: #ecfdf5;
+        --crx-bg-2: #dcfce7;
+        --headline: #064e3b;
+        --muted: #065f46;
+        --card-bg: rgba(255, 255, 255, 0.9);
+        --glass-border: rgba(6, 95, 70, 0.12);
+
+        --bg-orb-1: rgba(16, 185, 129, 0.08);
+        --bg-orb-2: rgba(34, 197, 94, 0.07);
+
+        --ring: rgba(16, 185, 129, 0.22);
+      }
+
+      /* =========================================================
+         Base
+         ========================================================= */
       html,
       body {
         height: 100%;
@@ -62,14 +118,10 @@
         z-index: -1;
         background: radial-gradient(
             600px 300px at 10% 10%,
-            rgba(245, 158, 11, 0.06),
+            var(--bg-orb-1),
             transparent
           ),
-          radial-gradient(
-            500px 240px at 90% 90%,
-            rgba(217, 119, 6, 0.05),
-            transparent
-          );
+          radial-gradient(500px 240px at 90% 90%, var(--bg-orb-2), transparent);
         pointer-events: none;
         animation: subtleShift 18s linear infinite;
         opacity: 1;
@@ -81,23 +133,28 @@
         padding: 24px 20px;
       }
 
-      /* Skip link */
       .skip-link {
         position: absolute;
         left: -999px;
         top: 10px;
-        background: #fff;
+        background: rgba(255, 255, 255, 0.98);
         border: 1px solid var(--glass-border);
         border-radius: 10px;
         padding: 10px 12px;
         z-index: 9999;
         box-shadow: 0 10px 24px rgba(2, 6, 23, 0.12);
       }
+      [data-theme="midnight"] .skip-link {
+        background: rgba(17, 24, 39, 0.92);
+        color: var(--headline);
+      }
       .skip-link:focus {
         left: 12px;
       }
 
-      /* Header */
+      /* =========================================================
+         Header + Hamburger + Theme outside menu
+         ========================================================= */
       #ls-header {
         position: sticky;
         top: 0;
@@ -117,15 +174,21 @@
         );
         border-bottom: 1px solid var(--glass-border);
         box-shadow: 0 6px 18px rgba(8, 38, 64, 0.06);
-        transition: box-shadow 0.28s ease, transform 0.12s ease, padding 0.18s ease;
+        transition: box-shadow 0.28s ease, padding 0.18s ease;
         min-height: 64px;
+      }
+      [data-theme="midnight"] #ls-header {
+        background: linear-gradient(
+          180deg,
+          rgba(2, 6, 23, 0.66),
+          rgba(17, 24, 39, 0.58)
+        );
       }
 
       #ls-header:hover {
         box-shadow: 0 12px 28px rgba(8, 38, 64, 0.09);
       }
 
-      /* Compact header on scroll */
       #ls-header.compact {
         padding: 8px 14px;
       }
@@ -137,7 +200,6 @@
         display: none;
       }
 
-      /* Brand */
       #ls-brand {
         display: flex;
         align-items: center;
@@ -168,17 +230,22 @@
 
       .title-main {
         font-size: 18px;
-        font-weight: 800;
+        font-weight: 900;
         letter-spacing: 0.2px;
         background: linear-gradient(90deg, #7c2d12, var(--crx-accent-dark));
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        transition: filter 0.18s ease;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 280px;
+      }
+
+      [data-theme="midnight"] .title-main {
+        background: linear-gradient(90deg, #fde68a, #f59e0b);
+        -webkit-background-clip: text;
+        background-clip: text;
       }
 
       .title-sub {
@@ -191,11 +258,10 @@
         max-width: 320px;
       }
 
-      /* Desktop search area (right side of header) */
       #ls-actions {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         width: 100%;
         justify-content: flex-end;
         min-width: 0;
@@ -221,7 +287,7 @@
         flex: 1;
         height: 44px;
         padding: 10px 14px;
-        border-radius: 10px;
+        border-radius: 12px;
         border: 1px solid rgba(13, 24, 40, 0.08);
         background: linear-gradient(
           180deg,
@@ -232,21 +298,30 @@
         outline: none;
         box-shadow: inset 0 1px 2px rgba(12, 22, 30, 0.03);
         transition: box-shadow 0.18s ease, border-color 0.18s ease;
+        color: var(--headline);
+      }
+      [data-theme="midnight"] #ls-search input[type="search"] {
+        background: linear-gradient(
+          180deg,
+          rgba(17, 24, 39, 0.92),
+          rgba(2, 6, 23, 0.45)
+        );
+        border-color: rgba(148, 163, 184, 0.18);
       }
 
       #ls-search input[type="search"]:focus {
         border-color: rgba(217, 119, 6, 0.35);
-        box-shadow: 0 6px 20px rgba(217, 119, 6, 0.08);
+        box-shadow: 0 0 0 4px var(--ring);
       }
 
       #ls-search button {
         padding: 10px 14px;
         height: 44px;
-        border-radius: 10px;
+        border-radius: 12px;
         border: none;
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        background: linear-gradient(135deg, #f59e0b, var(--crx-accent));
         color: white;
-        font-weight: 800;
+        font-weight: 900;
         cursor: pointer;
         box-shadow: 0 6px 18px rgba(217, 119, 6, 0.16);
         transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -266,12 +341,16 @@
         width: calc(100% - 160px);
         max-width: 560px;
         background: rgba(255, 255, 255, 0.98);
-        border-radius: 10px;
+        border-radius: 12px;
         border: 1px solid rgba(13, 24, 40, 0.04);
         box-shadow: 0 12px 32px rgba(9, 20, 40, 0.06);
         max-height: 340px;
         overflow: auto;
         z-index: 1400;
+      }
+      [data-theme="midnight"] #ls-suggestions {
+        background: rgba(17, 24, 39, 0.95);
+        border-color: rgba(148, 163, 184, 0.16);
       }
 
       #ls-suggestions .ls-item {
@@ -282,6 +361,7 @@
         font-size: 14px;
         color: var(--headline);
         text-decoration: none;
+        font-weight: 800;
       }
 
       #ls-suggestions .ls-item:hover {
@@ -295,18 +375,17 @@
       }
 
       #ls-nav a {
-        font-weight: 800;
+        font-weight: 900;
         color: var(--crx-accent-dark);
         text-decoration: none;
         padding: 8px 10px;
-        border-radius: 8px;
+        border-radius: 10px;
       }
 
       #ls-nav a:hover {
         background: rgba(217, 119, 6, 0.1);
       }
 
-      /* NEW: streak badge */
       .ls-badges {
         display: flex;
         gap: 8px;
@@ -322,26 +401,113 @@
         border: 1px solid rgba(13, 24, 40, 0.08);
         background: rgba(255, 255, 255, 0.9);
         box-shadow: 0 8px 22px rgba(2, 6, 23, 0.06);
-        font-weight: 800;
+        font-weight: 900;
         font-size: 13px;
         color: var(--headline);
         user-select: none;
       }
+      [data-theme="midnight"] .ls-badge {
+        background: rgba(17, 24, 39, 0.85);
+        border-color: rgba(148, 163, 184, 0.16);
+      }
       .ls-badge small {
-        font-weight: 800;
+        font-weight: 900;
         color: var(--muted);
       }
 
+      .theme-quick {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 44px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        background: rgba(255, 255, 255, 0.75);
+        cursor: pointer;
+        font-weight: 950;
+        color: var(--headline);
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.05);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      [data-theme="midnight"] .theme-quick {
+        background: rgba(17, 24, 39, 0.75);
+        border-color: rgba(148, 163, 184, 0.16);
+      }
+      .theme-quick:active {
+        transform: translateY(1px);
+      }
+      .theme-quick .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(13, 24, 40, 0.18);
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+      [data-theme="midnight"] .theme-quick .dot {
+        background: linear-gradient(135deg, #0ea5e9, #111827);
+      }
+      [data-theme="mint"] .theme-quick .dot {
+        background: linear-gradient(135deg, #10b981, #22c55e);
+      }
+
+      /* Theme in menu */
+      .theme-row {
+        display: grid;
+        gap: 10px;
+      }
+      .theme-pill {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        background: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        user-select: none;
+        font-weight: 950;
+      }
+      [data-theme="midnight"] .theme-pill {
+        background: rgba(17, 24, 39, 0.7);
+        border-color: rgba(148, 163, 184, 0.16);
+      }
+      .theme-pill.active {
+        border-color: rgba(217, 119, 6, 0.35);
+        box-shadow: 0 12px 26px rgba(217, 119, 6, 0.12);
+      }
+      .theme-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(13, 24, 40, 0.18);
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+      .theme-dot.midnight {
+        background: linear-gradient(135deg, #0ea5e9, #111827);
+      }
+      .theme-dot.mint {
+        background: linear-gradient(135deg, #10b981, #22c55e);
+      }
+
+      /* Hamburger */
       .menu-toggle {
         display: none;
         width: 44px;
         height: 44px;
-        border-radius: 10px;
-        border: none;
-        background: transparent;
+        border-radius: 12px;
+        border: 1px solid rgba(13, 24, 40, 0.06);
+        background: rgba(255, 255, 255, 0.6);
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        flex-shrink: 0;
+      }
+      [data-theme="midnight"] .menu-toggle {
+        background: rgba(17, 24, 39, 0.75);
+        border-color: rgba(148, 163, 184, 0.16);
       }
 
       .hamburger {
@@ -410,22 +576,30 @@
         z-index: 1195;
         width: var(--menu-width);
         max-width: calc(100% - 36px);
-        border-radius: 12px;
+        border-radius: 14px;
         padding: 12px 10px;
         background: linear-gradient(
           180deg,
-          rgba(255, 255, 255, 0.86),
+          rgba(255, 255, 255, 0.88),
           rgba(255, 255, 255, 0.78)
         );
-        backdrop-filter: blur(8px) saturate(120%);
+        backdrop-filter: blur(10px) saturate(120%);
         border: 1px solid rgba(15, 23, 42, 0.06);
         box-shadow: 0 18px 40px rgba(8, 36, 64, 0.12);
         transform: translateY(-6px) scale(0.99);
         opacity: 0;
         transition: transform 0.26s cubic-bezier(0.2, 0.9, 0.3, 1),
           opacity 0.26s ease;
-        max-height: 72vh;
+        max-height: 78vh;
         overflow: auto;
+      }
+      [data-theme="midnight"] .mobile-menu {
+        background: linear-gradient(
+          180deg,
+          rgba(2, 6, 23, 0.78),
+          rgba(17, 24, 39, 0.64)
+        );
+        border-color: rgba(148, 163, 184, 0.16);
       }
 
       .mobile-menu.show {
@@ -435,7 +609,7 @@
 
       .mobile-menu .mm-section {
         padding: 8px 10px;
-        border-radius: 8px;
+        border-radius: 10px;
         margin-bottom: 8px;
       }
 
@@ -444,30 +618,35 @@
         padding: 10px 12px;
         text-decoration: none;
         color: var(--headline);
-        border-radius: 8px;
+        border-radius: 10px;
         font-weight: 900;
       }
 
       .mobile-menu .mm-section a:hover {
-        background: rgba(13, 24, 40, 0.03);
-      }
-
-      .mobile-menu .mm-keywords {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
+        background: rgba(13, 24, 40, 0.05);
       }
 
       .mm-divider {
         height: 1px;
-        background: rgba(13, 24, 40, 0.03);
-        margin: 8px 0;
+        background: rgba(13, 24, 40, 0.08);
+        margin: 10px 0;
         border-radius: 2px;
       }
+      [data-theme="midnight"] .mm-divider {
+        background: rgba(148, 163, 184, 0.16);
+      }
 
+      .mm-title {
+        font-weight: 1000;
+        margin: 6px 0 10px;
+      }
+
+      /* =========================================================
+         Sections & tiles
+         ========================================================= */
       .crx-section {
         background: var(--card-bg);
-        border-radius: 14px;
+        border-radius: 16px;
         padding: 24px;
         margin: 20px 0;
         border: 1px solid var(--glass-border);
@@ -478,14 +657,14 @@
 
       .crx-section:hover {
         transform: translateY(-6px);
-        box-shadow: 0 18px 48px rgba(8, 36, 64, 0.06);
+        box-shadow: var(--shadow-2);
       }
 
       .crx-section h1,
       .crx-section h2 {
         margin: 0 0 12px;
         color: var(--headline);
-        font-weight: 900;
+        font-weight: 1000;
       }
 
       .crx-section p {
@@ -493,43 +672,27 @@
         margin: 0 0 8px;
       }
 
-      .crx-keyword {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
-        color: #ffffff;
-        display: inline-block;
-        padding: 8px 12px;
-        border-radius: 999px;
-        margin: 6px;
-        font-size: 14px;
-        box-shadow: 0 6px 18px rgba(217, 119, 6, 0.16);
-        text-decoration: none;
-        border: 1px solid rgba(180, 83, 9, 0.16);
-        font-weight: 900;
-      }
-
-      .crx-keyword:hover {
-        filter: brightness(1.02);
-        transform: translateY(-1px);
-      }
-
       .btn {
         border: none;
         padding: 10px 12px;
-        border-radius: 10px;
-        font-weight: 900;
+        border-radius: 12px;
+        font-weight: 950;
         cursor: pointer;
       }
 
       .btn.ghost {
         background: transparent;
-        border: 1px solid rgba(13, 24, 40, 0.06);
+        border: 1px solid rgba(13, 24, 40, 0.08);
         color: var(--headline);
+      }
+      [data-theme="midnight"] .btn.ghost {
+        border-color: rgba(148, 163, 184, 0.18);
       }
 
       .btn.primary {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        background: linear-gradient(135deg, #f59e0b, var(--crx-accent));
         color: #fff;
-        box-shadow: 0 8px 24px rgba(217, 119, 6, 0.16);
+        box-shadow: 0 10px 24px rgba(217, 119, 6, 0.16);
         font-size: 14px;
       }
 
@@ -543,11 +706,10 @@
       button:focus-visible,
       input:focus-visible,
       textarea:focus-visible {
-        outline: 3px solid rgba(37, 99, 235, 0.45);
+        outline: 3px solid var(--outline);
         outline-offset: 2px;
       }
 
-      /* NEW: Today strip */
       .ls-grid-3 {
         display: grid;
         gap: 14px;
@@ -559,45 +721,54 @@
       }
 
       .ls-tile {
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.98),
-          rgba(245, 251, 255, 0.98)
-        );
-        border: 1px solid rgba(13, 24, 40, 0.06);
-        border-radius: 14px;
+        background: linear-gradient(180deg, var(--tile-bg1), var(--tile-bg2));
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        border-radius: 16px;
         padding: 16px;
-        box-shadow: 0 10px 24px rgba(8, 36, 64, 0.03);
+        box-shadow: var(--shadow-1);
       }
+      [data-theme="midnight"] .ls-tile {
+        border-color: rgba(148, 163, 184, 0.16);
+      }
+
       .ls-tile h3 {
         margin: 0 0 8px;
-        font-weight: 1000;
+        font-weight: 1100;
         font-size: 16px;
       }
-      .ls-tile .kicker {
+
+      .kicker {
         display: inline-flex;
         gap: 8px;
         align-items: center;
         font-weight: 1000;
         font-size: 12px;
         color: var(--crx-accent-dark);
-        background: rgba(217, 119, 6, 0.1);
-        border: 1px solid rgba(217, 119, 6, 0.12);
+        background: rgba(217, 119, 6, 0.12);
+        border: 1px solid rgba(217, 119, 6, 0.14);
         padding: 6px 10px;
         border-radius: 999px;
         margin-bottom: 10px;
       }
-      .ls-tile .muted {
+      [data-theme="mint"] .kicker {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.16);
+        color: var(--crx-accent-dark);
+      }
+
+      .muted {
         color: var(--muted);
         font-size: 13px;
         margin: 6px 0 10px;
       }
+
       .ls-actions-row {
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
         margin-top: 10px;
       }
+
       .ls-done-chip {
         display: inline-flex;
         align-items: center;
@@ -611,7 +782,6 @@
         color: #065f46;
       }
 
-      /* NEW: chips */
       .ls-chips {
         display: flex;
         gap: 10px;
@@ -624,37 +794,287 @@
         gap: 8px;
         padding: 8px 12px;
         border-radius: 999px;
-        border: 1px solid rgba(13, 24, 40, 0.08);
-        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(13, 24, 40, 0.1);
+        background: var(--chip-bg);
         font-weight: 1000;
         color: var(--headline);
         cursor: pointer;
         user-select: none;
+      }
+      [data-theme="midnight"] .ls-chip {
+        border-color: rgba(148, 163, 184, 0.18);
       }
       .ls-chip.active {
         border-color: rgba(217, 119, 6, 0.35);
         box-shadow: 0 10px 24px rgba(217, 119, 6, 0.08);
       }
 
-      /* Feed */
+      /* =========================================================
+         HERO SLIDER (NEW)
+         ========================================================= */
+      .hero {
+        padding: 0;
+        overflow: hidden;
+        border-radius: 18px;
+        position: relative;
+      }
+      .hero-inner {
+        position: relative;
+        min-height: 280px;
+      }
+      .slides {
+        display: flex;
+        width: 300%;
+        transform: translateX(0%);
+        transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.2, 1);
+      }
+      .slide {
+        width: 100%;
+        flex: 0 0 100%;
+        padding: 22px;
+        box-sizing: border-box;
+        position: relative;
+        min-height: 280px;
+        display: grid;
+        gap: 14px;
+        align-content: center;
+        background: radial-gradient(
+            900px 420px at 10% 20%,
+            rgba(245, 158, 11, 0.18),
+            transparent 55%
+          ),
+          radial-gradient(
+            820px 380px at 90% 70%,
+            rgba(59, 130, 246, 0.12),
+            transparent 55%
+          );
+      }
+      [data-theme="mint"] .slide {
+        background: radial-gradient(
+            900px 420px at 10% 20%,
+            rgba(16, 185, 129, 0.18),
+            transparent 55%
+          ),
+          radial-gradient(
+            820px 380px at 90% 70%,
+            rgba(34, 197, 94, 0.12),
+            transparent 55%
+          );
+      }
+      [data-theme="midnight"] .slide {
+        background: radial-gradient(
+            900px 420px at 10% 20%,
+            rgba(245, 158, 11, 0.12),
+            transparent 55%
+          ),
+          radial-gradient(
+            820px 380px at 90% 70%,
+            rgba(14, 165, 233, 0.12),
+            transparent 55%
+          );
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        font-weight: 1000;
+        width: fit-content;
+      }
+      [data-theme="midnight"] .hero-badge {
+        background: rgba(17, 24, 39, 0.7);
+        border-color: rgba(148, 163, 184, 0.16);
+      }
+
+      .hero-title {
+        font-size: clamp(20px, 3.3vw, 34px);
+        font-weight: 1100;
+        margin: 0;
+        line-height: 1.15;
+        letter-spacing: -0.2px;
+      }
+      .hero-sub {
+        margin: 0;
+        color: var(--muted);
+        font-weight: 800;
+        max-width: 70ch;
+      }
+      .hero-cta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+      .hero-nav {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      .hero-btn {
+        pointer-events: auto;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        background: rgba(255, 255, 255, 0.68);
+        backdrop-filter: blur(6px);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        box-shadow: var(--shadow-1);
+        font-weight: 1100;
+      }
+      [data-theme="midnight"] .hero-btn {
+        background: rgba(17, 24, 39, 0.68);
+        border-color: rgba(148, 163, 184, 0.16);
+      }
+      .hero-btn.prev {
+        left: 12px;
+      }
+      .hero-btn.next {
+        right: 12px;
+      }
+      .hero-dots {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 12px;
+        display: flex;
+        gap: 8px;
+        pointer-events: auto;
+      }
+      .dotbtn {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(13, 24, 40, 0.18);
+        background: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        padding: 0;
+      }
+      [data-theme="midnight"] .dotbtn {
+        background: rgba(17, 24, 39, 0.8);
+        border-color: rgba(148, 163, 184, 0.18);
+      }
+      .dotbtn.on {
+        background: linear-gradient(135deg, #f59e0b, var(--crx-accent));
+        border-color: rgba(217, 119, 6, 0.35);
+        transform: scale(1.15);
+      }
+
+      @media (max-width: 720px) {
+        .hero-btn {
+          display: none;
+        }
+        .slide {
+          min-height: 300px;
+        }
+      }
+
+      /* =========================================================
+         EMBEDDED EDITORS (NEW)
+         ========================================================= */
+      .embed-wrap {
+        border-radius: 16px;
+        border: 1px solid rgba(13, 24, 40, 0.08);
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.6);
+      }
+      [data-theme="midnight"] .embed-wrap {
+        border-color: rgba(148, 163, 184, 0.16);
+        background: rgba(17, 24, 39, 0.5);
+      }
+
+      .embed-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 12px;
+        border-bottom: 1px solid rgba(13, 24, 40, 0.08);
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(6px);
+      }
+      [data-theme="midnight"] .embed-top {
+        background: rgba(17, 24, 39, 0.55);
+        border-color: rgba(148, 163, 184, 0.16);
+      }
+
+      .embed-tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .tabbtn {
+        border: 1px solid rgba(13, 24, 40, 0.1);
+        background: var(--chip-bg);
+        color: var(--headline);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 1000;
+        cursor: pointer;
+      }
+      [data-theme="midnight"] .tabbtn {
+        border-color: rgba(148, 163, 184, 0.18);
+      }
+      .tabbtn.on {
+        border-color: rgba(217, 119, 6, 0.35);
+        box-shadow: 0 10px 24px rgba(217, 119, 6, 0.08);
+      }
+
+      .embed-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .embed-frame {
+        width: 100%;
+        height: 660px;
+        border: 0;
+        display: none;
+        background: transparent;
+      }
+      .embed-frame.show {
+        display: block;
+      }
+      @media (max-width: 720px) {
+        .embed-frame {
+          height: 720px;
+        }
+      }
+
+      /* Feed cards (kept from earlier version) */
       #crx-feed-panel {
-        max-height: none; /* let page scroll naturally */
-        overflow: visible;
-        border-radius: 12px;
-        border: 1px solid rgba(13, 24, 40, 0.04);
+        border-radius: 14px;
+        border: 1px solid rgba(13, 24, 40, 0.06);
         padding: 12px;
         background: linear-gradient(
           180deg,
-          rgba(255, 255, 255, 0.95),
+          rgba(255, 255, 255, 0.92),
           rgba(255, 255, 255, 0.98)
         );
         box-shadow: 0 10px 30px rgba(9, 20, 40, 0.03);
-      }
-
-      #crx-feed-panel {
         display: flex;
         justify-content: center;
       }
+      [data-theme="midnight"] #crx-feed-panel {
+        background: linear-gradient(
+          180deg,
+          rgba(17, 24, 39, 0.82),
+          rgba(2, 6, 23, 0.35)
+        );
+        border-color: rgba(148, 163, 184, 0.16);
+      }
+
       #crx-card-list {
         width: 100%;
         max-width: 980px;
@@ -676,38 +1096,40 @@
         gap: 16px;
         align-items: center;
         padding: 12px;
-        border-radius: 14px;
+        border-radius: 16px;
         margin: 10px 6px;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.98),
-          rgba(245, 251, 255, 0.98)
-        );
-        border: 1px solid rgba(13, 24, 40, 0.03);
+        background: linear-gradient(180deg, var(--tile-bg1), var(--tile-bg2));
+        border: 1px solid rgba(13, 24, 40, 0.06);
         transition: transform 0.12s ease, box-shadow 0.12s ease;
         position: relative;
+      }
+      [data-theme="midnight"] .crx-card-row {
+        border-color: rgba(148, 163, 184, 0.16);
       }
 
       .crx-card-row:hover {
         transform: translateY(-4px);
-        box-shadow: 0 14px 30px rgba(8, 36, 64, 0.04);
+        box-shadow: var(--shadow-1);
       }
 
       .crx-thumb-square {
         width: 88px;
         height: 88px;
-        border-radius: 12px;
+        border-radius: 14px;
         object-fit: cover;
         flex-shrink: 0;
-        border: 1px solid rgba(13, 24, 40, 0.06);
+        border: 1px solid rgba(13, 24, 40, 0.08);
+      }
+      [data-theme="midnight"] .crx-thumb-square {
+        border-color: rgba(148, 163, 184, 0.16);
       }
 
       .crx-post-title {
-        background: #d97706;
+        background: var(--crx-accent);
         color: white;
         padding: 8px 12px;
-        border-radius: 10px;
-        font-weight: 900;
+        border-radius: 12px;
+        font-weight: 1000;
         display: inline-block;
         font-size: 0.95rem;
         text-decoration: none;
@@ -732,19 +1154,22 @@
         gap: 8px;
         padding: 8px 10px;
         border-radius: 999px;
-        border: 1px solid rgba(13, 24, 40, 0.08);
-        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(13, 24, 40, 0.1);
+        background: var(--chip-bg);
         font-weight: 1000;
         cursor: pointer;
         user-select: none;
         font-size: 13px;
+        color: var(--headline);
+      }
+      [data-theme="midnight"] .mini-pill {
+        border-color: rgba(148, 163, 184, 0.18);
       }
       .mini-pill.on {
         border-color: rgba(217, 119, 6, 0.35);
         box-shadow: 0 10px 24px rgba(217, 119, 6, 0.08);
       }
 
-      /* toast */
       .ls-toast {
         position: fixed;
         left: 50%;
@@ -754,7 +1179,7 @@
         border-radius: 999px;
         background: rgba(17, 24, 39, 0.92);
         color: #fff;
-        font-weight: 900;
+        font-weight: 950;
         font-size: 13px;
         box-shadow: 0 18px 48px rgba(2, 6, 23, 0.22);
         opacity: 0;
@@ -767,17 +1192,16 @@
         transform: translateX(-50%) translateY(0);
       }
 
-      /* back to top */
       #back-to-top {
         position: fixed;
         right: 18px;
         bottom: 18px;
         width: 44px;
         height: 44px;
-        border-radius: 10px;
+        border-radius: 12px;
         display: grid;
         place-items: center;
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        background: linear-gradient(135deg, #f59e0b, var(--crx-accent));
         color: white;
         box-shadow: 0 12px 30px rgba(217, 119, 6, 0.18);
         cursor: pointer;
@@ -796,19 +1220,27 @@
         transform: translateY(1px) scale(0.99);
       }
 
+      .crx_fade_in {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+        will-change: opacity, transform;
+      }
+      .crx_fade_in.crx_visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
       @media (max-width: 920px) {
         #ls-search {
-          max-width: 60%;
+          max-width: 58%;
         }
-
         #ls-nav {
           display: none;
         }
-
         .menu-toggle {
           display: flex;
         }
-
         #ls-actions {
           gap: 8px;
         }
@@ -818,19 +1250,21 @@
         #ls-header {
           padding: 10px 12px;
         }
-
         #ls-search {
           max-width: 100%;
         }
-
         .search-box {
           max-width: 100%;
         }
-
         .title-sub {
           display: none;
         }
-
+        .ls-badges {
+          display: none;
+        }
+        .theme-quick span.label {
+          display: none;
+        }
         .mobile-menu {
           left: 12px;
           right: 12px;
@@ -838,26 +1272,12 @@
           width: calc(100% - 24px);
           max-width: none;
         }
-
-        .ls-badges {
-          display: none; /* keep header clean on small screens */
-        }
       }
     </style>
   </head>
 
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-
-    <!-- Hidden labels (optional SEO / future use) -->
-    <div class="page-labels" style="display: none">
-      <span>Data Structures</span>
-      <span>Algorithms</span>
-      <span>Web Development</span>
-      <span>Python</span>
-      <span>Coding Interviews</span>
-      <span>Career Growth</span>
-    </div>
 
     <header id="ls-header" role="banner" aria-label="Learning Sutras header">
       <div id="ls-brand" aria-hidden="false">
@@ -897,7 +1317,6 @@
           >
         </nav>
 
-        <!-- NEW: streak + points -->
         <div class="ls-badges" aria-label="Daily progress">
           <div class="ls-badge" id="lsStreakBadge" title="Daily streak">
             🔥 <span id="lsStreak">0</span> <small>days</small>
@@ -906,6 +1325,12 @@
             ⭐ <span id="lsPoints">0</span>
           </div>
         </div>
+
+        <button class="theme-quick" id="lsThemeQuick" type="button" aria-label="Change theme">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="label">Theme</span>
+          <span id="lsThemeName" style="opacity:.75; font-weight:1000; font-size:12px;"></span>
+        </button>
 
         <div id="ls-search" role="search" aria-label="Search Learning Sutras">
           <div class="search-box">
@@ -917,11 +1342,10 @@
             />
             <button id="lsSearchBtn" type="button">Search</button>
           </div>
-
           <div id="ls-suggestions" aria-label="Search suggestions"></div>
         </div>
 
-        <button class="menu-toggle" id="lsMenuBtn" aria-label="Open menu">
+        <button class="menu-toggle" id="lsMenuBtn" aria-label="Open menu" type="button">
           <span class="hamburger"></span>
         </button>
       </div>
@@ -931,6 +1355,7 @@
 
     <div class="mobile-menu" id="lsMobileMenu" aria-label="Mobile menu">
       <div class="mm-section">
+        <div class="mm-title">Navigation</div>
         <a
           href="https://www.learnwithchampak.live/2025/12/programmers-picnic.html"
           target="_blank"
@@ -949,257 +1374,313 @@
           rel="noopener"
           >DSA — All posts</a
         >
-        <a href="https://www.learnwithchampak.live/search?q=python" target="_blank" rel="noopener"
-          >Python</a
-        >
-        <a
-          href="https://www.learnwithchampak.live/search?q=javascript"
-          target="_blank"
-          rel="noopener"
-          >JavaScript</a
+        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live"
+          >Home</a
         >
       </div>
 
       <div class="mm-divider"></div>
 
       <div class="mm-section">
-        <div style="font-weight: 1000; margin: 6px 0 10px">Explore</div>
-        <div class="mm-keywords">
-          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=python">Python</a>
-          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=dsa">DSA</a>
-          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=arrays">Arrays</a>
-          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=recursion">Recursion</a>
-          <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=interview">Interview</a>
+        <div class="mm-title">Theme</div>
+        <div class="theme-row" role="radiogroup" aria-label="Theme picker">
+          <div class="theme-pill" data-theme-pick="saffron" role="radio" aria-checked="true" tabindex="0">
+            <span>🧡 Light Saffron</span> <span class="theme-dot saffron"></span>
+          </div>
+          <div class="theme-pill" data-theme-pick="midnight" role="radio" aria-checked="false" tabindex="0">
+            <span>🌙 Midnight</span> <span class="theme-dot midnight"></span>
+          </div>
+          <div class="theme-pill" data-theme-pick="mint" role="radio" aria-checked="false" tabindex="0">
+            <span>🌿 Mint</span> <span class="theme-dot mint"></span>
+          </div>
         </div>
+      </div>
+
+      <div class="mm-divider"></div>
+
+      <div class="mm-section">
+        <div class="mm-title">Quick Topics</div>
+        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=python">Python</a>
+        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=javascript">JavaScript</a>
+        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=dsa">DSA</a>
+        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=interview">Interview</a>
+        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=projects">Projects</a>
       </div>
     </div>
 
-    <main id="main" id="crx-dashboard-home" role="main">
-      <main id="crx-dashboard-home">
-        <!-- NEW: Today strip -->
-        <section class="crx-section crx_fade_in" id="lsToday">
-          <h1 style="margin-bottom: 6px">Today at Learning Sutras</h1>
-          <p style="margin-bottom: 14px">
-            Quick wins for the day — complete 1 tile to keep your streak.
-          </p>
-
-          <div class="ls-grid-3">
-            <div class="ls-tile" id="tileChallenge">
-              <div class="kicker">✅ Daily Challenge</div>
-              <h3 id="challengeTitle">Loading…</h3>
-              <div class="muted" id="challengePrompt"></div>
-              <div class="ls-actions-row">
-                <button class="btn primary small" id="btnChallengeDone">Mark Done (+10)</button>
-                <button class="btn ghost small" id="btnChallengeCopy">Copy Prompt</button>
-              </div>
-              <div style="margin-top: 10px; display: none" id="challengeDoneChip" class="ls-done-chip">
-                🎉 Completed today
+    <main id="crx-dashboard-home" role="main">
+      <!-- HERO SLIDER (NEW) -->
+      <section class="crx-section hero crx_fade_in" id="lsHero">
+        <div class="hero-inner">
+          <div class="slides" id="heroSlides" aria-label="Hero slider">
+            <div class="slide">
+              <div class="hero-badge">🔥 Daily Learning • Streaks • Points</div>
+              <h1 class="hero-title">Come back daily — finish one small task.</h1>
+              <p class="hero-sub">
+                Your streak + points are saved on this device. Build consistency with Python, DSA, and Web Dev.
+              </p>
+              <div class="hero-cta">
+                <button class="btn primary" type="button" id="heroGoToday">Start Today</button>
+                <button class="btn ghost" type="button" data-share="hero">Share on WhatsApp</button>
               </div>
             </div>
 
-            <div class="ls-tile" id="tileMCQ">
-              <div class="kicker">🧠 Daily MCQ</div>
-              <h3 id="mcqQ">Loading…</h3>
-              <div class="muted" id="mcqA" style="display: none"></div>
-              <div class="ls-actions-row">
-                <button class="btn ghost small" id="btnMCQReveal">Reveal</button>
-                <button class="btn primary small" id="btnMCQDone">I got it (+5)</button>
-              </div>
-              <div style="margin-top: 10px; display: none" id="mcqDoneChip" class="ls-done-chip">
-                ✅ MCQ done
+            <div class="slide">
+              <div class="hero-badge">🧩 Learn by Seeing</div>
+              <h1 class="hero-title">Visualizers + interactive practice.</h1>
+              <p class="hero-sub">
+                Sorting, recursion, patterns — open visuals and then code immediately in the embedded editors below.
+              </p>
+              <div class="hero-cta">
+                <a class="btn primary" target="_blank" rel="noopener"
+                  href="https://www.learnwithchampak.live/search?q=visualizer">Explore Visualizers</a>
+                <button class="btn ghost" type="button" id="heroOpenEditors">Open Editors</button>
               </div>
             </div>
 
-            <div class="ls-tile" id="tileViz">
-              <div class="kicker">🧩 Today’s Visual</div>
-              <h3 id="vizTitle">Loading…</h3>
-              <div class="muted" id="vizDesc"></div>
-              <div class="ls-actions-row">
-                <a class="btn primary small" id="vizLink" href="#" target="_blank" rel="noopener">Open</a>
-                <button class="btn ghost small" id="btnVizDone">Watched (+3)</button>
-              </div>
-              <div style="margin-top: 10px; display: none" id="vizDoneChip" class="ls-done-chip">
-                👍 Nice
+            <div class="slide">
+              <div class="hero-badge">🛒 Build for Customers</div>
+              <h1 class="hero-title">We build real apps: cart, booking, dashboards.</h1>
+              <p class="hero-sub">
+                Tap “Request” in the “Build for you” section and WhatsApp your requirements instantly.
+              </p>
+              <div class="hero-cta">
+                <button class="btn primary" type="button" id="heroGoBuild">Request a Feature</button>
+                <a class="btn ghost" target="_blank" rel="noopener"
+                  href="https://www.learnwithchampak.live/2025/12/programmers-picnic.html">See Programmer’s Picnic</a>
               </div>
             </div>
           </div>
 
-          <div class="ls-chips" aria-label="Quick filters">
-            <div class="ls-chip active" data-q="learnwithchampak">All</div>
-            <div class="ls-chip" data-q="python">Python</div>
-            <div class="ls-chip" data-q="dsa">DSA</div>
-            <div class="ls-chip" data-q="javascript">JavaScript</div>
-            <div class="ls-chip" data-q="interview">Interview</div>
-            <div class="ls-chip" data-q="projects">Projects</div>
-          </div>
-        </section>
-
-        <!-- NEW: Continue -->
-        <section class="crx-section crx_fade_in" id="lsContinue" style="display: none">
-          <h2 style="margin-bottom: 6px">Continue where you left off</h2>
-          <p class="muted" style="margin-bottom: 12px">
-            Your last opened page is saved on this device.
-          </p>
-          <div class="ls-tile" style="padding: 14px">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-              <div>
-                <div style="font-weight:1000; font-size: 16px" id="lsLastTitle">—</div>
-                <div class="muted" id="lsLastMeta">—</div>
-              </div>
-              <div class="ls-actions-row" style="margin-top:0">
-                <a class="btn primary" id="lsLastOpen" href="#" target="_blank" rel="noopener">Continue</a>
-                <button class="btn ghost" id="lsLastClear" type="button">Clear</button>
-              </div>
+          <div class="hero-nav" aria-hidden="false">
+            <button class="hero-btn prev" id="heroPrev" aria-label="Previous slide" type="button">‹</button>
+            <button class="hero-btn next" id="heroNext" aria-label="Next slide" type="button">›</button>
+            <div class="hero-dots" aria-label="Slide dots">
+              <button class="dotbtn on" data-dot="0" aria-label="Slide 1" type="button"></button>
+              <button class="dotbtn" data-dot="1" aria-label="Slide 2" type="button"></button>
+              <button class="dotbtn" data-dot="2" aria-label="Slide 3" type="button"></button>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- Roadmaps -->
-        <section class="crx-section crx_fade_in" id="lsRoadmaps">
-          <h2 style="margin-bottom: 6px">Roadmaps</h2>
-          <p style="margin-bottom: 14px">Tick daily progress. Share streak on WhatsApp.</p>
+      <!-- TODAY -->
+      <section class="crx-section crx_fade_in" id="lsToday">
+        <h1 style="margin-bottom: 6px">Today at Learning Sutras</h1>
+        <p style="margin-bottom: 14px">
+          Quick wins for the day — complete 1 tile to keep your streak.
+        </p>
 
-          <div class="ls-grid-3">
-            <div class="ls-tile">
-              <div class="kicker">⭐ Python Starter</div>
-              <h3>28-Day Python Plan</h3>
-              <div class="muted">Daily small tasks + practice programs.</div>
-              <div class="ls-actions-row">
-                <a class="btn primary small" target="_blank" rel="noopener"
-                  href="https://www.learnwithchampak.live/search?q=python%20starter%20club"
-                  >Open Lessons</a
-                >
-                <button class="btn ghost small" data-share="python28">Share</button>
-              </div>
+        <div class="ls-grid-3">
+          <div class="ls-tile" id="tileChallenge">
+            <div class="kicker">✅ Daily Challenge</div>
+            <h3 id="challengeTitle">Loading…</h3>
+            <div class="muted" id="challengePrompt"></div>
+            <div class="ls-actions-row">
+              <button class="btn primary small" id="btnChallengeDone">Mark Done (+10)</button>
+              <button class="btn ghost small" id="btnChallengeCopy">Copy Prompt</button>
             </div>
-
-            <div class="ls-tile">
-              <div class="kicker">🧠 DSA Saturdays</div>
-              <h3>Interview Practice</h3>
-              <div class="muted">MCQs + assignments + submissions format.</div>
-              <div class="ls-actions-row">
-                <a class="btn primary small" target="_blank" rel="noopener"
-                  href="https://www.learnwithchampak.live/2025/11/all-dsa-posts.html"
-                  >Open DSA</a
-                >
-                <button class="btn ghost small" data-share="dsaSat">Share</button>
-              </div>
-            </div>
-
-            <div class="ls-tile">
-              <div class="kicker">🧩 Visualizers</div>
-              <h3>Learn by Seeing</h3>
-              <div class="muted">Sorting, recursion, pointers, trees (visual + code).</div>
-              <div class="ls-actions-row">
-                <a class="btn primary small" target="_blank" rel="noopener"
-                  href="https://www.learnwithchampak.live/search?q=visualizer"
-                  >Explore</a
-                >
-                <button class="btn ghost small" data-share="viz">Share</button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Explore keywords -->
-        <section class="crx-section crx_fade_in" id="lsExplore">
-          <h2 style="margin-bottom: 6px">Explore topics</h2>
-          <p style="margin-bottom: 14px">Tap a chip to open matching posts.</p>
-
-          <div>
-            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=python">Python</a>
-            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=arrays">Arrays</a>
-            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=string">Strings</a>
-            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=recursion">Recursion</a>
-            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=sorting">Sorting</a>
-            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=binary%20search">Binary Search</a>
-            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=javascript">JavaScript</a>
-            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=dom">DOM</a>
-            <a class="crx-keyword" target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=interview">Interview</a>
-          </div>
-        </section>
-
-        <!-- NEW: Mini tools -->
-        <section class="crx-section crx_fade_in" id="lsTools">
-          <h2 style="margin-bottom: 6px">Mini tools</h2>
-          <p style="margin-bottom: 14px">Small utilities people actually return for.</p>
-
-          <div class="ls-grid-3">
-            <div class="ls-tile">
-              <div class="kicker">🔧 JSON</div>
-              <h3>JSON Pretty</h3>
-              <div class="muted">Paste JSON → format quickly (in this page).</div>
-              <div class="ls-actions-row">
-                <button class="btn primary small" id="openJsonTool">Open</button>
-                <button class="btn ghost small" id="copyJsonToolLink">Copy Link</button>
-              </div>
-            </div>
-            <div class="ls-tile">
-              <div class="kicker">🧮 Python</div>
-              <h3>Format Cheatsheet</h3>
-              <div class="muted">Dates, zero-padding, commas, floats.</div>
-              <div class="ls-actions-row">
-                <a class="btn primary small" target="_blank" rel="noopener"
-                  href="https://www.learnwithchampak.live/search?q=format%20python"
-                  >Open</a
-                >
-              </div>
-            </div>
-            <div class="ls-tile">
-              <div class="kicker">📣 Join</div>
-              <h3>Daily Tasks (WhatsApp)</h3>
-              <div class="muted">Get daily prompts and doubt support.</div>
-              <div class="ls-actions-row">
-                <a class="btn primary small" target="_blank" rel="noopener"
-                  href="https://wa.me/?text=Namaste%20%F0%9F%99%8F%20I%20want%20to%20join%20Learning%20Sutras%20daily%20tasks."
-                  >WhatsApp</a
-                >
-              </div>
+            <div style="margin-top: 10px; display: none" id="challengeDoneChip" class="ls-done-chip">
+              🎉 Completed today
             </div>
           </div>
 
-          <!-- Inline JSON tool (hidden until opened) -->
-          <div class="ls-tile" id="jsonTool" style="margin-top: 14px; display: none">
-            <div class="kicker">🔧 JSON Pretty</div>
-            <h3 style="margin-bottom: 6px">Paste JSON</h3>
-            <textarea id="jsonInput" style="width:100%; min-height:140px; border-radius:12px; border:1px solid rgba(13,24,40,.08); padding:12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;"></textarea>
-            <div class="ls-actions-row" style="margin-top: 10px">
-              <button class="btn primary" id="btnJsonFormat">Format</button>
-              <button class="btn ghost" id="btnJsonMinify">Minify</button>
-              <button class="btn ghost" id="btnJsonCopy">Copy Output</button>
-              <button class="btn ghost" id="btnJsonClose">Close</button>
+          <div class="ls-tile" id="tileMCQ">
+            <div class="kicker">🧠 Daily MCQ</div>
+            <h3 id="mcqQ">Loading…</h3>
+            <div class="muted" id="mcqA" style="display: none"></div>
+            <div class="ls-actions-row">
+              <button class="btn ghost small" id="btnMCQReveal">Reveal</button>
+              <button class="btn primary small" id="btnMCQDone">I got it (+5)</button>
             </div>
-            <pre id="jsonOut" style="margin-top: 12px; background: rgba(243, 250, 255, 0.9); border-radius: 12px; padding: 12px; overflow:auto; white-space: pre-wrap; border:1px solid rgba(13,24,40,.06)"></pre>
+            <div style="margin-top: 10px; display: none" id="mcqDoneChip" class="ls-done-chip">
+              ✅ MCQ done
+            </div>
           </div>
-        </section>
 
-        <!-- Feed -->
-        <section class="crx-section crx_fade_in" id="lsLatest">
-          <h2 style="margin-bottom: 6px">Latest & Popular</h2>
-          <p style="margin-bottom: 14px">
-            Bookmark posts, mark as done, and continue anytime.
-          </p>
-
-          <div id="crx-feed-panel">
-            <div id="crx-card-list"></div>
+          <div class="ls-tile" id="tileViz">
+            <div class="kicker">🧩 Today’s Visual</div>
+            <h3 id="vizTitle">Loading…</h3>
+            <div class="muted" id="vizDesc"></div>
+            <div class="ls-actions-row">
+              <a class="btn primary small" id="vizLink" href="#" target="_blank" rel="noopener">Open</a>
+              <button class="btn ghost small" id="btnVizDone">Watched (+3)</button>
+            </div>
+            <div style="margin-top: 10px; display: none" id="vizDoneChip" class="ls-done-chip">
+              👍 Nice
+            </div>
           </div>
-        </section>
+        </div>
 
-        <div id="back-to-top" aria-label="Back to top" title="Back to top">↑</div>
-      </main>
+        <div class="ls-chips" aria-label="Quick filters">
+          <div class="ls-chip active" data-q="all">All</div>
+          <div class="ls-chip" data-q="python">Python</div>
+          <div class="ls-chip" data-q="dsa">DSA</div>
+          <div class="ls-chip" data-q="javascript">JavaScript</div>
+          <div class="ls-chip" data-q="interview">Interview</div>
+          <div class="ls-chip" data-q="projects">Projects</div>
+        </div>
+      </section>
+
+      <!-- EMBEDDED EDITORS (NEW) -->
+      <section class="crx-section crx_fade_in" id="lsEditors">
+        <h2 style="margin-bottom: 6px">Practice instantly</h2>
+        <p style="margin-bottom: 14px">
+          Embedded editors (Python + JavaScript). Use tabs to switch. Open fullscreen anytime.
+        </p>
+
+        <div class="embed-wrap">
+          <div class="embed-top">
+            <div class="embed-tabs" role="tablist" aria-label="Editors tabs">
+              <button class="tabbtn on" type="button" data-tab="py" role="tab" aria-selected="true">
+                🐍 Python Editor
+              </button>
+              <button class="tabbtn" type="button" data-tab="js" role="tab" aria-selected="false">
+                🟨 JavaScript Editor
+              </button>
+            </div>
+
+            <div class="embed-actions">
+              <button class="btn ghost small" type="button" id="btnReloadEditor">Reload</button>
+              <a class="btn primary small" id="btnOpenFull" href="#" target="_blank" rel="noopener">Open Fullscreen</a>
+            </div>
+          </div>
+
+          <!-- Python (student mode) -->
+          <iframe
+            id="framePy"
+            class="embed-frame show"
+            title="Python Editor"
+            loading="lazy"
+            allow="clipboard-read; clipboard-write; fullscreen"
+            allowfullscreen
+            src="https://programmer-s-picnic.github.io/lesson-viewer/python-starter/editor/super?tmode=0"
+          ></iframe>
+
+          <!-- JavaScript -->
+          <iframe
+            id="frameJs"
+            class="embed-frame"
+            title="JavaScript Editor"
+            loading="lazy"
+            allow="clipboard-read; clipboard-write; fullscreen"
+            allowfullscreen
+            src="https://programmer-s-picnic.github.io/lesson-viewer/java-script/editor/"
+          ></iframe>
+        </div>
+      </section>
+
+      <!-- BUILD FOR YOU -->
+      <section class="crx-section crx_fade_in" id="lsBuildForYou">
+        <h2 style="margin-bottom: 6px">What we can build for you</h2>
+        <p style="margin-bottom: 14px">
+          Common features customers request. Tap “Request” to message on WhatsApp with details.
+        </p>
+
+        <div class="ls-grid-3">
+          <div class="ls-tile">
+            <div class="kicker">🛒 E-commerce</div>
+            <h3>Shopping Cart + Checkout</h3>
+            <div class="muted">Cart, coupons, delivery charges, payment integration.</div>
+            <div class="ls-actions-row">
+              <button class="btn primary small" data-request="Shopping Cart + Checkout">Request</button>
+              <button class="btn ghost small" data-spec="cart">Specs</button>
+            </div>
+          </div>
+
+          <div class="ls-tile">
+            <div class="kicker">📅 Booking</div>
+            <h3>Appointments / Slot Booking</h3>
+            <div class="muted">Calendar, availability, reminders, admin panel.</div>
+            <div class="ls-actions-row">
+              <button class="btn primary small" data-request="Appointments / Slot Booking">Request</button>
+              <button class="btn ghost small" data-spec="booking">Specs</button>
+            </div>
+          </div>
+
+          <div class="ls-tile">
+            <div class="kicker">📚 Learning</div>
+            <h3>Quiz + Progress Dashboard</h3>
+            <div class="muted">MCQ tests, streaks, badges, leaderboard.</div>
+            <div class="ls-actions-row">
+              <button class="btn primary small" data-request="Quiz + Progress Dashboard">Request</button>
+              <button class="btn ghost small" data-spec="quiz">Specs</button>
+            </div>
+          </div>
+
+          <div class="ls-tile">
+            <div class="kicker">💬 Support</div>
+            <h3>Chat + Helpdesk Bot</h3>
+            <div class="muted">FAQ bot + ticketing + WhatsApp/Email follow-up.</div>
+            <div class="ls-actions-row">
+              <button class="btn primary small" data-request="Chat + Helpdesk Bot">Request</button>
+              <button class="btn ghost small" data-spec="bot">Specs</button>
+            </div>
+          </div>
+
+          <div class="ls-tile">
+            <div class="kicker">📈 Growth</div>
+            <h3>SEO + Blog Automation</h3>
+            <div class="muted">Internal links, schema, tags, related posts, sitemap.</div>
+            <div class="ls-actions-row">
+              <button class="btn primary small" data-request="SEO + Blog Automation">Request</button>
+              <button class="btn ghost small" data-spec="seo">Specs</button>
+            </div>
+          </div>
+
+          <div class="ls-tile">
+            <div class="kicker">🧾 Admin</div>
+            <h3>Invoices + CRM Lite</h3>
+            <div class="muted">Customers, invoices, reminders, export to Excel.</div>
+            <div class="ls-actions-row">
+              <button class="btn primary small" data-request="Invoices + CRM Lite">Request</button>
+              <button class="btn ghost small" data-spec="crm">Specs</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ls-tile" id="specDrawer" style="margin-top: 14px; display: none">
+          <div class="kicker">🧩 Quick specs</div>
+          <h3 id="specTitle" style="margin-bottom: 6px">—</h3>
+          <div class="muted" id="specBody" style="font-size: 14px; line-height: 1.55"></div>
+          <div class="ls-actions-row">
+            <button class="btn primary" id="specRequest">Request this</button>
+            <button class="btn ghost" id="specClose">Close</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LATEST -->
+      <section class="crx-section crx_fade_in" id="lsLatest">
+        <h2 style="margin-bottom: 6px">Latest & Popular</h2>
+        <p style="margin-bottom: 14px">Bookmark posts, mark as done, and continue anytime.</p>
+
+        <div id="crx-feed-panel">
+          <div id="crx-card-list"></div>
+        </div>
+      </section>
+
+      <div id="back-to-top" aria-label="Back to top" title="Back to top">↑</div>
     </main>
 
     <div class="ls-toast" id="lsToast">Saved</div>
 
     <script>
       (() => {
+        const $ = (id) => document.getElementById(id);
+
+        // --------------------------
+        // WhatsApp (your number)
+        // --------------------------
+        const WA_NUMBER = "919335874326";
+        function waOpen(text) {
+          const msg = encodeURIComponent(text);
+          window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank", "noopener");
+        }
+
         // --------------------------
         // Utilities
         // --------------------------
-        const $ = (id) => document.getElementById(id);
-        const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
-
-        // IST day-key (stable even when embedded)
         const IST_OFFSET_MIN = 330; // +05:30
         function getISTDayKey(ts = Date.now()) {
           const utcMs = ts + new Date(ts).getTimezoneOffset() * 60000;
@@ -1215,7 +1696,9 @@
           const istMs = utcMs + IST_OFFSET_MIN * 60000;
           return Math.floor(istMs / 86400000);
         }
-
+        function safeJSONParse(s, fallback) {
+          try { return JSON.parse(s); } catch { return fallback; }
+        }
         function toast(msg) {
           const t = $("lsToast");
           t.textContent = msg;
@@ -1223,30 +1706,79 @@
           clearTimeout(toast._timer);
           toast._timer = setTimeout(() => t.classList.remove("show"), 1400);
         }
-
-        function safeJSONParse(s, fallback) {
-          try {
-            return JSON.parse(s);
-          } catch {
-            return fallback;
-          }
+        function escapeHtml(s) {
+          return String(s)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+        }
+        function escapeAttr(s) {
+          return escapeHtml(s).replaceAll("`", "&#096;");
         }
 
         // --------------------------
         // Storage keys
         // --------------------------
         const K = {
+          theme: "ls_theme_v1",
           streak: "ls_streak",
           lastDay: "ls_last_day",
           points: "ls_points",
           doneToday: "ls_done_today_", // + dayKey
-          mcqDone: "ls_done_mcq_", // + dayKey
-          vizDone: "ls_done_viz_", // + dayKey
+          mcqDone: "ls_done_mcq_",      // + dayKey
+          vizDone: "ls_done_viz_",      // + dayKey
           bookmarks: "ls_bookmarks_v1",
           donePosts: "ls_doneposts_v1",
-          last: "ls_last_v1",
           recentSearch: "ls_recent_search_v1",
         };
+
+        // --------------------------
+        // THEME
+        // --------------------------
+        const THEMES = ["saffron", "midnight", "mint"];
+        const THEME_LABELS = { saffron: "Saffron", midnight: "Midnight", mint: "Mint" };
+
+        function applyTheme(theme) {
+          const t = THEMES.includes(theme) ? theme : "saffron";
+          document.documentElement.setAttribute("data-theme", t);
+          localStorage.setItem(K.theme, t);
+
+          document.querySelectorAll("[data-theme-pick]").forEach((pill) => {
+            const isActive = pill.dataset.themePick === t;
+            pill.classList.toggle("active", isActive);
+            pill.setAttribute("aria-checked", String(isActive));
+          });
+
+          const name = $("lsThemeName");
+          if (name) name.textContent = THEME_LABELS[t] || t;
+        }
+        function cycleTheme() {
+          const cur = localStorage.getItem(K.theme) || "saffron";
+          const idx = THEMES.indexOf(cur);
+          const next = THEMES[(idx + 1) % THEMES.length];
+          applyTheme(next);
+          toast(`Theme: ${THEME_LABELS[next]}`);
+        }
+        function initTheme() {
+          applyTheme(localStorage.getItem(K.theme) || "saffron");
+
+          const onPick = (el) => applyTheme(el.dataset.themePick);
+
+          document.querySelectorAll("[data-theme-pick]").forEach((pill) => {
+            pill.addEventListener("click", () => onPick(pill));
+            pill.addEventListener("keydown", (e) => {
+              if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onPick(pill); }
+            });
+          });
+
+          const quick = $("lsThemeQuick");
+          quick?.addEventListener("click", cycleTheme);
+          quick?.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); cycleTheme(); }
+          });
+        }
 
         // --------------------------
         // Streak & points
@@ -1254,8 +1786,8 @@
         function initStreak() {
           const today = getISTDayKey();
           const yesterdayIndex = getISTDayIndex(Date.now() - 86400000);
-          const todayIndex = getISTDayIndex();
           const lastDay = localStorage.getItem(K.lastDay);
+
           let streak = parseInt(localStorage.getItem(K.streak) || "0", 10);
           let points = parseInt(localStorage.getItem(K.points) || "0", 10);
 
@@ -1263,24 +1795,17 @@
             localStorage.setItem(K.lastDay, today);
             localStorage.setItem(K.streak, String(streak));
           } else {
-            // if first visit of a new day, update streak if yesterday was last day
             const lastIndex = getISTDayIndex(new Date(lastDay + "T00:00:00Z").getTime());
-            // Note: lastDay saved as IST date, but using UTC midnight is ok for day index comparisons
             if (today !== lastDay) {
-              if (lastIndex === yesterdayIndex) streak += 1;
-              else streak = 1;
+              streak = (lastIndex === yesterdayIndex) ? (streak + 1) : 1;
               localStorage.setItem(K.streak, String(streak));
               localStorage.setItem(K.lastDay, today);
-            } else {
-              // same day: keep streak as is
-              streak = clamp(streak, 0, 9999);
             }
           }
 
           $("lsStreak").textContent = String(streak);
           $("lsPoints").textContent = String(points);
         }
-
         function addPoints(n) {
           const points = parseInt(localStorage.getItem(K.points) || "0", 10) + n;
           localStorage.setItem(K.points, String(points));
@@ -1288,7 +1813,7 @@
         }
 
         // --------------------------
-        // Daily items (edit freely)
+        // Daily tiles
         // --------------------------
         const DAILY_CHALLENGES = [
           { title: "Zero Pad in Python", prompt: "Write code to print 4 as 04 and 4 as 004." },
@@ -1300,20 +1825,18 @@
           { title: "FizzBuzz+", prompt: "FizzBuzz plus print 'Prime' for primes." },
           { title: "Frequency Map", prompt: "Build a frequency dict for words in a paragraph." },
         ];
-
         const DAILY_MCQ = [
-          { q: "Python: What does n = 4; print(f\"{n:02}\") output?", a: "04 (02 means width 2, pad with 0)" },
+          { q: 'Python: What does n = 4; print(f"{n:02}") output?', a: "04 (width 2, padded with 0)" },
           { q: "DSA: Time complexity of binary search?", a: "O(log n)" },
           { q: "JS: querySelector returns…", a: "The first matching element (or null)" },
           { q: "Python: list.append(x) returns…", a: "None (it mutates the list)" },
           { q: "DSA: Stack is best for…", a: "LIFO operations / recursion simulation" },
         ];
-
         const DAILY_VIZ = [
-          { title: "Quicksort Visual", desc: "See partitioning happen step-by-step.", url: "https://www.learnwithchampak.live/search?q=quicksort%20visual" },
+          { title: "Quicksort Visual", desc: "See partitioning step-by-step.", url: "https://www.learnwithchampak.live/search?q=quicksort%20visual" },
           { title: "Recursion Visual", desc: "Call stack made visible.", url: "https://www.learnwithchampak.live/search?q=recursion%20visualizer" },
           { title: "Binary Search Visual", desc: "Mid pointers and shrinking range.", url: "https://www.learnwithchampak.live/search?q=binary%20search%20visual" },
-          { title: "Triangle Type Practice", desc: "Edge cases + right-angled check.", url: "https://www.learnwithchampak.live/search?q=triangle%20program" },
+          { title: "Triangle Type Practice", desc: "Edge cases + Pythagoras check.", url: "https://www.learnwithchampak.live/search?q=triangle%20program" },
         ];
 
         function initDailyTiles() {
@@ -1333,7 +1856,6 @@
           $("vizDesc").textContent = viz.desc;
           $("vizLink").href = viz.url;
 
-          // Restore done states
           const chalDone = localStorage.getItem(K.doneToday + dayKey) === "1";
           const mcqDone = localStorage.getItem(K.mcqDone + dayKey) === "1";
           const vizDone = localStorage.getItem(K.vizDone + dayKey) === "1";
@@ -1389,200 +1911,6 @@
         }
 
         // --------------------------
-        // Continue card
-        // --------------------------
-        function loadContinue() {
-          const last = safeJSONParse(localStorage.getItem(K.last) || "null", null);
-          if (!last || !last.url) {
-            $("lsContinue").style.display = "none";
-            return;
-          }
-          $("lsContinue").style.display = "block";
-          $("lsLastTitle").textContent = last.title || "Last opened";
-          $("lsLastMeta").textContent = last.when
-            ? "Last opened: " + new Date(last.when).toLocaleString()
-            : "";
-          $("lsLastOpen").href = last.url;
-
-          $("lsLastClear").onclick = () => {
-            localStorage.removeItem(K.last);
-            $("lsContinue").style.display = "none";
-            toast("Cleared");
-          };
-        }
-
-        function saveContinue(title, url) {
-          localStorage.setItem(K.last, JSON.stringify({ title, url, when: Date.now() }));
-        }
-
-        // --------------------------
-        // Feed data (edit these links anytime)
-        // --------------------------
-        const FEED = [
-          {
-            title: "Python Starter Club — Day 1",
-            url: "https://www.learnwithchampak.live/2025/12/python-starter-club-day1.html",
-            img: "https://programmer-s-picnic.github.io/json-images/pics/Python-Starter%20Club.png",
-            meta: "Beginner • Setup • VS Code • First program",
-            tags: ["python", "beginner"],
-          },
-          {
-            title: "All DSA Posts",
-            url: "https://www.learnwithchampak.live/2025/11/all-dsa-posts.html",
-            img: "https://programmer-s-picnic.github.io/json-images/pics/DSA.png",
-            meta: "Arrays • Strings • Recursion • Sorting • Interview prep",
-            tags: ["dsa", "interview"],
-          },
-          {
-            title: "JavaScript Editor Lessons",
-            url: "https://www.learnwithchampak.live/search?q=javascript%20editor",
-            img: "https://programmer-s-picnic.github.io/json-images/pics/JavaScript.png",
-            meta: "DOM • Events • Fetch • Promises • UI",
-            tags: ["javascript", "web"],
-          },
-          {
-            title: "Triangle Checker (Type + Right-angled)",
-            url: "https://www.learnwithchampak.live/search?q=triangle%20type%20right%20angled",
-            img: "https://programmer-s-picnic.github.io/json-images/pics/Python.png",
-            meta: "Conditionals • Sorting sides • Pythagoras check",
-            tags: ["python", "logic"],
-          },
-          {
-            title: "Promises + Async/Await (with Fetch)",
-            url: "https://www.learnwithchampak.live/search?q=async%20await%20promise%20fetch",
-            img: "https://programmer-s-picnic.github.io/json-images/pics/Web.png",
-            meta: "Async patterns • Real-world fetch",
-            tags: ["javascript", "web"],
-          },
-          {
-            title: "Pandas + CSV + Matplotlib",
-            url: "https://www.learnwithchampak.live/search?q=pandas%20csv%20matplotlib",
-            img: "https://programmer-s-picnic.github.io/json-images/pics/Pandas.png",
-            meta: "Data analysis • Charts • Exports",
-            tags: ["python", "data"],
-          },
-        ];
-
-        // --------------------------
-        // Bookmarks & Done
-        // --------------------------
-        function getSet(key) {
-          return new Set(safeJSONParse(localStorage.getItem(key) || "[]", []));
-        }
-        function setSet(key, setObj) {
-          localStorage.setItem(key, JSON.stringify([...setObj]));
-        }
-
-        function renderFeed(filterQ = "learnwithchampak") {
-          const list = $("crx-card-list");
-          list.innerHTML = "";
-
-          const bm = getSet(K.bookmarks);
-          const dn = getSet(K.donePosts);
-
-          const q = (filterQ || "").toLowerCase().trim();
-
-          const items = FEED.filter((it) => {
-            if (!q || q === "learnwithchampak" || q === "all") return true;
-            const hay = (it.title + " " + it.meta + " " + (it.tags || []).join(" ")).toLowerCase();
-            return hay.includes(q);
-          });
-
-          for (const it of items) {
-            const isBm = bm.has(it.url);
-            const isDone = dn.has(it.url);
-
-            const row = document.createElement("div");
-            row.className = "crx-card-row";
-
-            row.innerHTML = `
-              <img class="crx-thumb-square" src="${it.img}" alt="" loading="lazy"/>
-              <div style="min-width:0; flex:1;">
-                <a class="crx-post-title ls-track" data-title="${escapeHtml(it.title)}" href="${it.url}" target="_blank" rel="noopener">${escapeHtml(it.title)}</a>
-                <div class="crx-post-meta">${escapeHtml(it.meta)}</div>
-                <div class="crx-card-tools">
-                  <button class="mini-pill ${isBm ? "on" : ""}" data-action="bookmark" data-url="${escapeAttr(it.url)}">
-                    ⭐ ${isBm ? "Bookmarked" : "Bookmark"}
-                  </button>
-                  <button class="mini-pill ${isDone ? "on" : ""}" data-action="done" data-url="${escapeAttr(it.url)}">
-                    ✅ ${isDone ? "Done" : "Mark done"}
-                  </button>
-                  <button class="mini-pill" data-action="share" data-url="${escapeAttr(it.url)}" data-title="${escapeAttr(it.title)}">
-                    📣 Share
-                  </button>
-                </div>
-              </div>
-            `;
-
-            list.appendChild(row);
-          }
-
-          if (items.length === 0) {
-            list.innerHTML = `<div style="padding:14px; color: var(--muted); font-weight:900">No matches. Try another topic chip.</div>`;
-          }
-        }
-
-        function escapeHtml(s) {
-          return String(s)
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#039;");
-        }
-        function escapeAttr(s) {
-          return escapeHtml(s).replaceAll("`", "&#096;");
-        }
-
-        // Delegated actions
-        function initFeedActions() {
-          document.addEventListener("click", async (e) => {
-            const track = e.target.closest(".ls-track");
-            if (track && track.getAttribute("href")) {
-              const title = track.dataset.title || track.textContent.trim();
-              const url = track.getAttribute("href");
-              saveContinue(title, url);
-              // allow navigation
-              return;
-            }
-
-            const btn = e.target.closest("[data-action]");
-            if (!btn) return;
-
-            const action = btn.dataset.action;
-            const url = btn.dataset.url;
-
-            if (!url) return;
-
-            if (action === "bookmark") {
-              const bm = getSet(K.bookmarks);
-              if (bm.has(url)) bm.delete(url);
-              else bm.add(url);
-              setSet(K.bookmarks, bm);
-              toast(bm.has(url) ? "Bookmarked ⭐" : "Removed bookmark");
-              renderFeed(currentFilter);
-            }
-
-            if (action === "done") {
-              const dn = getSet(K.donePosts);
-              if (dn.has(url)) dn.delete(url);
-              else dn.add(url);
-              setSet(K.donePosts, dn);
-              if (dn.has(url)) addPoints(2);
-              toast(dn.has(url) ? "Marked done ✅ (+2)" : "Unmarked");
-              renderFeed(currentFilter);
-            }
-
-            if (action === "share") {
-              const title = btn.dataset.title || "Learning Sutras";
-              const text = encodeURIComponent(`📌 ${title}\n${url}\n\nDaily learning at Learning Sutras ✨`);
-              const wa = `https://wa.me/?text=${text}`;
-              window.open(wa, "_blank", "noopener");
-            }
-          });
-        }
-
-        // --------------------------
         // Search + suggestions
         // --------------------------
         const SUGGEST_TRENDING = ["python", "arrays", "recursion", "interview", "javascript", "pandas"];
@@ -1596,12 +1924,10 @@
           const next = [cleaned, ...arr.filter((x) => x !== cleaned)].slice(0, 8);
           localStorage.setItem(K.recentSearch, JSON.stringify(next));
         }
-
         function openSearch(q) {
           const cleaned = (q || "").trim();
           if (!cleaned) return;
           pushRecentSearch(cleaned);
-          // Blogger search
           const url = `https://www.learnwithchampak.live/search?q=${encodeURIComponent(cleaned)}`;
           window.open(url, "_blank", "noopener");
         }
@@ -1662,21 +1988,6 @@
         }
 
         // --------------------------
-        // Topic chips filter (local feed)
-        // --------------------------
-        let currentFilter = "learnwithchampak";
-        function initChips() {
-          document.querySelectorAll(".ls-chip").forEach((chip) => {
-            chip.addEventListener("click", () => {
-              document.querySelectorAll(".ls-chip").forEach((c) => c.classList.remove("active"));
-              chip.classList.add("active");
-              currentFilter = chip.dataset.q || "learnwithchampak";
-              renderFeed(currentFilter);
-            });
-          });
-        }
-
-        // --------------------------
         // Mobile menu
         // --------------------------
         function initMenu() {
@@ -1714,7 +2025,7 @@
         }
 
         // --------------------------
-        // Fade-in sections
+        // Fade-in
         // --------------------------
         function initFadeIn() {
           const els = document.querySelectorAll(".crx_fade_in");
@@ -1730,121 +2041,375 @@
         }
 
         // --------------------------
-        // Compact header on scroll
+        // Compact header
         // --------------------------
         function initHeaderCompact() {
           const header = $("ls-header");
-          let lastY = window.scrollY;
           window.addEventListener("scroll", () => {
-            const y = window.scrollY;
-            header.classList.toggle("compact", y > 40);
-            lastY = y;
+            header.classList.toggle("compact", window.scrollY > 40);
           });
         }
 
         // --------------------------
-        // Share roadmap buttons
+        // Share buttons
         // --------------------------
         function initShareButtons() {
           document.addEventListener("click", (e) => {
             const b = e.target.closest("[data-share]");
             if (!b) return;
-            const type = b.dataset.share;
             const streak = localStorage.getItem(K.streak) || "0";
             const points = localStorage.getItem(K.points) || "0";
-            const msg = encodeURIComponent(
+            waOpen(
               `🔥 Learning Sutras Daily\nStreak: ${streak} days\nPoints: ${points}\n\nJoin me:\nhttps://www.learnwithchampak.live/`
             );
-            window.open(`https://wa.me/?text=${msg}`, "_blank", "noopener");
           });
         }
 
         // --------------------------
-        // Mini JSON tool
+        // HERO slider logic (NEW)
         // --------------------------
-        function initJsonTool() {
-          const tool = $("jsonTool");
-          const input = $("jsonInput");
-          const out = $("jsonOut");
+        function initHeroSlider() {
+          const slides = $("heroSlides");
+          const dots = document.querySelectorAll(".dotbtn");
+          const total = 3;
+          let i = 0;
+          let timer = null;
 
-          $("openJsonTool").onclick = () => {
-            tool.style.display = "block";
-            tool.scrollIntoView({ behavior: "smooth", block: "start" });
-            toast("JSON tool opened");
+          function go(n) {
+            i = (n + total) % total;
+            slides.style.transform = `translateX(${-i * 100}%)`;
+            dots.forEach((d) => d.classList.toggle("on", Number(d.dataset.dot) === i));
+          }
+          function next() { go(i + 1); }
+          function prev() { go(i - 1); }
+
+          $("heroNext")?.addEventListener("click", () => { next(); restart(); });
+          $("heroPrev")?.addEventListener("click", () => { prev(); restart(); });
+          dots.forEach((d) => d.addEventListener("click", () => { go(Number(d.dataset.dot)); restart(); }));
+
+          function restart() {
+            clearInterval(timer);
+            timer = setInterval(next, 6000);
+          }
+          restart();
+
+          // pause on hover (desktop)
+          slides.addEventListener("mouseenter", () => clearInterval(timer));
+          slides.addEventListener("mouseleave", restart);
+
+          // hero CTAs
+          $("heroGoToday")?.addEventListener("click", () => {
+            $("lsToday")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+          $("heroOpenEditors")?.addEventListener("click", () => {
+            $("lsEditors")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+          $("heroGoBuild")?.addEventListener("click", () => {
+            $("lsBuildForYou")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        }
+
+        // --------------------------
+        // Embedded editors tabs (NEW)
+        // --------------------------
+        function initEditors() {
+          const tabBtns = document.querySelectorAll(".tabbtn");
+          const framePy = $("framePy");
+          const frameJs = $("frameJs");
+          const btnReload = $("btnReloadEditor");
+          const btnOpenFull = $("btnOpenFull");
+
+          const URLS = {
+            py: framePy.getAttribute("src"),
+            js: frameJs.getAttribute("src"),
           };
 
-          $("btnJsonClose").onclick = () => {
-            tool.style.display = "none";
-            toast("Closed");
-          };
+          let current = "py";
+          function setTab(t) {
+            current = t;
+            tabBtns.forEach((b) => {
+              const on = b.dataset.tab === t;
+              b.classList.toggle("on", on);
+              b.setAttribute("aria-selected", String(on));
+            });
+            framePy.classList.toggle("show", t === "py");
+            frameJs.classList.toggle("show", t === "js");
+            btnOpenFull.href = URLS[t];
+            toast(t === "py" ? "Python editor" : "JavaScript editor");
+          }
 
-          $("btnJsonFormat").onclick = () => {
-            const v = input.value.trim();
-            if (!v) return (out.textContent = "");
-            try {
-              out.textContent = JSON.stringify(JSON.parse(v), null, 2);
-              toast("Formatted");
-            } catch {
-              out.textContent = "Invalid JSON";
-              toast("Invalid JSON");
+          tabBtns.forEach((b) => b.addEventListener("click", () => setTab(b.dataset.tab)));
+
+          btnReload.addEventListener("click", () => {
+            const f = current === "py" ? framePy : frameJs;
+            // force reload
+            const src = f.getAttribute("src");
+            f.setAttribute("src", src);
+            toast("Reloaded");
+          });
+
+          // init fullscreen link
+          btnOpenFull.href = URLS[current];
+        }
+
+        // --------------------------
+        // Customer requests section
+        // --------------------------
+        const SPEC_LIBRARY = {
+          cart: {
+            title: "Shopping Cart + Checkout — Quick Specs",
+            body: `
+              <ul>
+                <li><b>Cart:</b> add/remove, quantity, price, taxes, delivery, coupons.</li>
+                <li><b>Checkout:</b> address, delivery slot, payment (UPI/Stripe/Razorpay), order confirmation.</li>
+                <li><b>Admin:</b> products, inventory, orders, refunds, CSV export.</li>
+                <li><b>Extras:</b> WhatsApp order updates, email receipts, analytics.</li>
+              </ul>`,
+            requestName: "Shopping Cart + Checkout",
+          },
+          booking: {
+            title: "Appointments / Slot Booking — Quick Specs",
+            body: `
+              <ul>
+                <li><b>Calendar:</b> availability, holidays, slot duration, buffers.</li>
+                <li><b>Booking:</b> customer info, OTP/confirmation, reminders.</li>
+                <li><b>Admin:</b> manage slots, reschedule/cancel, view upcoming.</li>
+                <li><b>Extras:</b> payment deposit, WhatsApp notifications, Google Calendar sync.</li>
+              </ul>`,
+            requestName: "Appointments / Slot Booking",
+          },
+          quiz: {
+            title: "Quiz + Progress Dashboard — Quick Specs",
+            body: `
+              <ul>
+                <li><b>Question bank:</b> MCQ, coding tasks, timed tests.</li>
+                <li><b>Progress:</b> streak, badges, topic mastery, revision list.</li>
+                <li><b>Admin:</b> add questions, view submissions, export results.</li>
+                <li><b>Extras:</b> leaderboards, WhatsApp share cards, certificates.</li>
+              </ul>`,
+            requestName: "Quiz + Progress Dashboard",
+          },
+          bot: {
+            title: "Chat + Helpdesk Bot — Quick Specs",
+            body: `
+              <ul>
+                <li><b>FAQ Bot:</b> knowledge base answers + handoff to human.</li>
+                <li><b>Tickets:</b> create ticket, status, priority, assignment.</li>
+                <li><b>Channels:</b> website chat, WhatsApp, email (optional).</li>
+                <li><b>Extras:</b> analytics, canned replies, file uploads.</li>
+              </ul>`,
+            requestName: "Chat + Helpdesk Bot",
+          },
+          seo: {
+            title: "SEO + Blog Automation — Quick Specs",
+            body: `
+              <ul>
+                <li><b>On-page:</b> internal links, tags, related posts, schema.</li>
+                <li><b>Speed:</b> lazy-loading, image optimization, core web vitals.</li>
+                <li><b>Automation:</b> content templates, topic clusters, sitemap.</li>
+                <li><b>Tracking:</b> Search Console + analytics dashboard.</li>
+              </ul>`,
+            requestName: "SEO + Blog Automation",
+          },
+          crm: {
+            title: "Invoices + CRM Lite — Quick Specs",
+            body: `
+              <ul>
+                <li><b>CRM:</b> customers, leads, notes, follow-ups.</li>
+                <li><b>Invoices:</b> PDF invoices, GST fields, reminders.</li>
+                <li><b>Reports:</b> monthly sales, pending payments, export.</li>
+                <li><b>Extras:</b> WhatsApp invoice sharing, payment links.</li>
+              </ul>`,
+            requestName: "Invoices + CRM Lite",
+          },
+        };
+
+        function initBuildForYou() {
+          const drawer = $("specDrawer");
+          const title = $("specTitle");
+          const body = $("specBody");
+          const btnReq = $("specRequest");
+          let currentRequestName = "";
+
+          document.addEventListener("click", (e) => {
+            const req = e.target.closest("[data-request]");
+            if (req) {
+              waOpen(
+                `Namaste 🙏\nI want this built:\n${req.dataset.request || "Custom feature"}\n\nMy requirements:\n1) ...\n2) ...\n3) ...\n\nBudget/Timeline:\n`
+              );
+              return;
             }
-          };
 
-          $("btnJsonMinify").onclick = () => {
-            const v = input.value.trim();
-            if (!v) return (out.textContent = "");
-            try {
-              out.textContent = JSON.stringify(JSON.parse(v));
-              toast("Minified");
-            } catch {
-              out.textContent = "Invalid JSON";
-              toast("Invalid JSON");
+            const specBtn = e.target.closest("[data-spec]");
+            if (specBtn) {
+              const key = specBtn.dataset.spec;
+              const spec = SPEC_LIBRARY[key];
+              if (!spec) return;
+
+              currentRequestName = spec.requestName || "Custom feature";
+              title.textContent = spec.title;
+              body.innerHTML = spec.body;
+              drawer.style.display = "block";
+              drawer.scrollIntoView({ behavior: "smooth", block: "start" });
+              toast("Specs opened");
+              return;
             }
-          };
+          });
 
-          $("btnJsonCopy").onclick = async () => {
-            try {
-              await navigator.clipboard.writeText(out.textContent || "");
-              toast("Copied output");
-            } catch {
-              toast("Copy blocked");
-            }
-          };
+          $("specClose").addEventListener("click", () => {
+            drawer.style.display = "none";
+          });
 
-          $("copyJsonToolLink").onclick = async () => {
-            // In iframes, location might be restricted; this tries best-effort
-            const link = (location && location.href) ? location.href.split("#")[0] + "#json" : "https://www.learnwithchampak.live/";
-            try {
-              await navigator.clipboard.writeText(link);
-              toast("Copied link");
-            } catch {
-              toast("Copy blocked");
-            }
-          };
+          btnReq.addEventListener("click", () => {
+            waOpen(
+              `Namaste 🙏\nI want this built:\n${currentRequestName || "Custom feature"}\n\nMy requirements:\n1) ...\n2) ...\n3) ...\n\nBudget/Timeline:\n`
+            );
+          });
+        }
 
-          // open if hash #json
-          if (location.hash === "#json") {
-            tool.style.display = "block";
+        // --------------------------
+        // Minimal feed (kept simple)
+        // --------------------------
+        const FEED = [
+          {
+            title: "Python Starter Club — Day 1",
+            url: "https://www.learnwithchampak.live/2025/12/python-starter-club-day1.html",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/Python-Starter%20Club.png",
+            meta: "Beginner • Setup • VS Code • First program",
+          },
+          {
+            title: "All DSA Posts",
+            url: "https://www.learnwithchampak.live/2025/11/all-dsa-posts.html",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/DSA.png",
+            meta: "Arrays • Strings • Recursion • Sorting • Interview prep",
+          },
+          {
+            title: "Promises + Async/Await (with Fetch)",
+            url: "https://www.learnwithchampak.live/search?q=async%20await%20promise%20fetch",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/Web.png",
+            meta: "Async patterns • Real-world fetch",
+          },
+          {
+            title: "Pandas + CSV + Matplotlib",
+            url: "https://www.learnwithchampak.live/search?q=pandas%20csv%20matplotlib",
+            img: "https://programmer-s-picnic.github.io/json-images/pics/Pandas.png",
+            meta: "Data analysis • Charts • Exports",
+          },
+        ];
+
+        function getSet(key) {
+          return new Set(safeJSONParse(localStorage.getItem(key) || "[]", []));
+        }
+        function setSet(key, setObj) {
+          localStorage.setItem(key, JSON.stringify([...setObj]));
+        }
+
+        function renderFeed() {
+          const list = $("crx-card-list");
+          list.innerHTML = "";
+
+          const bm = getSet(K.bookmarks);
+          const dn = getSet(K.donePosts);
+
+          for (const it of FEED) {
+            const isBm = bm.has(it.url);
+            const isDone = dn.has(it.url);
+
+            const row = document.createElement("div");
+            row.className = "crx-card-row";
+            row.innerHTML = `
+              <img class="crx-thumb-square" src="${it.img}" alt="" loading="lazy"/>
+              <div style="min-width:0; flex:1;">
+                <a class="crx-post-title" href="${it.url}" target="_blank" rel="noopener">${escapeHtml(it.title)}</a>
+                <div class="crx-post-meta">${escapeHtml(it.meta)}</div>
+                <div class="crx-card-tools">
+                  <button class="mini-pill ${isBm ? "on" : ""}" data-action="bookmark" data-url="${escapeAttr(it.url)}">
+                    ⭐ ${isBm ? "Bookmarked" : "Bookmark"}
+                  </button>
+                  <button class="mini-pill ${isDone ? "on" : ""}" data-action="done" data-url="${escapeAttr(it.url)}">
+                    ✅ ${isDone ? "Done" : "Mark done"}
+                  </button>
+                  <button class="mini-pill" data-action="share" data-url="${escapeAttr(it.url)}" data-title="${escapeAttr(it.title)}">
+                    📣 Share
+                  </button>
+                </div>
+              </div>
+            `;
+            list.appendChild(row);
           }
         }
+
+        function initFeedActions() {
+          document.addEventListener("click", (e) => {
+            const btn = e.target.closest("[data-action]");
+            if (!btn) return;
+
+            const action = btn.dataset.action;
+            const url = btn.dataset.url;
+            if (!url) return;
+
+            if (action === "bookmark") {
+              const bm = getSet(K.bookmarks);
+              bm.has(url) ? bm.delete(url) : bm.add(url);
+              setSet(K.bookmarks, bm);
+              toast(bm.has(url) ? "Bookmarked ⭐" : "Removed bookmark");
+              renderFeed();
+            }
+
+            if (action === "done") {
+              const dn = getSet(K.donePosts);
+              const was = dn.has(url);
+              was ? dn.delete(url) : dn.add(url);
+              setSet(K.donePosts, dn);
+              if (!was) addPoints(2);
+              toast(!was ? "Marked done ✅ (+2)" : "Unmarked");
+              renderFeed();
+            }
+
+            if (action === "share") {
+              const title = btn.dataset.title || "Learning Sutras";
+              waOpen(`📌 ${title}\n${url}\n\nDaily learning at Learning Sutras ✨`);
+            }
+          });
+        }
+
+        // --------------------------
+        // Chips (simple scroll actions)
+        // --------------------------
+        function initChips() {
+          document.querySelectorAll(".ls-chip").forEach((chip) => {
+            chip.addEventListener("click", () => {
+              document.querySelectorAll(".ls-chip").forEach((c) => c.classList.remove("active"));
+              chip.classList.add("active");
+              // quick behavior: scroll to editor if JS/Python selected
+              const q = chip.dataset.q;
+              if (q === "python" || q === "javascript") $("lsEditors")?.scrollIntoView({behavior:"smooth", block:"start"});
+            });
+          });
+        }
+
+        // --------------------------
+        // Editors "Open fullscreen" + reload handled in initEditors()
+        // --------------------------
 
         // --------------------------
         // Boot
         // --------------------------
+        initTheme();
         initStreak();
         initDailyTiles();
         initSearch();
-        initChips();
         initMenu();
         initBackToTop();
         initFadeIn();
         initHeaderCompact();
         initShareButtons();
-        initJsonTool();
+        initHeroSlider();
+        initEditors();
+        initBuildForYou();
 
-        renderFeed("learnwithchampak");
+        renderFeed();
         initFeedActions();
-        loadContinue();
       })();
     </script>
   </body>
