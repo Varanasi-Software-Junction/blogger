@@ -94,7 +94,11 @@
       }
 
       body {
-        background: linear-gradient(180deg, var(--crx-bg-1) 0%, var(--crx-bg-2) 100%);
+        background: linear-gradient(
+          180deg,
+          var(--crx-bg-1) 0%,
+          var(--crx-bg-2) 100%
+        );
         background-attachment: fixed;
         color: var(--headline);
       }
@@ -121,7 +125,11 @@
             var(--bg-orb-1),
             transparent
           ),
-          radial-gradient(500px 240px at 90% 90%, var(--bg-orb-2), transparent);
+          radial-gradient(
+            500px 240px at 90% 90%,
+            var(--bg-orb-2),
+            transparent
+          );
         pointer-events: none;
         animation: subtleShift 18s linear infinite;
         opacity: 1;
@@ -810,7 +818,7 @@
       }
 
       /* =========================================================
-         HERO SLIDER (NEW)
+         HERO SLIDER
          ========================================================= */
       .hero {
         padding: 0;
@@ -979,7 +987,7 @@
       }
 
       /* =========================================================
-         EMBEDDED EDITORS (NEW)
+         EMBEDDED EDITORS (Python + JS + SQL)
          ========================================================= */
       .embed-wrap {
         border-radius: 16px;
@@ -1052,7 +1060,7 @@
         }
       }
 
-      /* Feed cards (kept from earlier version) */
+      /* Feed cards */
       #crx-feed-panel {
         border-radius: 14px;
         border: 1px solid rgba(13, 24, 40, 0.06);
@@ -1312,7 +1320,10 @@
             rel="noopener"
             >DSA-Full</a
           >
-          <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live"
+          <a
+            target="_blank"
+            rel="noopener"
+            href="https://www.learnwithchampak.live"
             >Home</a
           >
         </nav>
@@ -1326,10 +1337,18 @@
           </div>
         </div>
 
-        <button class="theme-quick" id="lsThemeQuick" type="button" aria-label="Change theme">
+        <button
+          class="theme-quick"
+          id="lsThemeQuick"
+          type="button"
+          aria-label="Change theme"
+        >
           <span class="dot" aria-hidden="true"></span>
           <span class="label">Theme</span>
-          <span id="lsThemeName" style="opacity:.75; font-weight:1000; font-size:12px;"></span>
+          <span
+            id="lsThemeName"
+            style="opacity: 0.75; font-weight: 1000; font-size: 12px"
+          ></span>
         </button>
 
         <div id="ls-search" role="search" aria-label="Search Learning Sutras">
@@ -1345,7 +1364,12 @@
           <div id="ls-suggestions" aria-label="Search suggestions"></div>
         </div>
 
-        <button class="menu-toggle" id="lsMenuBtn" aria-label="Open menu" type="button">
+        <button
+          class="menu-toggle"
+          id="lsMenuBtn"
+          aria-label="Open menu"
+          type="button"
+        >
           <span class="hamburger"></span>
         </button>
       </div>
@@ -1374,7 +1398,10 @@
           rel="noopener"
           >DSA — All posts</a
         >
-        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live"
+        <a
+          target="_blank"
+          rel="noopener"
+          href="https://www.learnwithchampak.live"
           >Home</a
         >
       </div>
@@ -1384,13 +1411,31 @@
       <div class="mm-section">
         <div class="mm-title">Theme</div>
         <div class="theme-row" role="radiogroup" aria-label="Theme picker">
-          <div class="theme-pill" data-theme-pick="saffron" role="radio" aria-checked="true" tabindex="0">
+          <div
+            class="theme-pill"
+            data-theme-pick="saffron"
+            role="radio"
+            aria-checked="true"
+            tabindex="0"
+          >
             <span>🧡 Light Saffron</span> <span class="theme-dot saffron"></span>
           </div>
-          <div class="theme-pill" data-theme-pick="midnight" role="radio" aria-checked="false" tabindex="0">
+          <div
+            class="theme-pill"
+            data-theme-pick="midnight"
+            role="radio"
+            aria-checked="false"
+            tabindex="0"
+          >
             <span>🌙 Midnight</span> <span class="theme-dot midnight"></span>
           </div>
-          <div class="theme-pill" data-theme-pick="mint" role="radio" aria-checked="false" tabindex="0">
+          <div
+            class="theme-pill"
+            data-theme-pick="mint"
+            role="radio"
+            aria-checked="false"
+            tabindex="0"
+          >
             <span>🌿 Mint</span> <span class="theme-dot mint"></span>
           </div>
         </div>
@@ -1400,16 +1445,38 @@
 
       <div class="mm-section">
         <div class="mm-title">Quick Topics</div>
-        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=python">Python</a>
-        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=javascript">JavaScript</a>
-        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=dsa">DSA</a>
-        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=interview">Interview</a>
-        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=projects">Projects</a>
+        <a
+          target="_blank"
+          rel="noopener"
+          href="https://www.learnwithchampak.live/search?q=python"
+          >Python</a
+        >
+        <a
+          target="_blank"
+          rel="noopener"
+          href="https://www.learnwithchampak.live/search?q=javascript"
+          >JavaScript</a
+        >
+        <a target="_blank" rel="noopener" href="https://www.learnwithchampak.live/search?q=dsa"
+          >DSA</a
+        >
+        <a
+          target="_blank"
+          rel="noopener"
+          href="https://www.learnwithchampak.live/search?q=interview"
+          >Interview</a
+        >
+        <a
+          target="_blank"
+          rel="noopener"
+          href="https://www.learnwithchampak.live/search?q=projects"
+          >Projects</a
+        >
       </div>
     </div>
 
     <main id="crx-dashboard-home" role="main">
-      <!-- HERO SLIDER (NEW) -->
+      <!-- HERO SLIDER -->
       <section class="crx-section hero crx_fade_in" id="lsHero">
         <div class="hero-inner">
           <div class="slides" id="heroSlides" aria-label="Hero slider">
@@ -1517,16 +1584,17 @@
           <div class="ls-chip" data-q="python">Python</div>
           <div class="ls-chip" data-q="dsa">DSA</div>
           <div class="ls-chip" data-q="javascript">JavaScript</div>
+          <div class="ls-chip" data-q="sql">SQL</div>
           <div class="ls-chip" data-q="interview">Interview</div>
           <div class="ls-chip" data-q="projects">Projects</div>
         </div>
       </section>
 
-      <!-- EMBEDDED EDITORS (NEW) -->
+      <!-- EMBEDDED EDITORS -->
       <section class="crx-section crx_fade_in" id="lsEditors">
         <h2 style="margin-bottom: 6px">Practice instantly</h2>
         <p style="margin-bottom: 14px">
-          Embedded editors (Python + JavaScript). Use tabs to switch. Open fullscreen anytime.
+          Embedded editors (Python + JavaScript + SQL). Use tabs to switch. Open fullscreen anytime.
         </p>
 
         <div class="embed-wrap">
@@ -1537,6 +1605,9 @@
               </button>
               <button class="tabbtn" type="button" data-tab="js" role="tab" aria-selected="false">
                 🟨 JavaScript Editor
+              </button>
+              <button class="tabbtn" type="button" data-tab="sql" role="tab" aria-selected="false">
+                🧱 SQL Editor
               </button>
             </div>
 
@@ -1566,6 +1637,17 @@
             allow="clipboard-read; clipboard-write; fullscreen"
             allowfullscreen
             src="https://programmer-s-picnic.github.io/lesson-viewer/java-script/editor/"
+          ></iframe>
+
+          <!-- SQL (premium) -->
+          <iframe
+            id="frameSql"
+            class="embed-frame"
+            title="SQL Editor"
+            loading="lazy"
+            allow="clipboard-read; clipboard-write; fullscreen"
+            allowfullscreen
+            src="https://programmer-s-picnic.github.io/lesson-viewer/sql/premium/"
           ></iframe>
         </div>
       </section>
@@ -1726,9 +1808,9 @@
           streak: "ls_streak",
           lastDay: "ls_last_day",
           points: "ls_points",
-          doneToday: "ls_done_today_", // + dayKey
-          mcqDone: "ls_done_mcq_",      // + dayKey
-          vizDone: "ls_done_viz_",      // + dayKey
+          doneToday: "ls_done_today_",
+          mcqDone: "ls_done_mcq_",
+          vizDone: "ls_done_viz_",
           bookmarks: "ls_bookmarks_v1",
           donePosts: "ls_doneposts_v1",
           recentSearch: "ls_recent_search_v1",
@@ -1913,7 +1995,7 @@
         // --------------------------
         // Search + suggestions
         // --------------------------
-        const SUGGEST_TRENDING = ["python", "arrays", "recursion", "interview", "javascript", "pandas"];
+        const SUGGEST_TRENDING = ["python", "arrays", "recursion", "interview", "javascript", "sql"];
         function getRecentSearches() {
           return safeJSONParse(localStorage.getItem(K.recentSearch) || "[]", []);
         }
@@ -2066,7 +2148,7 @@
         }
 
         // --------------------------
-        // HERO slider logic (NEW)
+        // HERO slider logic
         // --------------------------
         function initHeroSlider() {
           const slides = $("heroSlides");
@@ -2093,11 +2175,9 @@
           }
           restart();
 
-          // pause on hover (desktop)
           slides.addEventListener("mouseenter", () => clearInterval(timer));
           slides.addEventListener("mouseleave", restart);
 
-          // hero CTAs
           $("heroGoToday")?.addEventListener("click", () => {
             $("lsToday")?.scrollIntoView({ behavior: "smooth", block: "start" });
           });
@@ -2110,45 +2190,49 @@
         }
 
         // --------------------------
-        // Embedded editors tabs (NEW)
+        // Embedded editors tabs (Python + JS + SQL)
         // --------------------------
         function initEditors() {
           const tabBtns = document.querySelectorAll(".tabbtn");
           const framePy = $("framePy");
           const frameJs = $("frameJs");
+          const frameSql = $("frameSql");
           const btnReload = $("btnReloadEditor");
           const btnOpenFull = $("btnOpenFull");
 
           const URLS = {
             py: framePy.getAttribute("src"),
             js: frameJs.getAttribute("src"),
+            sql: frameSql.getAttribute("src"),
           };
 
           let current = "py";
           function setTab(t) {
             current = t;
+
             tabBtns.forEach((b) => {
               const on = b.dataset.tab === t;
               b.classList.toggle("on", on);
               b.setAttribute("aria-selected", String(on));
             });
+
             framePy.classList.toggle("show", t === "py");
             frameJs.classList.toggle("show", t === "js");
+            frameSql.classList.toggle("show", t === "sql");
+
             btnOpenFull.href = URLS[t];
-            toast(t === "py" ? "Python editor" : "JavaScript editor");
+            toast(t === "py" ? "Python editor" : t === "js" ? "JavaScript editor" : "SQL editor");
           }
 
           tabBtns.forEach((b) => b.addEventListener("click", () => setTab(b.dataset.tab)));
 
           btnReload.addEventListener("click", () => {
-            const f = current === "py" ? framePy : frameJs;
-            // force reload
+            const f = current === "py" ? framePy : current === "js" ? frameJs : frameSql;
             const src = f.getAttribute("src");
             f.setAttribute("src", src);
             toast("Reloaded");
           });
 
-          // init fullscreen link
           btnOpenFull.href = URLS[current];
         }
 
@@ -2268,7 +2352,7 @@
         }
 
         // --------------------------
-        // Minimal feed (kept simple)
+        // Minimal feed
         // --------------------------
         const FEED = [
           {
@@ -2374,23 +2458,20 @@
         }
 
         // --------------------------
-        // Chips (simple scroll actions)
+        // Chips quick behavior
         // --------------------------
         function initChips() {
           document.querySelectorAll(".ls-chip").forEach((chip) => {
             chip.addEventListener("click", () => {
               document.querySelectorAll(".ls-chip").forEach((c) => c.classList.remove("active"));
               chip.classList.add("active");
-              // quick behavior: scroll to editor if JS/Python selected
               const q = chip.dataset.q;
-              if (q === "python" || q === "javascript") $("lsEditors")?.scrollIntoView({behavior:"smooth", block:"start"});
+              if (q === "python" || q === "javascript" || q === "sql") {
+                $("lsEditors")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
             });
           });
         }
-
-        // --------------------------
-        // Editors "Open fullscreen" + reload handled in initEditors()
-        // --------------------------
 
         // --------------------------
         // Boot
@@ -2410,6 +2491,7 @@
 
         renderFeed();
         initFeedActions();
+        initChips();
       })();
     </script>
   </body>
