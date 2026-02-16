@@ -1036,7 +1036,7 @@
 
  /* ---------- RESPONSIVE ---------- */
  /* COMPONENT: Responsive - BEGIN */
- @media (max-width:1100px) {
+ @media (max-width:100;) {
    .crx-container {
      padding: 8px;
      margin: 8px auto;
