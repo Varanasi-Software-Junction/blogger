@@ -1001,7 +1001,7 @@
       }
 
       /* =========================================================
-         EMBEDDED EDITORS (Python + JS + SQL)
+         EMBEDDED EDITORS (Python + JS + SQL + HTML + MongoDB)
          ========================================================= */
       .embed-wrap {
         border-radius: 16px;
@@ -1692,6 +1692,7 @@
           <div class="ls-chip" data-q="dsa">DSA</div>
           <div class="ls-chip" data-q="javascript">JavaScript</div>
           <div class="ls-chip" data-q="sql">SQL</div>
+          <div class="ls-chip" data-q="mongodb">MongoDB</div>
           <div class="ls-chip" data-q="interview">Interview</div>
           <div class="ls-chip" data-q="projects">Projects</div>
         </div>
@@ -1701,8 +1702,8 @@
       <section class="crx-section crx_fade_in" id="lsEditors">
         <h2 style="margin-bottom: 6px">Practice instantly</h2>
         <p style="margin-bottom: 14px">
-          Embedded editors (Python + JavaScript + SQL). Use tabs to switch. Open
-          fullscreen anytime.
+          Embedded editors (Python + JavaScript + SQL + HTML Preview + MongoDB).
+          Use tabs to switch. Open fullscreen anytime.
         </p>
 
         <div class="embed-wrap">
@@ -1734,6 +1735,26 @@
                 aria-selected="false"
               >
                 🧱 SQL Editor
+              </button>
+              <button
+                class="tabbtn"
+                type="button"
+                data-tab="html"
+                role="tab"
+                aria-selected="false"
+              >
+                🧾 HTML Preview
+              </button>
+
+              <!-- ✅ NEW: MongoDB tab -->
+              <button
+                class="tabbtn"
+                type="button"
+                data-tab="mongo"
+                role="tab"
+                aria-selected="false"
+              >
+                🍃 MongoDB
               </button>
             </div>
 
@@ -1787,6 +1808,28 @@
             allow="clipboard-read; clipboard-write; fullscreen"
             allowfullscreen
             src="https://programmer-s-picnic.github.io/lesson-viewer/sql/premium/"
+          ></iframe>
+
+          <!-- HTML Preview Editor -->
+          <iframe
+            id="frameHtml"
+            class="embed-frame"
+            title="HTML Preview Editor"
+            loading="lazy"
+            allow="clipboard-read; clipboard-write; fullscreen"
+            allowfullscreen
+            src="https://www.learnwithchampak.live/2026/01/programmers-picnic-html-preview.html"
+          ></iframe>
+
+          <!-- ✅ NEW: MongoDB Queries Editor -->
+          <iframe
+            id="frameMongo"
+            class="embed-frame"
+            title="MongoDB Queries Editor"
+            loading="lazy"
+            allow="clipboard-read; clipboard-write; fullscreen"
+            allowfullscreen
+            src="https://www.learnwithchampak.live/2026/02/programmers-picnic-mongodb-queries.html"
           ></iframe>
         </div>
       </section>
@@ -2281,6 +2324,7 @@
           "interview",
           "javascript",
           "sql",
+          "mongodb",
         ];
         function getRecentSearches() {
           return safeJSONParse(
@@ -2521,13 +2565,15 @@
         }
 
         // --------------------------
-        // Embedded editors tabs (Python + JS + SQL)
+        // Embedded editors tabs (Python + JS + SQL + HTML + MongoDB)
         // --------------------------
         function initEditors() {
           const tabBtns = document.querySelectorAll(".tabbtn");
           const framePy = $("framePy");
           const frameJs = $("frameJs");
           const frameSql = $("frameSql");
+          const frameHtml = $("frameHtml");
+          const frameMongo = $("frameMongo"); // ✅ NEW
           const btnReload = $("btnReloadEditor");
           const btnOpenFull = $("btnOpenFull");
 
@@ -2535,6 +2581,8 @@
             py: framePy.getAttribute("src"),
             js: frameJs.getAttribute("src"),
             sql: frameSql.getAttribute("src"),
+            html: frameHtml.getAttribute("src"),
+            mongo: frameMongo.getAttribute("src"), // ✅ NEW
           };
 
           let current = "py";
@@ -2550,14 +2598,21 @@
             framePy.classList.toggle("show", t === "py");
             frameJs.classList.toggle("show", t === "js");
             frameSql.classList.toggle("show", t === "sql");
+            frameHtml.classList.toggle("show", t === "html");
+            frameMongo.classList.toggle("show", t === "mongo"); // ✅ NEW
 
             btnOpenFull.href = URLS[t];
+
             toast(
               t === "py"
                 ? "Python editor"
                 : t === "js"
                   ? "JavaScript editor"
-                  : "SQL editor",
+                  : t === "sql"
+                    ? "SQL editor"
+                    : t === "html"
+                      ? "HTML preview"
+                      : "MongoDB editor",
             );
           }
 
@@ -2571,7 +2626,12 @@
                 ? framePy
                 : current === "js"
                   ? frameJs
-                  : frameSql;
+                  : current === "sql"
+                    ? frameSql
+                    : current === "html"
+                      ? frameHtml
+                      : frameMongo;
+
             const src = f.getAttribute("src");
             f.setAttribute("src", src);
             toast("Reloaded");
@@ -2814,11 +2874,20 @@
                 .forEach((c) => c.classList.remove("active"));
               chip.classList.add("active");
               const q = chip.dataset.q;
+
               if (q === "python" || q === "javascript" || q === "sql") {
                 $("lsEditors")?.scrollIntoView({
                   behavior: "smooth",
                   block: "start",
                 });
+              }
+              if (q === "mongodb") {
+                $("lsEditors")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+                // Also auto-open Mongo tab for convenience
+                document.querySelector('.tabbtn[data-tab="mongo"]')?.click?.();
               }
             });
           });
