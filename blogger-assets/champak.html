@@ -14,6 +14,45 @@
     />
 
     <style>
+
+/* ===== Blogger: force full-width page canvas ===== */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Common Blogger wrappers that constrain width (varies by theme) */
+body .content-outer,
+body .content-inner,
+body .main-wrapper,
+body .main-inner,
+body .centered,
+body .container,
+body .page_body,
+body .page,
+body .blog-posts,
+body .post-outer,
+body .post,
+body .post-body,
+body main,
+body section {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Remove side padding that creates “boxed” look */
+body .content-inner,
+body .main-inner,
+body .post-body {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+
       /* =========================================================
          THEMES (3) — saved in localStorage, works inside iframe
          ========================================================= */
