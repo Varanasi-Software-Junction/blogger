@@ -135,10 +135,22 @@
       }
 
       main#crx-dashboard-home {
-        max-width: 1200px;
+        width: 85%;
+        max-width: 1600px; /* prevents over-stretching on ultra-wide screens */
         margin: 0 auto;
-        padding: 24px 20px;
+        padding: 24px 0;
       }
+@media (max-width: 1024px) {
+  main#crx-dashboard-home {
+    width: 92%;
+  }
+}
+
+@media (max-width: 720px) {
+  main#crx-dashboard-home {
+    width: 96%;
+  }
+}
 
       .skip-link {
         position: absolute;

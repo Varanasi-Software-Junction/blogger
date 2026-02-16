@@ -57,12 +57,25 @@
 
  /* COMPONENT: Container - BEGIN */
  .crx-container {
-   max-width: 1100px;
-   margin: 0 auto;
-   display: block;
-   gap: 16px;
-   padding: 0 12px;
- }
+  width: 85%;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: block;
+  gap: 16px;
+  padding: 0;
+}
+@media (max-width: 1024px) {
+  .crx-container {
+    width: 92%;
+  }
+}
+
+@media (max-width: 720px) {
+  .crx-container {
+    width: 96%;
+  }
+}
+
 
  /* COMPONENT: Container - END */
 
